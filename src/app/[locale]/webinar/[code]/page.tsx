@@ -39,7 +39,7 @@ export default async function WebinarGuestPage({ params }: { params: Promise<{ l
 
   return (
     <div className="min-h-screen bg-[var(--ink)] text-white">
-      <header className="mx-auto flex max-w-3xl items-center gap-3 px-4 pt-5">
+      <header className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-5">
         <Logo size={34} className="h-[34px] w-[34px]" />
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--gold-bright)]">{t('name')}</p>
         {/* Uscita sempre a portata: chi è iscritto torna alla sua Home, gli altri al sito */}
@@ -51,9 +51,9 @@ export default async function WebinarGuestPage({ params }: { params: Promise<{ l
           {t('exitPage')}
         </Link>
       </header>
-      <main className="mx-auto max-w-3xl px-4 pb-10 pt-5">
+      <main className="mx-auto max-w-6xl px-4 pb-10 pt-5">
         {w.status !== 'live' && (
-          <div className="mb-6">
+          <div className="mx-auto mb-6 max-w-3xl">
             <p className="text-sm text-white/70">{t('invitedBy', { host: hostName })}</p>
             <h1 className="mt-1 text-3xl font-extrabold leading-tight">{w.title}</h1>
             <p className="mt-1 text-sm text-white/75">{when}</p>
@@ -68,7 +68,7 @@ export default async function WebinarGuestPage({ params }: { params: Promise<{ l
           initialStatus={w.status}
           suggestedName={me?.first_name ?? ''}
         />
-        <p className="mt-8 text-center text-xs leading-5 text-white/55">
+        <p className="mx-auto mt-8 max-w-3xl text-center text-xs leading-5 text-white/55">
           {t('privacyNote')}{' '}
           <Link href="/privacy" className="font-bold text-[var(--gold-bright)] underline-offset-2 hover:underline">
             {t('privacyLink')}

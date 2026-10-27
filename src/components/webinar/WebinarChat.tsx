@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { EyeOff, Loader2, Send } from 'lucide-react'
+import { EyeOff, Loader2, Send, X } from 'lucide-react'
 import { WEBINAR_MESSAGE_MAX, type WebinarMessage } from '@/lib/webinar'
 import WebinarName from '@/components/webinar/WebinarName'
 
@@ -12,6 +12,7 @@ export default function WebinarChat({
   hiddenIds,
   onSend,
   onHide,
+  onClose,
   disabled,
   title,
   placeholder,
@@ -20,6 +21,8 @@ export default function WebinarChat({
   hiddenIds: number[]
   onSend: (body: string) => Promise<string | null>
   onHide?: (id: number) => void
+  // Nasconde la chat (si riapre dal pulsante «Chat» della barra)
+  onClose?: () => void
   disabled?: boolean
   title: string
   placeholder: string
@@ -56,7 +59,20 @@ export default function WebinarChat({
 
   return (
     <section aria-label={title} className="flex min-h-0 flex-1 flex-col rounded-2xl bg-[#1b1915] p-3 text-white">
-      <h2 className="mb-2 text-xs font-extrabold uppercase tracking-wide text-white/70">{title}</h2>
+      <div className="mb-2 flex items-center gap-2">
+        <h2 className="flex-1 text-xs font-extrabold uppercase tracking-wide text-white/70">{title}</h2>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t('chatHide')}
+            title={t('chatHide')}
+            className="-my-1 rounded-full p-1.5 text-white/60 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+          >
+            <X className="h-4 w-4" aria-hidden />
+          </button>
+        )}
+      </div>
       <ol
         ref={listRef}
         onScroll={(e) => {

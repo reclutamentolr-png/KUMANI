@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Hand, Loader2, LogOut, Maximize, Mic, Minimize, MicOff, Video, VideoOff, Volume2, VolumeX } from 'lucide-react'
+import { Hand, Loader2, LogOut, Maximize, MessageSquare, Mic, Minimize, MicOff, PhoneOff, Video, VideoOff, Volume2, VolumeX, Wallpaper } from 'lucide-react'
 import {
   joinWebinar,
   viewerAnswer,
@@ -15,7 +15,9 @@ import {
 } from '@/app/actions/webinar'
 import { trackKind, VIEWER_POLL_MS, voiceOwner, voiceTrackNames, WEBINAR_NAME_MAX, type LiveState, type WebinarMessage, type WebinarStatus } from '@/lib/webinar'
 import WebinarChat from '@/components/webinar/WebinarChat'
-import { acceptOffer, initials, makeOffer, makePeer, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
+import { acceptOffer, avatarTrack, initials, makeOffer, makePeer, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
+import { backgroundsSupported, type BackgroundChoice, useCameraBackground } from '@/components/webinar/background'
+import { BackgroundPicker, CallButton, FaceStrip, type FaceTile } from '@/components/webinar/WebinarControls'
 
 type Phase = 'name' | 'joining' | 'in' | 'full' | 'banned' | 'ended' | 'gone'
 type Saved = { token: string; name: string }
@@ -91,9 +93,25 @@ export default function WebinarViewer({
   const pollBusy = useRef(0)
   // Avviso arrivato mentre un controllo era già in corso: se ne fa un altro subito dopo
   const pollAgain = useRef(false)
-  // Chi ha la parola: collegamento, voce e (se accesa) videocamera
-  const speakRef = useRef<{ pc: RTCPeerConnection; tracks: MediaStreamTrack[]; video: MediaStreamTrack | null; at: number } | null>(null)
+  // Chi ha la parola: collegamento, microfono, videocamera (se accesa) e il
+  // canale video, che con la videocamera spenta manda le iniziali
+  const speakRef = useRef<{
+    pc: RTCPeerConnection
+    mic: MediaStreamTrack
+    camera: MediaStreamTrack | null
+    sender: RTCRtpSender | null
+    placeholder: MediaStreamTrack | null
+    at: number
+  } | null>(null)
+  // La propria videocamera (con lo sfondo scelto); null = spenta
   const [selfVideo, setSelfVideo] = useState<MediaStream | null>(null)
+  const [videoChannel, setVideoChannel] = useState(false)
+  const [micMuted, setMicMuted] = useState(false)
+  const bg = useCameraBackground(15)
+  const [bgOpen, setBgOpen] = useState(false)
+  // Chat a destra (come Meet): si nasconde quando non serve
+  const [chatVisible, setChatVisible] = useState(true)
+  const [seenMessages, setSeenMessages] = useState(0)
   // Videocamere di chi parla (chi ha la parola e chi parla con il microfono aperto)
   const [faces, setFaces] = useState<{ name: string; stream: MediaStream }[]>([])
   // Voci di chi parla: un altoparlante per ognuno
@@ -431,7 +449,13 @@ export default function WebinarViewer({
     if ('error' in res) setHand(!next)
   }
 
-  // withVideo: anche la videocamera (se non si apre, si parla solo con la voce)
+  // Videocamera di chi parla: piccola con il microfono aperto a tutti
+  const cameraWanted = (): MediaTrackConstraints =>
+    mayspeak ? { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } : { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 15 } }
+
+  // withVideo: anche la videocamera (se non si apre, si parla solo con la voce).
+  // Il canale video si apre sempre (con le iniziali al posto dell'immagine):
+  // così la videocamera si accende e si spegne quando si vuole.
   const startSpeaking = async (withVideo: boolean) => {
     const token = tokenRef.current
     if (!token || speakRef.current) return
@@ -439,20 +463,26 @@ export default function WebinarViewer({
       const audioWanted = { echoCancellation: true, noiseSuppression: true }
       let stream: MediaStream
       try {
-        stream = await navigator.mediaDevices.getUserMedia(
-          withVideo ? { audio: audioWanted, video: mayspeak ? { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } } : { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 15 } } } : { audio: audioWanted }
-        )
+        stream = await navigator.mediaDevices.getUserMedia(withVideo && !camBlocked ? { audio: audioWanted, video: cameraWanted() } : { audio: audioWanted })
       } catch (e) {
         if (!withVideo) throw e
         stream = await navigator.mediaDevices.getUserMedia({ audio: audioWanted })
         setError(t('errorNoCamSpeak'))
       }
-      const track = stream.getAudioTracks()[0]
-      const video = stream.getVideoTracks()[0] ?? null
+      const mic = stream.getAudioTracks()[0]
+      const camera = stream.getVideoTracks()[0] ?? null
       const pc = makePeer(iceRef.current)
-      const transceiver = pc.addTransceiver(track, { direction: 'sendonly' })
-      const videoTransceiver = video ? pc.addTransceiver(video, { direction: 'sendonly' }) : null
-      speakRef.current = { pc, tracks: stream.getTracks(), video, at: Date.now() }
+      const transceiver = pc.addTransceiver(mic, { direction: 'sendonly' })
+      let out: MediaStreamTrack | null = null
+      let placeholder: MediaStreamTrack | null = null
+      let videoTransceiver: RTCRtpTransceiver | null = null
+      if (!camBlocked) {
+        out = camera ? await bg.wrap(camera) : null
+        placeholder = out ? null : avatarTrack(name)
+        const first = out ?? placeholder
+        if (first) videoTransceiver = pc.addTransceiver(first, { direction: 'sendonly' })
+      } else camera?.stop()
+      speakRef.current = { pc, mic, camera: camBlocked ? null : camera, sender: videoTransceiver?.sender ?? null, placeholder, at: Date.now() }
       const offer = await makeOffer(pc)
       const res = await viewerSpeak(code, token, offer, transceiver.mid ?? '', videoTransceiver?.mid ?? null)
       if ('error' in res) {
@@ -462,7 +492,9 @@ export default function WebinarViewer({
         return
       }
       await pc.setRemoteDescription(res.answer)
-      setSelfVideo(video ? new MediaStream([video]) : null)
+      setSelfVideo(out ? new MediaStream([out]) : null)
+      setVideoChannel(!!videoTransceiver)
+      setMicMuted(false)
       setSpeakingOn(true)
     } catch {
       stopSpeaking(false)
@@ -470,22 +502,70 @@ export default function WebinarViewer({
     }
   }
 
-  // Videocamera accesa o spenta mentre si parla (la voce continua)
-  const [selfCamOff, setSelfCamOff] = useState(false)
-  const toggleSelfCam = () => {
-    const video = speakRef.current?.video
-    if (!video) return
-    video.enabled = !video.enabled
-    setSelfCamOff(!video.enabled)
+  // Microfono muto mentre si ha la parola: non ti sentono, ma la parola resta
+  const toggleMic = () => {
+    const mic = speakRef.current?.mic
+    if (!mic) return
+    mic.enabled = !mic.enabled
+    setMicMuted(!mic.enabled)
+  }
+
+  // Spegne la videocamera (anche la lucina): agli altri arrivano le iniziali
+  const cameraOff = async () => {
+    const current = speakRef.current
+    if (!current?.camera) return
+    bg.release()
+    current.camera.stop()
+    current.camera = null
+    setBgOpen(false)
+    setSelfVideo(null)
+    if (!current.placeholder) current.placeholder = avatarTrack(name)
+    await current.sender?.replaceTrack(current.placeholder).catch(() => {})
+  }
+
+  const toggleCam = async () => {
+    const current = speakRef.current
+    if (!current) return
+    if (current.camera) return cameraOff()
+    if (camBlocked || !current.sender) return
+    try {
+      const camera = (await navigator.mediaDevices.getUserMedia({ video: cameraWanted() })).getVideoTracks()[0]
+      if (speakRef.current !== current) {
+        camera.stop()
+        return
+      }
+      current.camera = camera
+      const out = (await bg.wrap(camera)) ?? camera
+      await current.sender.replaceTrack(out).catch(() => {})
+      current.placeholder?.stop()
+      current.placeholder = null
+      setSelfVideo(new MediaStream([out]))
+    } catch {
+      setError(t('errorNoCamSpeak'))
+    }
+  }
+
+  const chooseBackground = async (c: BackgroundChoice) => {
+    const next = await bg.choose(c)
+    const current = speakRef.current
+    if (next === undefined || !current?.camera) return
+    const out = next ?? current.camera
+    await current.sender?.replaceTrack(out).catch(() => {})
+    setSelfVideo(new MediaStream([out]))
   }
 
   function stopSpeaking(tellServer: boolean) {
     const current = speakRef.current
     speakRef.current = null
-    current?.tracks.forEach((track) => track.stop())
+    bg.release()
+    current?.mic.stop()
+    current?.camera?.stop()
+    current?.placeholder?.stop()
     current?.pc.close()
     setSelfVideo(null)
-    setSelfCamOff(false)
+    setVideoChannel(false)
+    setMicMuted(false)
+    setBgOpen(false)
     setSpeakingOn(false)
     if (tellServer && tokenRef.current) viewerStopSpeak(code, tokenRef.current).then(() => poll())
   }
@@ -505,12 +585,8 @@ export default function WebinarViewer({
 
   // Chi presenta ha spento la videocamera: si spegne qui, la voce continua
   useEffect(() => {
-    const video = speakRef.current?.video
-    if (!camBlocked || !video) return
-    video.stop()
-    speakRef.current!.video = null
-    // Il cambio arriva dal server: si toglie l'anteprima della propria videocamera
-    setSelfVideo(null)
+    if (camBlocked) cameraOff()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camBlocked])
 
   useEffect(() => {
@@ -518,29 +594,57 @@ export default function WebinarViewer({
     return () => {
       pcRef.current?.close()
       speakRef.current?.pc.close()
-      speakRef.current?.tracks.forEach((track) => track.stop())
+      speakRef.current?.mic.stop()
+      speakRef.current?.camera?.stop()
+      speakRef.current?.placeholder?.stop()
       for (const el of voices.values()) el.remove()
       voices.clear()
     }
   }, [])
 
-  // Schermo intero: si entra e si esce con lo stesso pulsante (dentro
-  // l'immagine c'è «Riduci», perché fuori non si vede più nulla)
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  // Schermo intero con i comandi sempre a portata di mano. Dove il browser lo
+  // permette si usa lo schermo intero vero; sull'iPhone (che lo concede solo
+  // ai video, senza i nostri pulsanti) la sala copre tutta la pagina.
+  const roomRef = useRef<HTMLDivElement>(null)
+  const realFullscreen = useRef(false)
+  const [immersive, setImmersive] = useState(false)
   useEffect(() => {
-    const onChange = () => setIsFullscreen(!!document.fullscreenElement)
+    const onChange = () => {
+      if (document.fullscreenElement) return
+      // Uscita con Esc o con il gesto del telefono
+      if (realFullscreen.current) {
+        realFullscreen.current = false
+        setImmersive(false)
+      }
+    }
     document.addEventListener('fullscreenchange', onChange)
     return () => document.removeEventListener('fullscreenchange', onChange)
   }, [])
+  useEffect(() => {
+    if (!immersive) return
+    const root = document.documentElement
+    const before = root.style.overflow
+    root.style.overflow = 'hidden'
+    return () => {
+      root.style.overflow = before
+    }
+  }, [immersive])
   const fullscreen = () => {
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {})
+    if (immersive) {
+      setImmersive(false)
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
       return
     }
-    const stage = stageRef.current as (HTMLDivElement & { webkitRequestFullscreen?: () => void }) | null
-    const video = mainRef.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null
-    if (stage?.requestFullscreen) stage.requestFullscreen().catch(() => video?.webkitEnterFullscreen?.())
-    else video?.webkitEnterFullscreen?.()
+    setImmersive(true)
+    const room = roomRef.current
+    if (room?.requestFullscreen && document.fullscreenEnabled) {
+      room
+        .requestFullscreen()
+        .then(() => {
+          realFullscreen.current = true
+        })
+        .catch(() => {})
+    }
   }
 
   const unmute = () => {
@@ -576,7 +680,7 @@ export default function WebinarViewer({
       full: [t('fullTitle'), t('fullText')],
     }[phase]
     return (
-      <div className="rounded-3xl border border-[var(--gold)]/35 bg-white/5 p-6 text-center">
+      <div className="mx-auto max-w-3xl rounded-3xl border border-[var(--gold)]/35 bg-white/5 p-6 text-center">
         <h2 className="text-2xl font-extrabold">{text[0]}</h2>
         <p className="mt-2 text-white/75">{text[1]}</p>
         {phase === 'full' && (
@@ -599,7 +703,7 @@ export default function WebinarViewer({
           e.preventDefault()
           if (name.trim()) join(name.trim(), readSaved(code)?.token ?? null)
         }}
-        className="space-y-5"
+        className="mx-auto max-w-3xl space-y-5"
       >
         {initialStatus !== 'live' && left > 0 && (
           <div className="rounded-3xl border border-[var(--gold)]/35 bg-white/5 p-5 text-center">
@@ -647,115 +751,169 @@ export default function WebinarViewer({
   // Dentro il webinar
   const live = state?.status === 'live'
   const showMain = live && (state?.screenOn || state?.camOn)
-  // Riquadri di chi parla: la propria videocamera e quelle che arrivano adesso
+  // Riquadri: la propria videocamera e quelle di chi parla adesso
   const liveFaces = live && state ? faces.filter((f) => voiceTrackNames(state, myIdRef.current).includes(f.name)) : []
+  const tiles: FaceTile[] = [
+    ...(live && speakingOn ? [{ key: 'self', label: t('you'), stream: selfVideo, mirror: true }] : []),
+    ...liveFaces.map((f) => ({ key: f.name, label: voiceOwner(state, f.name) ?? '', stream: f.stream })),
+  ]
   const talkingNames = (state?.voices ?? []).filter((v) => v.id !== myIdRef.current).map((v) => v.name)
+  const camLive = !!selfVideo
+  // Messaggi arrivati con la chat nascosta (numero sul pulsante «Chat»)
+  const shownMessages = messages.filter((m) => !(state?.hiddenIds ?? []).includes(m.id)).length
+  const unread = chatVisible ? 0 : Math.max(0, shownMessages - seenMessages)
+  const toggleChat = () => {
+    if (chatVisible) setSeenMessages(shownMessages)
+    setChatVisible(!chatVisible)
+  }
+  const note = speakingOn
+    ? micMuted
+      ? t('micMutedNote')
+      : t('youAreSpeaking')
+    : canSpeak
+      ? mayspeak
+        ? t('youMaySpeak')
+        : t('openMicViewer')
+      : null
+
   return (
-    <div className="space-y-3">
+    <div ref={roomRef} className={immersive ? 'fixed inset-0 z-[70] flex flex-col gap-2 bg-black p-2 text-white' : 'space-y-3'}>
       <audio ref={hostAudioRef} autoPlay className="hidden" />
 
-      <div ref={stageRef} className="relative -mx-4 aspect-video overflow-hidden bg-[#2a2620] sm:mx-0 sm:rounded-3xl">
-        <video ref={mainRef} autoPlay playsInline muted className={`h-full w-full ${state?.screenOn ? 'object-contain' : 'object-cover'} ${showMain ? '' : 'hidden'}`} />
-        <video
-          ref={pipRef}
-          autoPlay
-          playsInline
-          muted
-          className={`absolute bottom-3 right-3 aspect-[3/4] w-20 rounded-xl border-2 border-[var(--gold-bright)] object-cover sm:w-28 ${live && state?.screenOn && state?.camOn ? '' : 'hidden'}`}
-        />
-        {!showMain && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-white/75">
-            {live ? (
-              <>
-                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-[#3b352b] text-3xl font-extrabold text-[var(--gold-bright)]">{initials(hostName)}</span>
-                <span className="text-sm">{t('audioOnly')}</span>
-              </>
-            ) : (
-              <>
-                <p className="text-xs font-bold uppercase tracking-[0.14em]">{left > 0 ? t('startsIn') : t('aboutToStart')}</p>
-                {left > 0 && <p className="text-5xl font-extrabold tabular-nums text-[var(--gold-bright)]">{countdown}</p>}
-                <p className="text-sm">{t('waitingAuto')}</p>
-              </>
+      <div className={`flex flex-col gap-3 lg:flex-row ${immersive ? 'min-h-0 flex-1' : ''}`}>
+        <div className={`flex min-w-0 flex-1 flex-col gap-2 ${immersive ? 'min-h-0' : ''}`}>
+          <div ref={stageRef} className={`relative overflow-hidden bg-[#2a2620] ${immersive ? 'min-h-0 flex-1 rounded-2xl' : '-mx-4 aspect-video sm:mx-0 sm:rounded-3xl'}`}>
+            <video ref={mainRef} autoPlay playsInline muted className={`h-full w-full ${state?.screenOn || immersive ? 'object-contain' : 'object-cover'} ${showMain ? '' : 'hidden'}`} />
+            <video
+              ref={pipRef}
+              autoPlay
+              playsInline
+              muted
+              className={`absolute bottom-3 right-3 aspect-[3/4] w-20 rounded-xl border-2 border-[var(--gold-bright)] object-cover sm:w-28 ${live && state?.screenOn && state?.camOn ? '' : 'hidden'}`}
+            />
+            {!showMain && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-white/75">
+                {live ? (
+                  <>
+                    <span className="flex h-20 w-20 items-center justify-center rounded-full bg-[#3b352b] text-3xl font-extrabold text-[var(--gold-bright)]">{initials(hostName)}</span>
+                    <span className="text-sm">{t('audioOnly')}</span>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs font-bold uppercase tracking-[0.14em]">{left > 0 ? t('startsIn') : t('aboutToStart')}</p>
+                    {left > 0 && <p className="text-5xl font-extrabold tabular-nums text-[var(--gold-bright)]">{countdown}</p>}
+                    <p className="text-sm">{t('waitingAuto')}</p>
+                  </>
+                )}
+              </div>
+            )}
+            {live && (
+              <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-red-700 px-2.5 py-1 text-[11px] font-extrabold text-white">
+                <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden />
+                {t('liveBadge')}
+              </span>
+            )}
+            {live && state?.hostAway && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/65 p-6 text-center text-sm font-semibold text-white">{t('hostAway')}</div>
+            )}
+            {live && connecting && !state?.hostAway && (
+              <div className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+                {t('reconnecting')}
+              </div>
+            )}
+            {needsTap && live && (
+              <button
+                type="button"
+                onClick={unmute}
+                className="absolute inset-x-0 bottom-0 m-3 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--gold-bright)] font-extrabold text-[var(--ink)]"
+              >
+                <VolumeX className="h-5 w-5" aria-hidden />
+                {t('tapForSound')}
+              </button>
             )}
           </div>
+
+          {/* Videocamere, sul telefono: striscia sotto l'immagine */}
+          <FaceStrip tiles={tiles} className="flex shrink-0 lg:hidden" />
+
+          {note && (
+            <p className={`flex items-center gap-1.5 text-sm font-semibold ${speakingOn && micMuted ? 'text-red-300' : 'text-emerald-300'}`}>
+              {speakingOn && micMuted ? <MicOff className="h-4 w-4 shrink-0" aria-hidden /> : <Volume2 className="h-4 w-4 shrink-0" aria-hidden />}
+              {note}
+            </p>
+          )}
+          {camBlocked && speakingOn && <p className="text-xs font-semibold text-amber-200">{t('camBlockedNote')}</p>}
+
+          {/* Barra dei comandi, anche a schermo intero */}
+          <div className="relative shrink-0">
+            {bgOpen && camLive && (
+              <div className="absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2">
+                <BackgroundPicker value={bg.choice} onChange={chooseBackground} onClose={() => setBgOpen(false)} busy={bg.busy} error={bg.failed ? t('bgError') : null} />
+              </div>
+            )}
+            <div className="flex flex-wrap items-start justify-center gap-x-1 gap-y-2 rounded-3xl bg-[#1b1915] px-2 py-2.5">
+              {speakingOn ? (
+                <>
+                  <CallButton icon={micMuted ? MicOff : Mic} label={micMuted ? t('micOff') : t('micOn')} onClick={toggleMic} tone={micMuted ? 'off' : 'normal'} pressed={micMuted} />
+                  {!camBlocked && videoChannel && (
+                    <CallButton icon={camLive ? Video : VideoOff} label={camLive ? t('camOn') : t('camOff')} onClick={toggleCam} tone={camLive ? 'normal' : 'off'} pressed={!camLive} />
+                  )}
+                  {camLive && backgroundsSupported() && (
+                    <CallButton icon={Wallpaper} label={t('bgButton')} onClick={() => setBgOpen(!bgOpen)} tone={bg.active ? 'selected' : 'normal'} pressed={bgOpen} busy={bg.busy} />
+                  )}
+                  <CallButton icon={PhoneOff} label={t('doneSpeaking')} onClick={() => stopSpeaking(true)} tone="danger" />
+                </>
+              ) : (
+                canSpeak && (
+                  <>
+                    <CallButton icon={Mic} label={t('turnOnMic')} onClick={() => startSpeaking(false)} tone="active" />
+                    {!camBlocked && <CallButton icon={Video} label={t('turnOnMicCam')} onClick={() => startSpeaking(true)} tone="active" />}
+                  </>
+                )
+              )}
+              <CallButton icon={Hand} label={hand ? t('handDown') : t('handUp')} onClick={toggleHand} disabled={!live || mayspeak} tone={hand ? 'active' : 'normal'} pressed={hand} />
+              <CallButton icon={MessageSquare} label={t('chatButton')} onClick={toggleChat} tone={chatVisible ? 'selected' : 'normal'} pressed={chatVisible} badge={unread} />
+              <CallButton icon={immersive ? Minimize : Maximize} label={immersive ? t('exitFullscreen') : t('fullscreen')} onClick={fullscreen} pressed={immersive} />
+              <CallButton icon={LogOut} label={t('leaveShort')} onClick={leave} tone="danger" />
+            </div>
+          </div>
+        </div>
+
+        {/* Chat: a destra sul computer; si nasconde quando non serve */}
+        {chatVisible && (
+          <aside className={`flex lg:w-80 lg:shrink-0 ${immersive ? 'max-lg:absolute max-lg:inset-x-2 max-lg:top-2 max-lg:z-10 max-lg:h-[50%]' : 'h-[360px] lg:h-auto'}`}>
+            <div className="relative flex min-h-0 flex-1">
+              <div className="flex min-h-0 flex-1 lg:absolute lg:inset-0">
+                <WebinarChat
+                  messages={messages}
+                  hiddenIds={state?.hiddenIds ?? []}
+                  onSend={sendMessage}
+                  onClose={toggleChat}
+                  title={t('chatTitle')}
+                  disabled={state?.chatOpen === false}
+                  placeholder={state?.chatOpen === false ? t('chatClosedNote') : t('chatViewerPlaceholder')}
+                />
+              </div>
+            </div>
+          </aside>
         )}
-        {live && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-red-700 px-2.5 py-1 text-[11px] font-extrabold text-white">
-            <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden />
-            {t('liveBadge')}
-          </span>
-        )}
-        {live && state?.hostAway && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/65 p-6 text-center text-sm font-semibold text-white">{t('hostAway')}</div>
-        )}
-        {live && connecting && !state?.hostAway && (
-          <div className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-            {t('reconnecting')}
+
+        {/* Videocamere, sul computer: riquadri piccoli a destra della chat */}
+        {tiles.length > 0 && (
+          <div className="relative hidden lg:block lg:w-28 lg:shrink-0">
+            <FaceStrip tiles={tiles} className="flex lg:absolute lg:inset-0" />
           </div>
         )}
-        {isFullscreen && (
-          <button
-            type="button"
-            onClick={fullscreen}
-            className="absolute right-3 top-3 z-[2] inline-flex min-h-11 items-center gap-2 rounded-full bg-black/70 px-4 text-sm font-bold text-white"
-          >
-            <Minimize className="h-5 w-5" aria-hidden />
-            {t('exitFullscreen')}
-          </button>
-        )}
-        {needsTap && live && (
-          <button
-            type="button"
-            onClick={unmute}
-            className="absolute inset-x-0 bottom-0 m-3 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--gold-bright)] font-extrabold text-[var(--ink)]"
-          >
-            <VolumeX className="h-5 w-5" aria-hidden />
-            {t('tapForSound')}
-          </button>
-        )}
       </div>
 
-      <div>
-        <h2 className="text-lg font-extrabold leading-snug">{title}</h2>
-        <p className="text-sm text-white/70">
-          {t('withHost', { host: hostName })}
-          {live && ` · ${t('connectedCount', { count: state?.viewers ?? 0 })}`}
-        </p>
-      </div>
-
-      {canSpeak && (
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-400/60 bg-emerald-500/15 p-3">
-          <Volume2 className="h-5 w-5 text-emerald-300" aria-hidden />
-          <p className="min-w-0 flex-1 text-sm font-semibold">{speakingOn ? t('youAreSpeaking') : mayspeak ? t('youMaySpeak') : t('openMicViewer')}</p>
-          {speakingOn ? (
-            <>
-              {camBlocked && <span className="text-xs font-semibold text-amber-200">{t('camBlockedNote')}</span>}
-              {selfVideo && (
-                <button type="button" onClick={toggleSelfCam} aria-pressed={selfCamOff} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-bold text-white">
-                  {selfCamOff ? <VideoOff className="h-4 w-4" aria-hidden /> : <Video className="h-4 w-4" aria-hidden />}
-                  {selfCamOff ? t('camTurnOn') : t('camTurnOff')}
-                </button>
-              )}
-              <button type="button" onClick={() => stopSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-sm font-bold text-[var(--ink)]">
-                <MicOff className="h-4 w-4" aria-hidden />
-                {t('doneSpeaking')}
-              </button>
-            </>
-          ) : (
-            <>
-              {!camBlocked && (
-                <button type="button" onClick={() => startSpeaking(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-400 px-4 text-sm font-extrabold text-[var(--ink)]">
-                  <Video className="h-4 w-4" aria-hidden />
-                  {t('turnOnMicCam')}
-                </button>
-              )}
-              <button type="button" onClick={() => startSpeaking(false)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/15 px-4 text-sm font-bold text-white">
-                <Mic className="h-4 w-4" aria-hidden />
-                {t('turnOnMic')}
-              </button>
-            </>
-          )}
+      {!immersive && (
+        <div>
+          <h2 className="text-lg font-extrabold leading-snug">{title}</h2>
+          <p className="text-sm text-white/70">
+            {t('withHost', { host: hostName })}
+            {live && ` · ${t('connectedCount', { count: state?.viewers ?? 0 })}`}
+          </p>
         </div>
       )}
       {state?.speaker && !mayspeak && (
@@ -775,88 +933,6 @@ export default function WebinarViewer({
           {error}
         </p>
       )}
-
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={toggleHand}
-          disabled={!live || mayspeak}
-          aria-pressed={hand}
-          className={`inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border text-sm font-extrabold disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold)] ${
-            hand ? 'border-[var(--gold-bright)] bg-[var(--gold-bright)] text-[var(--ink)]' : 'border-[var(--gold)]/50 bg-[var(--gold)]/12 text-[var(--gold-bright)]'
-          }`}
-        >
-          <Hand className="h-5 w-5" aria-hidden />
-          {hand ? t('handDown') : t('handUp')}
-        </button>
-        <button
-          type="button"
-          onClick={fullscreen}
-          disabled={!showMain}
-          aria-label={t('fullscreen')}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#26231d] text-white disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
-        >
-          <Maximize className="h-5 w-5" aria-hidden />
-        </button>
-        <button
-          type="button"
-          onClick={leave}
-          aria-label={t('leave')}
-          title={t('leave')}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#26231d] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
-        >
-          <LogOut className="h-5 w-5" aria-hidden />
-        </button>
-      </div>
-
-      <div className="flex flex-col gap-3 sm:flex-row">
-        {/* Chi parla con la videocamera: fuori dall'immagine, accanto alla chat */}
-        {live && (selfVideo || liveFaces.length > 0) && (
-          <div className="flex gap-2 overflow-x-auto sm:order-2 sm:max-h-[360px] sm:w-32 sm:shrink-0 sm:flex-col sm:overflow-y-auto sm:overflow-x-hidden">
-            {selfVideo && (
-              <div className="relative w-24 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-full">
-                <video
-                  ref={(el) => {
-                    if (el && el.srcObject !== selfVideo) el.srcObject = selfVideo
-                  }}
-                  autoPlay
-                  playsInline
-                  muted
-                  className={`aspect-[3/4] w-full -scale-x-100 object-cover ${selfCamOff ? 'opacity-0' : ''}`}
-                />
-                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{t('you')}</span>
-              </div>
-            )}
-            {liveFaces.map((f) => (
-              <div key={f.name} className="relative w-24 shrink-0 overflow-hidden rounded-xl border-2 border-emerald-400 bg-black sm:w-full">
-                <video
-                  ref={(el) => {
-                    if (el && el.srcObject !== f.stream) {
-                      el.srcObject = f.stream
-                      el.play().catch(() => {})
-                    }
-                  }}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="aspect-[3/4] w-full object-cover"
-                />
-                <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
-              </div>
-            ))}
-          </div>
-        )}
-        <div className="flex h-[360px] min-w-0 flex-1">
-          <WebinarChat
-            messages={messages}
-            hiddenIds={state?.hiddenIds ?? []}
-            onSend={sendMessage}
-            title={t('chatTitle')}
-            disabled={state?.chatOpen === false}
-            placeholder={state?.chatOpen === false ? t('chatClosedNote') : t('chatViewerPlaceholder')}
-          />
-        </div>
-      </div>
     </div>
   )
 }

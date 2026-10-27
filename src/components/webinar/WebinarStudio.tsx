@@ -26,6 +26,7 @@ import {
   Video,
   VideoOff,
   Volume2,
+  Wallpaper,
   X,
 } from 'lucide-react'
 import {
@@ -49,6 +50,8 @@ import WebinarInvites from '@/components/webinar/WebinarInvites'
 import WebinarName from '@/components/webinar/WebinarName'
 import WebinarPrompter from '@/components/webinar/WebinarPrompter'
 import { acceptOffer, initials, makeOffer, makePeer, useCanShareScreen, useMounted, useWakeLock, useWebinarChannel } from '@/components/webinar/rtc'
+import { backgroundsSupported, type BackgroundChoice, useCameraBackground } from '@/components/webinar/background'
+import { BackgroundPicker, CallButton, FaceStrip } from '@/components/webinar/WebinarControls'
 
 type Phase = 'setup' | 'starting' | 'live' | 'ended'
 
@@ -89,9 +92,6 @@ function placeholderTrack(): MediaStreamTrack | null {
   }
 }
 
-const ctrl =
-  'flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl px-2 text-xs font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gold)] disabled:opacity-40'
-
 export default function WebinarStudio({
   webinar,
   hostName,
@@ -127,6 +127,14 @@ export default function WebinarStudio({
   const tx = useRef<{ audio?: RTCRtpTransceiver; video?: RTCRtpTransceiver; screen?: RTCRtpTransceiver }>({})
   const micRef = useRef<MediaStreamTrack | null>(null)
   const camRef = useRef<MediaStreamTrack | null>(null)
+  // Videocamera che si trasmette: con lo sfondo scelto, o la stessa di camRef
+  const camOutRef = useRef<MediaStreamTrack | null>(null)
+  const bg = useCameraBackground(24)
+  const [bgOpen, setBgOpen] = useState(false)
+  // Pannello a destra (come Meet): chat e persone si nascondono quando non servono
+  const [chatVisible, setChatVisible] = useState(true)
+  const [peopleVisible, setPeopleVisible] = useState(true)
+  const [seenMessages, setSeenMessages] = useState(0)
   const screenRef = useRef<MediaStreamTrack | null>(null)
   const idleRef = useRef<{ video: MediaStreamTrack | null; screen: MediaStreamTrack | null }>({ video: null, screen: null })
   const flagsRef = useRef({ camOn: true, screenOn: false })
@@ -159,7 +167,7 @@ export default function WebinarStudio({
   const refreshPreview = useCallback(() => {
     const main = previewRef.current
     const pip = pipRef.current
-    const cam = camRef.current && camRef.current.readyState === 'live' ? camRef.current : null
+    const cam = camRef.current && camRef.current.readyState === 'live' ? (camOutRef.current ?? camRef.current) : null
     const screen = screenRef.current && screenRef.current.readyState === 'live' ? screenRef.current : null
     if (main) {
       const track = screen ?? cam
@@ -270,6 +278,7 @@ export default function WebinarStudio({
       if (micRef.current) micRef.current.enabled = micOn
       setCamOn(!!camRef.current)
       setMediaReady(true)
+      camOutRef.current = await bg.wrap(camRef.current)
       requestAnimationFrame(refreshPreview)
     } catch {
       // Senza videocamera si prova almeno il microfono
@@ -293,8 +302,11 @@ export default function WebinarStudio({
 
   const toggleCam = async () => {
     if (camOn) {
+      bg.release()
+      camOutRef.current = null
       camRef.current?.stop()
       camRef.current = null
+      setBgOpen(false)
       await tx.current.video?.sender.replaceTrack(idle('video')).catch(() => {})
       setCamOn(false)
       refreshPreview()
@@ -303,7 +315,8 @@ export default function WebinarStudio({
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: CAMERA })
       camRef.current = stream.getVideoTracks()[0]
-      await tx.current.video?.sender.replaceTrack(camRef.current).catch(() => {})
+      camOutRef.current = await bg.wrap(camRef.current)
+      await tx.current.video?.sender.replaceTrack(camOutRef.current).catch(() => {})
       setCamOn(true)
       requestAnimationFrame(refreshPreview)
     } catch {
@@ -364,7 +377,7 @@ export default function WebinarStudio({
     const pc = makePeer(iceRef.current)
     pcRef.current = pc
     const mic = micRef.current?.readyState === 'live' ? micRef.current : null
-    const cam = camRef.current?.readyState === 'live' ? camRef.current : null
+    const cam = camRef.current?.readyState === 'live' ? (camOutRef.current ?? camRef.current) : null
     const screen = screenRef.current?.readyState === 'live' ? screenRef.current : null
     tx.current = {
       audio: pc.addTransceiver(mic ?? 'audio', { direction: 'sendonly' }),
@@ -446,11 +459,21 @@ export default function WebinarStudio({
     listenRef.current = null
     for (const el of voicesRef.current.values()) el.remove()
     voicesRef.current.clear()
+    bg.release()
     micRef.current?.stop()
     camRef.current?.stop()
     screenRef.current?.stop()
     idleRef.current.video?.stop()
     idleRef.current.screen?.stop()
+  }
+
+  // Sfondo scelto: se cambia la traccia della videocamera, la si manda al posto della vecchia
+  const chooseBackground = async (c: BackgroundChoice) => {
+    const next = await bg.choose(c)
+    if (next === undefined) return
+    camOutRef.current = next
+    await tx.current.video?.sender.replaceTrack(next ?? idle('video')).catch(() => {})
+    refreshPreview()
   }
 
   const end = async () => {
@@ -496,7 +519,8 @@ export default function WebinarStudio({
           try {
             const s = await navigator.mediaDevices.getUserMedia({ video: CAMERA })
             camRef.current = s.getVideoTracks()[0]
-            await tx.current.video?.sender.replaceTrack(camRef.current)
+            camOutRef.current = await bg.wrap(camRef.current)
+            await tx.current.video?.sender.replaceTrack(camOutRef.current)
             refreshPreview()
           } catch {
             setError(t('errorNoCamera'))
@@ -653,6 +677,54 @@ export default function WebinarStudio({
     )
   }
 
+  // Messaggi arrivati con la chat nascosta (numero sul pulsante «Chat»)
+  const shownMessages = messages.filter((m) => !(state?.hiddenIds ?? []).includes(m.id)).length
+  const unread = chatVisible ? 0 : Math.max(0, shownMessages - seenMessages)
+  const toggleChat = () => {
+    if (chatVisible) setSeenMessages(shownMessages)
+    setChatVisible(!chatVisible)
+  }
+  const panelOpen = chatVisible || peopleVisible
+  const faceTiles = phase === 'live' ? faces.map((f) => ({ key: f.name, label: voiceOwner(state, f.name) ?? '', stream: f.stream })) : []
+  const panelHeight = isFullscreen ? 'lg:h-[calc(100vh-7rem)]' : 'lg:h-[640px]'
+
+  // Chi parla e mani alzate: nel pannello, o sopra l'immagine se il pannello è chiuso
+  const notices = (compact: boolean) => (
+    <>
+      {speaking && (
+        <div className={`flex items-center gap-3 rounded-2xl border border-emerald-400/50 ${compact ? 'bg-emerald-950/85 p-2 text-white' : 'bg-emerald-50 p-3'}`}>
+          <Volume2 className={`h-5 w-5 ${compact ? 'text-emerald-300' : 'text-emerald-700'}`} aria-hidden />
+          <p className="flex-1 text-sm">
+            <WebinarName name={speaking.name} kumano={speaking.kumano} /> {t('isSpeaking')}
+          </p>
+          <button
+            type="button"
+            onClick={() => giveVoice(null)}
+            className="min-h-10 rounded-full bg-[var(--ink)] px-3 text-xs font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+          >
+            {t('takeVoice')}
+          </button>
+        </div>
+      )}
+      {hands.map((v) => (
+        <div key={v.id} className={`flex items-center gap-3 rounded-2xl border border-[var(--gold)]/50 ${compact ? 'bg-black/80 p-2 text-white' : 'bg-[var(--gold-pale)] p-3'}`}>
+          <Hand className={`h-5 w-5 ${compact ? 'text-[var(--gold-bright)]' : 'text-[#7a5a14]'}`} aria-hidden />
+          <p className="flex-1 text-sm">
+            <WebinarName name={v.name} kumano={v.kumano} /> {t('raisedHand')}
+          </p>
+          <button
+            type="button"
+            onClick={() => giveVoice(v.id)}
+            disabled={phase !== 'live'}
+            className="min-h-10 rounded-full bg-[var(--ink)] px-3 text-xs font-bold text-[var(--gold-bright)] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+          >
+            {t('giveVoice')}
+          </button>
+        </div>
+      ))}
+    </>
+  )
+
   return (
     <div ref={studioRef} className={`space-y-4 ${isFullscreen ? 'overflow-y-auto bg-[var(--background)] p-4' : ''}`}>
       {/* Barra di stato */}
@@ -691,8 +763,8 @@ export default function WebinarStudio({
         </p>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="space-y-3">
+      <div className="flex flex-col gap-4 lg:flex-row">
+        <div className="min-w-0 flex-1 space-y-3">
           {/* Gobbo: il testo da dire, visibile solo a chi presenta */}
           <WebinarPrompter webinarId={webinar.id} />
           {/* Anteprima */}
@@ -714,7 +786,11 @@ export default function WebinarStudio({
             {phase === 'live' && (
               <span className="absolute bottom-3 left-3 rounded-full bg-black/55 px-3 py-1 text-xs font-bold text-white">{micOn ? t('youAreLive') : t('micMutedNote')}</span>
             )}
+            {!panelOpen && (speaking || hands.length > 0) && <div className="absolute inset-x-3 top-3 max-h-[60%] space-y-2 overflow-y-auto">{notices(true)}</div>}
           </div>
+
+          {/* Videocamere di chi parla, sul telefono: sotto l'immagine */}
+          <FaceStrip tiles={faceTiles} className="flex lg:hidden" />
 
           {!mediaReady ? (
             <button
@@ -726,37 +802,48 @@ export default function WebinarStudio({
               {t('openMedia')}
             </button>
           ) : (
-            <div className="grid grid-cols-4 gap-2">
-              <button type="button" onClick={toggleMic} aria-pressed={!micOn} className={`${ctrl} ${micOn ? 'bg-[var(--ink)] text-white' : 'bg-red-700 text-white'}`}>
-                {micOn ? <Mic className="h-5 w-5" aria-hidden /> : <MicOff className="h-5 w-5" aria-hidden />}
-                {micOn ? t('micOn') : t('micOff')}
-              </button>
-              <button type="button" onClick={toggleCam} aria-pressed={!camOn} className={`${ctrl} ${camOn ? 'bg-[var(--ink)] text-white' : 'bg-[#4a443a] text-white'}`}>
-                {camOn ? <Video className="h-5 w-5" aria-hidden /> : <VideoOff className="h-5 w-5" aria-hidden />}
-                {camOn ? t('camOn') : t('camOff')}
-              </button>
-              <button
-                type="button"
-                onClick={toggleScreen}
-                disabled={!screenAllowed}
-                aria-pressed={screenOn}
-                title={screenAllowed ? undefined : t('screenOnlyPc')}
-                className={`${ctrl} ${screenOn ? 'bg-[var(--gold-bright)] text-[var(--ink)]' : 'bg-[var(--ink)] text-white'}`}
-              >
-                {screenOn ? <MonitorX className="h-5 w-5" aria-hidden /> : <MonitorUp className="h-5 w-5" aria-hidden />}
-                {screenOn ? t('screenStop') : t('screenShare')}
-              </button>
-              {phase === 'live' ? (
-                <button type="button" onClick={end} className={`${ctrl} bg-red-700 text-white`}>
-                  <Square className="h-5 w-5" aria-hidden />
-                  {t('end')}
-                </button>
-              ) : (
-                <button type="button" onClick={start} disabled={phase === 'starting'} className={`${ctrl} bg-[var(--gold-bright)] text-[var(--ink)]`}>
-                  {phase === 'starting' ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <Radio className="h-5 w-5" aria-hidden />}
-                  {webinar.status === 'live' ? t('resume') : t('goLive')}
-                </button>
+            <div className="relative">
+              {bgOpen && (
+                <div className="absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2">
+                  <BackgroundPicker value={bg.choice} onChange={chooseBackground} onClose={() => setBgOpen(false)} busy={bg.busy} error={bg.failed ? t('bgError') : null} />
+                </div>
               )}
+              {/* Barra dei comandi, come Meet e Zoom */}
+              <div className="flex flex-wrap items-start justify-center gap-x-1 gap-y-3 rounded-3xl bg-[var(--ink)] px-2 py-3">
+                <CallButton icon={micOn ? Mic : MicOff} label={micOn ? t('micOn') : t('micOff')} onClick={toggleMic} tone={micOn ? 'normal' : 'off'} pressed={!micOn} />
+                <CallButton icon={camOn ? Video : VideoOff} label={camOn ? t('camOn') : t('camOff')} onClick={toggleCam} tone={camOn ? 'normal' : 'off'} pressed={!camOn} />
+                <CallButton
+                  icon={Wallpaper}
+                  label={t('bgButton')}
+                  onClick={() => setBgOpen(!bgOpen)}
+                  disabled={!camOn || !backgroundsSupported()}
+                  tone={bg.active && camOn ? 'selected' : 'normal'}
+                  pressed={bgOpen}
+                  busy={bg.busy}
+                />
+                <CallButton
+                  icon={screenOn ? MonitorX : MonitorUp}
+                  label={screenOn ? t('screenStop') : t('screenShare')}
+                  onClick={toggleScreen}
+                  disabled={!screenAllowed}
+                  tone={screenOn ? 'selected' : 'normal'}
+                  pressed={screenOn}
+                />
+                <CallButton icon={MessageSquare} label={t('chatButton')} onClick={toggleChat} tone={chatVisible ? 'selected' : 'normal'} pressed={chatVisible} badge={unread} />
+                <CallButton icon={Users} label={t('peopleButton')} onClick={() => setPeopleVisible(!peopleVisible)} tone={peopleVisible ? 'selected' : 'normal'} pressed={peopleVisible} badge={hands.length} />
+                {phase === 'live' ? (
+                  <CallButton icon={Square} label={t('end')} onClick={end} tone="danger" />
+                ) : (
+                  <CallButton
+                    icon={Radio}
+                    label={webinar.status === 'live' ? t('resume') : t('goLive')}
+                    onClick={start}
+                    disabled={phase === 'starting'}
+                    busy={phase === 'starting'}
+                    tone="active"
+                  />
+                )}
+              </div>
             </div>
           )}
           {!screenAllowed && mediaReady && <p className="text-xs text-[var(--muted)]">{t('screenOnlyPc')}</p>}
@@ -830,167 +917,128 @@ export default function WebinarStudio({
           </div>
         </div>
 
-        {/* Persone, mani alzate, videocamere di chi parla e chat */}
-        <div className={`flex min-h-[420px] flex-col gap-3 ${isFullscreen ? 'lg:h-[calc(100vh-7rem)]' : 'lg:h-[640px]'}`}>
-          {phase === 'live' && faces.length > 0 && (
-            <div className="grid shrink-0 grid-cols-3 gap-2">
-              {faces.map((f) => (
-                <div key={f.name} className="relative overflow-hidden rounded-xl border-2 border-emerald-400 bg-black">
-                  <video
-                    ref={(el) => {
-                      if (el && el.srcObject !== f.stream) {
-                        el.srcObject = f.stream
-                        el.play().catch(() => {})
-                      }
-                    }}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="aspect-[3/4] w-full object-cover"
-                  />
-                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-center text-[10px] font-bold text-white">{voiceOwner(state, f.name)}</span>
-                </div>
-              ))}
-            </div>
-          )}
-          {speaking && (
-            <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/50 bg-emerald-50 p-3">
-              <Volume2 className="h-5 w-5 text-emerald-700" aria-hidden />
-              <p className="flex-1 text-sm">
-                <WebinarName name={speaking.name} kumano={speaking.kumano} /> {t('isSpeaking')}
-              </p>
-              <button
-                type="button"
-                onClick={() => giveVoice(null)}
-                className="min-h-10 rounded-full bg-[var(--ink)] px-3 text-xs font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
-              >
-                {t('takeVoice')}
-              </button>
-            </div>
-          )}
-          {hands.map((v) => (
-            <div key={v.id} className="flex items-center gap-3 rounded-2xl border border-[var(--gold)]/50 bg-[var(--gold-pale)] p-3">
-              <Hand className="h-5 w-5 text-[#7a5a14]" aria-hidden />
-              <p className="flex-1 text-sm">
-                <WebinarName name={v.name} kumano={v.kumano} /> {t('raisedHand')}
-              </p>
-              <button
-                type="button"
-                onClick={() => giveVoice(v.id)}
-                disabled={phase !== 'live'}
-                className="min-h-10 rounded-full bg-[var(--ink)] px-3 text-xs font-bold text-[var(--gold-bright)] disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
-              >
-                {t('giveVoice')}
-              </button>
-            </div>
-          ))}
+        {/* Pannello: chi parla, mani alzate, persone e chat (si nasconde) */}
+        {panelOpen && (
+          <div className={`flex flex-col gap-3 lg:w-[340px] lg:shrink-0 ${chatVisible ? `min-h-[420px] ${panelHeight}` : 'lg:self-start'}`}>
+            {notices(false)}
 
-          <details className="rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)]">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 px-4 text-sm font-bold">
-              <Users className="h-4 w-4" aria-hidden />
-              {t('peopleTitle', { count: viewers.length })}
-            </summary>
-            <ul className="max-h-48 space-y-1 overflow-y-auto px-2 pb-2">
-              {viewers.length === 0 && <li className="px-2 py-1 text-sm text-[var(--muted)]">{t('nobodyYet')}</li>}
-              {viewers.map((v) => (
-                <li key={v.id} className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm hover:bg-[var(--gold-pale)]">
-                  <span className="min-w-0 flex-1">
-                    <WebinarName name={v.name} kumano={v.kumano} />
-                    {v.flagged && (
-                      <span className="ml-1.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-800" title={t('flaggedHint')}>
-                        <TriangleAlert className="h-3 w-3" aria-hidden /> {t('flagged')}
-                      </span>
-                    )}
+            {peopleVisible && (
+              <>
+                <details className="rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)]">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 px-4 text-sm font-bold">
+                    <Users className="h-4 w-4" aria-hidden />
+                    {t('peopleTitle', { count: viewers.length })}
+                  </summary>
+                  <ul className="max-h-48 space-y-1 overflow-y-auto px-2 pb-2">
+                    {viewers.length === 0 && <li className="px-2 py-1 text-sm text-[var(--muted)]">{t('nobodyYet')}</li>}
+                    {viewers.map((v) => (
+                      <li key={v.id} className="flex items-center gap-2 rounded-xl px-2 py-1 text-sm hover:bg-[var(--gold-pale)]">
+                        <span className="min-w-0 flex-1">
+                          <WebinarName name={v.name} kumano={v.kumano} />
+                          {v.flagged && (
+                            <span className="ml-1.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-800" title={t('flaggedHint')}>
+                              <TriangleAlert className="h-3 w-3" aria-hidden /> {t('flagged')}
+                            </span>
+                          )}
+                        </span>
+                        {(v.talking || v.speaking || v.camBlocked) && (
+                          <button
+                            type="button"
+                            onClick={() => toggleViewerCam(v)}
+                            aria-label={v.camBlocked ? t('camAllowAria', { name: v.name }) : t('camOffAria', { name: v.name })}
+                            title={v.camBlocked ? t('camAllowTitle') : t('camOffTitle')}
+                            className={`rounded-full p-2 hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)] ${v.camBlocked ? 'text-red-700' : 'text-emerald-700 hover:text-red-700'}`}
+                          >
+                            {v.camBlocked ? <VideoOff className="h-4 w-4" aria-hidden /> : <Video className="h-4 w-4" aria-hidden />}
+                          </button>
+                        )}
+                        {v.talking && (
+                          <button
+                            type="button"
+                            onClick={() => muteVoice(v)}
+                            aria-label={t('muteAria', { name: v.name })}
+                            title={t('muteTitle')}
+                            className="rounded-full p-2 text-emerald-700 hover:bg-red-50 hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+                          >
+                            <Mic className="h-4 w-4" aria-hidden />
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => ban(v)}
+                          aria-label={t('banAria', { name: v.name })}
+                          title={t('banTitle')}
+                          className="rounded-full p-2 text-[var(--muted)] hover:bg-red-50 hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
+                        >
+                          <UserX className="h-4 w-4" aria-hidden />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+
+                {/* Microfono e video aperti a tutti: nessuno deve chiedere la parola */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={openMic}
+                  disabled={phase !== 'live'}
+                  onClick={async () => {
+                    await hostSetOpenMic(webinar.id, !openMic)
+                    beat()
+                  }}
+                  className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] px-4 text-left text-sm font-bold disabled:opacity-50"
+                >
+                  <span className="flex items-center gap-2">
+                    <MicVocal className="h-4 w-4 shrink-0" aria-hidden />
+                    {openMic ? t('openMicOn') : t('openMicOff')}
                   </span>
-                  {(v.talking || v.speaking || v.camBlocked) && (
-                    <button
-                      type="button"
-                      onClick={() => toggleViewerCam(v)}
-                      aria-label={v.camBlocked ? t('camAllowAria', { name: v.name }) : t('camOffAria', { name: v.name })}
-                      title={v.camBlocked ? t('camAllowTitle') : t('camOffTitle')}
-                      className={`rounded-full p-2 hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)] ${v.camBlocked ? 'text-red-700' : 'text-emerald-700 hover:text-red-700'}`}
-                    >
-                      {v.camBlocked ? <VideoOff className="h-4 w-4" aria-hidden /> : <Video className="h-4 w-4" aria-hidden />}
-                    </button>
-                  )}
-                  {v.talking && (
-                    <button
-                      type="button"
-                      onClick={() => muteVoice(v)}
-                      aria-label={t('muteAria', { name: v.name })}
-                      title={t('muteTitle')}
-                      className="rounded-full p-2 text-emerald-700 hover:bg-red-50 hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
-                    >
-                      <Mic className="h-4 w-4" aria-hidden />
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => ban(v)}
-                    aria-label={t('banAria', { name: v.name })}
-                    title={t('banTitle')}
-                    className="rounded-full p-2 text-[var(--muted)] hover:bg-red-50 hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--gold)]"
-                  >
-                    <UserX className="h-4 w-4" aria-hidden />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </details>
+                  <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${openMic ? 'bg-emerald-600' : 'bg-gray-400'}`} aria-hidden>
+                    <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${openMic ? 'left-[22px]' : 'left-0.5'}`} />
+                  </span>
+                </button>
 
-          {/* Microfono e video aperti a tutti: nessuno deve chiedere la parola */}
-          <button
-            type="button"
-            role="switch"
-            aria-checked={openMic}
-            disabled={phase !== 'live'}
-            onClick={async () => {
-              await hostSetOpenMic(webinar.id, !openMic)
-              beat()
-            }}
-            className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] px-4 text-left text-sm font-bold disabled:opacity-50"
-          >
-            <span className="flex items-center gap-2">
-              <MicVocal className="h-4 w-4 shrink-0" aria-hidden />
-              {openMic ? t('openMicOn') : t('openMicOff')}
-            </span>
-            <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${openMic ? 'bg-emerald-600' : 'bg-gray-400'}`} aria-hidden>
-              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${openMic ? 'left-[22px]' : 'left-0.5'}`} />
-            </span>
-          </button>
+                {/* Chat di chi guarda: aperta o chiusa */}
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={chatOpen}
+                  onClick={async () => {
+                    await hostSetChat(webinar.id, !chatOpen)
+                    beat()
+                  }}
+                  className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] px-4 text-sm font-bold"
+                >
+                  <span className="flex items-center gap-2">
+                    {chatOpen ? <MessageSquare className="h-4 w-4" aria-hidden /> : <MessageSquareOff className="h-4 w-4" aria-hidden />}
+                    {chatOpen ? t('chatOpenForViewers') : t('chatClosedForViewers')}
+                  </span>
+                  <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${chatOpen ? 'bg-emerald-600' : 'bg-gray-400'}`} aria-hidden>
+                    <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${chatOpen ? 'left-[22px]' : 'left-0.5'}`} />
+                  </span>
+                </button>
+              </>
+            )}
 
-          {/* Chat di chi guarda: aperta o chiusa */}
-          <button
-            type="button"
-            role="switch"
-            aria-checked={chatOpen}
-            onClick={async () => {
-              await hostSetChat(webinar.id, !chatOpen)
-              beat()
-            }}
-            className="flex min-h-11 items-center justify-between gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--paper)] px-4 text-sm font-bold"
-          >
-            <span className="flex items-center gap-2">
-              {chatOpen ? <MessageSquare className="h-4 w-4" aria-hidden /> : <MessageSquareOff className="h-4 w-4" aria-hidden />}
-              {chatOpen ? t('chatOpenForViewers') : t('chatClosedForViewers')}
-            </span>
-            <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${chatOpen ? 'bg-emerald-600' : 'bg-gray-400'}`} aria-hidden>
-              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${chatOpen ? 'left-[22px]' : 'left-0.5'}`} />
-            </span>
-          </button>
+            {chatVisible && (
+              <WebinarChat
+                messages={messages}
+                hiddenIds={state?.hiddenIds ?? []}
+                onSend={sendMessage}
+                onHide={async (id) => {
+                  await hostModerate(webinar.id, { hide: id })
+                  beat()
+                }}
+                onClose={toggleChat}
+                title={t('chatTitle')}
+                placeholder={t('chatHostPlaceholder')}
+              />
+            )}
+          </div>
+        )}
 
-          <WebinarChat
-            messages={messages}
-            hiddenIds={state?.hiddenIds ?? []}
-            onSend={sendMessage}
-            onHide={async (id) => {
-              await hostModerate(webinar.id, { hide: id })
-              beat()
-            }}
-            title={t('chatTitle')}
-            placeholder={t('chatHostPlaceholder')}
-          />
-        </div>
+        {/* Videocamere di chi parla, sul computer: riquadri piccoli a destra della chat */}
+        <FaceStrip tiles={faceTiles} className={`hidden lg:flex lg:w-28 lg:shrink-0 ${panelHeight}`} />
       </div>
     </div>
   )
