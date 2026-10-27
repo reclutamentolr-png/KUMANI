@@ -34,7 +34,14 @@ const DEFAULTS: KumiSettings = { mode: 'staff', visitorDaily: 10, totalDaily: 30
 
 async function readSettings(): Promise<KumiSettings> {
   const { data } = await db().from('system_settings').select('value').eq('key', 'kumi_chat').maybeSingle()
-  const v = (data?.value ?? {}) as Partial<KumiSettings>
+  // system_settings.value è testo: l'oggetto arriva come JSON da leggere
+  let v: Partial<KumiSettings> = {}
+  try {
+    const raw = data?.value
+    v = (typeof raw === 'string' ? JSON.parse(raw) : (raw ?? {})) as Partial<KumiSettings>
+  } catch {
+    v = {}
+  }
   const int = (x: unknown, d: number) => (Number.isFinite(Number(x)) && Number(x) >= 0 ? Math.floor(Number(x)) : d)
   return {
     mode: v.mode === 'off' || v.mode === 'on' || v.mode === 'staff' ? v.mode : DEFAULTS.mode,
@@ -51,7 +58,8 @@ async function audience(settings: KumiSettings): Promise<'visitor' | 'staff' | n
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return settings.mode === 'on' ? 'visitor' : null
-  const { data: staff } = await supabase.rpc('admin_is_staff', { p_uid: user.id })
+  // admin_is_staff si chiama solo con la chiave di servizio
+  const { data: staff } = await db().rpc('admin_is_staff', { p_uid: user.id })
   return staff ? 'staff' : null
 }
 
@@ -333,7 +341,7 @@ export async function adminKumiSaveSettings(next: KumiSettings): Promise<{ ok: b
     visitorDaily: Math.min(100, Math.max(1, Math.floor(Number(next.visitorDaily) || DEFAULTS.visitorDaily))),
     totalDaily: Math.min(20000, Math.max(0, Math.floor(Number(next.totalDaily) || 0))),
   }
-  const { error } = await db().from('system_settings').upsert({ key: 'kumi_chat', value }, { onConflict: 'key' })
+  const { error } = await db().from('system_settings').upsert({ key: 'kumi_chat', value: JSON.stringify(value) }, { onConflict: 'key' })
   return error ? { ok: false, error: error.message } : { ok: true }
 }
 
