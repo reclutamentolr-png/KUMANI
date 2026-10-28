@@ -117,6 +117,17 @@ export default function MemoLifeApp({
         ? { kind: 'task', draft: { title: '', dueDate: initialDate ?? '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }
         : null
   )
+  // ?add= e ?date= servono una volta sola: tolti dall'indirizzo, ricaricando
+  // la pagina il modulo vuoto non si riapre
+  useEffect(() => {
+    if (!initialAdd) return
+    const url = new URL(window.location.href)
+    url.searchParams.delete('add')
+    url.searchParams.delete('date')
+    // Con null Next.js aggiorna anche il suo indirizzo (con lo stato suo lo ignorerebbe
+    // e al primo router.refresh() rimetterebbe ?add= nella barra)
+    window.history.replaceState(null, '', url.pathname + url.search + url.hash)
+  }, [initialAdd])
   const [view, setView] = useState({ year: Number(today.slice(0, 4)), month: Number(today.slice(5, 7)) })
   const [selectedDay, setSelectedDay] = useState(today)
   const [calendarEvents, setCalendarEvents] = useState(monthEvents)
@@ -280,10 +291,10 @@ export default function MemoLifeApp({
               <p className="font-bold capitalize text-[var(--ink)]">{dayLabel(selectedDay)}</p>
               <button
                 type="button"
-                onClick={() => setEditor({ kind: 'appointment', draft: { title: '', date: selectedDay, time: '09:00', description: '', remind: [60] } })}
+                onClick={() => setEditor({ kind: 'menu' })}
                 className="flex items-center gap-1 rounded-lg border border-[var(--gold)]/40 bg-white px-2.5 py-1.5 text-xs font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]"
               >
-                <Plus className="h-3.5 w-3.5" /> {t('add_appointment')}
+                <Plus className="h-3.5 w-3.5" /> {t('add')}
               </button>
             </div>
             {eventList(
@@ -488,7 +499,7 @@ export default function MemoLifeApp({
           <div className="space-y-2">
             {[
               { key: 'appointment', icon: CalendarClock, color: 'bg-sky-500', open: () => setEditor({ kind: 'appointment', draft: { title: '', date: tab === 'calendar' ? selectedDay : today, time: '09:00', description: '', remind: [60] } }) },
-              { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', open: () => setEditor({ kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }) },
+              { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', open: () => setEditor({ kind: 'task', draft: { title: '', dueDate: tab === 'calendar' ? selectedDay : '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }) },
               { key: 'note', icon: NotebookPen, color: 'bg-amber-400', open: () => setEditor({ kind: 'note', draft: { title: '', content: '' } }) },
               { key: 'contact', icon: BookUser, color: 'bg-[var(--ink)]', open: () => setEditor({ kind: 'contact', draft: { name: '', phone: '', email: '', company: '', notes: '' } }) },
             ].map(({ key, icon: Icon, color, open }) => (
