@@ -186,7 +186,11 @@ export default function HandsGame({
     try {
       const [hands, stream] = await Promise.all([
         loadHands(),
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false }),
+        // Video con lo stesso verso dello schermo: a schermo pieno sul telefono riempie quasi tutto
+        navigator.mediaDevices.getUserMedia({
+          video: window.innerHeight > window.innerWidth ? { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } } : { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false,
+        }),
       ])
       streamRef.current = stream
       const video = videoRef.current!
@@ -486,75 +490,91 @@ export default function HandsGame({
   const running = status === 'running'
   const counter = mode === 'stars' || mode === 'bubbles' ? caught : mode === 'balloon' ? streak : null
 
-  return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3">
-      {/* Le sei attività */}
-      <div className="grid grid-cols-3 gap-2">
-        {MODES.map(({ id, icon: Icon }) => (
+  // Scelta dell'attività e livelli: in alto prima di accendere, nella barra in basso a schermo pieno
+  const modeButtons = (bar: boolean) => (
+    <div className={bar ? 'flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none]' : 'grid grid-cols-3 gap-2'}>
+      {MODES.map(({ id, icon: Icon }) => (
+        <button
+          key={id}
+          type="button"
+          onClick={() => setMode(id)}
+          aria-pressed={mode === id}
+          className={`flex shrink-0 items-center justify-center gap-1.5 rounded-2xl border-[3px] border-[#2B2D52] text-xs font-extrabold leading-tight text-[#2B2D52] sm:text-sm ${bar ? 'min-h-10 px-2.5' : 'min-h-11 px-1.5 py-1 shadow-[3px_3px_0_#2B2D52]'} ${mode === id ? 'bg-[#FFC93C]' : 'bg-white'}`}
+        >
+          <Icon className="h-5 w-5 shrink-0" aria-hidden /> <span className="whitespace-nowrap text-left">{t(`hands.${MODE_LABEL[id]}`)}</span>
+        </button>
+      ))}
+    </div>
+  )
+  const levelButtons = (bar: boolean) =>
+    mode === 'stars' && (
+      <div className="flex flex-wrap items-center justify-center gap-2" role="radiogroup" aria-label={t('hands.levelLabel')}>
+        {([1, 2] as const).map((l) => (
           <button
-            key={id}
+            key={l}
             type="button"
-            onClick={() => setMode(id)}
-            aria-pressed={mode === id}
-            className={`flex min-h-11 items-center justify-center gap-1.5 rounded-2xl border-[3px] border-[#2B2D52] px-1.5 py-1 text-xs font-extrabold leading-tight text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] sm:text-sm ${mode === id ? 'bg-[#FFC93C]' : 'bg-white'}`}
+            role="radio"
+            aria-checked={level === l}
+            onClick={() => setLevel(l)}
+            className={`flex min-h-10 items-center gap-1.5 rounded-full border-[3px] border-[#2B2D52] px-4 text-sm font-extrabold text-[#2B2D52] shadow-[2px_2px_0_#2B2D52] ${level === l ? 'bg-[#FFC93C]' : 'bg-white'}`}
           >
-            <Icon className="h-5 w-5 shrink-0" aria-hidden /> <span className="text-left">{t(`hands.${MODE_LABEL[id]}`)}</span>
+            {t('hands.level', { n: l })}
+            {l === 2 && (
+              <span className="flex -space-x-1" aria-hidden>
+                {FINGER_COLORS.map((c) => (
+                  <span key={c} className="h-3 w-3 rounded-full border-2 border-[#2B2D52]" style={{ background: c }} />
+                ))}
+              </span>
+            )}
           </button>
         ))}
+        {level === 2 && !bar && <p className="w-full text-center text-xs font-bold text-[#61648A]">{t('hands.level2Hint')}</p>}
       </div>
+    )
 
-      {/* Prendi le stelle: livello 1 (qualsiasi dito) o 2 (dito dello stesso colore) */}
-      {mode === 'stars' && (
-        <div className="flex flex-wrap items-center justify-center gap-2" role="radiogroup" aria-label={t('hands.levelLabel')}>
-          {([1, 2] as const).map((l) => (
-            <button
-              key={l}
-              type="button"
-              role="radio"
-              aria-checked={level === l}
-              onClick={() => setLevel(l)}
-              className={`flex min-h-10 items-center gap-1.5 rounded-full border-[3px] border-[#2B2D52] px-4 text-sm font-extrabold text-[#2B2D52] shadow-[2px_2px_0_#2B2D52] ${level === l ? 'bg-[#FFC93C]' : 'bg-white'}`}
-            >
-              {t('hands.level', { n: l })}
-              {l === 2 && (
-                <span className="flex -space-x-1" aria-hidden>
-                  {FINGER_COLORS.map((c) => (
-                    <span key={c} className="h-3 w-3 rounded-full border-2 border-[#2B2D52]" style={{ background: c }} />
-                  ))}
-                </span>
-              )}
-            </button>
-          ))}
-          {level === 2 && <p className="w-full text-center text-xs font-bold text-[#61648A]">{t('hands.level2Hint')}</p>}
-        </div>
-      )}
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      {modeButtons(false)}
+      {levelButtons(false)}
 
-      {/* Fotocamera */}
-      <div className="flex min-h-[180px] flex-1 items-center justify-center [container-type:size]">
-        <div className="relative">
-          <KidChip />
-          <div className="relative mx-auto aspect-[4/3] w-[min(calc(100cqw-104px),calc((100cqh-6px)*1.333))] min-w-[220px] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-[#E6ECF8] shadow-[5px_5px_0_#2B2D52]">
-            <video ref={videoRef} playsInline muted className="hidden" />
-            <canvas ref={canvasRef} className={`block h-full w-full object-cover ${running ? '' : 'hidden'}`} />
+      {/* Fotocamera: in un riquadro prima di accenderla, a schermo pieno mentre si
+          gioca (stessi elementi, così il video non si stacca dalla fotocamera) */}
+      <div className={running ? 'fixed inset-0 z-[25] flex flex-col bg-[#1E1F3A]' : 'flex min-h-[180px] flex-1 items-center justify-center [container-type:size]'}>
+        <div className={running ? 'relative min-h-0 flex-1' : 'relative'}>
+          {!running && <KidChip />}
+          <div
+            className={
+              running
+                ? 'absolute inset-0 overflow-hidden'
+                : 'relative mx-auto aspect-[4/3] w-[min(calc(100cqw-104px),calc((100cqh-6px)*1.333))] min-w-[220px] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-[#E6ECF8] shadow-[5px_5px_0_#2B2D52]'
+            }
+            style={running ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
+          >
+            {/* Video invisibile ma «vivo»: con display:none Safari su iPhone non aggiorna i fotogrammi */}
+            <video ref={videoRef} playsInline muted autoPlay className="pointer-events-none absolute left-0 top-0 h-px w-px opacity-0" aria-hidden />
+            <canvas ref={canvasRef} className={`block h-full w-full object-contain ${running ? '' : 'hidden'}`} />
 
             {running && counter !== null && (
-              <span className="absolute right-2 top-2 flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-white px-2.5 py-1 text-lg font-extrabold tabular-nums text-[#2B2D52]" aria-label={`${t(mode === 'balloon' ? 'hands.balloonHits' : 'hands.caught')}: ${counter}`}>
+              <span className="absolute right-3 top-[max(12px,env(safe-area-inset-top))] flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-white px-2.5 py-1 text-lg font-extrabold tabular-nums text-[#2B2D52]" aria-label={`${t(mode === 'balloon' ? 'hands.balloonHits' : 'hands.caught')}: ${counter}`}>
                 <Star className="h-5 w-5 fill-[#FFC93C] text-[#2B2D52]" aria-hidden /> {counter}
               </span>
             )}
             {running && mode === 'balloon' && best > 0 && (
-              <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-[#FFF3C4] px-2.5 py-1 text-sm font-extrabold tabular-nums text-[#2B2D52]">
+              <span className="absolute left-3 top-[max(12px,env(safe-area-inset-top))] flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-[#FFF3C4] px-2.5 py-1 text-sm font-extrabold tabular-nums text-[#2B2D52]">
                 <Trophy className="h-4 w-4" aria-hidden /> {t('hands.balloonBest', { n: best })}
               </span>
             )}
             {running && mode === 'count' && target > 0 && (
-              <div className={`absolute inset-x-2 top-2 flex items-center justify-between gap-2 rounded-2xl border-[3px] border-[#2B2D52] px-3 py-1.5 font-extrabold text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] ${good || fingersDone ? 'bg-[#C8F0D2]' : 'bg-white'}`} role="status">
+              <div className={`absolute inset-x-3 top-[max(12px,env(safe-area-inset-top))] flex items-center justify-between gap-2 rounded-2xl border-[3px] border-[#2B2D52] px-3 py-1.5 font-extrabold text-[#2B2D52] shadow-[3px_3px_0_#2B2D52] ${good || fingersDone ? 'bg-[#C8F0D2]' : 'bg-white'}`} role="status">
                 <span className="text-base leading-tight sm:text-lg">{good ? t('hands.countGood', { n: target }) : t('hands.countAsk', { n: target })}</span>
                 <span className="text-4xl tabular-nums">{shown ?? '–'}</span>
               </div>
             )}
+            {running && mode === 'stars' && level === 2 && (
+              <p className="pointer-events-none absolute left-3 top-[max(12px,env(safe-area-inset-top))] max-w-[60%] rounded-2xl bg-white/90 px-3 py-1.5 text-xs font-extrabold leading-snug text-[#2B2D52]">{t('hands.level2Hint')}</p>
+            )}
             {running && mode === 'draw' && (
-              <div className="absolute inset-x-2 top-2 flex items-start justify-between gap-2">
+              <div className="absolute inset-x-3 top-[max(12px,env(safe-area-inset-top))] flex items-start justify-between gap-2">
                 <p className="rounded-2xl bg-white/90 px-3 py-1.5 text-xs font-extrabold leading-snug text-[#2B2D52] sm:text-sm">{t('hands.drawHint')}</p>
                 <button
                   type="button"
@@ -594,16 +614,20 @@ export default function HandsGame({
             )}
           </div>
         </div>
-      </div>
 
-      {/* Termina: fotocamera spenta in qualsiasi attività */}
-      {running && (
-        <div className="flex justify-center">
-          <KidsButton onClick={end}>
-            <Power className="h-5 w-5" /> {t('hands.end')}
-          </KidsButton>
-        </div>
-      )}
+        {/* Barra in basso a schermo pieno: attività, livelli e «Termina il gioco» */}
+        {running && (
+          <div className="space-y-2 bg-[#F3F7FB] px-3 pt-2.5" style={{ paddingBottom: 'max(10px, env(safe-area-inset-bottom))', paddingLeft: 'max(12px, env(safe-area-inset-left))', paddingRight: 'max(12px, env(safe-area-inset-right))' }}>
+            {modeButtons(true)}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {levelButtons(true)}
+              <KidsButton onClick={end}>
+                <Power className="h-5 w-5" /> {t('hands.end')}
+              </KidsButton>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

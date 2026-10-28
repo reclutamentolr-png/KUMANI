@@ -15,6 +15,9 @@ export const BONES: [number, number][] = [
 ]
 export const FINGERTIPS = [4, 8, 12, 16, 20]
 
+// iPhone, iPad (anche quello che si presenta come Mac)
+export const isIos = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+
 let handsPromise: Promise<HandLandmarker> | null = null
 export function loadHands() {
   handsPromise ??= (async () => {
@@ -26,7 +29,8 @@ export function loadHands() {
         runningMode: 'VIDEO',
         numHands: 2,
       })
-    return make('GPU').catch(() => make('CPU'))
+    // iPhone e iPad: con la scheda grafica Safari a volte si blocca, meglio il processore
+    return isIos() ? make('CPU') : make('GPU').catch(() => make('CPU'))
   })().catch((e) => {
     handsPromise = null
     throw e

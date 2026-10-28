@@ -1,4 +1,5 @@
 import type { FaceLandmarker, NormalizedLandmark } from '@mediapipe/tasks-vision'
+import { isIos } from '@/lib/kids/hands'
 
 // FOTOTESSERA, scatto guidato: la fotocamera controlla dal vivo che la foto
 // vada bene (una persona, distanza, viso al centro, testa dritta, occhi
@@ -17,7 +18,8 @@ export function loadLiveFace() {
         runningMode: 'VIDEO',
         numFaces: 2,
       })
-    return make('GPU').catch(() => make('CPU'))
+    // iPhone e iPad: con la scheda grafica Safari a volte si blocca, meglio il processore
+    return isIos() ? make('CPU') : make('GPU').catch(() => make('CPU'))
   })().catch((e) => {
     facePromise = null
     throw e
