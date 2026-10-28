@@ -59,7 +59,7 @@ export default async function CalendarFeedPage({ searchParams }: { searchParams:
             />
           </div>
         )}
-        <CalendarConnect httpsUrl={`${SITE_URL}/api/calendario/${feed.token}.ics`} lastFetchedAt={feed.last_fetched_at} />
+        <CalendarConnect httpsUrl={`${SITE_URL}/api/calendario/${feed.token}.ics`} lastFetchedAt={feed.last_fetched_at} googleApi={googleAllowed} />
       </main>
     </div>
   )
