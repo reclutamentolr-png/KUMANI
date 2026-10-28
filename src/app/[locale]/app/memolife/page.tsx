@@ -21,10 +21,10 @@ export default async function MemoLifePage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ add?: string }>
+  searchParams: Promise<{ add?: string; date?: string }>
 }) {
   const { locale } = await params
-  const { add } = await searchParams
+  const { add, date } = await searchParams
   const t = await getTranslations('agenda')
   const commonT = await getTranslations('common')
   const supabase = await createClient()
@@ -74,6 +74,7 @@ export default async function MemoLifePage({
           notes={(notes ?? []) as MemoNote[]}
           contacts={(contacts ?? []) as MemoContact[]}
           initialAdd={add === 'appointment' || add === 'task' ? add : null}
+          initialDate={date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null}
         />
       </main>
     </div>

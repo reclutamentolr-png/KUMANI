@@ -93,6 +93,7 @@ export default function MemoLifeApp({
   notes,
   contacts,
   initialAdd,
+  initialDate,
 }: {
   today: string
   sources: AgendaSources
@@ -102,6 +103,8 @@ export default function MemoLifeApp({
   notes: MemoNote[]
   contacts: MemoContact[]
   initialAdd: 'appointment' | 'task' | null
+  // Giorno scelto nel calendario della dashboard (?date=)
+  initialDate: string | null
 }) {
   const t = useTranslations('agenda')
   const locale = useLocale()
@@ -109,9 +112,9 @@ export default function MemoLifeApp({
   const [tab, setTab] = useState<Tab>('today')
   const [editor, setEditor] = useState<Editor>(
     initialAdd === 'appointment'
-      ? { kind: 'appointment', draft: { title: '', date: today, time: '09:00', description: '', remind: [60] } }
+      ? { kind: 'appointment', draft: { title: '', date: initialDate ?? today, time: '09:00', description: '', remind: [60] } }
       : initialAdd === 'task'
-        ? { kind: 'task', draft: { title: '', dueDate: '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }
+        ? { kind: 'task', draft: { title: '', dueDate: initialDate ?? '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }
         : null
   )
   const [view, setView] = useState({ year: Number(today.slice(0, 4)), month: Number(today.slice(5, 7)) })

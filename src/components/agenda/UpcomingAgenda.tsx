@@ -242,7 +242,7 @@ export default function UpcomingAgenda({ events, today, sources }: { events: Age
       </Link>
       </div>
 
-      {adding && <QuickAddMenu sources={sources} onClose={() => setAdding(false)} />}
+      {adding && <QuickAddMenu sources={sources} date={selected} onClose={() => setAdding(false)} />}
     </section>
   )
 }

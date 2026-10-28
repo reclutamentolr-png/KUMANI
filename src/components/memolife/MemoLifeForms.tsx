@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowRight, BellRing, FileBadge, LoaderCircle, Trash2, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
@@ -117,7 +117,48 @@ function RemindChoices<T extends number>({ choices, value, onChange, labelOf }: 
   )
 }
 
-export type AppointmentDraft = { id?: string; title: string; date: string; time: string; description: string; remind: number[] }
+// Orario: da computer (mouse) due tendine ore / minuti ogni 5, perché il campo
+// orario del browser lì è scomodo; su telefono e tablet resta la rotella del sistema.
+const subscribePointer = (onChange: () => void) => {
+  const query = window.matchMedia('(hover: hover) and (pointer: fine)')
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
+const HOURS = Array.from({ length: 24 }, (_, h) => String(h).padStart(2, '0'))
+const MINUTES = Array.from({ length: 12 }, (_, m) => String(m * 5).padStart(2, '0'))
+
+function TimeField({ id, value, required, className, onChange }: { id?: string; value: string; required?: boolean; className: string; onChange: (value: string) => void }) {
+  const desktop = useSyncExternalStore(subscribePointer, () => window.matchMedia('(hover: hover) and (pointer: fine)').matches, () => false)
+  if (!desktop) return <input id={id} type="time" className={className} value={value} required={required} onChange={(e) => onChange(e.target.value)} />
+
+  const [hour = '', minute = ''] = value ? value.split(':') : []
+  // Un orario già salvato fuori dai 5 minuti (es. 09:07) resta scelto
+  const minutes = minute && !MINUTES.includes(minute) ? [...MINUTES, minute].sort() : MINUTES
+  const select = 'rounded-xl border border-gray-300 bg-white px-2 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30 disabled:opacity-50'
+  return (
+    <div className="flex items-center gap-1.5">
+      <select id={id} aria-label="hh" className={select} value={hour} required={required} onChange={(e) => onChange(e.target.value ? `${e.target.value}:${minute || '00'}` : '')}>
+        {!required && <option value="">--</option>}
+        {HOURS.map((h) => (
+          <option key={h} value={h}>
+            {h}
+          </option>
+        ))}
+      </select>
+      <span className="font-bold text-gray-500">:</span>
+      <select aria-label="mm" className={select} value={minute} disabled={!hour} onChange={(e) => onChange(`${hour}:${e.target.value}`)}>
+        {!hour && <option value="">--</option>}
+        {minutes.map((m) => (
+          <option key={m} value={m}>
+            {m}
+          </option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
+export type AppointmentDraft ={ id?: string; title: string; date: string; time: string; description: string; remind: number[] }
 
 export function AppointmentForm({ draft, onDone }: { draft: AppointmentDraft; onDone: () => void }) {
   const t = useTranslations('agenda')
@@ -142,7 +183,7 @@ export function AppointmentForm({ draft, onDone }: { draft: AppointmentDraft; on
         </div>
         <div>
           <label className={label}>{t('fieldTime')}</label>
-          <input type="time" className={input} value={form.time} required onChange={(e) => setForm({ ...form, time: e.target.value })} />
+          <TimeField className={input} value={form.time} required onChange={(time) => setForm({ ...form, time })} />
         </div>
       </div>
       <RemindChoices choices={APPOINTMENT_REMIND_CHOICES} value={form.remind} onChange={(remind) => setForm({ ...form, remind })} labelOf={(m) => t(`remind_${m}`)} />
@@ -210,7 +251,7 @@ export function TaskForm({ draft, onDone, lifeCalendar }: { draft: TaskDraft; on
             <label htmlFor="task-remind-time" className={label}>
               {t('taskRemindTime')}
             </label>
-            <input id="task-remind-time" type="time" className={`${input} max-w-40`} value={form.remindTime} onChange={(e) => setForm({ ...form, remindTime: e.target.value })} />
+            <TimeField id="task-remind-time" className={`${input} max-w-40`} value={form.remindTime} onChange={(remindTime) => setForm({ ...form, remindTime })} />
             <p className="mt-1 text-xs text-[var(--muted)]">{t('taskRemindTimeHint')}</p>
           </div>
         </div>

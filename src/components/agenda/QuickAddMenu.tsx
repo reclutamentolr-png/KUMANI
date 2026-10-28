@@ -7,11 +7,13 @@ import type { AgendaSources } from '@/lib/agenda-server'
 
 // "+ Aggiungi": chiede COSA si vuole aggiungere e porta nello strumento giusto,
 // così non ci si chiede più dove inserire una bolletta o una scadenza.
-export default function QuickAddMenu({ sources, onClose }: { sources: AgendaSources; onClose: () => void }) {
+// Con un giorno scelto nel calendario, appuntamento e attività partono da quel giorno.
+export default function QuickAddMenu({ sources, date, onClose }: { sources: AgendaSources; date?: string | null; onClose: () => void }) {
   const t = useTranslations('agenda')
+  const day = date ? `&date=${date}` : ''
   const options = [
-    { key: 'appointment', icon: CalendarClock, color: 'bg-sky-500', href: '/app/memolife?add=appointment', enabled: sources.memolife },
-    { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', href: '/app/memolife?add=task', enabled: sources.memolife },
+    { key: 'appointment', icon: CalendarClock, color: 'bg-sky-500', href: `/app/memolife?add=appointment${day}`, enabled: sources.memolife },
+    { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', href: `/app/memolife?add=task${day}`, enabled: sources.memolife },
     { key: 'bill', icon: Receipt, color: 'bg-amber-500', href: '/app/spendly/bollette?new=1', enabled: sources.spendly },
     { key: 'deadline', icon: FileBadge, color: 'bg-rose-500', href: '/app/life-calendar/new', enabled: sources.lifeCalendar },
   ] as const
