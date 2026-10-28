@@ -12076,7 +12076,7 @@
     "socialTitle": "Redes sociales y reseñas",
     "reviewUrl": "Enlace para reseñas",
     "reviewUrlPlaceholder": "Ej. el enlace a tus reseñas de Google",
-    "brandTitle": "Color",
+    "brandTitle": "Los colores de tu marca",
     "accent": "Color de la marca",
     "accentChosen": "Color elegido: {color}",
     "accentHint": "El color de tu marca, usado por la Landing page, la Firma de email y los QR.",
@@ -12099,10 +12099,10 @@
     "importEdit": "Editar la ficha",
     "importButton": "Usar mi ficha del negocio",
     "menuLink": "Ficha del negocio",
-    "brandChange": "Cambiar los colores",
-    "brandChoose": "Elegir los colores de la marca",
+    "brandChange": "Modificar colores",
+    "brandChoose": "Elegir colores",
     "brandFollowHint": "Los servicios que siguen tu marca se actualizan solos cuando cambias los colores.",
-    "brandIntroHint": "Cuatro colores sacados del logo o generados, comprobados para que se lean bien y usados por todos tus servicios."
+    "brandIntroHint": "Del logo, con la cámara o a mano: cuatro colores comprobados para que se lean bien, usados por todos tus servicios."
   },
   "voucherPrint": {
     "title": "Imprime tu vale",

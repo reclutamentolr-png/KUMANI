@@ -226,6 +226,17 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
           <span className="hidden sm:inline">{docsT('title')}</span>
         </Link>
 
+        {/* Scheda attività: sul telefono è nel menu ☰, qui accanto a Documenti */}
+        <Link
+          href="/scheda-attivita"
+          className="hidden text-sm text-[var(--ink)] border border-[var(--gold)]/60 bg-white hover:bg-[var(--gold-pale)] font-bold transition-all sm:flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-md shadow-sm"
+          aria-label={bpT('menuLink')}
+          title={bpT('menuLink')}
+        >
+          <Building2 className="w-4 h-4" />
+          <span className="hidden lg:inline">{bpT('menuLink')}</span>
+        </Link>
+
         {/* Pulsante My Wallet */}
         <Link
           href="/wallet"

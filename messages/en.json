@@ -12076,7 +12076,7 @@
     "socialTitle": "Social and reviews",
     "reviewUrl": "Reviews link",
     "reviewUrlPlaceholder": "E.g. your Google reviews link",
-    "brandTitle": "Colour",
+    "brandTitle": "Your brand colours",
     "accent": "Brand colour",
     "accentChosen": "Chosen colour: {color}",
     "accentHint": "Your brand colour, used by Landing page, Email signature and QR.",
@@ -12099,10 +12099,10 @@
     "importEdit": "Edit profile",
     "importButton": "Use my business profile",
     "menuLink": "Business profile",
-    "brandChange": "Change colors",
-    "brandChoose": "Choose brand colors",
+    "brandChange": "Edit colours",
+    "brandChoose": "Choose colours",
     "brandFollowHint": "Services that follow your brand update by themselves when you change the colors.",
-    "brandIntroHint": "Four colors taken from your logo or generated, checked for readability and used by all your services."
+    "brandIntroHint": "From your logo, with the camera or by hand: four colours checked for readability, used by all your services."
   },
   "voucherPrint": {
     "title": "Print your voucher",

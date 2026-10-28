@@ -155,6 +155,21 @@ export default function QRCheckScanner() {
     return jsqrRef.current
   }, [])
 
+  // Fotocamera collegata al riquadro appena compare. Prima si collegava un
+  // attimo dopo averlo chiesto e su iPhone a volte il riquadro non c'era
+  // ancora: restava nero con la telecamera rossa accesa. Muto e «in linea»
+  // impostati a mano (iPhone non fa partire il video senza)
+  useEffect(() => {
+    const video = videoRef.current
+    const stream = streamRef.current
+    if (!cameraActive || !video || !stream) return
+    video.muted = true
+    video.setAttribute('muted', '')
+    video.setAttribute('playsinline', '')
+    if (video.srcObject !== stream) video.srcObject = stream
+    void video.play().catch(() => {})
+  }, [cameraActive])
+
   const stopCamera = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
     rafRef.current = null
@@ -269,7 +284,9 @@ export default function QRCheckScanner() {
         const video = videoRef.current
         const canvas = canvasRef.current
         const jsQR = jsqrRef.current
-        if (!video || !canvas || !jsQR || video.readyState !== video.HAVE_ENOUGH_DATA) {
+        // Safari a volte mette in pausa il video: si riavvia
+        if (video?.paused && video.srcObject) void video.play().catch(() => {})
+        if (!video || !canvas || !jsQR || video.readyState < video.HAVE_CURRENT_DATA || !video.videoWidth) {
           rafRef.current = requestAnimationFrame(tick)
           return
         }
@@ -298,13 +315,9 @@ export default function QRCheckScanner() {
         rafRef.current = requestAnimationFrame(tick)
       }
 
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          videoRef.current.play().catch(() => {})
-        }
-        rafRef.current = requestAnimationFrame(tick)
-      })
+      // Il video si collega quando il riquadro c'è davvero (effetto qui sotto):
+      // il ciclo intanto aspetta che arrivino le immagini
+      rafRef.current = requestAnimationFrame(tick)
     } catch {
       setError(t('allowCamera'))
     }

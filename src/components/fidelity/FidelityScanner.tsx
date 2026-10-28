@@ -73,6 +73,9 @@ export default function FidelityScanner({
         }
         streamRef.current = stream
         if (videoRef.current) {
+          // iPhone: muto e «in linea» impostati a mano, senza il video resta nero
+          videoRef.current.muted = true
+          videoRef.current.setAttribute('playsinline', '')
           videoRef.current.srcObject = stream
           videoRef.current.play().catch(() => {})
         }

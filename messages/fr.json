@@ -12076,7 +12076,7 @@
     "socialTitle": "Réseaux sociaux et avis",
     "reviewUrl": "Lien pour les avis",
     "reviewUrlPlaceholder": "Ex. le lien vers vos avis Google",
-    "brandTitle": "Couleur",
+    "brandTitle": "Les couleurs de ta marque",
     "accent": "Couleur de la marque",
     "accentChosen": "Couleur choisie : {color}",
     "accentHint": "La couleur de votre marque, utilisée par la Landing page, la Signature e-mail et les QR.",
@@ -12100,9 +12100,9 @@
     "importButton": "Utiliser ma fiche entreprise",
     "menuLink": "Fiche entreprise",
     "brandChange": "Modifier les couleurs",
-    "brandChoose": "Choisir les couleurs de la marque",
+    "brandChoose": "Choisir les couleurs",
     "brandFollowHint": "Les services qui suivent votre marque se mettent à jour seuls quand vous changez les couleurs.",
-    "brandIntroHint": "Quatre couleurs tirées du logo ou générées, vérifiées pour la lisibilité et utilisées par tous vos services."
+    "brandIntroHint": "Depuis le logo, avec la caméra ou à la main : quatre couleurs vérifiées pour la lisibilité, utilisées par tous tes services."
   },
   "voucherPrint": {
     "title": "Imprimez votre bon",

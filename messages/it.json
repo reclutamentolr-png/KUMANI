@@ -12076,7 +12076,7 @@
     "socialTitle": "Social e recensioni",
     "reviewUrl": "Link per le recensioni",
     "reviewUrlPlaceholder": "Es. il link alle recensioni Google",
-    "brandTitle": "Colore",
+    "brandTitle": "I colori del tuo brand",
     "accent": "Colore del marchio",
     "accentChosen": "Colore scelto: {color}",
     "accentHint": "Il colore del tuo marchio, usato da Landing page, Firma email e QR.",
@@ -12099,10 +12099,10 @@
     "importEdit": "Modifica Scheda",
     "importButton": "Usa i dati della Scheda attività",
     "menuLink": "Scheda attività",
-    "brandChange": "Cambia i colori",
-    "brandChoose": "Scegli i colori del brand",
+    "brandChange": "Modifica i colori",
+    "brandChoose": "Scegli i colori",
     "brandFollowHint": "I servizi che segui con il brand si aggiornano da soli quando cambi i colori.",
-    "brandIntroHint": "Quattro colori presi dal logo o generati, controllati per la leggibilità e usati da tutti i servizi."
+    "brandIntroHint": "Dal logo, con la fotocamera o a mano: quattro colori controllati per la leggibilità, usati da tutti i tuoi servizi."
   },
   "voucherPrint": {
     "title": "Stampa il tuo voucher",

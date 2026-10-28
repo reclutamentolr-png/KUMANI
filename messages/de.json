@@ -12076,7 +12076,7 @@
     "socialTitle": "Social Media und Bewertungen",
     "reviewUrl": "Link für Bewertungen",
     "reviewUrlPlaceholder": "z. B. der Link zu deinen Google-Bewertungen",
-    "brandTitle": "Farbe",
+    "brandTitle": "Deine Markenfarben",
     "accent": "Markenfarbe",
     "accentChosen": "Gewählte Farbe: {color}",
     "accentHint": "Deine Markenfarbe, genutzt von Landingpage, E-Mail-Signatur und QR.",
@@ -12100,9 +12100,9 @@
     "importButton": "Firmenprofil verwenden",
     "menuLink": "Firmenprofil",
     "brandChange": "Farben ändern",
-    "brandChoose": "Markenfarben wählen",
+    "brandChoose": "Farben wählen",
     "brandFollowHint": "Dienste, die deiner Marke folgen, passen sich selbst an, wenn du die Farben änderst.",
-    "brandIntroHint": "Vier Farben aus dem Logo oder erzeugt, auf Lesbarkeit geprüft und von all deinen Diensten verwendet."
+    "brandIntroHint": "Aus dem Logo, mit der Kamera oder von Hand: vier auf Lesbarkeit geprüfte Farben für alle deine Dienste."
   },
   "voucherPrint": {
     "title": "Gutschein drucken",

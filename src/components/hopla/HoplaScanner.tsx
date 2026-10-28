@@ -32,6 +32,9 @@ export default function HoplaScanner({ onClose, onFound }: { onClose: () => void
       }
       const video = videoRef.current
       if (!video) return
+      // iPhone: muto e «in linea» impostati a mano, senza il video resta nero
+      video.muted = true
+      video.setAttribute('playsinline', '')
       video.srcObject = stream
       await video.play().catch(() => {})
       const { default: jsQR } = await import('jsqr')

@@ -12076,7 +12076,7 @@
     "socialTitle": "Redes sociais e avaliações",
     "reviewUrl": "Link para avaliações",
     "reviewUrlPlaceholder": "Ex. o link para as suas avaliações Google",
-    "brandTitle": "Cor",
+    "brandTitle": "As cores da sua marca",
     "accent": "Cor da marca",
     "accentChosen": "Cor escolhida: {color}",
     "accentHint": "A cor da sua marca, usada pela Landing page, Assinatura de email e QR.",
@@ -12099,10 +12099,10 @@
     "importEdit": "Editar a ficha",
     "importButton": "Usar a minha ficha da atividade",
     "menuLink": "Ficha da atividade",
-    "brandChange": "Mudar as cores",
-    "brandChoose": "Escolher as cores da marca",
+    "brandChange": "Alterar cores",
+    "brandChoose": "Escolher cores",
     "brandFollowHint": "Os serviços que seguem a marca atualizam-se sozinhos quando muda as cores.",
-    "brandIntroHint": "Quatro cores tiradas do logótipo ou geradas, verificadas para a legibilidade e usadas por todos os seus serviços."
+    "brandIntroHint": "Do logótipo, com a câmara ou à mão: quatro cores verificadas para a legibilidade, usadas por todos os seus serviços."
   },
   "voucherPrint": {
     "title": "Imprime o teu voucher",
