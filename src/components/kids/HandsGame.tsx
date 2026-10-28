@@ -11,7 +11,6 @@ import type { KidProfile } from '@/lib/kids/storage'
 import { KidsButton } from './ColorStage'
 import { melody, speak, tone } from './kidsAudio'
 import type { KidsActions } from './actions'
-import KidChip from './KidChip'
 
 // «Gioca con le mani»: la fotocamera davanti vede le mani del bambino (21
 // puntini colorati per mano, MediaPipe sul telefono: il video non esce mai e
@@ -239,21 +238,24 @@ export default function HandsGame({
 
     const tick = () => {
       rafRef.current = requestAnimationFrame(tick)
-      if (video.readyState < 2 || video.currentTime === lastVideoTime) return
-      lastVideoTime = video.currentTime
-      const w = (canvas.width = video.videoWidth)
-      const h = (canvas.height = video.videoHeight)
-      const u = Math.min(w, h) / 480
+      // Al massimo ~30 volte al secondo. Non si guarda currentTime: su iPhone con
+      // la fotocamera a volte resta uguale e il gioco sembrava fermo
       const time = now()
+      if (video.readyState < 2 || !video.videoWidth || time - lastVideoTime < 33) return
+      lastVideoTime = time
+      if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+      }
+      const w = canvas.width
+      const h = canvas.height
+      const u = Math.min(w, h) / 480
       const result = hands.detectForVideo(video, time)
       const L = live.current
 
-      // Video a specchio, un po' schiarito perché i colori del gioco si vedano bene
-      ctx.save()
-      ctx.translate(w, 0)
-      ctx.scale(-1, 1)
-      ctx.drawImage(video, 0, 0, w, h)
-      ctx.restore()
+      // Il video si vede sotto (a specchio, con il CSS): qui solo un velo chiaro
+      // perché i colori del gioco risaltino, poi mani, stelle, bolle…
+      ctx.clearRect(0, 0, w, h)
       ctx.fillStyle = 'rgba(255,255,255,0.18)'
       ctx.fillRect(0, 0, w, h)
       const px = (p: NormalizedLandmark) => [(1 - p.x) * w, p.y * h] as const
@@ -490,18 +492,21 @@ export default function HandsGame({
   const running = status === 'running'
   const counter = mode === 'stars' || mode === 'bubbles' ? caught : mode === 'balloon' ? streak : null
 
-  // Scelta dell'attività e livelli: in alto prima di accendere, nella barra in basso a schermo pieno
+  // Scelta dell'attività e livelli: in alto prima di accendere, nella barra in
+  // basso a schermo pieno. Riquadri con l'icona sopra e il nome sotto (anche su
+  // due righe), 3 per riga: stanno nello schermo anche sui telefoni stretti
   const modeButtons = (bar: boolean) => (
-    <div className={bar ? 'flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none]' : 'grid grid-cols-3 gap-2'}>
+    <div className={`grid grid-cols-3 ${bar ? 'gap-1.5 sm:grid-cols-6' : 'gap-2'}`}>
       {MODES.map(({ id, icon: Icon }) => (
         <button
           key={id}
           type="button"
           onClick={() => setMode(id)}
           aria-pressed={mode === id}
-          className={`flex shrink-0 items-center justify-center gap-1.5 rounded-2xl border-[3px] border-[#2B2D52] text-xs font-extrabold leading-tight text-[#2B2D52] sm:text-sm ${bar ? 'min-h-10 px-2.5' : 'min-h-11 px-1.5 py-1 shadow-[3px_3px_0_#2B2D52]'} ${mode === id ? 'bg-[#FFC93C]' : 'bg-white'}`}
+          className={`flex min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl border-[3px] border-[#2B2D52] px-1 text-center font-extrabold leading-tight text-[#2B2D52] ${bar ? 'min-h-12 py-1 text-[11px]' : 'min-h-16 py-1.5 text-xs shadow-[3px_3px_0_#2B2D52] sm:text-sm'} ${mode === id ? 'bg-[#FFC93C]' : 'bg-white'}`}
         >
-          <Icon className="h-5 w-5 shrink-0" aria-hidden /> <span className="whitespace-nowrap text-left">{t(`hands.${MODE_LABEL[id]}`)}</span>
+          <Icon className={`${bar ? 'h-4 w-4' : 'h-6 w-6'} shrink-0`} aria-hidden />
+          <span className="w-full break-words">{t(`hands.${MODE_LABEL[id]}`)}</span>
         </button>
       ))}
     </div>
@@ -516,7 +521,7 @@ export default function HandsGame({
             role="radio"
             aria-checked={level === l}
             onClick={() => setLevel(l)}
-            className={`flex min-h-10 items-center gap-1.5 rounded-full border-[3px] border-[#2B2D52] px-4 text-sm font-extrabold text-[#2B2D52] shadow-[2px_2px_0_#2B2D52] ${level === l ? 'bg-[#FFC93C]' : 'bg-white'}`}
+            className={`flex items-center gap-1.5 rounded-full border-[3px] border-[#2B2D52] font-extrabold text-[#2B2D52] ${bar ? 'min-h-9 px-3 text-xs' : 'min-h-10 px-4 text-sm shadow-[2px_2px_0_#2B2D52]'} ${level === l ? 'bg-[#FFC93C]' : 'bg-white'}`}
           >
             {t('hands.level', { n: l })}
             {l === 2 && (
@@ -539,20 +544,20 @@ export default function HandsGame({
 
       {/* Fotocamera: in un riquadro prima di accenderla, a schermo pieno mentre si
           gioca (stessi elementi, così il video non si stacca dalla fotocamera) */}
-      <div className={running ? 'fixed inset-0 z-[25] flex flex-col bg-[#1E1F3A]' : 'flex min-h-[180px] flex-1 items-center justify-center [container-type:size]'}>
-        <div className={running ? 'relative min-h-0 flex-1' : 'relative'}>
-          {!running && <KidChip />}
+      <div className={running ? 'fixed inset-0 z-[25] flex flex-col bg-[#1E1F3A]' : 'flex min-h-[200px] flex-1 flex-col'}>
+        <div className={running ? 'relative min-h-0 flex-1' : 'relative flex min-h-0 flex-1 flex-col'}>
           <div
             className={
               running
                 ? 'absolute inset-0 overflow-hidden'
-                : 'relative mx-auto aspect-[4/3] w-[min(calc(100cqw-104px),calc((100cqh-6px)*1.333))] min-w-[220px] overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-[#E6ECF8] shadow-[5px_5px_0_#2B2D52]'
+                : 'relative min-h-0 w-full flex-1 overflow-hidden rounded-[22px] border-[3px] border-[#2B2D52] bg-[#E6ECF8] shadow-[5px_5px_0_#2B2D52]'
             }
             style={running ? { paddingTop: 'env(safe-area-inset-top)' } : undefined}
           >
-            {/* Video invisibile ma «vivo»: con display:none Safari su iPhone non aggiorna i fotogrammi */}
-            <video ref={videoRef} playsInline muted autoPlay className="pointer-events-none absolute left-0 top-0 h-px w-px opacity-0" aria-hidden />
-            <canvas ref={canvasRef} className={`block h-full w-full object-contain ${running ? '' : 'hidden'}`} />
+            {/* Il video si vede davvero (a specchio): Safari su iPhone non fa avanzare
+                un video nascosto. Sopra, il disegno del gioco con le stesse misure */}
+            <video ref={videoRef} playsInline muted autoPlay className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-contain ${running ? '' : 'opacity-0'}`} aria-hidden />
+            <canvas ref={canvasRef} className={`pointer-events-none absolute inset-0 h-full w-full object-contain ${running ? '' : 'hidden'}`} />
 
             {running && counter !== null && (
               <span className="absolute right-3 top-[max(12px,env(safe-area-inset-top))] flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-white px-2.5 py-1 text-lg font-extrabold tabular-nums text-[#2B2D52]" aria-label={`${t(mode === 'balloon' ? 'hands.balloonHits' : 'hands.caught')}: ${counter}`}>
@@ -593,21 +598,26 @@ export default function HandsGame({
             )}
 
             {!running && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center">
+              // Spiegazione in alto, «Accendi la fotocamera» in basso; si scorre se lo spazio è poco
+              <div className="absolute inset-0 flex flex-col items-center justify-between gap-3 overflow-y-auto p-4 text-center">
                 {status === 'loading' ? (
-                  <>
+                  <div className="m-auto flex flex-col items-center gap-3">
                     <RefreshCw className="h-9 w-9 animate-spin text-[#2B2D52]" aria-hidden />
                     <p className="text-lg font-extrabold text-[#2B2D52]">{t('hands.loading')}</p>
-                  </>
+                  </div>
                 ) : (
                   <>
-                    <p className="text-lg font-extrabold leading-snug text-[#2B2D52]">{t('hands.intro')}</p>
-                    {status === 'denied' && <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">{t('hands.denied')}</p>}
-                    {status === 'error' && <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">{t('hands.error')}</p>}
-                    <KidsButton onClick={() => void start()} accent>
-                      <Camera className="h-5 w-5" /> {t('hands.start')}
-                    </KidsButton>
-                    <p className="text-xs font-bold text-[#61648A]">{t('hands.privacy')}</p>
+                    <div className="flex flex-col items-center gap-3">
+                      <p className="text-lg font-extrabold leading-snug text-[#2B2D52]">{t('hands.intro')}</p>
+                      {status === 'denied' && <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">{t('hands.denied')}</p>}
+                      {status === 'error' && <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">{t('hands.error')}</p>}
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                      <KidsButton onClick={() => void start()} accent>
+                        <Camera className="h-5 w-5" /> {t('hands.start')}
+                      </KidsButton>
+                      <p className="text-xs font-bold text-[#61648A]">{t('hands.privacy')}</p>
+                    </div>
                   </>
                 )}
               </div>
@@ -621,9 +631,13 @@ export default function HandsGame({
             {modeButtons(true)}
             <div className="flex flex-wrap items-center justify-center gap-2">
               {levelButtons(true)}
-              <KidsButton onClick={end}>
-                <Power className="h-5 w-5" /> {t('hands.end')}
-              </KidsButton>
+              <button
+                type="button"
+                onClick={end}
+                className="flex min-h-9 items-center gap-1.5 rounded-full border-[3px] border-[#2B2D52] bg-[#FF6A3D] px-3.5 text-sm font-extrabold text-white shadow-[2px_2px_0_#2B2D52]"
+              >
+                <Power className="h-4 w-4" aria-hidden /> {t('hands.end')}
+              </button>
             </div>
           </div>
         )}

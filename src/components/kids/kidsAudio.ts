@@ -19,9 +19,50 @@ function audio() {
   }
 }
 
-// iPhone: suoni e voce partono solo se il primo è avviato da un tocco. Al
-// primo tocco nell'Angolo Bambini si «sbloccano» con un suono muto e una frase
-// vuota, così anche le frasi di KUMI dette dopo (con un ritardo) si sentono.
+// iPhone con iOS prima del 17 (senza audioSession): i suoni del sito restano
+// muti con il telefono in silenzioso. Un audio muto che suona in sottofondo
+// mette Safari in modalità «riproduzione» e i suoni si sentono comunque.
+let keepAlive: HTMLAudioElement | null = null
+function silentWavUrl() {
+  // 0,5 secondi di silenzio, 8 kHz, 8 bit mono
+  const n = 4000
+  const bytes = new Uint8Array(44 + n)
+  const view = new DataView(bytes.buffer)
+  const text = (at: number, s: string) => [...s].forEach((c, i) => view.setUint8(at + i, c.charCodeAt(0)))
+  text(0, 'RIFF')
+  view.setUint32(4, 36 + n, true)
+  text(8, 'WAVEfmt ')
+  view.setUint32(16, 16, true)
+  view.setUint16(20, 1, true)
+  view.setUint16(22, 1, true)
+  view.setUint32(24, 8000, true)
+  view.setUint32(28, 8000, true)
+  view.setUint16(32, 1, true)
+  view.setUint16(34, 8, true)
+  text(36, 'data')
+  view.setUint32(40, n, true)
+  bytes.fill(128, 44)
+  return URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' }))
+}
+function keepAudioAwake() {
+  try {
+    keepAlive ??= Object.assign(new Audio(silentWavUrl()), { loop: true, volume: 0.01 })
+    keepAlive.setAttribute('playsinline', '')
+    if (keepAlive.paused) void keepAlive.play().catch(() => {})
+  } catch {
+    // niente: restano gli altri accorgimenti
+  }
+}
+
+// Uscendo dall'Angolo Bambini l'audio muto di sottofondo si ferma
+export function stopAudioKeepAlive() {
+  keepAlive?.pause()
+}
+
+// iPhone: suoni e voce partono solo se il primo è avviato da un tocco. A ogni
+// tocco nell'Angolo Bambini si «sbloccano» (anche dopo un'interruzione:
+// fotocamera accesa, notifica, cambio di app) con un suono muto; la prima
+// volta anche con una frase vuota, così le frasi di KUMI dette dopo si sentono.
 let unlocked = false
 export function unlockAudio() {
   const a = audio()
@@ -32,6 +73,7 @@ export function unlockAudio() {
     source.connect(a.destination)
     source.start(0)
   }
+  keepAudioAwake()
   if (!unlocked && 'speechSynthesis' in window) {
     try {
       const u = new SpeechSynthesisUtterance(' ')

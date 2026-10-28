@@ -48,6 +48,10 @@ const isGreeting = (s: string) => {
 const THINK_MS = 2200
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const HINT_KEY = 'kumani:kumi-chat:hint'
+// KUMI ridotto a linguetta sul bordo (per la visita in corso)
+const MINI_KEY = 'kumani:kumi-chat:mini'
+// La nuvoletta sparisce da sola dopo qualche secondo
+const HINT_MS = 8000
 
 function readStore(): { msgs: Msg[]; open: boolean } | null {
   try {
@@ -74,6 +78,7 @@ export default function KumiChat() {
   const [status, setStatus] = useState<KumiStatus | null>(null)
   const [open, setOpen] = useState(false)
   const [hint, setHint] = useState(false)
+  const [mini, setMini] = useState(false)
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
@@ -122,17 +127,27 @@ export default function KumiChat() {
   }, [msgs, open])
 
   // Nuvoletta «Hai una domanda?» dopo qualche secondo, una volta per visita
+  // (e non con KUMI nascosto); poi sparisce da sola
   useEffect(() => {
     if (!status?.visible) return
     let seen = false
     try {
       seen = sessionStorage.getItem(HINT_KEY) === '1'
+      if (sessionStorage.getItem(MINI_KEY) === '1') {
+        seen = true
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- scelta della visita, letta dopo il primo disegno
+        setMini(true)
+      }
     } catch {
       // memoria del browser non disponibile
     }
     if (seen) return
-    const timer = window.setTimeout(() => setHint(true), 4000)
-    return () => window.clearTimeout(timer)
+    const show = window.setTimeout(() => setHint(true), 4000)
+    const hide = window.setTimeout(() => setHint(false), 4000 + HINT_MS)
+    return () => {
+      window.clearTimeout(show)
+      window.clearTimeout(hide)
+    }
   }, [status?.visible])
 
   useEffect(() => {
@@ -147,6 +162,20 @@ export default function KumiChat() {
     setHint(false)
     try {
       sessionStorage.setItem(HINT_KEY, '1')
+    } catch {
+      // memoria del browser non disponibile
+    }
+  }
+
+  // Nascondi / mostra KUMI (linguetta sul bordo destro)
+  const setMiniKept = (on: boolean) => {
+    setMini(on)
+    if (on) {
+      setOpen(false)
+      dismissHint()
+    }
+    try {
+      sessionStorage.setItem(MINI_KEY, on ? '1' : '0')
     } catch {
       // memoria del browser non disponibile
     }
@@ -197,8 +226,23 @@ export default function KumiChat() {
 
   const outOfQuestions = status.remaining <= 0
 
+  // KUMI nascosto: solo una linguetta sul bordo destro, un tocco e torna
+  if (mini) {
+    return (
+      <button
+        type="button"
+        onClick={() => setMiniKept(false)}
+        aria-label={t('show')}
+        title={t('show')}
+        className="kumi-chat-fab fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-0 z-40 flex h-11 w-9 items-center justify-start rounded-l-full border-y-2 border-l-2 border-[var(--gold)] bg-white pl-0.5 shadow-lg print:hidden"
+      >
+        <Kumi className="h-8 w-8" mood="happy" />
+      </button>
+    )
+  }
+
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 flex flex-col items-end gap-2 print:hidden">
+    <div className="kumi-chat-fab fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 flex flex-col items-end gap-2 print:hidden">
       {open && (
         <section
           role="dialog"
@@ -314,29 +358,48 @@ export default function KumiChat() {
       )}
 
       {!open && hint && (
+        <div className="relative max-w-[13.5rem] rounded-2xl rounded-br-sm border border-[var(--gold)]/40 bg-white shadow-lg">
+          <button
+            type="button"
+            onClick={() => {
+              dismissHint()
+              setOpen(true)
+            }}
+            className="block py-2 pl-3.5 pr-8 text-left text-sm font-semibold text-[var(--ink)]"
+          >
+            {t('bubble')}
+          </button>
+          <button type="button" onClick={dismissHint} aria-label={t('close')} className="absolute right-1 top-1 rounded-full p-1.5 text-[var(--muted)] hover:bg-[var(--gold-pale)]">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+      <div className="relative">
         <button
           type="button"
           onClick={() => {
             dismissHint()
-            setOpen(true)
+            setOpen((o) => !o)
           }}
-          className="max-w-[15rem] rounded-2xl rounded-br-sm border border-[var(--gold)]/40 bg-white px-4 py-2.5 text-left text-sm font-semibold text-[var(--ink)] shadow-lg"
+          aria-label={open ? t('close') : t('title')}
+          aria-expanded={open}
+          className="group flex h-14 w-14 items-center justify-center rounded-full border-2 border-[var(--gold)] bg-white shadow-xl transition-transform hover:scale-105 sm:h-16 sm:w-16"
         >
-          {t('bubble')}
+          {open ? <X className="h-7 w-7 text-[var(--ink)]" /> : <Kumi className="h-12 w-12 sm:h-14 sm:w-14" mood="happy" move={hint ? 'wave' : 'idle'} />}
         </button>
-      )}
-      <button
-        type="button"
-        onClick={() => {
-          dismissHint()
-          setOpen((o) => !o)
-        }}
-        aria-label={open ? t('close') : t('title')}
-        aria-expanded={open}
-        className="group flex h-16 w-16 items-center justify-center rounded-full border-2 border-[var(--gold)] bg-white shadow-xl transition-transform hover:scale-105"
-      >
-        {open ? <X className="h-7 w-7 text-[var(--ink)]" /> : <Kumi className="h-14 w-14" mood="happy" move={hint ? 'wave' : 'idle'} />}
-      </button>
+        {/* Nascondi KUMI: diventa una linguetta sul bordo */}
+        {!open && (
+          <button
+            type="button"
+            onClick={() => setMiniKept(true)}
+            aria-label={t('hide')}
+            title={t('hide')}
+            className="absolute -left-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--gold)]/50 bg-white text-[var(--muted)] shadow hover:text-[var(--ink)]"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
     </div>
   )
 }

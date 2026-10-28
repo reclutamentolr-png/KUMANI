@@ -17496,6 +17496,8 @@
     "linkTerms": "Regeln",
     "linkGuide": "Anleitung: {name}",
     "emptyHint": "Schreib mir eine Frage oder tippe unten auf einen Vorschlag.",
-    "greetAgain": "Hier bin ich! Frag mich alles, was du über KUMANI wissen möchtest."
+    "greetAgain": "Hier bin ich! Frag mich alles, was du über KUMANI wissen möchtest.",
+    "hide": "KUMI ausblenden",
+    "show": "KUMI anzeigen"
   }
 }

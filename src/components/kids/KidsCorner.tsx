@@ -16,7 +16,7 @@ import HandsGame from './HandsGame'
 import MusicGame from './MusicGame'
 import { KidsIconButton } from './ColorStage'
 import Kumi from './Kumi'
-import { speak, unlockAudio } from './kidsAudio'
+import { speak, stopAudioKeepAlive, unlockAudio } from './kidsAudio'
 import { KidChipContext } from './KidChip'
 import KumiGuide from './KumiGuide'
 import type { KidsActions, ShareTarget } from './actions'
@@ -78,15 +78,14 @@ export default function KidsCorner({ userId }: { userId: string }) {
     [userId]
   )
 
-  // iPhone: suoni e voce si sbloccano al primo tocco (poi i gesti non servono più)
+  // iPhone: suoni e voce si sbloccano con un tocco, e si risbloccano a ogni
+  // tocco se Safari li ha interrotti (fotocamera, notifiche, cambio di app)
   useEffect(() => {
-    const unlock = () => {
-      if (!unlockAudio()) return
-      for (const type of ['touchend', 'pointerdown', 'click'] as const) document.removeEventListener(type, unlock, true)
-    }
+    const unlock = () => void unlockAudio()
     for (const type of ['touchend', 'pointerdown', 'click'] as const) document.addEventListener(type, unlock, true)
     return () => {
       for (const type of ['touchend', 'pointerdown', 'click'] as const) document.removeEventListener(type, unlock, true)
+      stopAudioKeepAlive()
     }
   }, [])
 
