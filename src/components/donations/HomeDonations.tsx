@@ -36,7 +36,8 @@ export default async function HomeDonations() {
               <p className="mt-3 text-base leading-relaxed text-gray-300 sm:text-lg">
                 {t('pledgeLine', { percent: percentFormat(locale, summary.percent_bp), association: active.name })}
               </p>
-              {active.mission && <p className="mt-2 text-sm italic text-[var(--gold-bright)]">“{active.mission}”</p>}
+              {/* Motto dell'associazione: scritto da lei in italiano, si mostra solo in italiano */}
+              {active.mission && locale === 'it' && <p className="mt-2 text-sm italic text-[var(--gold-bright)]">“{active.mission}”</p>}
               <Link
                 href="/donazioni"
                 className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-xl hover:brightness-110"

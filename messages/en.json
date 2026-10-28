@@ -8983,7 +8983,7 @@
           "3": "on phone, tablet and computer"
         }
       },
-      "notes": "{total, plural, one {# service} other {# services}} in {areas} areas, {free} free for anyone who signs up. All in seven languages, with one account on phone, tablet and computer. We’ll see the prices at the end, after seeing everything."
+      "notes": "{total, plural, one {# service} other {# services}} in {areas} areas, {free} free for anyone who signs up. In English and Italian, with one account on phone, tablet and computer. We’ll see the prices at the end, after seeing everything."
     },
     "s6": {
       "title": "Everything you need, in {areas} areas",
@@ -9455,7 +9455,7 @@
         },
         "3": {
           "1": "Time and margin",
-          "2": "A timer on the job, materials also from {tabname_gestione_warehouse} and expenses: see straight away what you keep."
+          "2": "A timer on the job, materials also from the Warehouse and expenses: see straight away what you keep."
         },
         "4": {
           "1": "Payments and accountant",
@@ -9654,7 +9654,7 @@
         ],
         [
           "In your language",
-          "Website, guides and emails in 7 languages."
+          "Website, guides and emails in English and Italian."
         ]
       ],
       "badge": "Free to install · works on Android, iPhone and computers",

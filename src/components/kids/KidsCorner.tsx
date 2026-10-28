@@ -431,11 +431,13 @@ export default function KidsCorner({ userId }: { userId: string }) {
                   }}
                   className={`grid min-h-0 content-center justify-items-center gap-1.5 overflow-hidden rounded-3xl border-[3px] border-[#2B2D52] p-3 text-center shadow-[4px_4px_0_#2B2D52] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none [@media(min-height:760px)]:gap-2 [@media(min-height:760px)]:p-4 ${id === 'mani' ? 'col-span-2' : ''} ${tone}`}
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-[#2B2D52] bg-white [@media(min-height:760px)]:h-16 [@media(min-height:760px)]:w-16">
-                    <Icon className="h-7 w-7 text-[#2B2D52] [@media(min-height:760px)]:h-9 [@media(min-height:760px)]:w-9" aria-hidden />
+                  {/* Icona, titolo e descrizione (al massimo 2 righe): con 5 giochi
+                      nello schermo la scheda non deve tagliare nulla */}
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-[3px] border-[#2B2D52] bg-white [@media(min-height:760px)]:h-14 [@media(min-height:760px)]:w-14">
+                    <Icon className="h-6 w-6 text-[#2B2D52] [@media(min-height:760px)]:h-8 [@media(min-height:760px)]:w-8" aria-hidden />
                   </span>
-                  <span className="text-lg font-extrabold leading-tight text-[#2B2D52] [@media(min-height:760px)]:text-xl">{t(`games.${id}.title`)}</span>
-                  <span className="hidden text-sm font-bold leading-snug text-[#61648A] [@media(min-height:860px)]:block">{t(`games.${id}.text`)}</span>
+                  <span className="text-base font-extrabold leading-tight text-[#2B2D52] [@media(min-height:760px)]:text-lg">{t(`games.${id}.title`)}</span>
+                  <span className="hidden text-xs font-bold leading-snug text-[#61648A] [@media(min-height:760px)]:line-clamp-2 sm:text-sm">{t(`games.${id}.text`)}</span>
                 </button>
               ))}
             </div>

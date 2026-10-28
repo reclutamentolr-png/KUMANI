@@ -8983,7 +8983,7 @@
           "3": "su telefono, tablet e computer"
         }
       },
-      "notes": "{total, plural, one {# servizio} other {# servizi}} in {areas} aree, {free, plural, one {# gratuito} other {# gratuiti}} per chi si registra. Tutto in sette lingue, con un solo account su telefono, tablet e computer. I prezzi li vediamo alla fine, dopo aver visto tutto."
+      "notes": "{total, plural, one {# servizio} other {# servizi}} in {areas} aree, {free, plural, one {# gratuito} other {# gratuiti}} per chi si registra. In italiano e inglese, con un solo account su telefono, tablet e computer. I prezzi li vediamo alla fine, dopo aver visto tutto."
     },
     "s6": {
       "title": "Tutto quello che ti serve, in {areas} aree",
@@ -9653,7 +9653,7 @@
         },
         "4": {
           "1": "Nella tua lingua",
-          "2": "Sito, guide ed email in 7 lingue."
+          "2": "Sito, guide ed email in italiano e inglese."
         }
       },
       "badge": "Gratis da installare · funziona su Android, iPhone e computer",
