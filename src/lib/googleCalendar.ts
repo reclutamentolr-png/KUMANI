@@ -176,7 +176,12 @@ export async function syncGoogleCalendar(userId: string): Promise<GoogleSyncResu
       const query = new URLSearchParams({ timeMin: `${from}T00:00:00Z`, maxResults: '2500', fields: 'items(id,extendedProperties),nextPageToken', ...(pageToken ? { pageToken } : {}) })
       const { status, data } = await gapi<{ items?: { id: string; extendedProperties?: { private?: { kumani?: string } } }[]; nextPageToken?: string }>(token!, 'GET', `${path}/events?${query}`)
       if (!ok(status)) throw new Error(`google list ${status}`)
-      for (const item of data?.items ?? []) existing.set(item.id, item.extendedProperties?.private?.kumani)
+      // Solo gli eventi scritti da KUMANI (con l'impronta): quelli aggiunti a
+      // mano dall'utente nel calendario «KUMANI» restano dove sono
+      for (const item of data?.items ?? []) {
+        const print = item.extendedProperties?.private?.kumani
+        if (print) existing.set(item.id, print)
+      }
       pageToken = data?.nextPageToken
     } while (pageToken)
 
