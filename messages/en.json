@@ -2186,7 +2186,9 @@
     "placeAgeRecent": "in the last month",
     "placeNoDate": "No date taken in the photo.",
     "placeTip": "Compare it with what you were told: if the house “is in Rimini” but the photo was taken elsewhere, or the photo “from today” is years old, that is a warning sign. The photo data stays on your device; the map opens only if you tap it.",
-    "openYandex": "Open Yandex Images"
+    "openYandex": "Open Yandex Images",
+    "openSynthid": "Check the Google watermark (SynthID)",
+    "synthidText": "Images made with Gemini, ChatGPT and other AI tools from Google partners carry an invisible watermark in the pixels, which stays even if the photo is cropped or its data is removed. Google’s check is free: upload the same photo there."
   },
   "svat": {
     "backToMarketplace": "Back to the Ecosystem",

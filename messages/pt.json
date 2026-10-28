@@ -2186,7 +2186,9 @@
     "placeAgeRecent": "no último mês",
     "placeNoDate": "Sem data de captura na foto.",
     "placeTip": "Compara com o que te disseram: se a casa «fica em Rimini» mas a foto foi tirada noutro sítio, ou a foto «de hoje» tem anos, é um sinal de alarme. Os dados da foto ficam no teu dispositivo; o mapa só abre se lhe tocares.",
-    "openYandex": "Abrir Yandex Imagens"
+    "openYandex": "Abrir Yandex Imagens",
+    "openSynthid": "Verificar a marca de água da Google (SynthID)",
+    "synthidText": "As imagens feitas com Gemini, ChatGPT e outras ferramentas de IA parceiras da Google têm uma marca de água invisível nos píxeis, que se mantém mesmo que a foto seja recortada ou os dados removidos. A verificação da Google é gratuita: carregue lá a mesma foto."
   },
   "svat": {
     "backToMarketplace": "Voltar ao Ecossistema",

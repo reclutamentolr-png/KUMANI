@@ -2186,7 +2186,9 @@
     "placeAgeRecent": "au cours du dernier mois",
     "placeNoDate": "Aucune date de prise de vue dans la photo.",
     "placeTip": "Compare avec ce qu’on t’a dit : si la maison « est à Rimini » mais que la photo a été prise ailleurs, ou si la photo « d’aujourd’hui » date de plusieurs années, c’est un signal d’alarme. Les données de la photo restent sur ton appareil ; la carte ne s’ouvre que si tu la touches.",
-    "openYandex": "Ouvrir Yandex Images"
+    "openYandex": "Ouvrir Yandex Images",
+    "openSynthid": "Vérifier le filigrane Google (SynthID)",
+    "synthidText": "Les images créées avec Gemini, ChatGPT et d’autres outils d’IA partenaires de Google portent un filigrane invisible dans les pixels, qui reste même si la photo est recadrée ou ses données supprimées. La vérification de Google est gratuite : importez-y la même photo."
   },
   "svat": {
     "backToMarketplace": "Retour à l’Écosystème",

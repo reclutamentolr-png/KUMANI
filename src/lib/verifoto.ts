@@ -58,6 +58,10 @@ const AI_GENERATORS: [RegExp, string][] = [
   [/ideogram/i, 'Ideogram'],
   [/leonardo\.ai|leonardo ai/i, 'Leonardo AI'],
   [/runway/i, 'Runway'],
+  [/image playground|apple intelligence|genmoji/i, 'Apple Image Playground'],
+  [/\bgrok\b|\bx\.ai\b|\bxai\b/i, 'Grok (xAI)'],
+  [/kling|kuaishou/i, 'Kling'],
+  [/seedream|jimeng|doubao|bytedance/i, 'ByteDance Seedream'],
 ]
 
 export function aiGeneratorName(text: string | null | undefined): string | null {

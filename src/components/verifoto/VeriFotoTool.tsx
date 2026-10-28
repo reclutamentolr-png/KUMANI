@@ -330,6 +330,19 @@ export default function VeriFotoTool({
               )}
             </div>
 
+            {/* Filigrana invisibile SynthID: si legge solo con lo strumento di Google */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-[var(--muted)]">{t('synthidText')}</p>
+              <a
+                href="https://synthid.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-gray-50"
+              >
+                {t('openSynthid')} <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
             {/* Controlli manuali gratuiti */}
             <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
               <p className="font-bold text-[var(--ink)]">{t('manualTitle')}</p>

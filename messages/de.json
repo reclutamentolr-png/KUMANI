@@ -2186,7 +2186,9 @@
     "placeAgeRecent": "im letzten Monat",
     "placeNoDate": "Kein Aufnahmedatum im Foto.",
     "placeTip": "Vergleiche es mit dem, was man dir gesagt hat: Wenn das Haus „in Rimini“ ist, das Foto aber woanders aufgenommen wurde, oder das Foto „von heute“ Jahre alt ist, ist das ein Warnsignal. Die Fotodaten bleiben auf deinem Gerät; die Karte öffnet sich nur, wenn du sie antippst.",
-    "openYandex": "Yandex Bilder öffnen"
+    "openYandex": "Yandex Bilder öffnen",
+    "openSynthid": "Google-Wasserzeichen prüfen (SynthID)",
+    "synthidText": "Bilder aus Gemini, ChatGPT und anderen KI-Tools von Google-Partnern tragen ein unsichtbares Wasserzeichen in den Pixeln, das auch bleibt, wenn das Foto zugeschnitten oder seine Daten entfernt werden. Die Prüfung von Google ist kostenlos: Laden Sie dort dasselbe Foto hoch."
   },
   "svat": {
     "backToMarketplace": "Zurück zum Ökosystem",
