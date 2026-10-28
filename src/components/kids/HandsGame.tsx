@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Brush, Camera, Circle, Hand, Music, RefreshCw, Scissors, Star, Trash2 } from 'lucide-react'
+import { Brush, Camera, Circle, Hand, Music, Power, RefreshCw, Star, Trash2, Trophy, Wind } from 'lucide-react'
 import type { HandLandmarker, NormalizedLandmark } from '@mediapipe/tasks-vision'
 import { ageBand } from '@/lib/kids/catalog'
 import { BONES, FINGERTIPS, countFingers, loadHands } from '@/lib/kids/hands'
@@ -16,13 +16,15 @@ import KidChip from './KidChip'
 // «Gioca con le mani»: la fotocamera davanti vede le mani del bambino (21
 // puntini colorati per mano, MediaPipe sul telefono: il video non esce mai e
 // non si salva). Sei attività:
-// - Prendi le stelle: si toccano con la punta delle dita (KUMI guarda dal suo angolo)
+// - Prendi le stelle: si toccano con la punta delle dita (KUMI guarda dal suo
+//   angolo); al livello 2 solo con il dito dello stesso colore della stella
 // - Scoppia le bolle: le bolle salgono e si scoppiano con le dita
 // - Disegna nell'aria: pollice e indice uniti disegnano, mano aperta si ferma
 // - Pianoforte magico: tasti colorati in alto, si suonano con le dita
 // - Conta con le dita: KUMI chiede un numero, il bambino lo mostra
-// - Sasso, carta, forbice contro KUMI
-// Stelle del bambino: ogni 10 stelle o bolle prese, 5 conte giuste, 3 vittorie.
+// - Palloncino: cade piano, si tiene in aria colpendolo con la mano
+// Stelle del bambino: ogni 10 stelle, bolle o colpi al palloncino, 5 conte giuste.
+// «Termina il gioco» spegne la fotocamera in qualsiasi attività.
 
 const MODES = [
   { id: 'stars', icon: Star },
@@ -30,16 +32,15 @@ const MODES = [
   { id: 'draw', icon: Brush },
   { id: 'piano', icon: Music },
   { id: 'count', icon: Hand },
-  { id: 'rps', icon: Scissors },
+  { id: 'balloon', icon: Wind },
 ] as const
 type Mode = (typeof MODES)[number]['id']
-const MODE_LABEL: Record<Mode, string> = { stars: 'modeStars', bubbles: 'modeBubbles', draw: 'modeDraw', piano: 'modePiano', count: 'modeCount', rps: 'modeRps' }
-const MODE_HINT: Partial<Record<Mode, string>> = { stars: 'catchHint', bubbles: 'bubblesHint', draw: 'drawHint', piano: 'pianoHint' }
+const MODE_LABEL: Record<Mode, string> = { stars: 'modeStars', bubbles: 'modeBubbles', draw: 'modeDraw', piano: 'modePiano', count: 'modeCount', balloon: 'modeBalloon' }
+const MODE_HINT: Partial<Record<Mode, string>> = { stars: 'catchHint', bubbles: 'bubblesHint', draw: 'drawHint', piano: 'pianoHint', balloon: 'balloonHint' }
 
 type Status = 'idle' | 'loading' | 'running' | 'denied' | 'error'
-type Gesture = 'rock' | 'paper' | 'scissors'
-type Rps = { phase: 'ready' | 'beat' | 'result'; beat: number; you: Gesture | null; kumi: Gesture | null; result: 'win' | 'lose' | 'draw' | 'unknown' | null }
-type FloatingStar = { x: number; y: number; color: number; born: number }
+type Balloon = { x: number; y: number; vx: number; vy: number; color: number; hitAt: number; fellAt: number }
+type FloatingStar = { x: number; y: number; color: number; born: number; level: 1 | 2; bumpUntil: number }
 type Bubble = { x: number; y: number; r: number; vy: number; born: number }
 type Spark = { x: number; y: number; vx: number; vy: number; life: number; color: string }
 type Stroke = { color: string; pts: { x: number; y: number }[] }
@@ -51,16 +52,13 @@ const now = () => performance.now()
 const FINGER_COLORS = ['#E8473B', '#F28C28', '#F7C531', '#5DB14E', '#3A5BC7']
 const STAR_COLORS = ['#F7C531', '#F49CBB', '#7CC3EE', '#5DB14E', '#F28C28', '#8E5CC4']
 const KEY_COLORS = ['#E8473B', '#F28C28', '#F7C531', '#5DB14E', '#7CC3EE', '#3A5BC7', '#8E5CC4', '#F49CBB']
-const GESTURES: Gesture[] = ['rock', 'paper', 'scissors']
-const GESTURE_EMOJI: Record<Gesture, string> = { rock: '✊', paper: '✋', scissors: '✌️' }
-const BEATS = 3
-const BEAT_MS = 650
 const HOLD_MS = 700
 const MAX_DRAW_POINTS = 4000
-
-// Sasso: pugno (0-1 dita); carta: mano aperta (4-5); forbice: 2-3 dita
-const gestureOf = (fingers: number): Gesture => (fingers <= 1 ? 'rock' : fingers >= 4 ? 'paper' : 'scissors')
-const beats = (a: Gesture, b: Gesture) => (a === 'rock' && b === 'scissors') || (a === 'scissors' && b === 'paper') || (a === 'paper' && b === 'rock')
+// Palloncino: gravità leggera, spinta del colpo, punti della mano che lo toccano (punte e palmo)
+const BALLOON_GRAVITY = 0.00011
+const BALLOON_PUSH = 0.017
+const BALLOON_POINTS = [0, 4, 5, 8, 9, 12, 13, 16, 17, 20]
+const newBalloon = (color = 0): Balloon => ({ x: 0.5, y: -0.1, vx: 0, vy: 0.002, color, hitAt: 0, fellAt: 0 })
 
 // KUMI come immagine per il disegno sul canvas (fermo: il movimento lo fa il gioco)
 function kumiImage() {
@@ -96,12 +94,14 @@ export default function HandsGame({
   const [target, setTarget] = useState(0)
   const [shown, setShown] = useState<number | null>(null)
   const [good, setGood] = useState(false)
-  const [rps, setRps] = useState<Rps>({ phase: 'ready', beat: 0, you: null, kumi: null, result: null })
-  const [wins, setWins] = useState(0)
+  const [streak, setStreak] = useState(0)
+  const [best, setBest] = useState(0)
+  const [level, setLevelState] = useState<1 | 2>(1)
 
   // Il ciclo dei fotogrammi legge sempre i valori aggiornati da qui
   const live = useRef({
     mode: 'stars' as Mode,
+    level: 1 as 1 | 2,
     sound,
     voice,
     profile,
@@ -110,8 +110,8 @@ export default function HandsGame({
     correct: 0,
     holdFrom: 0,
     pauseUntil: 0,
-    wins: 0,
-    rps: { phase: 'ready' as Rps['phase'], from: 0, beat: 0 },
+    streak: 0,
+    best: 0,
     strokes: [] as Stroke[],
   })
   useEffect(() => {
@@ -138,30 +138,39 @@ export default function HandsGame({
     say(t('hands.countAsk', { n }))
   }, [maxCount, say, t])
 
-  // Sasso, carta, forbice: si riparte dal «pronti»
-  const rpsRestart = useCallback(() => {
-    live.current.rps = { phase: 'ready', from: now(), beat: 0 }
-    setRps({ phase: 'ready', beat: 0, you: null, kumi: null, result: null })
-  }, [])
-
   // Cosa dire e preparare quando un'attività comincia (con la fotocamera accesa)
   const begin = useCallback(
     (m: Mode) => {
       if (m === 'count') return newTarget()
-      if (m === 'rps') {
-        say(t('hands.rpsReady'))
-        return rpsRestart()
-      }
       const hint = MODE_HINT[m]
       if (hint) say(t(`hands.${hint}`))
     },
-    [newTarget, rpsRestart, say, t]
+    [newTarget, say, t]
   )
+
+  // «Termina il gioco»: fotocamera spenta, si torna alla schermata d'inizio
+  const end = () => {
+    stop()
+    try {
+      if (live.current.voice) speechSynthesis.cancel()
+    } catch {
+      // voce non disponibile
+    }
+    setStatus('idle')
+    setSeen(false)
+    setShown(null)
+  }
 
   const setMode = (m: Mode) => {
     live.current.mode = m
     setModeState(m)
     if (streamRef.current) begin(m)
+  }
+
+  const setLevel = (l: 1 | 2) => {
+    live.current.level = l
+    setLevelState(l)
+    if (streamRef.current) say(t(l === 2 ? 'hands.level2Hint' : 'hands.catchHint'))
   }
 
   const reward = () => {
@@ -201,6 +210,7 @@ export default function HandsGame({
     const bubbles: Bubble[] = []
     const sparks: Spark[] = []
     const keysDown = new Set<number>()
+    let balloon = newBalloon()
     let nextBubble = 0
     let pinching = false
     let strokeColor = 0
@@ -245,6 +255,8 @@ export default function HandsGame({
       const px = (p: NormalizedLandmark) => [(1 - p.x) * w, p.y * h] as const
       const first = result.landmarks[0]
       const tips = result.landmarks.flatMap((hand) => FINGERTIPS.map((i) => px(hand[i])))
+      // Le stesse punte con il dito (0 pollice … 4 mignolo), per il livello 2 delle stelle
+      const fingerTips = result.landmarks.flatMap((hand) => FINGERTIPS.map((i, finger) => ({ x: px(hand[i])[0], y: px(hand[i])[1], finger })))
       let fingers = 0
       for (const hand of result.landmarks) fingers += countFingers(hand)
       if (!!first !== lastSeen) {
@@ -314,20 +326,37 @@ export default function HandsGame({
       drawHands(ctx, result.landmarks, px, u)
 
       if (L.mode === 'stars') {
-        // Le stelle si prendono con la punta di un dito; KUMI guarda dal suo angolo
-        while (stars.length < 3) stars.push({ x: 0.12 + rand() * 0.76, y: 0.12 + rand() * 0.6, color: Math.floor(rand() * STAR_COLORS.length), born: time })
+        // Livello 1: qualsiasi dito prende qualsiasi stella. Livello 2: stelle
+        // dei colori delle dita, si prendono solo con il dito dello stesso
+        // colore (con quello sbagliato la stella rimbalza un po' più in là).
+        // KUMI guarda dal suo angolo
+        const two = L.level === 2
+        for (let i = stars.length - 1; i >= 0; i--) if (stars[i].level !== L.level) stars.splice(i, 1)
+        while (stars.length < 3)
+          stars.push({ x: 0.12 + rand() * 0.76, y: 0.12 + rand() * 0.6, color: Math.floor(rand() * (two ? FINGER_COLORS.length : STAR_COLORS.length)), born: time, level: L.level, bumpUntil: 0 })
         for (let i = stars.length - 1; i >= 0; i--) {
           const s = stars[i]
+          const color = two ? FINGER_COLORS[s.color] : STAR_COLORS[s.color]
           const age = (time - s.born) / 1000
           const sx = (s.x + Math.sin(age * 1.3 + i) * 0.02) * w
           const sy = (s.y + Math.cos(age * 1.1 + i) * 0.02) * h
           const r = 26 * u * Math.min(1, age * 3)
-          drawStar(ctx, sx, sy, r, age, STAR_COLORS[s.color])
-          if (tips.some(([x, y]) => Math.hypot(x - sx, y - sy) < r + 12 * u)) {
+          const shake = time < s.bumpUntil ? Math.sin(time / 30) * 6 * u : 0
+          drawStar(ctx, sx + shake, sy, r, age, color)
+          const touching = fingerTips.filter(({ x, y }) => Math.hypot(x - sx, y - sy) < r + 12 * u)
+          if (!touching.length) continue
+          if (!two || touching.some((tip) => tip.finger === s.color)) {
             stars.splice(i, 1)
-            burst(sx, sy, [STAR_COLORS[s.color], '#FFFFFF', '#FFC93C'])
+            burst(sx, sy, [color, '#FFFFFF', '#FFC93C'])
             if (L.sound) tone(s.color + 3, 0.12)
             scored()
+          } else if (time > s.bumpUntil) {
+            // Dito sbagliato: «boing» e la stella si sposta lontano dal dito
+            s.bumpUntil = time + 600
+            const away = touching[0]
+            s.x = Math.min(0.88, Math.max(0.12, s.x + (sx > away.x ? 0.12 : -0.12)))
+            s.y = Math.min(0.72, Math.max(0.12, s.y + (sy > away.y ? 0.08 : -0.08)))
+            if (L.sound) tone(15, 0.08, 0.18)
           }
         }
         drawKumi(ctx, kumi, w - 64 * u, h - 62 * u, 110 * u, time, !!first)
@@ -371,57 +400,67 @@ export default function HandsGame({
         if (time > L.pauseUntil && shownNow === L.target) {
           L.holdFrom ||= time
           if (time - L.holdFrom > HOLD_MS) {
-            L.pauseUntil = time + 1600
+            // Con la voce si aspetta che KUMI finisca «Bravo! Sono…» prima della domanda nuova
+            const pause = L.voice ? 3200 : 1600
+            L.pauseUntil = time + pause
             L.correct += 1
             setGood(true)
             burst(w / 2, h / 2, ['#F7C531', '#E8473B', '#7CC3EE', '#5DB14E', '#F49CBB'], 40)
             if (L.sound) melody([0, 4, 7, 11], 110)
             say(t('hands.countGood', { n: L.target }))
             if (L.correct % 5 === 0) reward()
-            setTimeout(() => live.current.mode === 'count' && streamRef.current && newTarget(), 1600)
+            setTimeout(() => live.current.mode === 'count' && streamRef.current && newTarget(), pause)
           }
         } else if (shownNow !== L.target) L.holdFrom = 0
       }
 
-      if (L.mode === 'rps') {
-        const R = L.rps
-        // Pronti: si parte appena si vede la mano (dopo un attimo)
-        if (R.phase === 'ready' && first && time - R.from > 900) {
-          R.phase = 'beat'
-          R.from = time
-          R.beat = 1
-          setRps({ phase: 'beat', beat: 1, you: null, kumi: null, result: null })
-          if (L.sound) tone(0, 0.12, 0.2)
-        } else if (R.phase === 'beat' && time - R.from > BEAT_MS) {
-          R.from = time
-          if (R.beat < BEATS) {
-            R.beat += 1
-            setRps((r) => ({ ...r, beat: R.beat }))
-            if (L.sound) tone(R.beat * 2, 0.12, 0.2)
-          } else {
-            // Via! La mano del bambino contro quella (a caso) di KUMI
-            R.phase = 'result'
-            const kumiPick = GESTURES[Math.floor(rand() * 3)]
-            const you = first ? gestureOf(countFingers(first)) : null
-            const res: Rps['result'] = !you ? 'unknown' : you === kumiPick ? 'draw' : beats(you, kumiPick) ? 'win' : 'lose'
-            setRps({ phase: 'result', beat: BEATS, you, kumi: kumiPick, result: res })
-            if (res === 'win') {
-              L.wins += 1
-              setWins(L.wins)
-              burst(w / 2, h / 2, ['#F7C531', '#E8473B', '#7CC3EE', '#5DB14E', '#F49CBB'], 40)
-              if (L.sound) melody([0, 4, 7, 11], 110)
-              if (L.wins % 3 === 0) reward()
-            } else if (L.sound) melody(res === 'lose' ? [7, 4, 0] : [4, 4], 140)
-            say(t(res === 'win' ? 'hands.rpsWin' : res === 'lose' ? 'hands.rpsLose' : res === 'draw' ? 'hands.rpsDraw' : 'hands.rpsUnknown'))
+      if (L.mode === 'balloon') {
+        drawKumi(ctx, kumi, w - 64 * u, h - 62 * u, 110 * u, time, !!first)
+        const b = balloon
+        const radius = 0.075
+        if (b.fellAt) {
+          // Caduto: dopo un attimo ne scende uno nuovo dall'alto
+          if (time - b.fellAt > 1400) balloon = newBalloon((b.color + 1) % KEY_COLORS.length)
+        } else {
+          // Si muove in coordinate 0–1 (y verso il basso), rimbalza sui lati
+          b.vy += BALLOON_GRAVITY
+          b.vx *= 0.99
+          b.x += b.vx
+          b.y += b.vy
+          if (b.x < radius || b.x > 1 - radius) {
+            b.x = Math.min(1 - radius, Math.max(radius, b.x))
+            b.vx = -b.vx * 0.8
           }
-        } else if (R.phase === 'result' && time - R.from > 2800) {
-          R.phase = 'ready'
-          R.from = time
-          setRps({ phase: 'ready', beat: 0, you: null, kumi: null, result: null })
+          // Colpo: un punto della mano lo tocca mentre scende (o dopo un attimo dall'ultimo colpo)
+          const hit = result.landmarks
+            .flatMap((hand) => BALLOON_POINTS.map((i) => ({ x: 1 - hand[i].x, y: hand[i].y })))
+            .find((p) => Math.hypot((p.x - b.x) * (w / h), p.y - b.y) < radius * 1.15)
+          if (hit && time - b.hitAt > 280 && (b.vy > -0.004 || time - b.hitAt > 700)) {
+            b.hitAt = time
+            b.vy = -BALLOON_PUSH
+            b.vx = Math.max(-0.008, Math.min(0.008, (b.x - hit.x) * 0.12))
+            b.color = (b.color + 1) % KEY_COLORS.length
+            L.streak += 1
+            setStreak(L.streak)
+            if (L.streak > L.best) {
+              L.best = L.streak
+              setBest(L.best)
+            }
+            burst(b.x * w, b.y * h, [KEY_COLORS[b.color], '#FFFFFF'], 8)
+            if (L.sound) tone(Math.min(15, L.streak), 0.12, 0.25)
+            scored()
+          }
+          if (b.y > 1 + radius) {
+            b.fellAt = time
+            if (L.streak > 0) {
+              if (L.sound) melody([7, 4, 0], 120)
+              say(t('hands.balloonFell'))
+            }
+            L.streak = 0
+            setStreak(0)
+          }
         }
-        // KUMI agita il tentacolo a ogni battito
-        const shake = R.phase === 'beat' ? Math.abs(Math.sin(((time - R.from) / BEAT_MS) * Math.PI)) * 30 * u : 0
-        drawKumi(ctx, kumi, w - 70 * u, h - 66 * u - shake, 120 * u, time, true)
+        if (!b.fellAt) drawBalloon(ctx, b.x * w, b.y * h, radius * h, KEY_COLORS[b.color], u, time)
       }
 
       // Scintille
@@ -445,7 +484,7 @@ export default function HandsGame({
 
   const fingersDone = shown !== null && shown === target
   const running = status === 'running'
-  const counter = mode === 'stars' || mode === 'bubbles' ? caught : mode === 'rps' ? wins : null
+  const counter = mode === 'stars' || mode === 'bubbles' ? caught : mode === 'balloon' ? streak : null
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
@@ -464,6 +503,32 @@ export default function HandsGame({
         ))}
       </div>
 
+      {/* Prendi le stelle: livello 1 (qualsiasi dito) o 2 (dito dello stesso colore) */}
+      {mode === 'stars' && (
+        <div className="flex flex-wrap items-center justify-center gap-2" role="radiogroup" aria-label={t('hands.levelLabel')}>
+          {([1, 2] as const).map((l) => (
+            <button
+              key={l}
+              type="button"
+              role="radio"
+              aria-checked={level === l}
+              onClick={() => setLevel(l)}
+              className={`flex min-h-10 items-center gap-1.5 rounded-full border-[3px] border-[#2B2D52] px-4 text-sm font-extrabold text-[#2B2D52] shadow-[2px_2px_0_#2B2D52] ${level === l ? 'bg-[#FFC93C]' : 'bg-white'}`}
+            >
+              {t('hands.level', { n: l })}
+              {l === 2 && (
+                <span className="flex -space-x-1" aria-hidden>
+                  {FINGER_COLORS.map((c) => (
+                    <span key={c} className="h-3 w-3 rounded-full border-2 border-[#2B2D52]" style={{ background: c }} />
+                  ))}
+                </span>
+              )}
+            </button>
+          ))}
+          {level === 2 && <p className="w-full text-center text-xs font-bold text-[#61648A]">{t('hands.level2Hint')}</p>}
+        </div>
+      )}
+
       {/* Fotocamera */}
       <div className="flex min-h-[180px] flex-1 items-center justify-center [container-type:size]">
         <div className="relative">
@@ -473,8 +538,13 @@ export default function HandsGame({
             <canvas ref={canvasRef} className={`block h-full w-full object-cover ${running ? '' : 'hidden'}`} />
 
             {running && counter !== null && (
-              <span className="absolute right-2 top-2 flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-white px-2.5 py-1 text-lg font-extrabold tabular-nums text-[#2B2D52]" aria-label={`${t(mode === 'rps' ? 'hands.wins' : 'hands.caught')}: ${counter}`}>
+              <span className="absolute right-2 top-2 flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-white px-2.5 py-1 text-lg font-extrabold tabular-nums text-[#2B2D52]" aria-label={`${t(mode === 'balloon' ? 'hands.balloonHits' : 'hands.caught')}: ${counter}`}>
                 <Star className="h-5 w-5 fill-[#FFC93C] text-[#2B2D52]" aria-hidden /> {counter}
+              </span>
+            )}
+            {running && mode === 'balloon' && best > 0 && (
+              <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full border-[3px] border-[#2B2D52] bg-[#FFF3C4] px-2.5 py-1 text-sm font-extrabold tabular-nums text-[#2B2D52]">
+                <Trophy className="h-4 w-4" aria-hidden /> {t('hands.balloonBest', { n: best })}
               </span>
             )}
             {running && mode === 'count' && target > 0 && (
@@ -482,33 +552,6 @@ export default function HandsGame({
                 <span className="text-base leading-tight sm:text-lg">{good ? t('hands.countGood', { n: target }) : t('hands.countAsk', { n: target })}</span>
                 <span className="text-4xl tabular-nums">{shown ?? '–'}</span>
               </div>
-            )}
-            {running && mode === 'rps' && (
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 p-3 text-center" role="status">
-                {rps.phase === 'beat' && <span className="text-7xl font-black text-white [text-shadow:0_3px_0_#2B2D52,0_0_12px_#2B2D52]">{rps.beat}</span>}
-                {rps.phase === 'result' && (
-                  <div className="rounded-3xl border-[3px] border-[#2B2D52] bg-white/95 px-4 py-3 shadow-[4px_4px_0_#2B2D52]">
-                    <p className="text-2xl font-extrabold text-[#2B2D52]">
-                      {t(rps.result === 'win' ? 'hands.rpsWin' : rps.result === 'lose' ? 'hands.rpsLose' : rps.result === 'draw' ? 'hands.rpsDraw' : 'hands.rpsUnknown')}
-                    </p>
-                    {rps.you && rps.kumi && (
-                      <div className="mt-2 flex items-center justify-center gap-5 text-sm font-bold text-[#61648A]">
-                        <span className="grid justify-items-center">
-                          <span className="text-4xl">{GESTURE_EMOJI[rps.you]}</span>
-                          {t('hands.rpsYou')} · {t(`hands.${rps.you}`)}
-                        </span>
-                        <span className="grid justify-items-center">
-                          <span className="text-4xl">{GESTURE_EMOJI[rps.kumi]}</span>
-                          {t('hands.rpsKumi')} · {t(`hands.${rps.kumi}`)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-            {running && mode === 'rps' && rps.phase === 'ready' && seen && (
-              <p className="pointer-events-none absolute inset-x-3 top-3 rounded-2xl bg-white/90 px-3 py-2 text-center text-lg font-extrabold text-[#2B2D52]">{t('hands.rpsReady')}</p>
             )}
             {running && mode === 'draw' && (
               <div className="absolute inset-x-2 top-2 flex items-start justify-between gap-2">
@@ -552,6 +595,15 @@ export default function HandsGame({
           </div>
         </div>
       </div>
+
+      {/* Termina: fotocamera spenta in qualsiasi attività */}
+      {running && (
+        <div className="flex justify-center">
+          <KidsButton onClick={end}>
+            <Power className="h-5 w-5" /> {t('hands.end')}
+          </KidsButton>
+        </div>
+      )}
     </div>
   )
 }
@@ -633,6 +685,36 @@ function drawStar(ctx: CanvasRenderingContext2D, x: number, y: number, r: number
   ctx.lineJoin = 'round'
   ctx.strokeStyle = '#2B2D52'
   ctx.stroke()
+  ctx.restore()
+}
+
+// Palloncino colorato con riflesso, nodino e filo che ondeggia
+function drawBalloon(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string, u: number, time: number) {
+  ctx.save()
+  ctx.lineWidth = 2.5 * u
+  ctx.strokeStyle = '#2B2D52'
+  ctx.beginPath()
+  ctx.moveTo(x, y + r * 1.15)
+  ctx.quadraticCurveTo(x + Math.sin(time / 300) * r * 0.4, y + r * 1.8, x, y + r * 2.4)
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.moveTo(x - r * 0.15, y + r * 1.22)
+  ctx.lineTo(x + r * 0.15, y + r * 1.22)
+  ctx.lineTo(x, y + r * 1.05)
+  ctx.closePath()
+  ctx.fillStyle = color
+  ctx.fill()
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.ellipse(x, y, r * 0.9, r * 1.1, 0, 0, Math.PI * 2)
+  ctx.fillStyle = color
+  ctx.fill()
+  ctx.lineWidth = 4 * u
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.ellipse(x - r * 0.35, y - r * 0.45, r * 0.18, r * 0.3, -0.5, 0, Math.PI * 2)
+  ctx.fillStyle = 'rgba(255,255,255,0.7)'
+  ctx.fill()
   ctx.restore()
 }
 

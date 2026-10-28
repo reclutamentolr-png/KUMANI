@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Camera, LoaderCircle, Trash2 } from 'lucide-react'
 import { removeProfilePhoto, uploadProfilePhoto } from '@/app/actions/profilePhoto'
 import { profilePhotoUrl } from '@/lib/profilePhoto'
+import ProfileSelfie from './ProfileSelfie'
 
 // Ritaglio quadrato al centro e lato di 512 px: la foto pesa poco e nel
 // cerchio si vede sempre intera, senza deformarsi
@@ -89,6 +90,7 @@ export default function ProfilePhotoSection({
           >
             <Camera className="h-3.5 w-3.5" /> {url ? t('change') : t('add')}
           </button>
+          <ProfileSelfie onDone={onChange} />
           {url && (
             <button
               type="button"

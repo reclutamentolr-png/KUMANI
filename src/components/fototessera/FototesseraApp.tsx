@@ -7,6 +7,10 @@ import { fototesseraDone } from '@/app/actions/fototessera'
 import { DEFAULT_ADJUST, HEAD_MM, PHOTO_DPI, PHOTO_MM, PHOTO_PX, PHOTO_PX_PER_MM, SHEET, fitFace, headLines, placement, setJpegDpi, sheetSlots, type Adjust, type Fit } from '@/lib/fototessera/geometry'
 import { analyze, busyBackground, cutout, cutoutMatte, loadMatte, loadVision, matte, type Warning } from '@/lib/fototessera/vision'
 import CameraDialog, { needsCameraDialog } from '@/components/camera/CameraDialog'
+import SmartCamera from './SmartCamera'
+
+// Scatto guidato: scelta ricordata nel browser
+const SMART_KEY = 'kumani_fototessera_smart'
 
 // FOTOTESSERA (piano Plus): dalla foto del telefono alla fototessera 35×45 mm
 // con sfondo bianco, testa della misura giusta e foglio 10×15 da stampare.
@@ -86,6 +90,8 @@ export default function FototesseraApp() {
   const [canShare, setCanShare] = useState(false)
   const [busySave, setBusySave] = useState(false)
   const [camera, setCamera] = useState(false)
+  const [smart, setSmart] = useState(false)
+  const [smartOpen, setSmartOpen] = useState(false)
   const previewRef = useRef<HTMLCanvasElement>(null)
   const takeRef = useRef<HTMLInputElement>(null)
   const pickRef = useRef<HTMLInputElement>(null)
@@ -98,7 +104,21 @@ export default function FototesseraApp() {
     } catch {
       setCanShare(false)
     }
+    try {
+      setSmart(localStorage.getItem(SMART_KEY) === '1')
+    } catch {
+      // memoria del browser non disponibile: resta spento
+    }
   }, [])
+
+  const toggleSmart = (on: boolean) => {
+    setSmart(on)
+    try {
+      localStorage.setItem(SMART_KEY, on ? '1' : '0')
+    } catch {
+      // niente
+    }
+  }
 
   // Anteprima con le linee guida
   const paint = useCallback(() => {
@@ -249,10 +269,20 @@ export default function FototesseraApp() {
     setPhase({ kind: 'start' })
   }
 
-  const takePhoto = () => (needsCameraDialog() ? setCamera(true) : takeRef.current?.click())
+  // Con lo scatto guidato la fotocamera è sempre quella della pagina (anche sul telefono)
+  const takePhoto = () => (smart ? setSmartOpen(true) : needsCameraDialog() ? setCamera(true) : takeRef.current?.click())
 
   const fileInputs = (
     <>
+      {smartOpen && (
+        <SmartCamera
+          onClose={() => setSmartOpen(false)}
+          onPhoto={(file: File) => {
+            setSmartOpen(false)
+            void openFile(file)
+          }}
+        />
+      )}
       {camera && (
         <CameraDialog
           onClose={() => setCamera(false)}
@@ -282,7 +312,15 @@ export default function FototesseraApp() {
               </li>
             ))}
           </ul>
-          <div className="mt-5 flex flex-wrap gap-3">
+          {/* Scatto guidato: si usa solo se spuntato */}
+          <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/30 p-3">
+            <input type="checkbox" checked={smart} onChange={(e) => toggleSmart(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--gold)]" />
+            <span>
+              <span className="block text-sm font-bold text-[var(--ink)]">{t('smartTitle')}</span>
+              <span className="block text-xs text-[var(--muted)]">{t('smartHint')}</span>
+            </span>
+          </label>
+          <div className="mt-4 flex flex-wrap gap-3">
             <button type="button" disabled={busy} onClick={takePhoto} className={`${btn} bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]`}>
               <Camera className="h-5 w-5" /> {t('take')}
             </button>

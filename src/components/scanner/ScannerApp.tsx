@@ -36,6 +36,10 @@ import ScanEditor, { type EditResult, type EditState } from "./ScanEditor";
 import CameraDialog, {
   needsCameraDialog,
 } from "@/components/camera/CameraDialog";
+import ScanCamera from "./ScanCamera";
+
+// Scatto automatico: scelta ricordata nel browser
+const AUTO_KEY = "kumani_scanner_auto";
 
 // SCANNER E PDF (piano Pro): fotografa i documenti e mettili in un PDF con le
 // pagine di altri PDF; poi riordina, ruota, togli, scegli le pagine e
@@ -82,6 +86,8 @@ export default function ScannerApp() {
   const [error, setError] = useState<string | null>(null);
   const [canShare, setCanShare] = useState(false);
   const [camera, setCamera] = useState(false);
+  const [auto, setAuto] = useState(false);
+  const [autoOpen, setAutoOpen] = useState(false);
   const sources = useRef(new Map<string, SourcePdf>());
   const cameraRef = useRef<HTMLInputElement>(null);
   const photosRef = useRef<HTMLInputElement>(null);
@@ -101,6 +107,11 @@ export default function ScannerApp() {
       );
     } catch {
       setCanShare(false);
+    }
+    try {
+      setAuto(localStorage.getItem(AUTO_KEY) === "1");
+    } catch {
+      // memoria del browser non disponibile: resta spento
     }
     const all = sources.current;
     return () => {
@@ -346,8 +357,24 @@ export default function ScannerApp() {
     }
   };
 
+  const toggleAuto = (on: boolean) => {
+    setAuto(on);
+    try {
+      localStorage.setItem(AUTO_KEY, on ? "1" : "0");
+    } catch {
+      // niente
+    }
+  };
+
   const inputs = (
     <>
+      {autoOpen && (
+        <ScanCamera
+          room={room}
+          onClose={() => setAutoOpen(false)}
+          onPhoto={(file) => addPhotos([file])}
+        />
+      )}
       {camera && (
         <CameraDialog
           facing="environment"
@@ -389,11 +416,32 @@ export default function ScannerApp() {
 
   const addButtons = (
     <div className="flex flex-wrap gap-3">
+      {/* Scatto automatico: si usa solo se spuntato */}
+      <label className="flex w-full cursor-pointer items-start gap-3 rounded-2xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/30 p-3">
+        <input
+          type="checkbox"
+          checked={auto}
+          onChange={(e) => toggleAuto(e.target.checked)}
+          className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--gold)]"
+        />
+        <span>
+          <span className="block text-sm font-bold text-[var(--ink)]">
+            {t("autoTitle")}
+          </span>
+          <span className="block text-xs text-[var(--muted)]">
+            {t("autoHint")}
+          </span>
+        </span>
+      </label>
       <button
         type="button"
         disabled={!!busy || room <= 0}
         onClick={() =>
-          needsCameraDialog() ? setCamera(true) : cameraRef.current?.click()
+          auto
+            ? setAutoOpen(true)
+            : needsCameraDialog()
+              ? setCamera(true)
+              : cameraRef.current?.click()
         }
         className={`${btn} bg-[var(--ink)] text-white hover:bg-[var(--ink-soft)]`}
       >

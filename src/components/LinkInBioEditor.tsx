@@ -15,6 +15,7 @@ import Link from '@/components/LocalizedLink'
 import BioThemeScene from '@/components/BioThemeScene'
 import LogoCircle from '@/components/LogoCircle'
 import BusinessProfileImport from '@/components/businessProfile/BusinessProfileImport'
+import ProfileSelfie from '@/components/profile/ProfileSelfie'
 import { businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
 import { Plus, Trash2, Save, Link as LinkIcon, Check, ExternalLink, Globe, Mail, Phone, MessageCircle, Lock, Loader2, Eye, Sparkles, X, User, Building2, GripVertical, ChevronUp, ChevronDown } from 'lucide-react'
 
@@ -404,6 +405,15 @@ export default function LinkInBioEditor({
                 </Link>
               </p>
             )}
+            {/* Selfie guidato: diventa la foto del profilo e si mostra subito qui */}
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <ProfileSelfie
+                onDone={() => {
+                  setShowPhoto(true)
+                  router.refresh()
+                }}
+              />
+            </div>
           </div>
         )}
 
