@@ -152,8 +152,29 @@ export default function AppNav() {
     grown.observe(document.body)
     window.addEventListener('load', settle)
     window.addEventListener('pageshow', settle)
+    // Tastiera chiusa (un campo perde il cursore: finestra salvata o chiusa,
+    // es. «Nuova bolletta»): iPhone aveva spostato la pagina per farle spazio e
+    // non la rimette a posto finché non si scorre, così il menu restava alzato.
+    // Appena la tastiera è giù si «ritocca» lo scorrimento (WebKit ricalcola
+    // il fondo) e si riaggancia il menu
+    let keyboardTimer = 0
+    const keyboardClosed = (e: FocusEvent) => {
+      const el = e.target as HTMLElement | null
+      if (!el || !/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) && !el.isContentEditable) return
+      window.clearTimeout(keyboardTimer)
+      keyboardTimer = window.setTimeout(() => {
+        // Un altro campo ha già il cursore: la tastiera è ancora aperta
+        const active = document.activeElement as HTMLElement | null
+        if (active && (/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) || active.isContentEditable)) return
+        window.scrollTo(window.scrollX, window.scrollY)
+        fix()
+      }, 350)
+    }
+    document.addEventListener('focusout', keyboardClosed)
     return () => {
       window.clearTimeout(timer)
+      window.clearTimeout(keyboardTimer)
+      document.removeEventListener('focusout', keyboardClosed)
       grown.disconnect()
       vv.removeEventListener('resize', settle)
       window.removeEventListener('scroll', settle)

@@ -48,6 +48,13 @@ body:has([data-app-nav]) .tool-guide-fab {
 body:has([data-app-nav]) .kumi-chat-fab {
   bottom: calc(5.25rem + env(safe-area-inset-bottom));
 }
+/* Dentro i servizi c'è già «Come si usa» in basso a destra: KUMI sale sopra */
+body:has(.tool-guide-fab) .kumi-chat-fab {
+  bottom: 6.5rem;
+}
+body:has([data-app-nav]):has(.tool-guide-fab) .kumi-chat-fab {
+  bottom: calc(9.75rem + env(safe-area-inset-bottom));
+}
 body:has([data-app-nav]):has([data-fab]) .tool-guide-fab {
   bottom: calc(9.75rem + env(safe-area-inset-bottom));
 }

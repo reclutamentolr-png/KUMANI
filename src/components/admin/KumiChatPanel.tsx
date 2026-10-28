@@ -1,7 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { BookOpen, CheckCircle2, GraduationCap, LoaderCircle, MessagesSquare, RefreshCw, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
+import { BookOpen, CheckCircle2, GraduationCap, LoaderCircle, MapPin, MessagesSquare, RefreshCw, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
+import { DEFAULT_PLACES, KUMI_PLACES } from '@/lib/kumiChat/places'
 import {
   adminKumiClearCache,
   adminKumiData,
@@ -35,6 +36,7 @@ export default function KumiChatPanel() {
   const [mode, setMode] = useState<KumiMode>('staff')
   const [visitorDaily, setVisitorDaily] = useState(10)
   const [totalDaily, setTotalDaily] = useState(300)
+  const [places, setPlaces] = useState<Record<string, boolean>>(DEFAULT_PLACES)
   const [saved, setSaved] = useState<string | null>(null)
   const [teach, setTeach] = useState<{ question: string; answer: string } | null>(null)
 
@@ -45,6 +47,7 @@ export default function KumiChatPanel() {
     setMode(r.settings.mode)
     setVisitorDaily(r.settings.visitorDaily)
     setTotalDaily(r.settings.totalDaily)
+    setPlaces(r.settings.places ?? DEFAULT_PLACES)
     setLoading(false)
   }, [])
 
@@ -54,7 +57,7 @@ export default function KumiChatPanel() {
   }, [load])
 
   const save = async () => {
-    const r = await adminKumiSaveSettings({ mode, visitorDaily, totalDaily })
+    const r = await adminKumiSaveSettings({ mode, visitorDaily, totalDaily, places })
     setSaved(r.ok ? 'Salvato' : `Errore: ${r.error}`)
   }
 
@@ -127,7 +130,7 @@ export default function KumiChatPanel() {
             <MessagesSquare className="h-5 w-5 text-[var(--gold)]" /> Chiedi a KUMI
           </h2>
           <p className="text-sm text-gray-600">
-            La chat della home per chi visita KUMANI la prima volta (gli iscritti non la vedono). KUMI risponde solo con i testi di KUMANI; quando non sa, propone di scrivere allo Staff. Ultimi 30 giorni.
+            La chat per chi visita KUMANI (e, se lo accendi qui sotto, anche per gli iscritti nella loro area). KUMI risponde solo con i testi di KUMANI; quando non sa, propone di scrivere allo Staff. Ultimi 30 giorni.
           </p>
         </div>
         <button type="button" onClick={load} className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50">
@@ -171,6 +174,37 @@ export default function KumiChatPanel() {
           (dopo aver cambiato prezzi o servizi).
         </p>
         {saved && <p className="text-xs font-semibold text-green-700 sm:col-span-4">{saved}</p>}
+      </div>
+
+      {/* Dove compare: un interruttore per ogni posto del sito (si salva con «Salva») */}
+      <div className="rounded-xl border border-gray-200 bg-white p-4">
+        <h3 className="flex items-center gap-2 text-sm font-bold text-gray-900">
+          <MapPin className="h-4 w-4 text-[var(--gold)]" /> Dove compare KUMI
+        </h3>
+        <p className="mt-1 text-xs text-gray-500">
+          Accendi i posti e premi «Salva» qui sopra. Le pagine pubbliche le vedono i visitatori (con lo stato «Accesa») e lo Staff; l’area iscritti, con lo stato «Accesa», la vedono anche gli iscritti, solo lì. Admin, traduttori e agenti: mai.
+        </p>
+        {(['public', 'member'] as const).map((group) => (
+          <div key={group} className="mt-3">
+            <p className="text-xs font-bold uppercase tracking-wide text-gray-500">{group === 'public' ? 'Pagine pubbliche' : 'Area iscritti'}</p>
+            <ul className="mt-1.5 grid gap-1.5 sm:grid-cols-2">
+              {KUMI_PLACES.filter((p) => p.group === group).map((p) => (
+                <li key={p.id}>
+                  <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-2.5 ${places[p.id] ? 'border-[var(--gold)]/60 bg-[var(--gold-pale)]/40' : 'border-gray-200'}`}>
+                    <input type="checkbox" checked={!!places[p.id]} onChange={(e) => setPlaces((prev) => ({ ...prev, [p.id]: e.target.checked }))} className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)]" />
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold text-gray-900">{p.label}</span>
+                      <span className="block text-xs text-gray-500">{p.hint}</span>
+                    </span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <button type="button" onClick={save} className="mt-3 rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--gold-bright)]">
+          Salva i posti
+        </button>
       </div>
 
       {/* Numeri */}

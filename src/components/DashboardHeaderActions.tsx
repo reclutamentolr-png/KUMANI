@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import Link from '@/components/LocalizedLink' // ✅ CAMBIATO: usa LocalizedLink invece di next/link
 import { logout } from '@/app/actions/logout'
@@ -270,16 +271,23 @@ export default function DashboardHeaderActions({ user, profile, isAdmin }: Dashb
         </form>
       </div>
 
-      {/* Modale Profilo */}
-      <ProfileModal 
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-        initialData={profile}
-        userId={user.id}
-        onChangeRequestUpdate={setChangeState}
-        photoPath={photoPath}
-        onPhotoChange={setPhotoPath}
-      />
+      {/* Modale Profilo, disegnata direttamente nella pagina (portal): nei
+          servizi questa barra è nascosta sul telefono e sul tablet (resta solo
+          dal computer), e la finestra aperta dal «Profilo» del menu in basso
+          restava invisibile dentro la barra nascosta */}
+      {isProfileModalOpen &&
+        createPortal(
+          <ProfileModal
+            isOpen={isProfileModalOpen}
+            onClose={() => setIsProfileModalOpen(false)}
+            initialData={profile}
+            userId={user.id}
+            onChangeRequestUpdate={setChangeState}
+            photoPath={photoPath}
+            onPhotoChange={setPhotoPath}
+          />,
+          document.body
+        )}
     </>
   )
 }

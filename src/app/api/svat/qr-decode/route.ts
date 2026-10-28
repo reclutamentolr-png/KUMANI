@@ -479,6 +479,9 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
     riskScore -= 15
   } else {
     indicators.push({ type: 'ok', key: 'indicatorHttpsOk' })
+    // I segnali buoni contano anche loro: prima il punteggio partiva da 50 e
+    // poteva solo scendere, così nessun link arrivava mai al verde (80)
+    riskScore += 10
   }
 
   // Brand impersonation check
@@ -523,7 +526,10 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
   ])
   const worst = googleHits ? worstThreat(googleHits) : null
   if (worst) indicators.push({ type: 'risk', key: worst === 'SOCIAL_ENGINEERING' ? 'indicatorGooglePhishing' : worst === 'MALWARE' ? 'indicatorGoogleMalware' : 'indicatorGoogleUnwanted' })
-  else if (googleHits) indicators.push({ type: 'ok', key: 'indicatorGoogleClean' })
+  else if (googleHits) {
+    indicators.push({ type: 'ok', key: 'indicatorGoogleClean' })
+    riskScore += 15
+  }
   if (listed.length) indicators.push({ type: 'risk', key: 'indicatorScamList', params: { domain: listed[0].domain } })
   if (community.length) indicators.push({ type: 'risk', key: 'indicatorCommunityConfirmed', params: { count: String(Math.max(1, ...community.map((c) => c.confirmed_reports ?? 1))) } })
   const blocked = !!worst || listed.length > 0 || community.length > 0 || !!phishing
@@ -548,6 +554,8 @@ async function analyzeURL(url: string): Promise<QRAnalysis['analysis']> {
               key: 'indicatorDomainAgeOk',
               params: { years: String(Math.floor(diffDays / 365)) },
             })
+            // Un sito con anni di vita è un buon segno (le truffe usano domini nuovi)
+            riskScore += diffDays >= 5 * 365 ? 20 : diffDays >= 365 ? 15 : 5
           }
         }
       }

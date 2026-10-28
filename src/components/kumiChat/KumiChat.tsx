@@ -8,6 +8,7 @@ import Link from '@/components/LocalizedLink'
 import Kumi from '@/components/kids/Kumi'
 import { askKumi, kumiChatStatus, rateKumi, type KumiStatus } from '@/app/actions/kumiChat'
 import type { KumiLink } from '@/lib/kumiChat/knowledge'
+import { kumiPlaceOf } from '@/lib/kumiChat/places'
 
 // Chiedi a KUMI: KUMI in basso a destra risponde a chi visita KUMANI la prima
 // volta, in tutte le pagine pubbliche, finché non si iscrive ed entra. La
@@ -15,8 +16,7 @@ import type { KumiLink } from '@/lib/kumiChat/knowledge'
 // chiudendo il sito, e si cancella quando la persona entra con il suo account.
 // Si vede solo se l'Admin l'ha accesa (o allo Staff in prova): decide il server.
 
-// Pagine da iscritti: lo Staff non vede KUMI mentre lavora
-const STAFF_HIDDEN = ['/admin', '/dashboard', '/app', '/wallet', '/community', '/documenti', '/messaggio', '/avvisi', '/agente', '/traduzioni']
+// Dove compare: i posti accesi dall'Admin (lib/kumiChat/places)
 const LOCALE_RE = /^\/(it|en|fr|es|pt|de|ru)(?=\/|$)/
 const STORE_KEY = 'kumani:kumi-chat'
 const STORE_DAYS = 7
@@ -96,7 +96,8 @@ export default function KumiChat() {
     kumiChatStatus()
       .then((s) => {
         if (!alive) return
-        if (s.member) clearStore()
+        // Iscritto entrato senza la chat per gli iscritti: la conversazione da visitatore si cancella
+        if (s.member && !s.memberChat) clearStore()
         setStatus(s)
       })
       .catch(() => {})
@@ -155,8 +156,10 @@ export default function KumiChat() {
   }, [msgs, busy])
 
   if (!status?.visible) return null
-  // Lo Staff non vede KUMI nelle pagine in cui lavora
-  if (status.staff && STAFF_HIDDEN.some((a) => path === a || path.startsWith(`${a}/`))) return null
+  // Solo nei posti accesi dall'Admin; gli iscritti solo nell'area iscritti
+  const place = kumiPlaceOf(path)
+  if (!place || !status.places[place.id]) return null
+  if (status.memberChat && place.group !== 'member') return null
 
   const dismissHint = () => {
     setHint(false)

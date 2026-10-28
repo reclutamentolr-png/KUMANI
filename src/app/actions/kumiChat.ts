@@ -11,6 +11,7 @@ import { AI_MODELS } from '@/lib/aiModels'
 import { clientIp } from '@/lib/securityCore'
 import { detect, protect, type PiiType } from '@/lib/textShield/detect'
 import { normalize, pickKnowledge, type Chunk, type KumiLink } from '@/lib/kumiChat/knowledge'
+import { DEFAULT_PLACES, cleanPlaces, memberPlacesOn } from '@/lib/kumiChat/places'
 
 // Chiedi a KUMI (home): risponde a chi visita KUMANI la prima volta, solo con
 // i testi di KUMANI. Gli iscritti non la vedono (hanno i messaggi allo Staff);
@@ -29,8 +30,9 @@ const IP_DAILY = 30
 const CACHE_DAYS = 7
 
 export type KumiMode = 'off' | 'staff' | 'on'
-export type KumiSettings = { mode: KumiMode; visitorDaily: number; totalDaily: number }
-const DEFAULTS: KumiSettings = { mode: 'staff', visitorDaily: 10, totalDaily: 300 }
+// places: posti del sito dove KUMI compare (lib/kumiChat/places)
+export type KumiSettings = { mode: KumiMode; visitorDaily: number; totalDaily: number; places: Record<string, boolean> }
+const DEFAULTS: KumiSettings = { mode: 'staff', visitorDaily: 10, totalDaily: 300, places: DEFAULT_PLACES }
 
 async function readSettings(): Promise<KumiSettings> {
   const { data } = await db().from('system_settings').select('value').eq('key', 'kumi_chat').maybeSingle()
@@ -47,12 +49,14 @@ async function readSettings(): Promise<KumiSettings> {
     mode: v.mode === 'off' || v.mode === 'on' || v.mode === 'staff' ? v.mode : DEFAULTS.mode,
     visitorDaily: int(v.visitorDaily, DEFAULTS.visitorDaily),
     totalDaily: int(v.totalDaily, DEFAULTS.totalDaily),
+    places: cleanPlaces(v.places),
   }
 }
 
 // Chi può usare la chat adesso: visitatori (accesa), Staff (sempre, tranne
-// spenta). 'member': iscritto entrato, la chat non serve più
-async function audience(settings: KumiSettings): Promise<'visitor' | 'staff' | 'member' | null> {
+// spenta), iscritti (accesa e almeno un posto dell'area iscritti acceso).
+// 'member': iscritto entrato per cui la chat non è accesa
+async function audience(settings: KumiSettings): Promise<'visitor' | 'staff' | 'memberChat' | 'member' | null> {
   const supabase = await createClient()
   const {
     data: { user },
@@ -60,7 +64,7 @@ async function audience(settings: KumiSettings): Promise<'visitor' | 'staff' | '
   if (user) {
     // admin_is_staff si chiama solo con la chiave di servizio
     const { data: staff } = await db().rpc('admin_is_staff', { p_uid: user.id })
-    if (!staff) return 'member'
+    if (!staff) return settings.mode === 'on' && memberPlacesOn(settings.places) ? 'memberChat' : 'member'
     return settings.mode === 'off' ? null : 'staff'
   }
   return settings.mode === 'on' ? 'visitor' : null
@@ -81,13 +85,15 @@ async function visitorKey(create: boolean): Promise<string | null> {
 }
 
 // member: la persona è iscritta ed è entrata (la conversazione salvata nel
-// browser si cancella); staff: lo Staff la vede solo nelle pagine pubbliche
-export type KumiStatus = { visible: boolean; remaining: number; limit: number; staffPreview: boolean; staff: boolean; member: boolean }
+// browser si cancella, a meno che la chat sia accesa anche per gli iscritti:
+// memberChat); staff: lo Staff la vede nei posti accesi; places: posti accesi
+export type KumiStatus = { visible: boolean; remaining: number; limit: number; staffPreview: boolean; staff: boolean; member: boolean; memberChat: boolean; places: Record<string, boolean> }
 
 export async function kumiChatStatus(): Promise<KumiStatus> {
   const settings = await readSettings()
   const who = await audience(settings)
-  if (who !== 'visitor' && who !== 'staff') return { visible: false, remaining: 0, limit: 0, staffPreview: false, staff: false, member: who === 'member' }
+  if (who !== 'visitor' && who !== 'staff' && who !== 'memberChat')
+    return { visible: false, remaining: 0, limit: 0, staffPreview: false, staff: false, member: who === 'member', memberChat: false, places: settings.places }
   const key = await visitorKey(false)
   const used = key ? (((await db().rpc('kumi_chat_used', { p_visitor: key })).data as number | null) ?? 0) : 0
   return {
@@ -96,7 +102,9 @@ export async function kumiChatStatus(): Promise<KumiStatus> {
     limit: settings.visitorDaily,
     staffPreview: who === 'staff' && settings.mode === 'staff',
     staff: who === 'staff',
-    member: false,
+    member: who === 'memberChat',
+    memberChat: who === 'memberChat',
+    places: settings.places,
   }
 }
 
@@ -122,7 +130,7 @@ type Result = { answer: string; answered: boolean; links: KumiLink[] }
 export async function askKumi(question: string, locale: string, history: KumiTurn[] = []): Promise<KumiAnswer> {
   const settings = await readSettings()
   const who = await audience(settings)
-  if (who !== 'visitor' && who !== 'staff') return { ok: false, error: 'off' }
+  if (who !== 'visitor' && who !== 'staff' && who !== 'memberChat') return { ok: false, error: 'off' }
   const lang = LOCALES.includes(locale) ? locale : 'it'
   const raw = String(question ?? '').replace(/\s+/g, ' ').trim().slice(0, 300)
   if (raw.length < 2) return { ok: false, error: 'empty' }
@@ -354,6 +362,7 @@ export async function adminKumiSaveSettings(next: KumiSettings): Promise<{ ok: b
     mode: next.mode === 'off' || next.mode === 'on' ? next.mode : 'staff',
     visitorDaily: Math.min(100, Math.max(1, Math.floor(Number(next.visitorDaily) || DEFAULTS.visitorDaily))),
     totalDaily: Math.min(20000, Math.max(0, Math.floor(Number(next.totalDaily) || 0))),
+    places: cleanPlaces(next.places),
   }
   const { error } = await db().from('system_settings').upsert({ key: 'kumi_chat', value: JSON.stringify(value) }, { onConflict: 'key' })
   return error ? { ok: false, error: error.message } : { ok: true }
