@@ -96,11 +96,12 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
     setError(false)
     try {
       const { jsPDF } = await import('jspdf')
-      // 85×55 mm + 3 mm di margine di taglio per lato
-      const pdf = new jsPDF({ unit: 'mm', format: [91, 61], orientation: 'landscape' })
+      // 85×55 mm + 2 mm di abbondanza per lato (come chiedono le tipografie
+      // online): il disegno ha 3 mm, il millimetro in più resta fuori pagina
+      const pdf = new jsPDF({ unit: 'mm', format: [89, 59], orientation: 'landscape' })
       for (const [i, side] of sides.entries()) {
-        if (i > 0) pdf.addPage([91, 61], 'landscape')
-        pdf.addImage(await render(side), 'PNG', 0, 0, 91, 61)
+        if (i > 0) pdf.addPage([89, 59], 'landscape')
+        pdf.addImage(await render(side), 'PNG', -1, -1, 91, 61, undefined, 'FAST')
       }
       download(URL.createObjectURL(pdf.output('blob')), `${fileBase}_stampa.pdf`)
     } catch (e) {

@@ -155,9 +155,19 @@ export default function AppNav() {
     // Tastiera chiusa (un campo perde il cursore: finestra salvata o chiusa,
     // es. «Nuova bolletta»): iPhone aveva spostato la pagina per farle spazio e
     // non la rimette a posto finché non si scorre, così il menu restava alzato.
-    // Appena la tastiera è giù si «ritocca» lo scorrimento (WebKit ricalcola
-    // il fondo) e si riaggancia il menu
+    // Appena la tastiera è giù si dà una piccola spinta allo scorrimento
+    // (WebKit ricalcola il fondo) e si riaggancia il menu
     let keyboardTimer = 0
+    // «Spinta» di un pixel e ritorno: scrollTo sulla stessa posizione WebKit lo
+    // ignora, così invece ricalcola davvero barre e menu
+    const nudge = () => {
+      const y = window.scrollY
+      window.scrollTo(window.scrollX, y + 1)
+      requestAnimationFrame(() => {
+        window.scrollTo(window.scrollX, y)
+        fix()
+      })
+    }
     const keyboardClosed = (e: FocusEvent) => {
       const el = e.target as HTMLElement | null
       if (!el || !/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) && !el.isContentEditable) return
@@ -166,15 +176,27 @@ export default function AppNav() {
         // Un altro campo ha già il cursore: la tastiera è ancora aperta
         const active = document.activeElement as HTMLElement | null
         if (active && (/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) || active.isContentEditable)) return
-        window.scrollTo(window.scrollX, window.scrollY)
-        fix()
+        nudge()
       }, 350)
     }
     document.addEventListener('focusout', keyboardClosed)
+    // Finestra chiusa con la X mentre un campo aveva il cursore: il campo sparisce
+    // e iPhone non segnala nulla. Ci si accorge dalla tastiera che scende: lo
+    // schermo visibile torna alto di colpo
+    let lastHeight = vv.height
+    const viewportChanged = () => {
+      const grew = vv.height - lastHeight > 120
+      lastHeight = vv.height
+      if (!grew) return
+      window.clearTimeout(keyboardTimer)
+      keyboardTimer = window.setTimeout(nudge, 250)
+    }
+    vv.addEventListener('resize', viewportChanged)
     return () => {
       window.clearTimeout(timer)
       window.clearTimeout(keyboardTimer)
       document.removeEventListener('focusout', keyboardClosed)
+      vv.removeEventListener('resize', viewportChanged)
       grown.disconnect()
       vv.removeEventListener('resize', settle)
       window.removeEventListener('scroll', settle)
