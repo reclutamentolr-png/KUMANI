@@ -140,6 +140,11 @@ export default function QRCheckScanner() {
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  // Dal vivo: contorno e bollino disegnati sopra il QR inquadrato; ogni QR si
+  // controlla una volta sola (risultati tenuti qui) e la fotocamera resta accesa
+  const overlayRef = useRef<HTMLCanvasElement>(null)
+  const liveCache = useRef(new Map<string, QRAnalysis | 'loading' | 'error'>())
+  const [live, setLive] = useState<{ data: string; state: QRAnalysis | 'loading' | 'error' } | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const rafRef = useRef<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -185,9 +190,26 @@ export default function QRCheckScanner() {
     }
   }, [])
 
+  // Controllo di un QR visto dal vivo, senza fermare la fotocamera
+  const analyzeLive = useCallback(async (qrData: string) => {
+    liveCache.current.set(qrData, 'loading')
+    setLive({ data: qrData, state: 'loading' })
+    let state: QRAnalysis | 'error' = 'error'
+    try {
+      const res = await fetch('/api/svat/qr-decode', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ qrData }) })
+      if (res.ok) state = (await res.json()) as QRAnalysis
+    } catch {
+      // resta «error»: si potrà riprovare inquadrandolo di nuovo
+    }
+    if (state === 'error') liveCache.current.delete(qrData)
+    else liveCache.current.set(qrData, state)
+    setLive((prev) => (prev?.data === qrData ? { data: qrData, state } : prev))
+  }, [])
+
   const startCamera = useCallback(async () => {
     setError(null)
     setResult(null)
+    setLive(null)
     try {
       loadJsQR().catch(() => {})
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -195,6 +217,53 @@ export default function QRCheckScanner() {
       })
       streamRef.current = stream
       setCameraActive(true)
+      let lastSeen = 0
+
+      // Contorno del QR e bollino colorato sopra, nelle misure del video
+      function drawOverlay(code: { data: string; location: Record<'topLeftCorner' | 'topRightCorner' | 'bottomRightCorner' | 'bottomLeftCorner', { x: number; y: number }> } | null, w: number, h: number) {
+        const overlay = overlayRef.current
+        if (!overlay) return
+        if (overlay.width !== w || overlay.height !== h) {
+          overlay.width = w
+          overlay.height = h
+        }
+        const octx = overlay.getContext('2d')
+        if (!octx) return
+        octx.clearRect(0, 0, w, h)
+        if (!code) return
+        const state = liveCache.current.get(code.data)
+        const badge = state && typeof state === 'object' ? state.analysis.badge : null
+        const color = badge === 'red' ? '#dc2626' : badge === 'yellow' ? '#f59e0b' : badge === 'green' ? '#16a34a' : '#ffffff'
+        const L = code.location
+        const pts = [L.topLeftCorner, L.topRightCorner, L.bottomRightCorner, L.bottomLeftCorner]
+        const u = Math.max(w, h) / 900
+        octx.lineJoin = 'round'
+        octx.lineWidth = 8 * u
+        octx.strokeStyle = color
+        octx.fillStyle = badge ? `${color}33` : 'rgba(255,255,255,0.15)'
+        octx.beginPath()
+        pts.forEach((p, i) => (i ? octx.lineTo(p.x, p.y) : octx.moveTo(p.x, p.y)))
+        octx.closePath()
+        octx.fill()
+        octx.stroke()
+        // Bollino sopra il codice
+        const label = badge === 'red' ? `✕ ${t('liveDanger')}` : badge === 'yellow' ? `⚠ ${t('liveWarning')}` : badge === 'green' ? `✓ ${t('liveSafe')}` : t('liveChecking')
+        const top = Math.min(...pts.map((p) => p.y))
+        const cx = pts.reduce((s, p) => s + p.x, 0) / 4
+        octx.font = `800 ${Math.round(34 * u)}px system-ui, sans-serif`
+        const tw = octx.measureText(label).width
+        const bw = tw + 36 * u
+        const bh = 58 * u
+        const bx = Math.max(6, Math.min(w - bw - 6, cx - bw / 2))
+        const by = Math.max(6, top - bh - 14 * u)
+        octx.fillStyle = badge ? color : 'rgba(23,23,23,0.85)'
+        octx.beginPath()
+        octx.roundRect(bx, by, bw, bh, bh / 2)
+        octx.fill()
+        octx.fillStyle = badge === 'yellow' ? '#1f1f1f' : '#ffffff'
+        octx.textBaseline = 'middle'
+        octx.fillText(label, bx + 18 * u, by + bh / 2)
+      }
 
       function tick() {
         const video = videoRef.current
@@ -214,10 +283,17 @@ export default function QRCheckScanner() {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
         const code = jsQR(imageData.data, imageData.width, imageData.height)
+        const now = performance.now()
         if (code?.data) {
-          stopCamera()
-          analyze(code.data)
-          return
+          lastSeen = now
+          // QR nuovo: si controlla (una volta sola) e la fotocamera resta accesa
+          const known = liveCache.current.get(code.data)
+          if (!known) void analyzeLive(code.data)
+          else setLive((prev) => (prev?.data === code.data ? prev : { data: code.data, state: known }))
+          drawOverlay(code, canvas.width, canvas.height)
+        } else if (now - lastSeen > 700) {
+          // QR uscito dall'inquadratura: via il contorno (il risultato resta in basso)
+          drawOverlay(null, canvas.width, canvas.height)
         }
         rafRef.current = requestAnimationFrame(tick)
       }
@@ -232,7 +308,7 @@ export default function QRCheckScanner() {
     } catch {
       setError(t('allowCamera'))
     }
-  }, [t, analyze, stopCamera, loadJsQR])
+  }, [t, analyzeLive, loadJsQR])
 
   const handleFile = useCallback(
     (file: File) => {
@@ -304,15 +380,53 @@ export default function QRCheckScanner() {
       />
 
       {cameraActive && (
-        <div className="relative rounded-xl overflow-hidden bg-black mb-4">
-          <video ref={videoRef} className="w-full max-h-96 object-contain" muted playsInline />
-          <button
-            onClick={stopCamera}
-            className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow"
-            aria-label="Close"
-          >
-            <X className="w-5 h-5 text-[var(--ink)]" />
-          </button>
+        <div className="mb-4">
+          <div className="relative rounded-xl overflow-hidden bg-black">
+            <video ref={videoRef} className="block w-full max-h-[28rem] object-contain" muted playsInline />
+            {/* Contorno e bollino sopra il QR, con le stesse misure del video */}
+            <canvas ref={overlayRef} className="pointer-events-none absolute inset-0 h-full w-full object-contain" aria-hidden />
+            {!live && <p className="pointer-events-none absolute inset-x-3 bottom-3 rounded-xl bg-black/60 px-3 py-2 text-center text-sm font-semibold text-white">{t('liveHint')}</p>}
+            <button
+              onClick={stopCamera}
+              className="absolute top-3 right-3 bg-white/90 hover:bg-white rounded-full p-2 shadow"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5 text-[var(--ink)]" />
+            </button>
+          </div>
+          {/* Ultimo QR controllato: esito in breve e dettagli completi */}
+          {live && (
+            <div
+              className={`mt-3 flex flex-wrap items-center gap-3 rounded-xl border p-3 ${
+                typeof live.state === 'object' ? `${TONES[live.state.analysis.badge].soft} ${TONES[live.state.analysis.badge].border}` : 'border-[var(--gold)]/30 bg-[var(--paper)]'
+              }`}
+              role="status"
+            >
+              <div className="min-w-0 flex-1">
+                <p className={`font-extrabold ${typeof live.state === 'object' ? TONES[live.state.analysis.badge].text : 'text-[var(--ink)]'}`}>
+                  {live.state === 'loading'
+                    ? t('liveChecking')
+                    : live.state === 'error'
+                      ? t('liveError')
+                      : t(live.state.analysis.badge === 'red' ? 'liveDanger' : live.state.analysis.badge === 'yellow' ? 'liveWarning' : 'liveSafe')}
+                </p>
+                <p className="truncate text-xs text-[var(--muted)]">{live.data}</p>
+              </div>
+              {typeof live.state === 'object' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const full = live.state as QRAnalysis
+                    stopCamera()
+                    setResult(full)
+                  }}
+                  className="rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-bold text-[var(--gold-bright)]"
+                >
+                  {t('liveDetails')}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
 

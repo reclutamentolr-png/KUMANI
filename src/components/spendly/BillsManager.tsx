@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { AlertCircle, CheckCircle2, Pause, Pencil, Play, Plus, Receipt, Trash2, TrendingDown, TrendingUp, Undo2 } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Pause, Pencil, Play, Plus, Receipt, ScanLine, Trash2, TrendingDown, TrendingUp, Undo2 } from 'lucide-react'
+import OcrCamera from '@/components/ocr/OcrCamera'
 import SpendlyModal from './SpendlyModal'
 import { createFixedExpense, deleteFixedExpense, setBillActive, updateFixedExpense } from '@/app/actions/spendly'
 import { markBillPaid, unmarkBillPaid } from '@/app/actions/agenda'
@@ -100,6 +101,9 @@ export default function BillsManager({
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [showInactive, setShowInactive] = useState(false)
+  // Bolletta fotografata: nome, importo e scadenza letti nel telefono
+  const [scanOpen, setScanOpen] = useState(false)
+  const [scanned, setScanned] = useState(false)
 
   const paid = new Map(payments.map((p) => [paymentKey(p.expense_id, p.period), p]))
   // Disattivare mette la fine a oggi (o alla data di inizio, se è nel futuro):
@@ -407,6 +411,32 @@ export default function BillsManager({
 
       {form && (
         <SpendlyModal title={form.id ? t('editBill') : t('newBill')} onClose={() => setForm(null)}>
+          {scanOpen && (
+            <OcrCamera
+              mode="bill"
+              onClose={() => setScanOpen(false)}
+              onResult={(r) => {
+                setScanOpen(false)
+                setScanned(true)
+                setForm((f) =>
+                  f && {
+                    ...f,
+                    description: f.description.trim() || r.provider || f.description,
+                    amount: r.amount ?? f.amount,
+                    date: r.dueDate ?? f.date,
+                  }
+                )
+              }}
+            />
+          )}
+          {!form.id && (
+            <div className="mb-4 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-3">
+              <button type="button" onClick={() => setScanOpen(true)} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[var(--ink)] px-4 text-sm font-bold text-[var(--gold-bright)]">
+                <ScanLine className="h-4 w-4" /> {t('scanBillButton')}
+              </button>
+              <p className="mt-1.5 text-xs text-[var(--muted)]">{scanned ? t('scanBillDone') : t('scanBillHint')}</p>
+            </div>
+          )}
           <form onSubmit={save} className="space-y-4">
             <div>
               <label className="mb-1 block text-sm font-medium text-[var(--ink)]">{t('billName')}</label>

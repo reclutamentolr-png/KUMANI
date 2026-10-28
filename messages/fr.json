@@ -1730,7 +1730,10 @@
     "legendNetNegative": "Solde négatif",
     "chartNet": "Solde",
     "chartToday": "aujourd’hui",
-    "chartEndOfYear": "en fin d’année"
+    "chartEndOfYear": "en fin d’année",
+    "scanBillButton": "Lire la facture",
+    "scanBillHint": "Prends la facture en photo : nom, montant et échéance se remplissent seuls. La photo reste sur ton téléphone.",
+    "scanBillDone": "Données lues sur la facture : vérifie-les avant d’enregistrer."
   },
   "common": {
     "publicOfflineProfileTitle": "Profil momentanément indisponible",
@@ -2422,7 +2425,14 @@
       "recDontOpen": "N’ouvrez pas le lien et ne saisissez pas les données de votre carte ou de votre compte.",
       "recOfficialPay": "Payez stationnement, amendes et taxes uniquement via l’application ou le site officiel de la mairie ou de l’opérateur.",
       "recIfPaid": "Si vous avez déjà payé ou saisi votre carte, appelez tout de suite votre banque pour la bloquer.",
-      "recReportQr": "Signalez le QR ci-dessous et, s’il est sur un horodateur, prévenez la police municipale : vous aidez les autres à l’éviter."
+      "recReportQr": "Signalez le QR ci-dessous et, s’il est sur un horodateur, prévenez la police municipale : vous aidez les autres à l’éviter.",
+      "liveHint": "Vise un QR code : le badge apparaît au-dessus",
+      "liveChecking": "Vérification…",
+      "liveSafe": "Sûr",
+      "liveWarning": "Attention",
+      "liveDanger": "Danger",
+      "liveError": "Vérification impossible : vise-le à nouveau",
+      "liveDetails": "Voir les détails"
     },
     "securitySection": "Sécurité & Protection",
     "checkLookalike": "Ressemblance avec des sites connus",
@@ -2741,7 +2751,12 @@
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Ouvrir dans KUMANI Casa",
     "casaNotice": "Cette échéance concerne votre logement : touchez pour l’ouvrir dans KUMANI Casa.",
-    "limitReached": "Vous avez atteint le nombre maximum autorisé. Supprimez ce dont vous n’avez plus besoin pour en ajouter d’autres."
+    "limitReached": "Vous avez atteint le nombre maximum autorisé. Supprimez ce dont vous n’avez plus besoin pour en ajouter d’autres.",
+    "scanDocButton": "Lire la date d’expiration du document",
+    "scanDocHint": "Passeport ou carte d’identité électronique : la date est lue sur les lignes <<<. Tout reste sur ton téléphone.",
+    "scanDocDone": "Date lue sur le document : vérifie-la et enregistre.",
+    "scanDocPassport": "Passeport",
+    "scanDocIdCard": "Carte d’identité"
   },
   "findo": {
     "title": "Findo",
@@ -13719,6 +13734,7 @@
     "sourceLabel": "Point de départ",
     "sources": {
       "logo": "Du logo",
+      "camera": "Caméra",
       "harmony": "Générer",
       "hand": "À la main"
     },
@@ -13844,7 +13860,18 @@
       "use": "Utiliser les couleurs de la marque"
     },
     "bioTheme": "Les couleurs de votre marque",
-    "bioThemeHint": "Depuis la Fiche entreprise ; elles se mettent à jour seules"
+    "bioThemeHint": "Depuis la Fiche entreprise ; elles se mettent à jour seules",
+    "cameraTitle": "Les couleurs en direct",
+    "cameraText": "Vise ton enseigne, ton comptoir, ta vitrine ou un de tes produits : les couleurs du centre sont lues pendant que tu bouges le téléphone. La photo n’est ni enregistrée ni envoyée.",
+    "cameraOpen": "Viser avec la caméra",
+    "cameraAgain": "Viser à nouveau",
+    "cameraHint": "Place les couleurs de ta marque dans le carré",
+    "cameraSwatches": "Couleurs trouvées",
+    "cameraUse": "Utiliser ces couleurs",
+    "cameraClose": "Fermer",
+    "cameraSwitch": "Changer de caméra",
+    "cameraDenied": "Accès à la caméra refusé. Autorise-le dans les réglages du navigateur et réessaie.",
+    "cameraError": "La caméra n’est pas disponible sur cet appareil."
   },
   "proposals": {
     "title": "Propositions de la communauté",
@@ -17323,7 +17350,18 @@
     "errNone": "Aucune caméra trouvée sur cet appareil. Annulez et choisissez une photo sur l’ordinateur.",
     "retake": "Reprendre",
     "use": "Utiliser cette photo",
-    "preview": "Photo qui vient d’être prise"
+    "preview": "Photo qui vient d’être prise",
+    "mrzTitle": "Lire la date d’expiration du document",
+    "mrzHint": "Place dans le cadre les lignes avec les symboles <<< en bas du passeport ou au dos de la carte d’identité",
+    "mrzReading": "Lecture… tiens le document immobile, avec une bonne lumière et sans reflets",
+    "billTitle": "Lire la facture",
+    "billHint": "Cadre la première page de la facture, avec le montant et l’échéance, puis prends la photo",
+    "billReading": "Lecture de la facture…",
+    "billNothing": "Aucun montant ni échéance trouvés : rapproche-toi, avec plus de lumière, et réessaie",
+    "billShoot": "Prendre la photo",
+    "ocrManual": "Je saisis à la main",
+    "ocrDenied": "Accès à la caméra refusé. Autorise-le dans les réglages du navigateur et réessaie.",
+    "ocrError": "La lecture n’est pas disponible sur cet appareil. Tu peux saisir les données à la main."
   },
   "needSearch": {
     "title": "Écrivez ce dont vous avez besoin",

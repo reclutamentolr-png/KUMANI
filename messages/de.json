@@ -1730,7 +1730,10 @@
     "legendNetNegative": "Negatives Saldo",
     "chartNet": "Saldo",
     "chartToday": "heute",
-    "chartEndOfYear": "zum Jahresende"
+    "chartEndOfYear": "zum Jahresende",
+    "scanBillButton": "Aus der Rechnung lesen",
+    "scanBillHint": "Fotografiere die Rechnung: Name, Betrag und Fälligkeit werden automatisch ausgefüllt. Das Foto bleibt auf deinem Handy.",
+    "scanBillDone": "Daten aus der Rechnung gelesen: vor dem Speichern prüfen."
   },
   "common": {
     "publicOfflineProfileTitle": "Profil vorübergehend nicht verfügbar",
@@ -2422,7 +2425,14 @@
       "recDontOpen": "Öffne den Link nicht und gib keine Karten- oder Kontodaten ein.",
       "recOfficialPay": "Bezahle Parken, Bußgelder und Gebühren nur über die offizielle App oder Seite der Stadt oder des Betreibers.",
       "recIfPaid": "Wenn du schon bezahlt oder die Karte eingegeben hast, ruf sofort deine Bank an und lass sie sperren.",
-      "recReportQr": "Melde den QR-Code unten und, wenn er auf einem Parkautomaten klebt, informiere die örtliche Polizei: So hilfst du anderen."
+      "recReportQr": "Melde den QR-Code unten und, wenn er auf einem Parkautomaten klebt, informiere die örtliche Polizei: So hilfst du anderen.",
+      "liveHint": "Richte die Kamera auf einen QR-Code: Das Abzeichen erscheint darüber",
+      "liveChecking": "Prüfung…",
+      "liveSafe": "Sicher",
+      "liveWarning": "Achtung",
+      "liveDanger": "Gefahr",
+      "liveError": "Prüfung fehlgeschlagen: erneut erfassen",
+      "liveDetails": "Details ansehen"
     },
     "securitySection": "Sicherheit & Schutz",
     "checkLookalike": "Ähnlichkeit mit bekannten Seiten",
@@ -2741,7 +2751,12 @@
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "In KUMANI Casa öffnen",
     "casaNotice": "Diese Frist gehört zu deiner Wohnung: Tippe, um sie in KUMANI Casa zu öffnen.",
-    "limitReached": "Du hast die erlaubte Höchstzahl erreicht. Lösche, was du nicht mehr brauchst, um weitere hinzuzufügen."
+    "limitReached": "Du hast die erlaubte Höchstzahl erreicht. Lösche, was du nicht mehr brauchst, um weitere hinzuzufügen.",
+    "scanDocButton": "Ablaufdatum aus dem Ausweis lesen",
+    "scanDocHint": "Reisepass oder elektronischer Ausweis: Das Datum wird aus den <<<-Zeilen gelesen. Alles bleibt auf deinem Handy.",
+    "scanDocDone": "Ablaufdatum aus dem Dokument gelesen: prüfen und speichern.",
+    "scanDocPassport": "Reisepass",
+    "scanDocIdCard": "Personalausweis"
   },
   "findo": {
     "title": "Findo",
@@ -13719,6 +13734,7 @@
     "sourceLabel": "Womit beginnen",
     "sources": {
       "logo": "Aus dem Logo",
+      "camera": "Kamera",
       "harmony": "Erzeugen",
       "hand": "Von Hand"
     },
@@ -13844,7 +13860,18 @@
       "use": "Markenfarben verwenden"
     },
     "bioTheme": "Die Farben deiner Marke",
-    "bioThemeHint": "Aus dem Firmenprofil; passen sich selbst an"
+    "bioThemeHint": "Aus dem Firmenprofil; passen sich selbst an",
+    "cameraTitle": "Farben aus dem echten Leben",
+    "cameraText": "Richte die Kamera auf dein Schild, die Theke, das Schaufenster oder ein Produkt: Die Farben in der Mitte werden gelesen, während du das Handy bewegst. Das Foto wird weder gespeichert noch gesendet.",
+    "cameraOpen": "Mit der Kamera erfassen",
+    "cameraAgain": "Erneut erfassen",
+    "cameraHint": "Bring deine Markenfarben in das Quadrat",
+    "cameraSwatches": "Gefundene Farben",
+    "cameraUse": "Diese Farben verwenden",
+    "cameraClose": "Schließen",
+    "cameraSwitch": "Kamera wechseln",
+    "cameraDenied": "Kamerazugriff verweigert. Erlaube ihn in den Browsereinstellungen und versuche es erneut.",
+    "cameraError": "Die Kamera ist auf diesem Gerät nicht verfügbar."
   },
   "proposals": {
     "title": "Vorschläge der Community",
@@ -17323,7 +17350,18 @@
     "errNone": "Auf diesem Gerät wurde keine Kamera gefunden. Brich ab und wähle ein Foto vom Computer.",
     "retake": "Neu aufnehmen",
     "use": "Dieses Foto verwenden",
-    "preview": "Gerade aufgenommenes Foto"
+    "preview": "Gerade aufgenommenes Foto",
+    "mrzTitle": "Ablaufdatum aus dem Ausweis lesen",
+    "mrzHint": "Bring die Zeilen mit den Zeichen <<< (unten im Reisepass oder auf der Rückseite des Personalausweises) in den Rahmen",
+    "mrzReading": "Lese… halte das Dokument ruhig, bei gutem Licht und ohne Spiegelungen",
+    "billTitle": "Rechnung lesen",
+    "billHint": "Erfasse die erste Seite der Rechnung mit Betrag und Fälligkeit, dann fotografiere",
+    "billReading": "Lese die Rechnung…",
+    "billNothing": "Kein Betrag oder Fälligkeitsdatum gefunden: geh näher heran, mit mehr Licht, und versuche es erneut",
+    "billShoot": "Foto aufnehmen",
+    "ocrManual": "Von Hand eingeben",
+    "ocrDenied": "Kamerazugriff verweigert. Erlaube ihn in den Browsereinstellungen und versuche es erneut.",
+    "ocrError": "Das Lesen ist auf diesem Gerät nicht verfügbar. Du kannst die Daten von Hand eingeben."
   },
   "needSearch": {
     "title": "Schreib, was du brauchst",

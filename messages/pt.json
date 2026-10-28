@@ -1730,7 +1730,10 @@
     "legendNetNegative": "Saldo negativo",
     "chartNet": "Saldo",
     "chartToday": "hoje",
-    "chartEndOfYear": "no fim do ano"
+    "chartEndOfYear": "no fim do ano",
+    "scanBillButton": "Ler da fatura",
+    "scanBillHint": "Fotografe a fatura: nome, valor e data-limite preenchem-se sozinhos. A foto fica no telemóvel.",
+    "scanBillDone": "Dados lidos da fatura: confirme-os antes de guardar."
   },
   "common": {
     "publicOfflineProfileTitle": "Perfil temporariamente indisponível",
@@ -2422,7 +2425,14 @@
       "recDontOpen": "Não abra o link e não introduza os dados do cartão ou da conta.",
       "recOfficialPay": "Pague estacionamento, multas e impostos só pela app ou pelo site oficial da câmara municipal ou da empresa gestora.",
       "recIfPaid": "Se já pagou ou introduziu o cartão, ligue já ao seu banco para o bloquear.",
-      "recReportQr": "Denuncie o QR aqui em baixo e, se estiver num parquímetro, avise a Polícia Municipal: ajuda os outros a não caírem."
+      "recReportQr": "Denuncie o QR aqui em baixo e, se estiver num parquímetro, avise a Polícia Municipal: ajuda os outros a não caírem.",
+      "liveHint": "Aponte para um QR: o selo aparece por cima do código",
+      "liveChecking": "A verificar…",
+      "liveSafe": "Seguro",
+      "liveWarning": "Atenção",
+      "liveDanger": "Perigo",
+      "liveError": "Não foi possível verificar: aponte de novo",
+      "liveDetails": "Ver detalhes"
     },
     "securitySection": "Segurança e Proteção",
     "checkLookalike": "Semelhança com sites conhecidos",
@@ -2741,7 +2751,12 @@
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Abrir no KUMANI Casa",
     "casaNotice": "Este prazo é da sua casa: toque para a abrir no KUMANI Casa.",
-    "limitReached": "Atingiu o número máximo permitido. Elimine o que já não precisa para adicionar mais."
+    "limitReached": "Atingiu o número máximo permitido. Elimine o que já não precisa para adicionar mais.",
+    "scanDocButton": "Ler a validade do documento",
+    "scanDocHint": "Passaporte ou cartão de cidadão: a data é lida das linhas <<<. Tudo fica no telemóvel.",
+    "scanDocDone": "Validade lida do documento: confirme e guarde.",
+    "scanDocPassport": "Passaporte",
+    "scanDocIdCard": "Cartão de cidadão"
   },
   "findo": {
     "title": "Findo",
@@ -13719,6 +13734,7 @@
     "sourceLabel": "Por onde começar",
     "sources": {
       "logo": "Do logótipo",
+      "camera": "Câmara",
       "harmony": "Gerar",
       "hand": "À mão"
     },
@@ -13844,7 +13860,18 @@
       "use": "Usar as cores da marca"
     },
     "bioTheme": "As cores da sua marca",
-    "bioThemeHint": "Da Ficha da atividade; atualizam-se sozinhas"
+    "bioThemeHint": "Da Ficha da atividade; atualizam-se sozinhas",
+    "cameraTitle": "As cores ao vivo",
+    "cameraText": "Aponte para o letreiro, o balcão, a montra ou um dos seus produtos: as cores do centro são lidas enquanto move o telemóvel. A foto não é guardada nem enviada.",
+    "cameraOpen": "Apontar com a câmara",
+    "cameraAgain": "Apontar de novo",
+    "cameraHint": "Coloque as cores da sua marca dentro do quadrado",
+    "cameraSwatches": "Cores encontradas",
+    "cameraUse": "Usar estas cores",
+    "cameraClose": "Fechar",
+    "cameraSwitch": "Mudar de câmara",
+    "cameraDenied": "Permissão da câmara recusada. Permita-a nas definições do navegador e tente de novo.",
+    "cameraError": "A câmara não está disponível neste dispositivo."
   },
   "proposals": {
     "title": "Propostas da comunidade",
@@ -17323,7 +17350,18 @@
     "errNone": "Não encontramos uma câmara neste dispositivo. Cancele e escolha uma foto do computador.",
     "retake": "Repetir",
     "use": "Usar esta foto",
-    "preview": "Foto acabada de tirar"
+    "preview": "Foto acabada de tirar",
+    "mrzTitle": "Ler a validade do documento",
+    "mrzHint": "Coloque dentro do quadro as linhas com os símbolos <<< no fundo do passaporte ou no verso do cartão de cidadão",
+    "mrzReading": "A ler… mantenha o documento parado, com boa luz e sem reflexos",
+    "billTitle": "Ler a fatura",
+    "billHint": "Enquadre a primeira página da fatura, onde estão o valor e a data-limite, e tire a foto",
+    "billReading": "A ler a fatura…",
+    "billNothing": "Não encontrei valor nem data-limite: aproxime-se, com mais luz, e tente de novo",
+    "billShoot": "Tirar foto",
+    "ocrManual": "Escrevo à mão",
+    "ocrDenied": "Permissão da câmara recusada. Permita-a nas definições do navegador e tente de novo.",
+    "ocrError": "A leitura não está disponível neste dispositivo. Pode escrever os dados à mão."
   },
   "needSearch": {
     "title": "Escreva o que precisa",

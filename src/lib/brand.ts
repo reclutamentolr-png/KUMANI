@@ -155,7 +155,12 @@ export async function colorsFromImage(url: string, count = 6): Promise<string[]>
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
   if (!ctx) return []
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-  const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+  return colorsFromPixels(ctx.getImageData(0, 0, canvas.width, canvas.height).data, count)
+}
+
+// Colori principali di un'immagine già piccola (anche un fotogramma della
+// fotocamera): pixel RGBA, i trasparenti si saltano
+export function colorsFromPixels(data: Uint8ClampedArray, count = 6): string[] {
   const pixels: number[][] = []
   for (let i = 0; i < data.length; i += 4) {
     if (data[i + 3] < 200) continue // trasparente

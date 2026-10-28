@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { AlertCircle, Check, LoaderCircle } from 'lucide-react'
+import { AlertCircle, Camera, Check, LoaderCircle } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
+import BrandCamera from './BrandCamera'
 import { saveBrand, type BrandState } from '@/app/actions/brand'
 import {
   BRAND_ROLES,
@@ -25,7 +26,8 @@ import {
   type Harmony,
 } from '@/lib/brand'
 
-type Source = 'logo' | 'harmony' | 'hand'
+// camera = colori presi dal vivo con la fotocamera (insegna, bancone, vetrina…)
+type Source = 'logo' | 'camera' | 'harmony' | 'hand'
 const card = 'rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm'
 const primaryBtn = 'inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[var(--ink)] px-5 text-base font-bold text-[var(--gold-bright)] disabled:opacity-50'
 const ghostBtn = 'inline-flex min-h-12 items-center justify-center rounded-2xl border border-[var(--gold)]/40 bg-white px-5 text-base font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)]'
@@ -39,6 +41,8 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
   const [active, setActive] = useState<BrandRole>('primary')
   const [logoSwatches, setLogoSwatches] = useState<string[] | null>(null)
   const [logoError, setLogoError] = useState(false)
+  const [cameraOpen, setCameraOpen] = useState(false)
+  const [cameraSwatches, setCameraSwatches] = useState<string[]>([])
   const [harmony, setHarmony] = useState<Harmony>('contrast')
   const [baseColor, setBaseColor] = useState(initial.palette?.primary ?? '#7a2e1f')
   // Prima volta: tutti i servizi proposti; poi le scelte salvate
@@ -67,7 +71,7 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
   }, [source, initial.logoUrl, logoSwatches, firstTime])
 
   const generated = useMemo(() => harmonyPalette(hueOf(baseColor), harmony), [baseColor, harmony])
-  const candidates = source === 'logo' ? (logoSwatches ?? []) : source === 'harmony' ? generated.swatches : []
+  const candidates = source === 'logo' ? (logoSwatches ?? []) : source === 'camera' ? cameraSwatches : source === 'harmony' ? generated.swatches : []
   const pairs = contrastPairs(palette)
   const bad = pairs.filter((p) => !p.ok).length
   const onPrimary = readableOn(palette.primary)
@@ -125,8 +129,19 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
 
       {step === 1 && (
         <>
-          <div className="grid grid-cols-3 gap-1.5 rounded-2xl border border-[var(--gold)]/25 bg-white p-1" role="group" aria-label={t('sourceLabel')}>
-            {(['logo', 'harmony', 'hand'] as const).map((s) => (
+          {cameraOpen && (
+            <BrandCamera
+              onClose={() => setCameraOpen(false)}
+              onColors={(swatches) => {
+                setCameraOpen(false)
+                setCameraSwatches(swatches)
+                setTouched(true)
+                changePalette(paletteFromSwatches(swatches))
+              }}
+            />
+          )}
+          <div className="grid grid-cols-2 gap-1.5 rounded-2xl border border-[var(--gold)]/25 bg-white p-1 sm:grid-cols-4" role="group" aria-label={t('sourceLabel')}>
+            {(['logo', 'camera', 'harmony', 'hand'] as const).map((s) => (
               <button key={s} type="button" aria-pressed={source === s} onClick={() => setSource(s)} className={tab(source === s)}>
                 {t(`sources.${s}`)}
               </button>
@@ -150,6 +165,23 @@ export default function BrandWizard({ initial }: { initial: BrandState }) {
                   </Link>
                 )}
               </div>
+            </section>
+          )}
+
+          {source === 'camera' && (
+            <section className={`${card} space-y-3`}>
+              <p className="font-bold text-[var(--ink)]">{t('cameraTitle')}</p>
+              <p className="text-sm text-[var(--muted)]">{t('cameraText')}</p>
+              {cameraSwatches.length > 0 && (
+                <div className="flex flex-wrap gap-2" aria-label={t('cameraSwatches')}>
+                  {cameraSwatches.map((hex) => (
+                    <span key={hex} className="h-9 w-9 rounded-lg border border-black/10" style={{ background: hex }} title={hex} />
+                  ))}
+                </div>
+              )}
+              <button type="button" onClick={() => setCameraOpen(true)} className={primaryBtn}>
+                <Camera className="h-5 w-5" /> {t(cameraSwatches.length ? 'cameraAgain' : 'cameraOpen')}
+              </button>
             </section>
           )}
 

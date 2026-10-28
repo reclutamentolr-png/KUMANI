@@ -18,8 +18,11 @@ import {
   Plane,
   MoreHorizontal,
   PlusCircle,
+  ScanLine,
 } from 'lucide-react'
 import { createItem, updateItem, createProfile } from '@/app/actions/lifeCalendar'
+import OcrCamera from '@/components/ocr/OcrCamera'
+import type { MrzResult } from '@/lib/ocr/mrz'
 import {
   CATEGORIES,
   RECURRENCE_OPTIONS,
@@ -74,8 +77,23 @@ export default function LifeCalendarItemForm(props: Props) {
   const [addingProfile, setAddingProfile] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Scadenza letta dalle righe «<<<» di passaporto o carta d'identità
+  const [scanOpen, setScanOpen] = useState(false)
+  const [scanned, setScanned] = useState(false)
 
   const isValid = form.title.trim().length > 0 && form.dueDate.length > 0
+
+  const fromDocument = (r: MrzResult) => {
+    setScanOpen(false)
+    setScanned(true)
+    setForm((prev) => ({
+      ...prev,
+      title: prev.title.trim() || t(r.doc === 'passport' ? 'scanDocPassport' : 'scanDocIdCard'),
+      category: 'person',
+      reminderOffsets: REMINDER_PRESETS.person,
+      dueDate: r.expiry,
+    }))
+  }
 
   const setCategory = (category: Category) => {
     setForm((prev) => ({ ...prev, category, reminderOffsets: REMINDER_PRESETS[category] }))
@@ -132,6 +150,15 @@ export default function LifeCalendarItemForm(props: Props) {
 
   return (
     <div data-cancel-scope className="bg-white rounded-2xl shadow-sm border border-[var(--gold)]/25 p-6 sm:p-8 space-y-6">
+      {scanOpen && <OcrCamera mode="mrz" onResult={fromDocument} onClose={() => setScanOpen(false)} />}
+      {props.mode === 'create' && (
+        <div className="rounded-xl border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-3">
+          <button type="button" onClick={() => setScanOpen(true)} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-[var(--ink)] px-4 text-sm font-bold text-[var(--gold-bright)]">
+            <ScanLine className="h-4 w-4" /> {t('scanDocButton')}
+          </button>
+          <p className="mt-1.5 text-xs text-[var(--muted)]">{scanned ? t('scanDocDone') : t('scanDocHint')}</p>
+        </div>
+      )}
       <div>
         <label className="block text-sm font-medium text-[var(--ink)] mb-1">{t('titleField')}</label>
         <input

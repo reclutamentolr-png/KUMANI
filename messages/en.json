@@ -1775,7 +1775,10 @@
     "legendNetNegative": "Negative balance",
     "chartNet": "Balance",
     "chartToday": "today",
-    "chartEndOfYear": "at year end"
+    "chartEndOfYear": "at year end",
+    "scanBillButton": "Read from the bill",
+    "scanBillHint": "Take a photo of the bill: name, amount and due date fill in by themselves. The photo stays on your phone.",
+    "scanBillDone": "Details read from the bill: check them before saving."
   },
   "magazzino": {
     "deleteForever": "Delete permanently",
@@ -2422,7 +2425,14 @@
       "recDontOpen": "Do not open the link and do not enter your card or account details.",
       "recOfficialPay": "Pay for parking, fines and taxes only through the official app or site of the council or operator.",
       "recIfPaid": "If you have already paid or entered your card, call your bank right away to block it.",
-      "recReportQr": "Report the QR below and, if it is on a parking meter, tell the local police: you help others avoid it."
+      "recReportQr": "Report the QR below and, if it is on a parking meter, tell the local police: you help others avoid it.",
+      "liveHint": "Point at a QR code: the badge appears on top of it",
+      "liveChecking": "Checking…",
+      "liveSafe": "Safe",
+      "liveWarning": "Caution",
+      "liveDanger": "Danger",
+      "liveError": "Check failed: point at it again",
+      "liveDetails": "See details"
     },
     "securitySection": "Security & Protection",
     "checkLookalike": "Similarity to known sites",
@@ -2741,7 +2751,12 @@
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Open in KUMANI Casa",
     "casaNotice": "This deadline belongs to your home: tap to open it in KUMANI Casa.",
-    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more."
+    "limitReached": "You have reached the maximum allowed. Delete what you no longer need to add more.",
+    "scanDocButton": "Read the expiry date from the document",
+    "scanDocHint": "Passport or electronic ID card: the date is read from the <<< lines. Everything stays on your phone.",
+    "scanDocDone": "Expiry date read from the document: check it and save.",
+    "scanDocPassport": "Passport",
+    "scanDocIdCard": "ID card"
   },
   "findo": {
     "title": "Findo",
@@ -13719,6 +13734,7 @@
     "sourceLabel": "Where to start",
     "sources": {
       "logo": "From logo",
+      "camera": "Camera",
       "harmony": "Generate",
       "hand": "By hand"
     },
@@ -13844,7 +13860,18 @@
       "use": "Use brand colors"
     },
     "bioTheme": "Your brand colors",
-    "bioThemeHint": "From your Business profile; they update by themselves"
+    "bioThemeHint": "From your Business profile; they update by themselves",
+    "cameraTitle": "Colours from real life",
+    "cameraText": "Point the camera at your sign, counter, shop window or one of your products: the colours in the centre are read as you move the phone. The photo is not saved or sent.",
+    "cameraOpen": "Point the camera",
+    "cameraAgain": "Point again",
+    "cameraHint": "Put your brand colours inside the square",
+    "cameraSwatches": "Colours found",
+    "cameraUse": "Use these colours",
+    "cameraClose": "Close",
+    "cameraSwitch": "Switch camera",
+    "cameraDenied": "Camera permission denied. Allow it in your browser settings and try again.",
+    "cameraError": "The camera is not available on this device."
   },
   "proposals": {
     "title": "Community proposals",
@@ -17323,7 +17350,18 @@
     "errNone": "We can’t find a camera on this device. Cancel and pick a photo from your computer.",
     "retake": "Retake",
     "use": "Use this photo",
-    "preview": "Photo just taken"
+    "preview": "Photo just taken",
+    "mrzTitle": "Read the expiry date from the document",
+    "mrzHint": "Put the lines with the <<< symbols, at the bottom of the passport or on the back of the ID card, inside the frame",
+    "mrzReading": "Reading… hold the document still, in good light and without glare",
+    "billTitle": "Read the bill",
+    "billHint": "Frame the first page of the bill, where the amount and due date are, then take the photo",
+    "billReading": "Reading the bill…",
+    "billNothing": "No amount or due date found: move closer, with more light, and try again",
+    "billShoot": "Take photo",
+    "ocrManual": "Enter it by hand",
+    "ocrDenied": "Camera permission denied. Allow it in your browser settings and try again.",
+    "ocrError": "Reading is not available on this device. You can enter the details by hand."
   },
   "needSearch": {
     "title": "Tell us what you need",

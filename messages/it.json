@@ -2286,7 +2286,14 @@
       "recDontOpen": "Non aprire il link e non inserire i dati della carta o del conto.",
       "recOfficialPay": "Paga soste, multe e tributi solo dall’app o dal sito ufficiale del Comune o del gestore, oppure con pagoPA.",
       "recIfPaid": "Se hai già pagato o inserito la carta, chiama subito la tua banca per bloccarla.",
-      "recReportQr": "Segnala il QR qui sotto e, se è su un parcometro, avvisa la Polizia Locale: aiuti gli altri a non cascarci."
+      "recReportQr": "Segnala il QR qui sotto e, se è su un parcometro, avvisa la Polizia Locale: aiuti gli altri a non cascarci.",
+      "liveHint": "Inquadra un QR: il bollino compare sopra il codice",
+      "liveChecking": "Controllo…",
+      "liveSafe": "Sicuro",
+      "liveWarning": "Attenzione",
+      "liveDanger": "Pericolo",
+      "liveError": "Controllo non riuscito: inquadralo di nuovo",
+      "liveDetails": "Vedi i dettagli"
     },
     "checkLookalike": "Somiglianza a siti noti",
     "lookalikeRisk": "Attenzione: somiglia a {brand} ma non è un suo sito ufficiale (il sito vero è {official}). È il trucco più usato per rubare dati e soldi.",
@@ -2604,7 +2611,12 @@
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Apri in KUMANI Casa",
     "casaNotice": "Questa scadenza è della tua casa: tocca per aprirla in KUMANI Casa.",
-    "limitReached": "Hai raggiunto il numero massimo consentito. Elimina ciò che non ti serve più per aggiungerne altri."
+    "limitReached": "Hai raggiunto il numero massimo consentito. Elimina ciò che non ti serve più per aggiungerne altri.",
+    "scanDocButton": "Leggi la scadenza dal documento",
+    "scanDocHint": "Passaporto o carta d’identità elettronica: la data si legge dalle righe <<<. Tutto resta sul telefono.",
+    "scanDocDone": "Scadenza letta dal documento: controlla e salva.",
+    "scanDocPassport": "Passaporto",
+    "scanDocIdCard": "Carta d’identità"
   },
   "findo": {
     "title": "Findo",
@@ -2947,7 +2959,10 @@
     "legendNetNegative": "Saldo negativo",
     "chartNet": "Saldo",
     "chartToday": "oggi",
-    "chartEndOfYear": "a fine anno"
+    "chartEndOfYear": "a fine anno",
+    "scanBillButton": "Leggi dalla bolletta",
+    "scanBillHint": "Fotografa la bolletta: nome, importo e scadenza si compilano da soli. La foto resta sul telefono.",
+    "scanBillDone": "Dati letti dalla bolletta: controllali prima di salvare."
   },
   "preventivi": {
     "title": "Preventivi",
@@ -13719,6 +13734,7 @@
     "sourceLabel": "Da dove partire",
     "sources": {
       "logo": "Dal logo",
+      "camera": "Fotocamera",
       "harmony": "Genera",
       "hand": "A mano"
     },
@@ -13844,7 +13860,18 @@
       "use": "Usa i colori del brand"
     },
     "bioTheme": "I colori del tuo brand",
-    "bioThemeHint": "Dalla Scheda attività; si aggiornano da soli"
+    "bioThemeHint": "Dalla Scheda attività; si aggiornano da soli",
+    "cameraTitle": "I colori dal vivo",
+    "cameraText": "Inquadra l’insegna, il bancone, la vetrina o un tuo prodotto: i colori al centro si leggono mentre muovi il telefono. La foto non viene salvata né inviata.",
+    "cameraOpen": "Inquadra con la fotocamera",
+    "cameraAgain": "Inquadra di nuovo",
+    "cameraHint": "Metti nel quadrato i colori del tuo brand",
+    "cameraSwatches": "Colori trovati",
+    "cameraUse": "Usa questi colori",
+    "cameraClose": "Chiudi",
+    "cameraSwitch": "Cambia fotocamera",
+    "cameraDenied": "Permesso della fotocamera negato. Consentilo nelle impostazioni del browser e riprova.",
+    "cameraError": "La fotocamera non è disponibile su questo dispositivo."
   },
   "proposals": {
     "title": "Proposte della community",
@@ -17323,7 +17350,18 @@
     "errNone": "Non troviamo una fotocamera su questo dispositivo. Annulla e scegli una foto dal computer.",
     "retake": "Rifai",
     "use": "Usa questa foto",
-    "preview": "Foto appena scattata"
+    "preview": "Foto appena scattata",
+    "mrzTitle": "Leggi la scadenza dal documento",
+    "mrzHint": "Metti nel riquadro le righe con i simboli <<< in fondo al passaporto o sul retro della carta d’identità",
+    "mrzReading": "Sto leggendo… tieni fermo il documento, con buona luce e senza riflessi",
+    "billTitle": "Leggi la bolletta",
+    "billHint": "Inquadra la prima pagina della bolletta, dove ci sono importo e scadenza, poi scatta",
+    "billReading": "Sto leggendo la bolletta…",
+    "billNothing": "Non ho trovato importo o scadenza: avvicinati, con più luce, e riprova",
+    "billShoot": "Scatta",
+    "ocrManual": "Inserisco a mano",
+    "ocrDenied": "Permesso della fotocamera negato. Consentilo nelle impostazioni del browser e riprova.",
+    "ocrError": "La lettura non è disponibile su questo dispositivo. Puoi inserire i dati a mano."
   },
   "needSearch": {
     "title": "Scrivi cosa ti serve",

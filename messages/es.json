@@ -1730,7 +1730,10 @@
     "legendNetNegative": "Saldo negativo",
     "chartNet": "Saldo",
     "chartToday": "hoy",
-    "chartEndOfYear": "a final de año"
+    "chartEndOfYear": "a final de año",
+    "scanBillButton": "Leer de la factura",
+    "scanBillHint": "Haz una foto de la factura: nombre, importe y vencimiento se rellenan solos. La foto se queda en el teléfono.",
+    "scanBillDone": "Datos leídos de la factura: compruébalos antes de guardar."
   },
   "common": {
     "publicOfflineProfileTitle": "Perfil no disponible temporalmente",
@@ -2422,7 +2425,14 @@
       "recDontOpen": "No abras el enlace y no introduzcas los datos de la tarjeta o de la cuenta.",
       "recOfficialPay": "Paga aparcamiento, multas e impuestos solo desde la app o el sitio oficial del ayuntamiento o del operador.",
       "recIfPaid": "Si ya has pagado o has introducido la tarjeta, llama enseguida a tu banco para bloquearla.",
-      "recReportQr": "Denuncia el QR aquí abajo y, si está en un parquímetro, avisa a la Policía Local: ayudas a que otros no caigan."
+      "recReportQr": "Denuncia el QR aquí abajo y, si está en un parquímetro, avisa a la Policía Local: ayudas a que otros no caigan.",
+      "liveHint": "Enfoca un QR: el distintivo aparece encima del código",
+      "liveChecking": "Comprobando…",
+      "liveSafe": "Seguro",
+      "liveWarning": "Atención",
+      "liveDanger": "Peligro",
+      "liveError": "No se pudo comprobar: enfócalo de nuevo",
+      "liveDetails": "Ver detalles"
     },
     "securitySection": "Seguridad y Protección",
     "checkLookalike": "Parecido a sitios conocidos",
@@ -2741,7 +2751,12 @@
     "casaBadge": "KUMANI Casa · {name}",
     "openInCasa": "Abrir en KUMANI Casa",
     "casaNotice": "Este vencimiento es de tu vivienda: toca para abrirla en KUMANI Casa.",
-    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más."
+    "limitReached": "Has alcanzado el número máximo permitido. Elimina lo que ya no necesites para añadir más.",
+    "scanDocButton": "Leer la caducidad del documento",
+    "scanDocHint": "Pasaporte o documento de identidad electrónico: la fecha se lee de las líneas <<<. Todo se queda en el teléfono.",
+    "scanDocDone": "Caducidad leída del documento: compruébala y guarda.",
+    "scanDocPassport": "Pasaporte",
+    "scanDocIdCard": "Documento de identidad"
   },
   "findo": {
     "title": "Findo",
@@ -13719,6 +13734,7 @@
     "sourceLabel": "Por dónde empezar",
     "sources": {
       "logo": "Del logo",
+      "camera": "Cámara",
       "harmony": "Generar",
       "hand": "A mano"
     },
@@ -13844,7 +13860,18 @@
       "use": "Usar los colores de la marca"
     },
     "bioTheme": "Los colores de tu marca",
-    "bioThemeHint": "De la Ficha del negocio; se actualizan solos"
+    "bioThemeHint": "De la Ficha del negocio; se actualizan solos",
+    "cameraTitle": "Los colores en directo",
+    "cameraText": "Enfoca el rótulo, el mostrador, el escaparate o uno de tus productos: los colores del centro se leen mientras mueves el teléfono. La foto no se guarda ni se envía.",
+    "cameraOpen": "Enfocar con la cámara",
+    "cameraAgain": "Enfocar de nuevo",
+    "cameraHint": "Pon los colores de tu marca dentro del cuadrado",
+    "cameraSwatches": "Colores encontrados",
+    "cameraUse": "Usar estos colores",
+    "cameraClose": "Cerrar",
+    "cameraSwitch": "Cambiar cámara",
+    "cameraDenied": "Permiso de cámara denegado. Permítelo en los ajustes del navegador e inténtalo de nuevo.",
+    "cameraError": "La cámara no está disponible en este dispositivo."
   },
   "proposals": {
     "title": "Propuestas de la comunidad",
@@ -17323,7 +17350,18 @@
     "errNone": "No encontramos ninguna cámara en este dispositivo. Cancela y elige una foto del ordenador.",
     "retake": "Repetir",
     "use": "Usar esta foto",
-    "preview": "Foto recién hecha"
+    "preview": "Foto recién hecha",
+    "mrzTitle": "Leer la caducidad del documento",
+    "mrzHint": "Pon dentro del recuadro las líneas con los símbolos <<< del final del pasaporte o del reverso del DNI",
+    "mrzReading": "Leyendo… mantén el documento quieto, con buena luz y sin reflejos",
+    "billTitle": "Leer la factura",
+    "billHint": "Enfoca la primera página de la factura, donde están el importe y el vencimiento, y haz la foto",
+    "billReading": "Leyendo la factura…",
+    "billNothing": "No he encontrado importe ni vencimiento: acércate, con más luz, e inténtalo de nuevo",
+    "billShoot": "Hacer la foto",
+    "ocrManual": "Lo escribo a mano",
+    "ocrDenied": "Permiso de cámara denegado. Permítelo en los ajustes del navegador e inténtalo de nuevo.",
+    "ocrError": "La lectura no está disponible en este dispositivo. Puedes escribir los datos a mano."
   },
   "needSearch": {
     "title": "Escribe lo que necesitas",
