@@ -12,7 +12,7 @@ import { getConsentConfig } from '@/lib/consentServer'
 // questo file (commit precedente a "privacy essenziale") e tornerà qui,
 // con i dati del titolare, quando sarà approvata.
 
-const LAST_UPDATE = '2026-10-27'
+const LAST_UPDATE = '2026-10-28'
 const LIST_SECTIONS = new Set([2, 3, 6])
 
 // Pagina uguale per tutti: preparata in anticipo per ogni lingua e rifatta
@@ -76,10 +76,10 @@ export default async function PrivacyPage({ params }: LocaleProps) {
         </p>
 
         <div className="mt-8 space-y-4">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => {
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
             const body = (t.raw(`s${n}`) as string).replace('{company}', companyLine)
             return (
-              <section key={n} id={n === 7 ? 'cookie' : undefined} className="scroll-mt-24 rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm sm:p-6">
+              <section key={n} id={n === 7 ? 'cookie' : n === 8 ? 'google-calendar' : undefined} className="scroll-mt-24 rounded-2xl border border-[var(--gold)]/25 bg-white p-5 shadow-sm sm:p-6">
                 <h2 className="text-lg font-bold text-[var(--ink)]">
                   {n}. {t(`s${n}t`)}
                 </h2>
