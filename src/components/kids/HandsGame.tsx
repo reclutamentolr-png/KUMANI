@@ -96,6 +96,8 @@ export default function HandsGame({
   const [streak, setStreak] = useState(0)
   const [best, setBest] = useState(0)
   const [level, setLevelState] = useState<1 | 2>(1)
+  // Codice dell'errore all'avvio (piccolo, sotto il messaggio): serve a capire cosa non va su un telefono
+  const [errorCode, setErrorCode] = useState('')
 
   // Il ciclo dei fotogrammi legge sempre i valori aggiornati da qui
   const live = useRef({
@@ -198,11 +200,27 @@ export default function HandsGame({
       video.setAttribute('playsinline', '')
       video.setAttribute('muted', '')
       video.srcObject = stream
-      await video.play()
+      // Safari avvia il video da solo appena riceve la fotocamera e a volte il
+      // nostro play() va in errore («interrotto»): non è un problema. Errore vero
+      // solo se dopo qualche secondo il video non ha ancora un'immagine
+      await video.play().catch(() => {})
+      const ready = await new Promise<boolean>((resolve) => {
+        const from = performance.now()
+        const check = () => {
+          if (video.videoWidth > 0 && video.readyState >= 2) return resolve(true)
+          if (video.paused) void video.play().catch(() => {})
+          if (performance.now() - from > 6000) return resolve(false)
+          setTimeout(check, 150)
+        }
+        check()
+      })
+      if (!ready) throw new Error('video senza immagine')
       setStatus('running')
       begin(live.current.mode)
       run(hands)
     } catch (e) {
+      console.error('[gioca con le mani] avvio:', e)
+      setErrorCode(e instanceof Error ? `${e.name}: ${e.message}`.slice(0, 120) : String(e).slice(0, 120))
       stop()
       setStatus(e instanceof DOMException && (e.name === 'NotAllowedError' || e.name === 'SecurityError') ? 'denied' : 'error')
     }
@@ -620,7 +638,12 @@ export default function HandsGame({
                     <div className="flex flex-col items-center gap-3">
                       <p className="text-lg font-extrabold leading-snug text-[#2B2D52]">{t('hands.intro')}</p>
                       {status === 'denied' && <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">{t('hands.denied')}</p>}
-                      {status === 'error' && <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">{t('hands.error')}</p>}
+                      {status === 'error' && (
+                        <p className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-sm font-bold text-[#2B2D52]">
+                          {t('hands.error')}
+                          {errorCode && <span className="mt-1 block break-all font-mono text-[10px] font-normal text-[#61648A]">{errorCode}</span>}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col items-center gap-2">
                       <KidsButton onClick={() => void start()} accent>
