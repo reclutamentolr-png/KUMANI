@@ -16,6 +16,7 @@ const KINDS = [
 ] as const
 const CATEGORIES = [
   ['investment', 'Investimenti miracolosi / recupero fondi'],
+  ['gaming', 'Giochi online (falsi casinò e scommesse)'],
   ['bank', 'Falso operatore della banca'],
   ['courier', 'Falso corriere'],
   ['phishing', 'Furto di dati (phishing)'],

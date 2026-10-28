@@ -193,6 +193,10 @@ export default function HandsGame({
       ])
       streamRef.current = stream
       const video = videoRef.current!
+      // iPhone: muto e «in linea» impostati a mano prima di play (React non sempre li scrive)
+      video.muted = true
+      video.setAttribute('playsinline', '')
+      video.setAttribute('muted', '')
       video.srcObject = stream
       await video.play()
       setStatus('running')
@@ -218,6 +222,7 @@ export default function HandsGame({
     let pinching = false
     let strokeColor = 0
     let lastVideoTime = -1
+    let lastResume = 0
     let lastSeen = false
     let lastShown: number | null = null
 
@@ -241,6 +246,11 @@ export default function HandsGame({
       // Al massimo ~30 volte al secondo. Non si guarda currentTime: su iPhone con
       // la fotocamera a volte resta uguale e il gioco sembrava fermo
       const time = now()
+      // Safari a volte mette in pausa il video (cambio di schermata, interruzioni): si riavvia
+      if (video.paused && time - lastResume > 1000) {
+        lastResume = time
+        void video.play().catch(() => {})
+      }
       if (video.readyState < 2 || !video.videoWidth || time - lastVideoTime < 33) return
       lastVideoTime = time
       if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
@@ -556,7 +566,7 @@ export default function HandsGame({
           >
             {/* Il video si vede davvero (a specchio): Safari su iPhone non fa avanzare
                 un video nascosto. Sopra, il disegno del gioco con le stesse misure */}
-            <video ref={videoRef} playsInline muted autoPlay className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-contain ${running ? '' : 'opacity-0'}`} aria-hidden />
+            <video ref={videoRef} playsInline muted autoPlay className="pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-contain" aria-hidden />
             <canvas ref={canvasRef} className={`pointer-events-none absolute inset-0 h-full w-full object-contain ${running ? '' : 'hidden'}`} />
 
             {running && counter !== null && (

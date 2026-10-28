@@ -18,6 +18,7 @@ const CATEGORY: Record<string, string> = {
   courier: 'Falso corriere',
   bank: 'Falso operatore della banca',
   investment: 'Investimenti miracolosi',
+  gaming: 'Giochi online (falsi casinò e scommesse)',
   romance: 'Truffa sentimentale',
   rental: 'Affitto inesistente',
   marketplace: 'Compravendita online',

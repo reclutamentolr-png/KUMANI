@@ -7,7 +7,8 @@ import { normalizeIban, validateIban } from '@/lib/iban'
 export const SCAM_KINDS = ['phone', 'site', 'iban', 'email', 'social', 'qr'] as const
 export type ScamKind = (typeof SCAM_KINDS)[number]
 
-export const SCAM_CATEGORIES = ['courier', 'bank', 'investment', 'romance', 'rental', 'marketplace', 'job', 'support', 'prize', 'phishing', 'other'] as const
+// gaming = giochi online: falsi casinò e scommesse (spesso in criptovalute)
+export const SCAM_CATEGORIES = ['courier', 'bank', 'investment', 'gaming', 'romance', 'rental', 'marketplace', 'job', 'support', 'prize', 'phishing', 'other'] as const
 export type ScamCategory = (typeof SCAM_CATEGORIES)[number]
 
 export const SCAM_DESCRIPTION_MAX = 600
