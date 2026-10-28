@@ -1,6 +1,8 @@
 'use server'
 
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { syncGoogleCalendar } from '@/lib/googleCalendar'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { APPOINTMENT_REMIND_CHOICES, romeToInstant, TASK_REMIND_DAYS, TIME_RE } from '@/lib/agenda'
@@ -26,6 +28,12 @@ async function gate() {
 const clean = (value: string | null | undefined, max: number) => (value ?? '').trim().slice(0, max) || null
 const isDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value)
 
+// Appuntamenti e attività finiscono anche nel Google Calendar collegato:
+// aggiornato subito, dopo la risposta all'utente
+function syncAgendaToGoogle(table: string, userId: string) {
+  if (table === 'appointments' || table === 'tasks') after(() => syncGoogleCalendar(userId))
+}
+
 async function save(table: string, id: string | undefined, fields: Record<string, unknown>): Promise<Result> {
   const g = await gate()
   if (!g.ok) return { success: false, message: g.message }
@@ -34,6 +42,7 @@ async function save(table: string, id: string | undefined, fields: Record<string
     : await g.supabase.from(table).insert({ ...fields, user_id: g.userId })
   if (error) return (await limitError(error)) ?? { success: false, message: 'saveError' }
   if (!id) await awardToolPoint('memolife')
+  syncAgendaToGoogle(table, g.userId)
   return { success: true }
 }
 
@@ -41,7 +50,9 @@ async function remove(table: string, id: string): Promise<Result> {
   const g = await gate()
   if (!g.ok) return { success: false, message: g.message }
   const { error } = await g.supabase.from(table).delete().eq('id', id).eq('user_id', g.userId)
-  return error ? { success: false, message: 'saveError' } : { success: true }
+  if (error) return { success: false, message: 'saveError' }
+  syncAgendaToGoogle(table, g.userId)
+  return { success: true }
 }
 
 // Solo valori ammessi, senza doppioni, in ordine

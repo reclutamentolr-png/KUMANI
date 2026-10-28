@@ -4,6 +4,8 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowLeft, CalendarSync } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import CalendarConnect from '@/components/agenda/CalendarConnect'
+import GoogleCalendarSync from '@/components/agenda/GoogleCalendarSync'
+import { googleCalendarAllowed, googleCalendarStatus } from '@/lib/googleCalendar'
 import { createClient } from '@/lib/supabase/server'
 import { SITE_URL } from '@/lib/siteUrl'
 
@@ -15,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Collega il calendario KUMANI a Google Calendar, iPhone e Outlook
-export default async function CalendarFeedPage() {
+export default async function CalendarFeedPage({ searchParams }: { searchParams: Promise<{ google?: string }> }) {
   const locale = await getLocale()
   const t = await getTranslations('calendarFeed')
   const supabase = await createClient()
@@ -28,6 +30,9 @@ export default async function CalendarFeedPage() {
   const { data } = await supabase.rpc('calendar_feed_token', { p_rotate: false, p_locale: locale })
   const feed = data as { token: string; last_fetched_at: string | null } | null
   if (!feed?.token) throw new Error('calendar feed unavailable')
+
+  // Google Calendar con l'API: solo a chi può usarlo (lo Staff finché Google non verifica l'app)
+  const [googleAllowed, googleLink, { google: outcome }] = await Promise.all([googleCalendarAllowed(user.id), googleCalendarStatus(user.id), searchParams])
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -46,6 +51,14 @@ export default async function CalendarFeedPage() {
           <h1 className="text-3xl font-bold text-[var(--ink)]">{t('title')}</h1>
           <p className="mt-2 text-[var(--muted)]">{t('intro')}</p>
         </div>
+        {googleAllowed && (
+          <div className="mb-6">
+            <GoogleCalendarSync
+              link={googleLink ? { email: googleLink.google_email, lastSyncAt: googleLink.last_sync_at, lastError: googleLink.last_error } : null}
+              outcome={outcome ?? null}
+            />
+          </div>
+        )}
         <CalendarConnect httpsUrl={`${SITE_URL}/api/calendario/${feed.token}.ics`} lastFetchedAt={feed.last_fetched_at} />
       </main>
     </div>

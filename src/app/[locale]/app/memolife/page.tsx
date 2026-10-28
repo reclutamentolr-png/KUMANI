@@ -1,4 +1,6 @@
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
+import { syncGoogleCalendarIfStale } from '@/lib/googleCalendar'
 import ToolBackLink from '@/components/ToolBackLink'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, CalendarHeart } from 'lucide-react'
@@ -32,6 +34,8 @@ export default async function MemoLifePage({
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
+  // Google Calendar collegato: riallineato aprendo l'agenda (al massimo ogni 15 minuti)
+  after(() => syncGoogleCalendarIfStale(user.id))
 
   const [spendly, lifeCalendar] = await Promise.all([
     hasActiveToolAccess(supabase, user.id, 'spendly'),

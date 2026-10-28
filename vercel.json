@@ -12,6 +12,10 @@
       "schedule": "0 7 * * *"
     },
     {
+      "path": "/api/cron/google-calendar",
+      "schedule": "45 3 * * *"
+    },
+    {
       "path": "/api/cron/storage-cleanup",
       "schedule": "30 3 * * *"
     },

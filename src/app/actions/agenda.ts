@@ -1,6 +1,8 @@
 'use server'
 
+import { after } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { syncGoogleCalendar } from '@/lib/googleCalendar'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { loadAgenda, type AgendaSources } from '@/lib/agenda-server'
 import { addDays, daysBetween, todayKey, type AgendaEvent } from '@/lib/agenda'
@@ -101,5 +103,6 @@ export async function setTaskDone(taskId: string, done: boolean): Promise<boolea
   const { supabase, user } = await session()
   if (!user || !(await hasActiveToolAccess(supabase, user.id, 'memolife'))) return false
   const { error } = await supabase.from('tasks').update({ completed: done }).eq('id', taskId).eq('user_id', user.id)
+  if (!error) after(() => syncGoogleCalendar(user.id))
   return !error
 }

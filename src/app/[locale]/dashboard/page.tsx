@@ -57,6 +57,7 @@ import { SERVICE_HUBS } from '@/lib/serviceHubs'
 import IconHome from '@/components/dashboard/IconHome'
 import { getInviteUrl } from '@/lib/shareLinksServer'
 import { after } from 'next/server'
+import { syncGoogleCalendarIfStale } from '@/lib/googleCalendar'
 import { canSeeSolve } from '@/lib/solve/server'
 import SolveEntryCard from '@/components/solve/SolveEntryCard'
 import FounderCard from '@/components/founders/FounderCard'
@@ -238,6 +239,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   await deferNetworkClaims(supabase)
   // Kumani Fondatori: un posto (e il Plus in regalo) a chi ne ha diritto
   after(() => grantFounderIfEligible(user.id).catch((e) => console.error('[fondatori]', e)))
+  // Google Calendar collegato: riallineato aprendo la dashboard (al massimo ogni 15 minuti)
+  after(() => syncGoogleCalendarIfStale(user.id))
   proTrial = trial
   if (stats) {
     proAreaStats = stats
