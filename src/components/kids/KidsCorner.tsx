@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, BookImage, Brush, FileDown, Image as ImageIcon, Lock, MessageCircle, MessageCircleOff, Music, Palette, Pencil, Plus, Printer, Settings, ShieldCheck, Sparkles, Star, Trash2, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowLeft, BookImage, Brush, FileDown, Hand, Image as ImageIcon, Lock, MessageCircle, MessageCircleOff, Music, Palette, Pencil, Plus, Printer, Settings, ShieldCheck, Sparkles, Star, Trash2, Volume2, VolumeX, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { drawingById } from '@/lib/kids/catalog'
 import { addToAlbum, clearChildAlbum, listAlbum, removeFromAlbum, type AlbumItem } from '@/lib/kids/album'
@@ -12,6 +12,7 @@ import { AVATAR_COLORS, checkPin, clearKidsLock, emptyStore, loadStore, makePin,
 import ColoringGame from './ColoringGame'
 import CreatureGame from './CreatureGame'
 import FreeDrawGame from './FreeDrawGame'
+import HandsGame from './HandsGame'
 import MusicGame from './MusicGame'
 import { KidsIconButton } from './ColorStage'
 import Kumi from './Kumi'
@@ -24,12 +25,13 @@ import ProfileForm from './ProfileForm'
 
 type Phase = 'loading' | 'welcome' | 'pinCreate' | 'pinConfirm' | 'firstChild' | 'children' | 'childForm' | 'menu' | 'game'
 type Gate = { purpose: 'exit' | 'share' | 'manage'; then: () => void } | null
-// I 4 giochi dell'Angolo Bambini
+// I 5 giochi dell'Angolo Bambini (l'ultimo, con la fotocamera, occupa tutta la riga)
 const GAMES = [
   { id: 'colora', icon: Palette, tone: 'bg-[#FFE3D6]' },
   { id: 'crea', icon: Sparkles, tone: 'bg-[#E4F1E8]' },
   { id: 'musica', icon: Music, tone: 'bg-[#E6ECF8]' },
   { id: 'disegno', icon: Brush, tone: 'bg-[#EFE7FD]' },
+  { id: 'mani', icon: Hand, tone: 'bg-[#FFF3C4]' },
 ] as const
 type GameId = (typeof GAMES)[number]['id']
 
@@ -419,7 +421,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
           <div className="flex min-h-0 flex-1 flex-col gap-3">
             <KumiGuide sound={store.sound} voice={store.voice} />
             <h2 className="text-center text-2xl font-extrabold leading-tight text-[#2B2D52] [@media(min-height:760px)]:text-3xl">{t('menuTitle', { name: active.name })}</h2>
-            <div className="grid min-h-0 flex-1 grid-cols-2 grid-rows-2 gap-3 [@media(min-height:760px)]:gap-4">
+            <div className="grid min-h-0 flex-1 grid-cols-2 grid-rows-[1fr_1fr_0.8fr] gap-3 [@media(min-height:760px)]:gap-4">
               {GAMES.map(({ id, icon: Icon, tone }) => (
                 <button
                   key={id}
@@ -428,7 +430,7 @@ export default function KidsCorner({ userId }: { userId: string }) {
                     setGame(id)
                     setPhase('game')
                   }}
-                  className={`grid min-h-0 content-center justify-items-center gap-1.5 overflow-hidden rounded-3xl border-[3px] border-[#2B2D52] p-3 text-center shadow-[4px_4px_0_#2B2D52] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none [@media(min-height:760px)]:gap-2 [@media(min-height:760px)]:p-4 ${tone}`}
+                  className={`grid min-h-0 content-center justify-items-center gap-1.5 overflow-hidden rounded-3xl border-[3px] border-[#2B2D52] p-3 text-center shadow-[4px_4px_0_#2B2D52] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none [@media(min-height:760px)]:gap-2 [@media(min-height:760px)]:p-4 ${id === 'mani' ? 'col-span-2' : ''} ${tone}`}
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-[#2B2D52] bg-white [@media(min-height:760px)]:h-16 [@media(min-height:760px)]:w-16">
                     <Icon className="h-7 w-7 text-[#2B2D52] [@media(min-height:760px)]:h-9 [@media(min-height:760px)]:w-9" aria-hidden />
@@ -448,6 +450,8 @@ export default function KidsCorner({ userId }: { userId: string }) {
               <CreatureGame key={active.id} {...props} voice={store.voice} />
             ) : game === 'musica' ? (
               <MusicGame key={active.id} {...props} />
+            ) : game === 'mani' ? (
+              <HandsGame key={active.id} {...props} voice={store.voice} />
             ) : (
               <FreeDrawGame key={active.id} {...props} />
             )}
