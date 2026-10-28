@@ -118,7 +118,8 @@ export default function AppNav() {
   // carica altri pezzi, WebKit può spostare il «fondo» su cui è agganciato il
   // menu, che resta più in alto del bordo visibile. Si confronta il fondo
   // visibile (visualViewport) con quello della pagina e, se c'è uno scarto, il
-  // menu scende di quanto serve. Si corregge solo a scorrimento fermo (mai
+  // menu scende di quanto serve. Si ricontrolla anche quando la pagina cambia
+  // altezza (pezzi caricati dopo). Si corregge solo a scorrimento fermo (mai
   // durante il movimento, che farebbe tremare le barre) e mai verso l'alto
   // (tastiera aperta). In Safari niente correzione: la barra degli indirizzi
   // che si allunga e si accorcia la farebbe saltare, e iOS tiene già fermo il
@@ -144,10 +145,20 @@ export default function AppNav() {
     fix()
     vv.addEventListener('resize', settle)
     window.addEventListener('scroll', settle, { passive: true })
+    // Anche quando la pagina cambia altezza senza scorrere: i servizi più
+    // pesanti (Scanner, Fototessera, PDF…) finiscono di caricare dei pezzi dopo
+    // l'apertura e il menu restava alzato finché non si scorreva e ci si fermava
+    const grown = new ResizeObserver(settle)
+    grown.observe(document.body)
+    window.addEventListener('load', settle)
+    window.addEventListener('pageshow', settle)
     return () => {
       window.clearTimeout(timer)
+      grown.disconnect()
       vv.removeEventListener('resize', settle)
       window.removeEventListener('scroll', settle)
+      window.removeEventListener('load', settle)
+      window.removeEventListener('pageshow', settle)
     }
   }, [member])
 
