@@ -16,6 +16,8 @@ const db = () =>
 
 export async function accrueSubscriptionDonation(invoice: Stripe.Invoice): Promise<void> {
   if (!invoice.id || (invoice.amount_paid ?? 0) <= 0) return
+  // I pagamenti di prova di Stripe (modalità test) non sono soldi veri: niente donazione
+  if (!invoice.livemode) return
   const pro = isProInvoice(invoice)
   const kind =
     invoice.billing_reason === 'subscription_create'
