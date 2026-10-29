@@ -9,6 +9,7 @@ import { KUMANI_MAILBOXES } from '@/lib/contactInfo'
 import { PUBLIC_SITE_URL } from '@/lib/siteUrl'
 import { fetchAllRows } from '@/lib/fetchAllRows'
 import { COMM_LOCALES, EMAIL_CHROME, isHeading, personalize, readyLocales, textsFor, type CommLocale } from '@/lib/communications'
+import { emailBodyToText, isEmailLayout, parseEmailBody, renderLettera, renderRivista, type EmailLayout } from '@/lib/emailBlocks'
 import { adminSendPushCampaign } from './push'
 
 // Admin → Comunicazioni: i messaggi a tutti gli iscritti preparati in anticipo
@@ -40,6 +41,9 @@ export type CommunicationRow = {
   email_sent_at: string | null
   email_result: { recipients?: number; sent?: number; failed?: number; excluded?: number; pending?: number; stopped?: string; byLocale?: Record<string, number> } | null
   translations: Partial<Record<CommLocale, Record<string, string>>> | null
+  // Grafica dell'email e destinatari (tutti o solo chi ha un piano attivo)
+  email_layout: EmailLayout
+  audience: CommAudience
   // Lingue pronte (calcolate)
   ready?: CommLocale[]
 }
@@ -47,12 +51,18 @@ export type CommunicationRow = {
 export type UnsubscribeRow = { user_id: string; name: string; email: string | null; unsubscribed_at: string; from_title: string | null }
 
 type Person = { id: string; email: string; first_name: string | null; locale: string | null }
+export type CommAudience = 'all' | 'subscribers'
 
-// Iscritti che ricevono le email: account attivi con un'email, meno chi si è disiscritto
-async function emailAudience(): Promise<{ people: Person[]; excluded: number }> {
+type PlanRow = { subscription_status: string | null; subscription_expires_at: string | null }
+// Piano attivo e non scaduto (come i destinatari «attivi» delle notifiche)
+const hasPlan = (p: PlanRow) => p.subscription_status === 'active' && (!p.subscription_expires_at || new Date(p.subscription_expires_at).getTime() > Date.now())
+
+// Iscritti che ricevono le email: account attivi con un'email, meno chi si è
+// disiscritto; con «subscribers» solo chi ha un piano attivo
+async function emailAudience(audience: CommAudience = 'all'): Promise<{ people: Person[]; excluded: number }> {
   const s = db()
-  const { data: rows, error } = await fetchAllRows<{ id: string; email: string | null; first_name: string | null; locale: string | null; is_blocked: boolean | null; deleted_at: string | null }>(
-    (from, to) => s.from('profiles').select('id, email, first_name, locale, is_blocked, deleted_at').order('id').range(from, to),
+  const { data: rows, error } = await fetchAllRows<{ id: string; email: string | null; first_name: string | null; locale: string | null; is_blocked: boolean | null; deleted_at: string | null } & PlanRow>(
+    (from, to) => s.from('profiles').select('id, email, first_name, locale, is_blocked, deleted_at, subscription_status, subscription_expires_at').order('id').range(from, to),
     100000,
   )
   if (error) throw new Error('profiles')
@@ -60,7 +70,7 @@ async function emailAudience(): Promise<{ people: Person[]; excluded: number }> 
   const { data: off, error: offError } = await fetchAllRows<{ user_id: string }>((from, to) => s.from('email_unsubscribes').select('user_id').order('user_id').range(from, to), 100000)
   if (offError) throw new Error('unsubscribes')
   const offSet = new Set(off.map((r) => r.user_id))
-  const valid = rows.filter((p) => p.email && /@/.test(p.email) && !p.deleted_at && !p.is_blocked)
+  const valid = rows.filter((p) => p.email && /@/.test(p.email) && !p.deleted_at && !p.is_blocked && (audience === 'all' || hasPlan(p)))
   // Un'email sola per indirizzo, anche se due account lo condividono
   const seen = new Set<string>()
   const people = valid
@@ -116,14 +126,23 @@ function buildEmail(c: CommunicationRow, person: Person): SendEmailInput & { loc
   const chrome = EMAIL_CHROME[tx.locale]
   const body = personalize(tx.email_body ?? '', name)
   const unsub = unsubscribeUrl(person.id, c.id, tx.locale)
+  const subject = personalize(tx.email_subject ?? '', name)
+  const layout = isEmailLayout(c.email_layout) ? c.email_layout : 'classic'
+  // Grafica a blocchi («Rivista», «Lettera») o testo semplice («Classica»)
+  const frame = { preheader: tx.email_preheader ?? '', unsubUrl: unsub, siteUrl: PUBLIC_SITE_URL, openLabel: chrome.open, why: chrome.why, stop: chrome.stop, pushNote: chrome.pushNote, locale: tx.locale, subject }
+  const html =
+    layout === 'rivista' ? renderRivista(parseEmailBody(body), frame)
+    : layout === 'lettera' ? renderLettera(parseEmailBody(body), frame)
+    : toHtml(c, body, unsub, tx.email_preheader ?? '', tx.locale)
+  const plain = layout === 'classic' ? body.trim() : emailBodyToText(body)
   return {
     locale: tx.locale,
     to: person.email,
     from: `${mailbox.name} <${mailbox.address}>`,
     replyTo: mailbox.address,
-    subject: personalize(tx.email_subject ?? '', name),
-    html: toHtml(c, body, unsub, tx.email_preheader ?? '', tx.locale),
-    text: `${body.trim()}
+    subject,
+    html,
+    text: `${plain}
 
 ${chrome.open}: ${PUBLIC_SITE_URL}/dashboard
 
@@ -134,20 +153,21 @@ ${chrome.stop}: ${unsub}`,
   }
 }
 
-export async function adminListCommunications(): Promise<{ items: CommunicationRow[]; emailPeople: number; emailExcluded: number; pushPeople: number; error?: string }> {
-  if (!(await verifyAdmin('messages.read'))) return { items: [], emailPeople: 0, emailExcluded: 0, pushPeople: 0, error: 'Non autorizzato' }
+export async function adminListCommunications(): Promise<{ items: CommunicationRow[]; emailPeople: number; emailExcluded: number; emailSubscribers: number; pushPeople: number; error?: string }> {
+  if (!(await verifyAdmin('messages.read'))) return { items: [], emailPeople: 0, emailExcluded: 0, emailSubscribers: 0, pushPeople: 0, error: 'Non autorizzato' }
   const s = db()
   try {
-    const [{ data, error }, audience, subs] = await Promise.all([
+    const [{ data, error }, audience, subscribers, subs] = await Promise.all([
       s.from('staff_communications').select('*').order('created_at', { ascending: false }).limit(200),
       emailAudience(),
+      emailAudience('subscribers'),
       fetchAllRows<{ user_id: string }>((from, to) => s.from('push_subscriptions').select('user_id, id').order('id').range(from, to), 100000),
     ])
-    if (error) return { items: [], emailPeople: 0, emailExcluded: 0, pushPeople: 0, error: error.message }
+    if (error) return { items: [], emailPeople: 0, emailExcluded: 0, emailSubscribers: 0, pushPeople: 0, error: error.message }
     const items = ((data ?? []) as CommunicationRow[]).map((c) => ({ ...c, ready: readyLocales(c) }))
-    return { items, emailPeople: audience.people.length, emailExcluded: audience.excluded, pushPeople: new Set(subs.data.map((r) => r.user_id)).size }
+    return { items, emailPeople: audience.people.length, emailExcluded: audience.excluded, emailSubscribers: subscribers.people.length, pushPeople: new Set(subs.data.map((r) => r.user_id)).size }
   } catch {
-    return { items: [], emailPeople: 0, emailExcluded: 0, pushPeople: 0, error: 'Lettura non riuscita: riprova.' }
+    return { items: [], emailPeople: 0, emailExcluded: 0, emailSubscribers: 0, pushPeople: 0, error: 'Lettura non riuscita: riprova.' }
   }
 }
 
@@ -174,7 +194,7 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
   for (const locale of COMM_LOCALES) {
     if (!present.has(locale)) continue
     const tx = textsFor(c, locale)
-    const r = await adminSendPushCampaign({ title: tx.push_title ?? c.push_title, body: tx.push_body ?? c.push_body, url: messageUrl(c), audience: 'all', locale })
+    const r = await adminSendPushCampaign({ title: tx.push_title ?? c.push_title, body: tx.push_body ?? c.push_body, url: messageUrl(c), audience: c.audience === 'subscribers' ? 'active' : 'all', locale })
     if (!r.success) {
       firstError ??= r.error
       continue
@@ -195,8 +215,8 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
 // Avviso nella campanella di ogni account attivo, in tutte le lingue (si vede in quella della pagina)
 async function addToInbox(c: CommunicationRow): Promise<number> {
   const s = db()
-  const { data: rows, error } = await fetchAllRows<{ id: string; is_blocked: boolean | null; deleted_at: string | null }>(
-    (from, to) => s.from('profiles').select('id, is_blocked, deleted_at').order('id').range(from, to),
+  const { data: rows, error } = await fetchAllRows<{ id: string; is_blocked: boolean | null; deleted_at: string | null } & PlanRow>(
+    (from, to) => s.from('profiles').select('id, is_blocked, deleted_at, subscription_status, subscription_expires_at').order('id').range(from, to),
     100000,
   )
   if (error) return 0
@@ -210,7 +230,7 @@ async function addToInbox(c: CommunicationRow): Promise<number> {
   const kind = `communication:${c.id}`
   const { data: already } = await fetchAllRows<{ user_id: string }>((from, to) => s.from('user_notifications').select('user_id, id').eq('kind', kind).order('id').range(from, to), 100000)
   const has = new Set(already.map((r) => r.user_id))
-  const users = rows.filter((p) => !p.deleted_at && !p.is_blocked && !has.has(p.id)).map((p) => ({ user_id: p.id, category: 'staff', kind, texts }))
+  const users = rows.filter((p) => !p.deleted_at && !p.is_blocked && !has.has(p.id) && (c.audience !== 'subscribers' || hasPlan(p))).map((p) => ({ user_id: p.id, category: 'staff', kind, texts }))
   let added = has.size
   for (let i = 0; i < users.length; i += 500) {
     const { error: e } = await s.from('user_notifications').insert(users.slice(i, i + 500))
@@ -243,7 +263,7 @@ export async function adminSendCommunicationEmail(id: string): Promise<{ success
   try {
     let audience: Awaited<ReturnType<typeof emailAudience>>
     try {
-      audience = await emailAudience()
+      audience = await emailAudience(c.audience === 'subscribers' ? 'subscribers' : 'all')
     } catch {
       return { success: false, error: 'Lettura degli iscritti non riuscita: invio annullato, riprova.' }
     }
@@ -362,4 +382,22 @@ export async function adminResubscribeEmail(userId: string): Promise<{ success: 
   if (!(await verifyAdmin('messages.write'))) return { success: false, error: 'Non autorizzato' }
   const { error } = await db().from('email_unsubscribes').delete().eq('user_id', userId)
   return error ? { success: false, error: error.message } : { success: true }
+}
+
+// Grafica e destinatari si cambiano finché nessun canale è partito
+export async function adminSetCommunicationOptions(id: string, options: { email_layout?: EmailLayout; audience?: CommAudience }): Promise<{ success: boolean; error?: string }> {
+  if (!(await verifyAdmin('messages.write'))) return { success: false, error: 'Non autorizzato' }
+  const patch: Record<string, string> = {}
+  if (options.email_layout !== undefined) {
+    if (!isEmailLayout(options.email_layout)) return { success: false, error: 'Grafica non valida' }
+    patch.email_layout = options.email_layout
+  }
+  if (options.audience !== undefined) {
+    if (options.audience !== 'all' && options.audience !== 'subscribers') return { success: false, error: 'Destinatari non validi' }
+    patch.audience = options.audience
+  }
+  if (!Object.keys(patch).length) return { success: true }
+  const { data, error } = await db().from('staff_communications').update(patch).eq('id', id).is('push_sent_at', null).is('email_sent_at', null).select('id')
+  if (error) return { success: false, error: error.message }
+  return data?.length ? { success: true } : { success: false, error: 'Già inviata: non si può più cambiare' }
 }

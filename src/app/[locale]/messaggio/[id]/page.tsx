@@ -7,6 +7,7 @@ import AppHeader from '@/components/nav/AppHeader'
 import Link from '@/components/LocalizedLink'
 import { getSessionUser, preloadSession } from '@/lib/session'
 import { isHeading, personalize, textsFor } from '@/lib/communications'
+import { emailBodyToText } from '@/lib/emailBlocks'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +31,7 @@ export default async function MessagePage({ params }: { params: Promise<{ id: st
   if (!user) redirect(`/${locale}/login?next=${encodeURIComponent(`/messaggio/${id}`)}`)
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound()
   const s = db()
-  const { data: c } = await s.from('staff_communications').select('id, push_title, push_body, email_subject, email_preheader, email_body, translations, push_sent_at, email_sent_at').eq('id', id).maybeSingle()
+  const { data: c } = await s.from('staff_communications').select('id, push_title, push_body, email_subject, email_preheader, email_body, translations, push_sent_at, email_sent_at, email_layout').eq('id', id).maybeSingle()
   if (!c || (!c.push_sent_at && !c.email_sent_at)) notFound()
   const { data: me } = await s.from('profiles').select('first_name').eq('id', user.id).maybeSingle()
   await s.from('user_notifications').update({ read_at: new Date().toISOString() }).eq('user_id', user.id).eq('kind', `communication:${id}`).is('read_at', null)
@@ -40,7 +41,9 @@ export default async function MessagePage({ params }: { params: Promise<{ id: st
   // Nella lingua della pagina (traduzione, poi inglese, poi italiano)
   const tx = textsFor(c, locale)
   const title = personalize(tx.email_subject || tx.push_title || '', name)
-  const body = personalize(tx.email_body || tx.push_body || '', name)
+  const fullBody = personalize(tx.email_body || tx.push_body || '', name)
+  // Email con grafica (titoli, elenchi, pulsanti): qui come testo, con i titoli in evidenza
+  const body = tx.email_body && c.email_layout && c.email_layout !== 'classic' ? emailBodyToText(fullBody) : fullBody
   const sentAt = new Date(c.push_sent_at ?? c.email_sent_at).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
 
   return (

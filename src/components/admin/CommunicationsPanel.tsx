@@ -11,11 +11,20 @@ import {
   adminResubscribeEmail,
   adminSendCommunicationEmail,
   adminSendCommunicationPush,
+  adminSetCommunicationOptions,
+  type CommAudience,
   adminTestCommunicationEmail,
   type CommunicationRow,
   type UnsubscribeRow,
 } from '@/app/actions/adminCommunications'
 import { COMM_LOCALES, type CommLocale } from '@/lib/communications'
+import type { EmailLayout } from '@/lib/emailBlocks'
+
+const LAYOUTS: { id: EmailLayout; label: string }[] = [
+  { id: 'classic', label: 'Classica' },
+  { id: 'rivista', label: 'Rivista' },
+  { id: 'lettera', label: 'Lettera' },
+]
 
 // Admin → Comunicazioni: messaggi a tutti gli iscritti già pronti (notifica
 // push e/o email). «Da inviare» finché un canale non è partito; «Inviati» con
@@ -29,7 +38,7 @@ const btn = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-
 export default function CommunicationsPanel() {
   const [tab, setTab] = useState<Tab>('todo')
   const [items, setItems] = useState<CommunicationRow[]>([])
-  const [counts, setCounts] = useState({ emailPeople: 0, emailExcluded: 0, pushPeople: 0 })
+  const [counts, setCounts] = useState({ emailPeople: 0, emailExcluded: 0, emailSubscribers: 0, pushPeople: 0 })
   const [unsubs, setUnsubs] = useState<UnsubscribeRow[]>([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
@@ -43,7 +52,7 @@ export default function CommunicationsPanel() {
     const [r, u] = await Promise.all([adminListCommunications(), adminEmailUnsubscribes()])
     if (r.error) notify('Errore: ' + r.error)
     setItems(r.items)
-    setCounts({ emailPeople: r.emailPeople, emailExcluded: r.emailExcluded, pushPeople: r.pushPeople })
+    setCounts({ emailPeople: r.emailPeople, emailExcluded: r.emailExcluded, emailSubscribers: r.emailSubscribers, pushPeople: r.pushPeople })
     setUnsubs(u.rows)
     setLoading(false)
   }, [])
@@ -73,7 +82,7 @@ export default function CommunicationsPanel() {
     const again = !!c.email_sent_at
     const question = again
       ? `Inviare l’email «${c.email_subject}» agli iscritti che non l’hanno ancora ricevuta (circa ${missing(c)})? Chi l’ha già ricevuta non la riceve di nuovo.`
-      : `Inviare l’email «${c.email_subject}» a ${counts.emailPeople} iscritti? ${counts.emailExcluded ? `${counts.emailExcluded} hanno scelto di non riceverle e saranno esclusi. ` : ''}Se si supera il limite di Resend di oggi, le restanti si mandano domani con «Invia ai mancanti». Non si può annullare.`
+      : `Inviare l’email «${c.email_subject}» a ${peopleFor(c)} ${c.audience === 'subscribers' ? 'iscritti con un piano attivo' : 'iscritti'}? ${counts.emailExcluded ? `${counts.emailExcluded} hanno scelto di non riceverle e saranno esclusi. ` : ''}Se si supera il limite di Resend di oggi, le restanti si mandano domani con «Invia ai mancanti». Non si può annullare.`
     if (!(await askConfirm(question, { tone: 'warning' }))) return
     setBusy(c.id + 'email')
     const r = await adminSendCommunicationEmail(c.id)
@@ -97,6 +106,16 @@ export default function CommunicationsPanel() {
     if (r.html) setPreview(r.html)
     else notify('Errore: ' + r.error)
   }
+
+  // Grafica e destinatari: si cambiano finché non è partito niente
+  const setOptions = async (c: CommunicationRow, options: { email_layout?: EmailLayout; audience?: CommAudience }) => {
+    setBusy(c.id + 'options')
+    const r = await adminSetCommunicationOptions(c.id, options)
+    setBusy(null)
+    if (!r.success) return notify('Errore: ' + r.error)
+    setItems((list) => list.map((x) => (x.id === c.id ? { ...x, ...options } : x)))
+  }
+  const peopleFor = (c: CommunicationRow) => (c.audience === 'subscribers' ? counts.emailSubscribers : counts.emailPeople)
 
   const resubscribe = async (row: UnsubscribeRow) => {
     if (!(await askConfirm(`Rimettere ${row.name || row.email} tra chi riceve le email? Fallo solo se te l’ha chiesto.`))) return
@@ -130,6 +149,29 @@ export default function CommunicationsPanel() {
           </button>
         </div>
 
+        {!c.push_sent_at && !c.email_sent_at && (
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+            {c.email_subject && (
+              <span className="flex flex-wrap items-center gap-1">
+                <span className="font-semibold text-gray-500">Grafica email:</span>
+                {LAYOUTS.map((l) => (
+                  <button key={l.id} type="button" disabled={!!busy} onClick={() => setOptions(c, { email_layout: l.id })} aria-pressed={c.email_layout === l.id} className={`rounded-full border px-2.5 py-1 font-semibold ${c.email_layout === l.id ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                    {l.label}
+                  </button>
+                ))}
+              </span>
+            )}
+            <span className="flex flex-wrap items-center gap-1">
+              <span className="font-semibold text-gray-500">A chi:</span>
+              {(['all', 'subscribers'] as const).map((a) => (
+                <button key={a} type="button" disabled={!!busy} onClick={() => setOptions(c, { audience: a })} aria-pressed={c.audience === a} className={`rounded-full border px-2.5 py-1 font-semibold ${c.audience === a ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                  {a === 'all' ? `Tutti gli iscritti (${counts.emailPeople})` : `Solo con un piano attivo (${counts.emailSubscribers})`}
+                </button>
+              ))}
+            </span>
+          </div>
+        )}
+
         <div className="mt-3 grid gap-3 md:grid-cols-2">
           {c.push_title && (
             <div className="rounded-lg border border-gray-100 bg-gray-50 p-3">
@@ -147,7 +189,7 @@ export default function CommunicationsPanel() {
                   </p>
                 ) : (
                   <button type="button" disabled={!!busy} onClick={() => sendPush(c)} className={`${btn} bg-gray-900 text-white hover:bg-gray-700`}>
-                    {busy === c.id + 'push' ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} Invia la notifica a tutti
+                    {busy === c.id + 'push' ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} {c.audience === 'subscribers' ? 'Invia la notifica a chi ha un piano' : 'Invia la notifica a tutti'}
                   </button>
                 )}
               </div>
@@ -179,7 +221,7 @@ export default function CommunicationsPanel() {
                   </p>
                 ) : (
                   <button type="button" disabled={!!busy} onClick={() => sendEmail(c)} className={`${btn} bg-gray-900 text-white hover:bg-gray-700`}>
-                    {busy === c.id + 'email' ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} Invia l’email a tutti
+                    {busy === c.id + 'email' ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />} {c.audience === 'subscribers' ? `Invia l’email a chi ha un piano (${peopleFor(c)})` : 'Invia l’email a tutti'}
                   </button>
                 )}
               </div>
