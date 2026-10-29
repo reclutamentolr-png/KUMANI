@@ -28,9 +28,9 @@ const THEME_COLORS: Record<string, string> = {
 const HEX = { ink: '171717', gold: 'C79A3B', goldBright: 'E7C56A', white: 'FFFFFF', red: 'B5452F', sky: '5BA4D6' }
 const SCALE: Record<string, number> = { it: 1, en: 1, fr: 0.94, es: 0.96, pt: 0.96, de: 0.92, ru: 0.92 }
 // Gruppi di servizi (stessi colori della pagina Servizi) e bollini dei piani
-const GROUP_HEX: Record<string, string> = { social: 'C2185B', kids: 'E08A1E', security: 'B5452F', money: '2F6B45', work: '2B4F9A', business: '8A6D1F', wellness: '0F766E', fun: '7C3AED', community: 'C79A3B' }
-const GROUP_TILE: Record<string, string> = { social: 'FCE4EF', kids: 'FDEFD9', security: 'FDE7E3', money: 'E4F1E8', work: 'E6ECF8', business: 'F5E8BD', wellness: 'DFF3F1', fun: 'EFE7FD', community: 'F5E8BD' }
-const GROUP_ICON: Record<string, string> = { social: 'Megaphone', kids: 'Baby', security: 'ShieldCheck', money: 'Wallet', work: 'BriefcaseBusiness', business: 'Store', wellness: 'Leaf', fun: 'Dices', community: 'Users' }
+const GROUP_HEX: Record<string, string> = { social: 'C2185B', kids: 'E08A1E', security: 'B5452F', money: '2F6B45', work: '2B4F9A', business: '8A6D1F', wellness: '0F766E', fun: '7C3AED', audio: '0E7490', community: 'C79A3B' }
+const GROUP_TILE: Record<string, string> = { social: 'FCE4EF', kids: 'FDEFD9', security: 'FDE7E3', money: 'E4F1E8', work: 'E6ECF8', business: 'F5E8BD', wellness: 'DFF3F1', fun: 'EFE7FD', audio: 'DFF4F8', community: 'F5E8BD' }
+const GROUP_ICON: Record<string, string> = { social: 'Megaphone', kids: 'Baby', security: 'ShieldCheck', money: 'Wallet', work: 'BriefcaseBusiness', business: 'Store', wellness: 'Leaf', fun: 'Dices', audio: 'AudioLines', community: 'Users' }
 const PLAN_BADGE: Record<DeckPlan, { fill: string; text: string }> = { free: { fill: '3E7C59', text: 'FFFFFF' }, base: { fill: 'C79A3B', text: '171717' }, pro: { fill: '171717', text: 'E7C56A' } }
 // Servizi per slide (griglia 2 × 4): oltre, il gruppo si divide in più slide
 const PER_SLIDE = 8

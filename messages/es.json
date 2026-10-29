@@ -1214,7 +1214,11 @@
     "carteAntitruffa": "Cartas Antiestafa",
     "carteAntitruffaDescription": "Un álbum de 20 cartas, una por cada estafa más común: lee cómo funciona, responde a 3 preguntas y llévate la carta. Cuantas más cartas tengas, más protegido estás.",
     "vocaleSospetto": "¿Audio sospechoso?",
-    "vocaleSospettoDescription": "¿Un audio raro en WhatsApp? Deja que KUMANI lo escuche: lo transcribe en el teléfono y te dice si tiene las señales típicas de una estafa."
+    "vocaleSospettoDescription": "¿Un audio raro en WhatsApp? Deja que KUMANI lo escuche: lo transcribe en el teléfono y te dice si tiene las señales típicas de una estafa.",
+    "fonometro": "Sonómetro",
+    "fonometroDescription": "Mide el ruido con el micrófono del teléfono, registra los momentos más fuertes y crea un PDF para enviarlo al administrador o al ayuntamiento.",
+    "categoryAudio": "Audio y Herramientas",
+    "categoryAudioDesc": "Herramientas que usan el micrófono del teléfono: medir, escuchar y entender los sonidos a tu alrededor."
   },
   "neurobalance": {
     "tracksLabel": "Audios de relajación",
@@ -7813,6 +7817,10 @@
       "kids": {
         "title": "Niños",
         "text": "Los juegos creativos del Rincón de los niños, con KUMI como guía y el código del adulto."
+      },
+      "audio": {
+        "title": "Audio y Herramientas",
+        "text": "Herramientas que usan el micrófono del teléfono: medir, escuchar y entender los sonidos a tu alrededor."
       }
     },
     "registrazione": {
@@ -11370,7 +11378,9 @@
     "group_social": "Social",
     "interest_social": "Empezar en redes sociales",
     "group_kids": "Niños",
-    "interest_kids": "Que jueguen los niños"
+    "interest_kids": "Que jueguen los niños",
+    "group_audio": "Audio y Herramientas",
+    "interest_audio": "Medir ruidos y sonidos"
   },
   "garage": {
     "eyebrow": "Coches y motos, en propiedad y de renting",
@@ -17728,5 +17738,59 @@
     "transcriptTitle": "El texto del audio",
     "again": "Comprobar otro audio",
     "privacy": "El audio se escucha y se transcribe en tu teléfono: no lo subimos a los servidores y nadie lo escucha. La comprobación reconoce las señales típicas de estafa en italiano; no puede decir si una voz es real o creada con IA."
+  },
+  "fonometro": {
+    "badge": "Audio y Herramientas · Plus",
+    "heroTitle": "¿Cuánto ruido hay de verdad?",
+    "heroText": "Vecinos ruidosos, un bar debajo de casa, obras: mide los decibelios, guarda el registro de los momentos más fuertes y descarga un PDF con gráfico y horas.",
+    "errorMic": "No puedo usar el micrófono: permítelo en los ajustes del navegador.",
+    "errorSave": "La memoria del teléfono está llena: borra alguna medición del registro.",
+    "errorPdf": "No se ha creado el PDF. Inténtalo de nuevo.",
+    "level_whisper": "Muy silencioso, como un susurro",
+    "level_quiet": "Silencioso, como una biblioteca",
+    "level_talk": "Como una conversación",
+    "level_traffic": "Fuerte, como el tráfico",
+    "level_loud": "Muy fuerte",
+    "level_danger": "Fortísimo: a la larga daña los oídos",
+    "levelIdle": "Toca «Empezar a medir»",
+    "liveLine": "{time} · media {average} dB · máximo {max} dB · {events, plural, one {# momento} other {# momentos}} por encima del umbral",
+    "keepOn": "Mantén la pantalla encendida y el teléfono quieto, con el micrófono libre.",
+    "start": "Empezar a medir",
+    "stop": "Parar",
+    "settings": "Umbral y calibración",
+    "thresholdLabel": "Umbral de ruido: {value} dB",
+    "thresholdHint": "Por encima de este umbral KUMANI anota la hora y la duración del ruido. De noche en casa 40–45 dB ya molestan.",
+    "calibrationLabel": "Calibración: {value} dB",
+    "calibrationHint": "Cada teléfono oye de forma distinta. Si tienes un sonómetro de verdad o una app calibrada, mide el mismo ruido y ajusta hasta que los números coincidan.",
+    "doneTitle": "Medición de {from} a {to}",
+    "statLength": "Duración",
+    "statAverage": "Media",
+    "statMax": "Máximo",
+    "statMin": "Mínimo",
+    "statOver": "Tiempo por encima del umbral",
+    "eventsTitle": "Momentos por encima del umbral",
+    "eventAt": "Hora",
+    "eventLong": "Duración",
+    "eventPeak": "Pico",
+    "noEvents": "Ningún momento por encima del umbral.",
+    "place": "Lugar",
+    "note": "Notas",
+    "placePlaceholder": "Lugar (p. ej. dormitorio, calle Mayor 10)",
+    "notePlaceholder": "Notas (p. ej. música del piso de arriba)",
+    "save": "Guardar en el registro",
+    "savedAgain": "Actualizar en el registro",
+    "pdf": "Descargar el PDF",
+    "logTitle": "Registro de mediciones",
+    "logLine": "media {average} dB · máximo {max} dB · {events, plural, one {# momento} other {# momentos}}",
+    "delete": "Eliminar",
+    "disclaimer": "El micrófono del teléfono no es un instrumento calibrado: los valores son una estimación, útil para comparar momentos y lugares, no una medición con valor legal. No se graba el audio: solo se mide el volumen y todo queda en el teléfono.",
+    "threshold": "Umbral",
+    "pdfTitle": "Medición del ruido",
+    "pdfDate": "Día",
+    "pdfFrom": "Inicio",
+    "pdfTo": "Fin",
+    "pdfFooter": "Creado con KUMANI · kumani.io",
+    "discard": "Descartar esta medición",
+    "discardConfirm": "¿Descartar esta medición? Si la habías guardado, también desaparece del registro."
   }
 }

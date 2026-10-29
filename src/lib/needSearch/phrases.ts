@@ -82,6 +82,15 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
     de: ['ausweis foto senden', 'wasserzeichen'],
     ru: ['фото паспорта', 'водяной знак'],
   },
+  fonometro: {
+    it: ['fonometro', 'misurare il rumore', 'decibel', 'vicini rumorosi', 'rumore di notte', 'rumore del locale', 'cantiere rumoroso', 'quanto rumore', 'esposto per rumore', 'misurare i decibel'],
+    en: ['sound level meter', 'measure noise', 'decibel', 'noisy neighbours', 'noise at night'],
+    fr: ['sonomètre', 'mesurer le bruit', 'voisins bruyants'],
+    es: ['sonómetro', 'medir el ruido', 'vecinos ruidosos'],
+    pt: ['sonómetro', 'medir o ruído', 'vizinhos barulhentos'],
+    de: ['schallpegelmesser', 'lärm messen', 'laute nachbarn'],
+    ru: ['шумомер', 'измерить шум', 'шумные соседи'],
+  },
   'vocale-sospetto': {
     it: ['vocale sospetto', 'messaggio vocale strano', 'vocale whatsapp truffa', 'ciao mamma ho cambiato numero', 'nuovo numero mamma', 'finto carabiniere', 'finto nipote', 'telefonata truffa', 'chiamata della banca', 'mi chiedono un codice', 'mi chiedono soldi al telefono'],
     en: ['suspicious voice message', 'voice note scam', 'hi mum new number', 'fake bank call', 'they ask for a code'],

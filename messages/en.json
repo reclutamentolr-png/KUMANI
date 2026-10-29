@@ -1259,7 +1259,11 @@
     "carteAntitruffa": "Scam Cards",
     "carteAntitruffaDescription": "An album of 20 cards, one for each of the most common scams: read how it works, answer 3 questions and take the card. The more cards you have, the safer you are.",
     "vocaleSospetto": "Suspicious voice message?",
-    "vocaleSospettoDescription": "A strange voice message on WhatsApp? Let KUMANI listen: it transcribes it on your phone and tells you if it has the typical signs of a scam."
+    "vocaleSospettoDescription": "A strange voice message on WhatsApp? Let KUMANI listen: it transcribes it on your phone and tells you if it has the typical signs of a scam.",
+    "fonometro": "Sound meter",
+    "fonometroDescription": "Measure noise with your phone’s microphone, log the loudest moments and create a PDF to send to the building manager or the council.",
+    "categoryAudio": "Audio & Tools",
+    "categoryAudioDesc": "Tools that use your phone’s microphone: measure, listen and understand the sounds around you."
   },
   "neurobalance": {
     "tracksLabel": "Relaxation audio",
@@ -7813,6 +7817,10 @@
       "kids": {
         "title": "Kids",
         "text": "The creative games of the Kids Corner, with KUMI as a guide and the parent code."
+      },
+      "audio": {
+        "title": "Audio & Tools",
+        "text": "Tools that use your phone’s microphone: measure, listen and understand the sounds around you."
       }
     },
     "registrazione": {
@@ -11370,7 +11378,9 @@
     "group_social": "Social",
     "interest_social": "Getting started on social media",
     "group_kids": "Kids",
-    "interest_kids": "Let the kids play"
+    "interest_kids": "Let the kids play",
+    "group_audio": "Audio & Tools",
+    "interest_audio": "Measuring noise and sounds"
   },
   "garage": {
     "eyebrow": "Cars and motorbikes, owned and leased",
@@ -17728,5 +17738,59 @@
     "transcriptTitle": "The text of the message",
     "again": "Check another message",
     "privacy": "The message is listened to and transcribed on your phone: we don’t upload it and nobody listens to it. The check recognises typical scam signs in Italian; it can’t tell whether a voice is real or AI-generated."
+  },
+  "fonometro": {
+    "badge": "Audio & Tools · Plus",
+    "heroTitle": "How much noise is there really?",
+    "heroText": "Noisy neighbours, a bar downstairs, building work: measure the decibels, keep a log of the loudest moments and download a PDF with chart and times.",
+    "errorMic": "I can’t use the microphone: allow it in your browser settings.",
+    "errorSave": "Phone storage is full: delete some measurements from the log.",
+    "errorPdf": "The PDF wasn’t created. Try again.",
+    "level_whisper": "Very quiet, like a whisper",
+    "level_quiet": "Quiet, like a library",
+    "level_talk": "Like a conversation",
+    "level_traffic": "Loud, like traffic",
+    "level_loud": "Very loud",
+    "level_danger": "Extremely loud: harmful to ears over time",
+    "levelIdle": "Tap “Start measuring”",
+    "liveLine": "{time} · average {average} dB · max {max} dB · {events, plural, one {# moment} other {# moments}} above the threshold",
+    "keepOn": "Keep the screen on and the phone still, with the microphone uncovered.",
+    "start": "Start measuring",
+    "stop": "Stop",
+    "settings": "Threshold and calibration",
+    "thresholdLabel": "Noise threshold: {value} dB",
+    "thresholdHint": "Above this threshold KUMANI notes the time and length of the noise. At night at home 40–45 dB is already annoying.",
+    "calibrationLabel": "Calibration: {value} dB",
+    "calibrationHint": "Every phone hears differently. If you have a real sound meter or a calibrated app, measure the same noise and adjust until the numbers match.",
+    "doneTitle": "Measurement from {from} to {to}",
+    "statLength": "Length",
+    "statAverage": "Average",
+    "statMax": "Maximum",
+    "statMin": "Minimum",
+    "statOver": "Time above threshold",
+    "eventsTitle": "Moments above the threshold",
+    "eventAt": "Time",
+    "eventLong": "Length",
+    "eventPeak": "Peak",
+    "noEvents": "No moments above the threshold.",
+    "place": "Place",
+    "note": "Notes",
+    "placePlaceholder": "Place (e.g. bedroom, 10 Rome Street)",
+    "notePlaceholder": "Notes (e.g. music from upstairs)",
+    "save": "Save to the log",
+    "savedAgain": "Update in the log",
+    "pdf": "Download the PDF",
+    "logTitle": "Measurement log",
+    "logLine": "average {average} dB · max {max} dB · {events, plural, one {# moment} other {# moments}}",
+    "delete": "Delete",
+    "disclaimer": "A phone microphone isn’t a calibrated instrument: values are an estimate, useful for comparing times and places, not a legally valid measurement. No audio is recorded: only the volume is measured, and everything stays on your phone.",
+    "threshold": "Threshold",
+    "pdfTitle": "Noise measurement",
+    "pdfDate": "Day",
+    "pdfFrom": "Start",
+    "pdfTo": "End",
+    "pdfFooter": "Created with KUMANI · kumani.io",
+    "discard": "Discard this measurement",
+    "discardConfirm": "Discard this measurement? If you saved it, it’s removed from the log too."
   }
 }

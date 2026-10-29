@@ -62,6 +62,7 @@ const PAID_TOOLS = [
   'documento-sicuro',
   'testo-protetto',
   'carte-antitruffa',
+  'fonometro',
   'firma-email',
   'calcolatrici',
   'angolo-bambini',

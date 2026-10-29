@@ -57,6 +57,7 @@ export default async function HomePlans() {
     wellness: marketplaceT('categoryWellness'),
     lavoro: marketplaceT('categoryLavoro'),
     svago: marketplaceT('categorySvago'),
+    audio: marketplaceT('categoryAudio'),
     bambini: marketplaceT('categoryBambini'),
   }
   // Servizi di un piano, con descrizione e argomento (per "Dettagli")

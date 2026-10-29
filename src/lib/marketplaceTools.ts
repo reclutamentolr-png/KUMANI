@@ -1,4 +1,4 @@
-export const MARKETPLACE_CATEGORIES = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'bambini', 'community'] as const
+export const MARKETPLACE_CATEGORIES = ['marketing', 'security', 'personal', 'wellness', 'lavoro', 'svago', 'audio', 'bambini', 'community'] as const
 export type MarketplaceCategory = (typeof MARKETPLACE_CATEGORIES)[number]
 
 export interface MarketplaceTool {
@@ -667,6 +667,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       description: t('nexusDescription'),
       color: 'gold',
       category: 'svago',
+    },
+    {
+      toolName: 'fonometro',
+      href: '/app/fonometro',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'AudioWaveform',
+      title: t('fonometro'),
+      description: t('fonometroDescription'),
+      color: 'gold',
+      category: 'audio',
+      requiresSubscription: true,
     },
     {
       toolName: 'angolo-bambini',

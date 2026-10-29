@@ -1214,7 +1214,11 @@
     "carteAntitruffa": "Anti-Betrugs-Karten",
     "carteAntitruffaDescription": "Ein Album mit 20 Karten, eine für jede der häufigsten Betrugsmaschen: Lies, wie sie funktioniert, beantworte 3 Fragen und hol dir die Karte. Je mehr Karten, desto besser geschützt.",
     "vocaleSospetto": "Verdächtige Sprachnachricht?",
-    "vocaleSospettoDescription": "Eine seltsame Sprachnachricht auf WhatsApp? Lass KUMANI zuhören: Es schreibt sie auf dem Handy mit und sagt dir, ob sie typische Betrugsmerkmale hat."
+    "vocaleSospettoDescription": "Eine seltsame Sprachnachricht auf WhatsApp? Lass KUMANI zuhören: Es schreibt sie auf dem Handy mit und sagt dir, ob sie typische Betrugsmerkmale hat.",
+    "fonometro": "Schallpegelmesser",
+    "fonometroDescription": "Miss den Lärm mit dem Mikrofon des Handys, halte die lautesten Momente fest und erstelle ein PDF für Hausverwaltung oder Gemeinde.",
+    "categoryAudio": "Audio & Werkzeuge",
+    "categoryAudioDesc": "Werkzeuge, die das Mikrofon des Handys nutzen: messen, hören und die Geräusche um dich herum verstehen."
   },
   "neurobalance": {
     "tracksLabel": "Entspannungsaudios",
@@ -7813,6 +7817,10 @@
       "kids": {
         "title": "Kinder",
         "text": "Die kreativen Spiele der Kinderecke, mit KUMI als Begleiter und dem Eltern-Code."
+      },
+      "audio": {
+        "title": "Audio & Werkzeuge",
+        "text": "Werkzeuge, die das Mikrofon des Handys nutzen: messen, hören und die Geräusche um dich herum verstehen."
       }
     },
     "registrazione": {
@@ -11370,7 +11378,9 @@
     "group_social": "Social",
     "interest_social": "Mit Social Media starten",
     "group_kids": "Kinder",
-    "interest_kids": "Die Kinder spielen lassen"
+    "interest_kids": "Die Kinder spielen lassen",
+    "group_audio": "Audio & Werkzeuge",
+    "interest_audio": "Lärm und Geräusche messen"
   },
   "garage": {
     "eyebrow": "Autos und Motorräder, eigen und geleast",
@@ -17728,5 +17738,59 @@
     "transcriptTitle": "Der Text der Sprachnachricht",
     "again": "Andere Sprachnachricht prüfen",
     "privacy": "Die Nachricht wird auf deinem Handy angehört und abgeschrieben: Wir laden sie nicht hoch und niemand hört sie an. Die Prüfung erkennt typische Betrugsmerkmale auf Italienisch; sie kann nicht sagen, ob eine Stimme echt oder mit KI erzeugt ist."
+  },
+  "fonometro": {
+    "badge": "Audio & Werkzeuge · Plus",
+    "heroTitle": "Wie laut ist es wirklich?",
+    "heroText": "Laute Nachbarn, eine Bar unten im Haus, eine Baustelle: Miss die Dezibel, führe ein Protokoll der lautesten Momente und lade ein PDF mit Grafik und Uhrzeiten herunter.",
+    "errorMic": "Ich kann das Mikrofon nicht nutzen: Erlaube es in den Browsereinstellungen.",
+    "errorSave": "Der Speicher des Handys ist voll: Lösche einige Messungen aus dem Protokoll.",
+    "errorPdf": "Das PDF wurde nicht erstellt. Versuch es erneut.",
+    "level_whisper": "Sehr leise, wie ein Flüstern",
+    "level_quiet": "Leise, wie eine Bibliothek",
+    "level_talk": "Wie ein Gespräch",
+    "level_traffic": "Laut, wie Straßenverkehr",
+    "level_loud": "Sehr laut",
+    "level_danger": "Extrem laut: auf Dauer schädlich für die Ohren",
+    "levelIdle": "Tippe auf „Messung starten“",
+    "liveLine": "{time} · Mittel {average} dB · Maximum {max} dB · {events, plural, one {# Moment} other {# Momente}} über der Schwelle",
+    "keepOn": "Lass den Bildschirm an und das Handy ruhig liegen, mit freiem Mikrofon.",
+    "start": "Messung starten",
+    "stop": "Stopp",
+    "settings": "Schwelle und Kalibrierung",
+    "thresholdLabel": "Lärmschwelle: {value} dB",
+    "thresholdHint": "Über dieser Schwelle notiert KUMANI Uhrzeit und Dauer des Lärms. Nachts zu Hause stören schon 40–45 dB.",
+    "calibrationLabel": "Kalibrierung: {value} dB",
+    "calibrationHint": "Jedes Handy hört anders. Wenn du einen echten Schallpegelmesser oder eine kalibrierte App hast, miss dasselbe Geräusch und stelle ein, bis die Werte übereinstimmen.",
+    "doneTitle": "Messung von {from} bis {to}",
+    "statLength": "Dauer",
+    "statAverage": "Mittelwert",
+    "statMax": "Maximum",
+    "statMin": "Minimum",
+    "statOver": "Zeit über der Schwelle",
+    "eventsTitle": "Momente über der Schwelle",
+    "eventAt": "Uhrzeit",
+    "eventLong": "Dauer",
+    "eventPeak": "Spitze",
+    "noEvents": "Keine Momente über der Schwelle.",
+    "place": "Ort",
+    "note": "Notizen",
+    "placePlaceholder": "Ort (z. B. Schlafzimmer, Hauptstraße 10)",
+    "notePlaceholder": "Notizen (z. B. Musik von oben)",
+    "save": "Im Protokoll speichern",
+    "savedAgain": "Im Protokoll aktualisieren",
+    "pdf": "PDF herunterladen",
+    "logTitle": "Messprotokoll",
+    "logLine": "Mittel {average} dB · Maximum {max} dB · {events, plural, one {# Moment} other {# Momente}}",
+    "delete": "Löschen",
+    "disclaimer": "Das Handymikrofon ist kein kalibriertes Messgerät: Die Werte sind eine Schätzung, nützlich zum Vergleichen von Zeiten und Orten, keine rechtsgültige Messung. Es wird kein Ton aufgenommen: Nur die Lautstärke wird gemessen, und alles bleibt auf dem Handy.",
+    "threshold": "Schwelle",
+    "pdfTitle": "Lärmmessung",
+    "pdfDate": "Tag",
+    "pdfFrom": "Beginn",
+    "pdfTo": "Ende",
+    "pdfFooter": "Erstellt mit KUMANI · kumani.io",
+    "discard": "Diese Messung verwerfen",
+    "discardConfirm": "Diese Messung verwerfen? Falls du sie gespeichert hast, verschwindet sie auch aus dem Protokoll."
   }
 }

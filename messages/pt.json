@@ -1214,7 +1214,11 @@
     "carteAntitruffa": "Cartas Antiburla",
     "carteAntitruffaDescription": "Um álbum de 20 cartas, uma por cada burla mais comum: lê como funciona, responde a 3 perguntas e leva a carta. Quantas mais cartas tens, mais protegido estás.",
     "vocaleSospetto": "Áudio suspeito?",
-    "vocaleSospettoDescription": "Um áudio estranho no WhatsApp? Deixe a KUMANI ouvir: transcreve-o no telemóvel e diz-lhe se tem os sinais típicos de uma burla."
+    "vocaleSospettoDescription": "Um áudio estranho no WhatsApp? Deixe a KUMANI ouvir: transcreve-o no telemóvel e diz-lhe se tem os sinais típicos de uma burla.",
+    "fonometro": "Sonómetro",
+    "fonometroDescription": "Meça o ruído com o microfone do telemóvel, registe os momentos mais fortes e crie um PDF para enviar ao administrador do condomínio ou à câmara.",
+    "categoryAudio": "Áudio e Ferramentas",
+    "categoryAudioDesc": "Ferramentas que usam o microfone do telemóvel: medir, ouvir e perceber os sons à sua volta."
   },
   "neurobalance": {
     "tracksLabel": "Áudios de relaxamento",
@@ -7813,6 +7817,10 @@
       "kids": {
         "title": "Crianças",
         "text": "Os jogos criativos do Cantinho das Crianças, com o KUMI como guia e o código dos pais."
+      },
+      "audio": {
+        "title": "Áudio e Ferramentas",
+        "text": "Ferramentas que usam o microfone do telemóvel: medir, ouvir e perceber os sons à sua volta."
       }
     },
     "registrazione": {
@@ -11370,7 +11378,9 @@
     "group_social": "Social",
     "interest_social": "Começar nas redes sociais",
     "group_kids": "Crianças",
-    "interest_kids": "Pôr as crianças a brincar"
+    "interest_kids": "Pôr as crianças a brincar",
+    "group_audio": "Áudio e Ferramentas",
+    "interest_audio": "Medir ruídos e sons"
   },
   "garage": {
     "eyebrow": "Carros e motas, próprios e em renting",
@@ -17728,5 +17738,59 @@
     "transcriptTitle": "O texto do áudio",
     "again": "Verificar outro áudio",
     "privacy": "O áudio é ouvido e transcrito no seu telemóvel: não o carregamos nos servidores e ninguém o ouve. A verificação reconhece sinais típicos de burla em italiano; não consegue dizer se uma voz é verdadeira ou criada com IA."
+  },
+  "fonometro": {
+    "badge": "Áudio e Ferramentas · Plus",
+    "heroTitle": "Quanto ruído há mesmo?",
+    "heroText": "Vizinhos barulhentos, um bar por baixo de casa, obras: meça os decibéis, guarde o registo dos momentos mais fortes e descarregue um PDF com gráfico e horas.",
+    "errorMic": "Não consigo usar o microfone: permita-o nas definições do navegador.",
+    "errorSave": "A memória do telemóvel está cheia: apague algumas medições do registo.",
+    "errorPdf": "O PDF não foi criado. Tente de novo.",
+    "level_whisper": "Muito silencioso, como um sussurro",
+    "level_quiet": "Silencioso, como uma biblioteca",
+    "level_talk": "Como uma conversa",
+    "level_traffic": "Forte, como o trânsito",
+    "level_loud": "Muito forte",
+    "level_danger": "Fortíssimo: com o tempo faz mal aos ouvidos",
+    "levelIdle": "Toque em «Iniciar medição»",
+    "liveLine": "{time} · média {average} dB · máximo {max} dB · {events, plural, one {# momento} other {# momentos}} acima do limite",
+    "keepOn": "Mantenha o ecrã ligado e o telemóvel parado, com o microfone livre.",
+    "start": "Iniciar medição",
+    "stop": "Parar",
+    "settings": "Limite e calibração",
+    "thresholdLabel": "Limite de ruído: {value} dB",
+    "thresholdHint": "Acima deste limite a KUMANI regista a hora e a duração do ruído. À noite em casa 40–45 dB já incomodam.",
+    "calibrationLabel": "Calibração: {value} dB",
+    "calibrationHint": "Cada telemóvel ouve de forma diferente. Se tiver um sonómetro verdadeiro ou uma app calibrada, meça o mesmo ruído e ajuste até os números coincidirem.",
+    "doneTitle": "Medição das {from} às {to}",
+    "statLength": "Duração",
+    "statAverage": "Média",
+    "statMax": "Máximo",
+    "statMin": "Mínimo",
+    "statOver": "Tempo acima do limite",
+    "eventsTitle": "Momentos acima do limite",
+    "eventAt": "Hora",
+    "eventLong": "Duração",
+    "eventPeak": "Pico",
+    "noEvents": "Nenhum momento acima do limite.",
+    "place": "Local",
+    "note": "Notas",
+    "placePlaceholder": "Local (ex. quarto, Rua de Roma 10)",
+    "notePlaceholder": "Notas (ex. música do andar de cima)",
+    "save": "Guardar no registo",
+    "savedAgain": "Atualizar no registo",
+    "pdf": "Descarregar o PDF",
+    "logTitle": "Registo das medições",
+    "logLine": "média {average} dB · máximo {max} dB · {events, plural, one {# momento} other {# momentos}}",
+    "delete": "Eliminar",
+    "disclaimer": "O microfone do telemóvel não é um instrumento calibrado: os valores são uma estimativa, útil para comparar momentos e locais, não uma medição com valor legal. O áudio não é gravado: só se mede o volume e tudo fica no telemóvel.",
+    "threshold": "Limite",
+    "pdfTitle": "Medição do ruído",
+    "pdfDate": "Dia",
+    "pdfFrom": "Início",
+    "pdfTo": "Fim",
+    "pdfFooter": "Criado com a KUMANI · kumani.io",
+    "discard": "Descartar esta medição",
+    "discardConfirm": "Descartar esta medição? Se a tinha guardado, também desaparece do registo."
   }
 }
