@@ -131,6 +131,8 @@ export default function FonometroApp() {
     }
     const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
     const ctx = new Ctx()
+    // Dopo la domanda del microfono il browser può tenere l'audio in pausa (iPhone): si riavvia
+    await ctx.resume().catch(() => {})
     const source = ctx.createMediaStreamSource(stream)
     const analyser = ctx.createAnalyser()
     analyser.fftSize = 2048
