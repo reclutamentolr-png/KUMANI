@@ -4,12 +4,13 @@ import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import Logo from '@/components/Logo'
 import SiteHomeButton from '@/components/nav/SiteHomeButton'
-import HoplaSender from '@/components/hopla/HoplaSender'
+import HoplaGuest from '@/components/hopla/HoplaGuest'
 import { HOPLA_ID_RE } from '@/lib/hopla'
 
-// Pagina aperta dal telefono inquadrando il codice QR di Hoplà sul PC.
-// Non serve l'accesso: il codice (casuale, valido solo finché il PC tiene
-// aperta la pagina) è la chiave. I file vanno direttamente al PC.
+// Pagina aperta dal telefono inquadrando il codice QR di Hoplà sull'altro
+// dispositivo. Non serve l'accesso: il codice (casuale, valido solo finché
+// l'altra pagina resta aperta) è la chiave. I file vanno direttamente da un
+// dispositivo all'altro, nella direzione scelta da chi mostra il codice.
 export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -35,7 +36,7 @@ export default async function HoplaPhonePage({ params }: { params: Promise<{ id:
         </div>
       </header>
       <main className="mx-auto max-w-md px-4 py-6">
-        <HoplaSender id={id} />
+        <HoplaGuest id={id} />
         <p className="mt-8 text-center text-xs leading-5 text-[var(--muted)]">{t('privacyText')}</p>
         <p className="mt-2 text-center text-xs leading-5 text-[var(--muted)]">
           {t('phoneTerms')}{' '}

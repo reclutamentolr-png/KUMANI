@@ -1,14 +1,15 @@
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, MonitorSmartphone } from 'lucide-react'
 import ToolBackLink from '@/components/ToolBackLink'
-import HoplaReceiver from '@/components/hopla/HoplaReceiver'
+import HoplaHost from '@/components/hopla/HoplaHost'
 import { toolMetadata } from '@/lib/toolMetadata'
 import HubBar from '@/components/hubs/HubBar'
 
 // Nome del servizio nella scheda del browser
 export const generateMetadata = toolMetadata('hopla')
 
-// HOPLÀ (piano Plus e Pro): foto e video dal telefono al PC, direttamente.
+// HOPLÀ (piano Plus e Pro): file tra telefono e computer o tra due telefoni,
+// direttamente, in tutte e due le direzioni.
 // La pagina è protetta dal proxy come gli altri strumenti; i file passano
 // da dispositivo a dispositivo e non vengono mai salvati sui server.
 export default async function HoplaPage() {
@@ -52,7 +53,7 @@ export default async function HoplaPage() {
           </div>
         </div>
 
-        <HoplaReceiver />
+        <HoplaHost />
       </main>
     </div>
   )

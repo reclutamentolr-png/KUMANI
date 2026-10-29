@@ -80,6 +80,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "needSearch",
   "neurobalance",
   "nexus",
+  "nfcTag",
   "notifications",
   "offermaker",
   "oxygen",
