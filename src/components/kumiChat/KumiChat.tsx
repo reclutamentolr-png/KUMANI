@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { Send, ThumbsDown, ThumbsUp, X } from 'lucide-react'
+import { ListPlus, RotateCcw, Send, ThumbsDown, ThumbsUp, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Kumi from '@/components/kids/Kumi'
 import { askKumi, kumiChatStatus, rateKumi, type KumiStatus } from '@/app/actions/kumiChat'
@@ -84,6 +84,8 @@ export default function KumiChat() {
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
+  // Domande suggerite di nuovo aperte dopo una risposta («Altre domande»)
+  const [moreChips, setMoreChips] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
   const restored = useRef(false)
   const pathname = usePathname()
@@ -192,10 +194,19 @@ export default function KumiChat() {
     }
   }
 
+  // «Ricomincia»: conversazione cancellata, di nuovo le domande suggerite
+  const restart = () => {
+    setMsgs([])
+    setMoreChips(false)
+    clearStore()
+  }
+  const asked = new Set(msgs.filter((m) => m.from === 'me').map((m) => m.text))
+
   const send = async (question: string) => {
     const q = question.trim()
     if (!q || busy) return
     setText('')
+    setMoreChips(false)
     // La prima volta KUMI si presenta, poi risponde alla domanda
     const first = !msgs.some((m) => m.from === 'kumi')
     const greeting = isGreeting(q)
@@ -268,6 +279,11 @@ export default function KumiChat() {
               <p className="font-bold text-[var(--gold-bright)]">{t('title')}</p>
               <p className="truncate text-xs text-white/70">{t('subtitle')}</p>
             </div>
+            {msgs.length > 0 && (
+              <button type="button" onClick={restart} aria-label={t('restart')} title={t('restart')} className="rounded-full p-2 text-white/80 hover:bg-white/10">
+                <RotateCcw className="h-5 w-5" />
+              </button>
+            )}
             <button type="button" onClick={() => setOpen(false)} aria-label={t('close')} className="rounded-full p-2 text-white/80 hover:bg-white/10">
               <X className="h-5 w-5" />
             </button>
@@ -333,6 +349,30 @@ export default function KumiChat() {
               )
             )}
             {busy && <div className="w-fit rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-sm italic text-[var(--muted)] shadow-sm">{t('thinking')}</div>}
+            {/* Dopo una risposta: di nuovo le domande suggerite (quelle non ancora fatte) */}
+            {msgs.length > 0 && !busy && (() => {
+              const left = chips.filter((c) => !asked.has(t(c, { tool: context.tool ?? '' })))
+              if (!left.length) return null
+              return moreChips ? (
+                <div className="flex flex-wrap gap-2">
+                  {left.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      disabled={outOfQuestions}
+                      onClick={() => send(t(c, { tool: context.tool ?? '' }))}
+                      className="rounded-full border border-[var(--gold)]/50 bg-white px-3 py-1.5 text-xs font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)] disabled:opacity-50"
+                    >
+                      {t(c, { tool: context.tool ?? '' })}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <button type="button" onClick={() => setMoreChips(true)} className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-[var(--gold)]/60 px-3 py-1.5 text-xs font-bold text-[var(--ink)] hover:bg-[var(--gold-pale)]">
+                  <ListPlus className="h-3.5 w-3.5 text-[var(--gold)]" /> {t('moreQuestions')}
+                </button>
+              )
+            })()}
             <div ref={endRef} />
           </div>
 

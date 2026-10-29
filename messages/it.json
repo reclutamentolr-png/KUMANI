@@ -17643,7 +17643,9 @@
     "tool1": "Come si usa {tool}?",
     "tool2": "Cosa posso fare con {tool}?",
     "tool3": "I miei dati sono al sicuro qui?",
-    "tool4": "Quali servizi vanno bene insieme a {tool}?"
+    "tool4": "Quali servizi vanno bene insieme a {tool}?",
+    "moreQuestions": "Altre domande",
+    "restart": "Ricomincia la conversazione"
   },
   "nfcTag": {
     "buyTitle": "Cosa ti serve",
