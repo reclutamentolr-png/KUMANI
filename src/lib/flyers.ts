@@ -6,7 +6,7 @@
 //   light = chiaro e minimale, punti numerati
 
 export type FlyerStyle = 'photo' | 'phone' | 'light'
-export type FlyerCategory = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'community' | 'pro'
+export type FlyerCategory = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'audio' | 'community' | 'pro'
 
 export type FlyerConfig = {
   tool: string
@@ -82,6 +82,15 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'listings', style: 'light', category: 'community', icon: 'ClipboardList', points: ['Camera', 'Search', 'MessageCircle'] },
   { tool: 'veritas', style: 'light', category: 'svago', icon: 'VenetianMask', points: ['Users', 'KeyRound', 'Laugh'] },
   { tool: 'spotlight', style: 'light', category: 'community', icon: 'Star', points: ['PenLine', 'House', 'Users'] },
+  // Servizi nuovi (ottobre 2026): la schermata della guida «Come si usa»
+  { tool: 'vocale-sospetto', style: 'phone', category: 'security', icon: 'Mic', points: ['Mic', 'ShieldAlert', 'Users'], shot: 'vocale-sospetto-3' },
+  { tool: 'testo-protetto', style: 'phone', category: 'security', icon: 'ScanText', points: ['Search', 'EyeOff', 'RefreshCw'], shot: 'testo-protetto-2' },
+  { tool: 'carte-antitruffa', style: 'phone', category: 'security', icon: 'Album', points: ['BookOpen', 'ListChecks', 'Share2'], shot: 'carte-antitruffa-2' },
+  { tool: 'scanner', style: 'phone', category: 'lavoro', icon: 'ScanLine', points: ['Camera', 'Crop', 'Files'], shot: 'scanner-2' },
+  { tool: 'fototessera', style: 'phone', category: 'personal', icon: 'ScanFace', points: ['ScanFace', 'Image', 'Printer'], shot: 'fototessera-3' },
+  { tool: 'fonometro', style: 'phone', category: 'audio', icon: 'AudioWaveform', points: ['Gauge', 'Clock', 'FileDown'], shot: 'fonometro-2' },
+  { tool: 'metronomo', style: 'phone', category: 'audio', icon: 'Drum', points: ['Timer', 'Ear', 'ChartLine'], shot: 'metronomo-1' },
+  { tool: 'accordatore', style: 'phone', category: 'audio', icon: 'Guitar', points: ['Gauge', 'Guitar', 'ListChecks'], shot: 'accordatore-4' },
   { tool: 'trova-lavoro', style: 'photo', category: 'lavoro', icon: 'BriefcaseBusiness', points: ['SlidersHorizontal', 'ShieldCheck', 'Bookmark'], photo: '/flyers/photos/job-search.webp' },
 ]
 

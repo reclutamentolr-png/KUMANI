@@ -10,7 +10,7 @@ import {
   Map as MapIcon, MapPin, Megaphone, MessageCircle, MessageSquareWarning, Moon, Music, NotebookPen, Package, Palette, Paperclip, PenLine, Pencil, Puzzle,
   PartyPopper, Percent, PiggyBank, Plane, QrCode, Receipt, RefreshCw, Repeat, Route, ScanBarcode, Search, Send, Share2, ShieldCheck, ShoppingBasket, SlidersHorizontal,
   Smartphone, Sparkles, Stamp, Star, Store, Swords, Tag, Ticket, Timer, TreePine, TriangleAlert, UserSearch, Users, Utensils, VenetianMask, Wallet,
-  Wheat, Wind, Zap, type LucideIcon,
+  Wheat, Wind, Zap, Album, Crop, Drum, Files, Guitar, Mic, Printer, ScanFace, ScanLine, ScanText, ShieldAlert, type LucideIcon,
 } from 'lucide-react'
 import type { FlyerConfig } from '@/lib/flyers'
 
@@ -31,7 +31,7 @@ export const ICONS: Record<string, LucideIcon> = {
   Map: MapIcon, MapPin, Megaphone, MessageCircle, MessageSquareWarning, Moon, Music, NotebookPen, Package, Palette, Paperclip, PenLine, Pencil, Puzzle,
   PartyPopper, Percent, PiggyBank, Plane, QrCode, Receipt, RefreshCw, Repeat, Route, ScanBarcode, Search, Send, Share2, ShieldCheck, ShoppingBasket, SlidersHorizontal,
   Smartphone, Sparkles, Stamp, Star, Store, Swords, Tag, Ticket, Timer, TreePine, TriangleAlert, UserSearch, Users, Utensils, VenetianMask, Wallet,
-  Wheat, Wind, Zap,
+  Wheat, Wind, Zap, Album, Crop, Drum, Files, Guitar, Mic, Printer, ScanFace, ScanLine, ScanText, ShieldAlert,
 }
 const Icon = ({ name, size, color }: { name: string; size: number; color: string }) => {
   const C = ICONS[name] ?? Sparkles

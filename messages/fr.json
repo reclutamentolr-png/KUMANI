@@ -7773,12 +7773,99 @@
         "p3": "Horaires décalés et voyages",
         "p3d": "Des plans pour le travail de nuit et les fuseaux horaires.",
         "note": "Bien-être et bonnes habitudes : cela ne remplace pas l’avis du médecin."
+      },
+      "fonometro": {
+        "sub": "Combien de bruit, vraiment ?",
+        "tagline": "Voisins bruyants, bar en bas de chez vous, chantier : mesurez les décibels et gardez des preuves.",
+        "p1": "Décibels en direct",
+        "p1d": "Le chiffre, la couleur et le graphique, seconde par seconde.",
+        "p2": "Moments au-dessus du seuil",
+        "p2d": "Heure, durée et pic de chaque bruit fort.",
+        "p3": "PDF avec graphique",
+        "p3d": "À conserver ou à montrer à qui de droit.",
+        "note": "Le son n’est pas enregistré : on mesure seulement son intensité."
+      },
+      "metronomo": {
+        "sub": "Êtes-vous en rythme ?",
+        "tagline": "Le métronome avec son, lumière et vibration qui écoute vos frappes.",
+        "p1": "De 30 à 250 battements",
+        "p1d": "Mesures, accents, subdivisions et « Taper le tempo ».",
+        "p2": "Écoute si vous êtes en rythme",
+        "p2d": "Vert en rythme, orange en avance ou en retard.",
+        "p3": "Accélérer peu à peu",
+        "p3d": "Et le minuteur d’entraînement qui s’arrête tout seul."
+      },
+      "accordatore": {
+        "sub": "Accordé au centième",
+        "tagline": "Guitare, basse, ukulélé, violon, alto et violoncelle : accordez en quelques secondes.",
+        "p1": "Au centième",
+        "p1d": "Aiguille, stroboscope et son de référence.",
+        "p2": "Pas à pas",
+        "p2d": "Le dessin de l’instrument et la flèche à suivre.",
+        "p3": "De nombreux accordages",
+        "p3d": "Standard, Drop D, DADGAD, Open G et d’autres.",
+        "note": "Le son n’est pas enregistré : la note est reconnue dans le téléphone."
+      },
+      "vocale_sospetto": {
+        "sub": "Un vocal vous semble étrange ?",
+        "tagline": "« Coucou maman, j’ai changé de numéro », le faux policier, la fausse banque : faites-le écouter à KUMANI.",
+        "p1": "Chargez-le ou faites-le écouter",
+        "p1d": "Le vocal WhatsApp, ou son texte.",
+        "p2": "Les signes des arnaques",
+        "p2d": "Urgence, argent, codes, fausses autorités : tout est expliqué.",
+        "p3": "Que faire tout de suite",
+        "p3d": "Et le signalement pour protéger aussi les autres.",
+        "note": "Le vocal reste dans le téléphone : personne ne l’écoute."
+      },
+      "testo_protetto": {
+        "sub": "L’IA sans vos données",
+        "tagline": "Noms, IBAN, téléphones et adresses deviennent des étiquettes neutres avant d’utiliser ChatGPT ou Gemini.",
+        "p1": "Données trouvées toutes seules",
+        "p1d": "Noms, numéros fiscaux, IBAN, e-mails, adresses.",
+        "p2": "Texte protégé",
+        "p2d": "Vous le copiez et l’utilisez dans l’IA de votre choix.",
+        "p3": "Données remises à leur place",
+        "p3d": "Les vrais noms reviennent dans la réponse, seulement chez vous.",
+        "note": "Le texte ne quitte pas l’appareil."
+      },
+      "carte_antitruffa": {
+        "sub": "Les arnaques, carte par carte",
+        "tagline": "20 vraies arnaques : lisez comment l’appât est fait, répondez à 3 questions et complétez l’album.",
+        "p1": "Lisez la carte",
+        "p1d": "L’appât, les signes et la défense.",
+        "p2": "3 questions",
+        "p2d": "Répondez juste et la carte est à vous.",
+        "p3": "Prévenez vos proches",
+        "p3d": "La carte s’envoie sur WhatsApp et se lit même sans KUMANI."
+      },
+      "scanner": {
+        "sub": "De la feuille au PDF",
+        "tagline": "Photographiez reçus, contrats et formulaires : KUMANI trouve les bords et redresse la feuille.",
+        "p1": "Capture automatique",
+        "p1d": "Il déclenche tout seul quand la feuille est immobile.",
+        "p2": "Bords et filtres",
+        "p2d": "Des pages droites et lisibles, même en noir et blanc.",
+        "p3": "Un seul PDF",
+        "p3d": "Réunissez photos et PDF, réorganisez et choisissez les pages.",
+        "note": "Les documents restent sur le téléphone."
+      },
+      "fototessera": {
+        "sub": "La photo d’identité sans photomaton",
+        "tagline": "35×45 mm pour carte d’identité, passeport, permis de conduire et titre de séjour.",
+        "p1": "Prise guidée",
+        "p1d": "Distance, tête droite et lumière vérifiées en direct.",
+        "p2": "Fond blanc",
+        "p2d": "Visage redressé et tête à la bonne taille.",
+        "p3": "Planche 10×15",
+        "p3d": "6 photos à imprimer chez le photographe ou à la borne.",
+        "note": "La photo reste sur le téléphone."
       }
     },
     "includedSurprise": "Pour tous, même avec le compte gratuit",
     "priceSurprise": "À partir de {price} la surprise",
     "surpriseNote": "Vous la créez et l’essayez gratuitement : vous ne payez qu’à l’activation.",
-    "partOf": "Fait partie de {hub}"
+    "partOf": "Fait partie de {hub}",
+    "cat_audio": "Audio et Outils"
   },
   "guideTexts": {
     "categories": {
@@ -7824,7 +7911,7 @@
       },
       "audio": {
         "title": "Audio et Outils",
-        "text": "Des outils qui utilisent le micro du téléphone : mesurer, écouter et comprendre les sons autour de vous."
+        "text": "Les guides des outils qui utilisent le micro : sonomètre, métronome et accordeur."
       }
     },
     "registrazione": {
@@ -8882,6 +8969,125 @@
       "step9Title": "Sortir et bloquer le téléphone",
       "step9Text": "Pour revenir à KUMANI, touchez le cadenas en haut et saisissez le code : KUMI dit au revoir et on sort. Le bouton « retour » reste lui aussi dans le jeu.",
       "step9Tip": "Pour vraiment bloquer le téléphone sur KUMANI, utilisez « Accès guidé » sur iPhone (Réglages › Accessibilité) ou « Épinglage d’application » sur Android (Paramètres › Sécurité) : l’enfant ne peut pas sortir, même avec le bouton d’accueil."
+    },
+    "fonometro": {
+      "title": "Sonomètre",
+      "summary": "Mesurez le bruit en décibels, gardez un registre des moments les plus forts et téléchargez un PDF avec graphique et horaires.",
+      "cta": "Ouvrir le Sonomètre",
+      "step1Title": "Lancez la mesure",
+      "step1Text": "Touchez « Lancer la mesure » et autorisez le micro. Posez le téléphone bien immobile, micro dégagé, et laissez l’écran allumé.",
+      "step1Tip": "Le son n’est pas enregistré : le téléphone mesure seulement son intensité.",
+      "step2Title": "Le bruit en direct",
+      "step2Text": "Le grand chiffre indique les décibels du moment, avec une couleur et une phrase qui dit à quoi ils ressemblent. En dessous, vous voyez le graphique, la moyenne, le maximum et les moments au-dessus du seuil.",
+      "step3Title": "Seuil et étalonnage",
+      "step3Text": "Dans « Seuil et étalonnage », choisissez à partir de combien de décibels un bruit doit être noté (la nuit à la maison, 40–45 dB sont déjà gênants). Si vous avez un vrai sonomètre, déplacez l’étalonnage jusqu’à ce que les chiffres correspondent.",
+      "step4Title": "Registre et PDF",
+      "step4Text": "Touchez « Arrêter » : vous voyez la durée, la moyenne, le maximum et la liste des moments bruyants avec heure et durée. Indiquez le lieu et des notes, puis « Enregistrer dans le registre » ou « Télécharger le PDF ».",
+      "step4Tip": "Le micro du téléphone n’est pas étalonné : les valeurs sont une estimation, utile pour comparer des moments et des lieux."
+    },
+    "metronomo": {
+      "title": "Métronome",
+      "summary": "Le métronome avec son, lumière et vibration qui, si vous le souhaitez, écoute vos frappes et vous dit si vous êtes en rythme.",
+      "cta": "Ouvrir le Métronome",
+      "step1Title": "Choisissez la vitesse",
+      "step1Text": "Changez les battements par minute avec ±1, ±5 ou le curseur, de 30 à 250, ou touchez « Taper le tempo » en rythme et le métronome le prend de vous. Puis touchez « Lancer ».",
+      "step2Title": "Mesure, accents et subdivisions",
+      "step2Text": "Choisissez la mesure (2/4, 3/4, 4/4, 6/8…) et touchez un temps pour le rendre fort, normal ou muet. Dans « Subdivision », ajoutez des croches, des triolets ou des doubles croches entre deux temps.",
+      "step3Title": "Son, lumière et vibration",
+      "step3Text": "Choisissez clic, wood-block ou clochette et le volume. Avec « Lumière seule », le métronome ne sonne pas : il marque les temps avec la lumière (et la vibration, si le téléphone le permet).",
+      "step4Title": "Accélérer et minuteur d’entraînement",
+      "step4Text": "Avec « Accélérer peu à peu », le tempo monte tout seul de quelques battements toutes les quelques mesures, jusqu’à la vitesse choisie. Le minuteur d’entraînement arrête le métronome après 5, 10, 15 ou 30 minutes.",
+      "step5Title": "Écouter si je suis en rythme",
+      "step5Text": "Activez « Écouter si je suis en rythme » : le micro entend vos frappes et les compare aux battements. Vert, c’est en rythme ; orange, en avance ou en retard. À la fin, vous voyez le pourcentage, la tendance et le graphique de vos frappes.",
+      "step5Tip": "Utilisez des écouteurs ou « Lumière seule » : ainsi le micro n’entend pas le clic du métronome."
+    },
+    "accordatore": {
+      "title": "Accordeur",
+      "summary": "Accordez guitare, basse, ukulélé, violon, alto et violoncelle au centième près, même pas à pas avec le dessin de l’instrument.",
+      "cta": "Ouvrir l’Accordeur",
+      "step1Title": "Choisissez l’instrument et l’accordage",
+      "step1Text": "Touchez l’instrument et choisissez l’accordage (standard, un demi-ton plus bas, Drop D, DADGAD…). Avec « Chromatique », il reconnaît n’importe quelle note.",
+      "step2Title": "Lancez et jouez une corde",
+      "step2Text": "Touchez « Lancer », autorisez le micro et jouez une corde à la fois. L’accordeur reconnaît tout seul la corde la plus proche ; vous pouvez aussi la toucher à l’écran pour entendre le son de référence.",
+      "step3Title": "Lisez l’aiguille",
+      "step3Text": "L’aiguille indique combien de centièmes il manque : à gauche la note est trop basse (tendez la corde), à droite elle est trop haute (détendez-la). Dans la zone verte, c’est juste : après un instant, la corde est cochée.",
+      "step4Title": "Pas à pas, une corde à la fois",
+      "step4Text": "Avec « Pas à pas, une corde à la fois », vous voyez le dessin de l’instrument : la corde à accorder est en or et la flèche indique dans quel sens tourner la cheville. Quand elle est juste, le guide passe tout seul à la suivante.",
+      "step5Title": "Les réglages",
+      "step5Text": "Vous pouvez changer le La de référence (de 415 à 466 Hz), le nom des notes (Do Ré Mi ou C D E), la précision et la sensibilité. Vos choix restent enregistrés dans le téléphone.",
+      "step5Tip": "Le son n’est pas enregistré : la note est reconnue dans le téléphone."
+    },
+    "vocale_sospetto": {
+      "title": "Vocal suspect ?",
+      "summary": "Faites écouter à KUMANI un message vocal étrange et découvrez s’il présente les signes typiques des arnaques.",
+      "cta": "Vérifier un vocal",
+      "step1Title": "Choisissez comment le vérifier",
+      "step1Text": "Vous pouvez charger le fichier du vocal, le faire écouter au micro pendant qu’il est lu (même depuis un autre téléphone) ou en coller le texte, si WhatsApp l’a déjà transcrit.",
+      "step2Title": "Le vocal de WhatsApp",
+      "step2Text": "Dans WhatsApp, appuyez longuement sur le vocal, touchez Transférer ou Partager, puis « Enregistrer dans Fichiers ». Revenez ici, touchez « Charger le vocal » et choisissez-le.",
+      "step2Tip": "La première fois, la reconnaissance vocale est téléchargée (environ 80 Mo) : mieux vaut être en Wi-Fi.",
+      "step3Title": "Le résultat",
+      "step3Text": "Après l’écoute, vous voyez l’avis en couleur (de « Aucun signe d’arnaque trouvé » à « Attention : cela ressemble vraiment à une arnaque »), les signes trouvés avec la phrase du vocal et le texte transcrit.",
+      "step4Title": "Que faire maintenant",
+      "step4Text": "N’envoyez ni argent, ni codes, ni photos de documents, et rappelez vous-même la personne au numéro que vous connaissez. Si c’est une arnaque, touchez « Signaler le numéro au Réseau Anti-arnaque » : vous protégez aussi les autres.",
+      "step4Tip": "Le vocal est écouté et transcrit dans le téléphone : nous ne l’envoyons pas sur nos serveurs et personne ne l’écoute."
+    },
+    "testo_protetto": {
+      "title": "Texte Protégé",
+      "summary": "Utilisez ChatGPT ou Gemini sans livrer vos données personnelles : noms, IBAN et adresses deviennent des étiquettes neutres.",
+      "cta": "Ouvrir Texte Protégé",
+      "step1Title": "Votre texte",
+      "step1Text": "Collez le texte ou chargez un fichier (PDF avec texte, Word, TXT) : un procès-verbal, un rapport, un e-mail, un contrat. Avec « Essayer un exemple », vous voyez tout de suite comment ça marche.",
+      "step2Title": "Ce que j’ai trouvé",
+      "step2Text": "Les données personnelles trouvées sont surlignées : noms, numéros fiscaux, IBAN, téléphones, e-mails, adresses, dates de naissance. Touchez une donnée pour la laisser visible et ajoutez les mots à cacher.",
+      "step3Title": "Copiez le texte protégé",
+      "step3Text": "À la place des données, il y a des étiquettes comme [PERSONNE 1]. Touchez « Copier » et collez-le dans l’IA de votre choix.",
+      "step3Tip": "Relisez toujours le texte avant de le partager : la reconnaissance aide beaucoup, mais elle n’est pas infaillible.",
+      "step4Title": "Remettez les données dans la réponse",
+      "step4Text": "Collez la réponse de l’IA à l’étape 4 : les étiquettes redeviennent les vrais noms et les vraies données, seulement ici, dans votre téléphone.",
+      "step4Tip": "Le texte ne quitte pas l’appareil : la « clé » reste seulement dans ce navigateur pendant 7 jours."
+    },
+    "carte_antitruffa": {
+      "title": "Cartes Anti-arnaque",
+      "summary": "Les arnaques les plus répandues, carte par carte : lisez comment l’appât est fait, répondez à 3 questions et complétez l’album.",
+      "cta": "Ouvrir les Cartes Anti-arnaque",
+      "step1Title": "L’album",
+      "step1Text": "En haut, vous voyez combien de cartes vous avez et combien il en manque pour le bouclier de bronze, d’argent et d’or. Avec « Toutes », « À prendre » et « Les miennes », choisissez lesquelles afficher.",
+      "step2Title": "Lisez la carte",
+      "step2Text": "Touchez une carte : au recto, l’appât tel qu’il arrive vraiment, le canal et le danger. Retournez-la pour voir comment le reconnaître et comment vous défendre.",
+      "step3Title": "Gagnez-la avec 3 questions",
+      "step3Text": "Touchez « Prendre la carte : 3 questions ». Répondez juste et la carte entre dans l’album. Si vous vous trompez, relisez-la et réessayez demain.",
+      "step3Tip": "Une carte par jour : avec les questions ou capturée par un contrôle, une seule arrive chaque jour.",
+      "step4Title": "Capturez-les et prévenez vos proches",
+      "step4Text": "Quand SVAT, CheckMail, le contrôle des QR codes ou le Réseau Anti-arnaque arrêtent une vraie arnaque, sa carte arrive avec un cadre vert. Avec « Prévenir quelqu’un », vous envoyez la carte sur WhatsApp."
+    },
+    "scanner": {
+      "title": "Scanner",
+      "summary": "De la feuille au PDF en quelques secondes : KUMANI trouve les bords, redresse la page et la rend lisible.",
+      "cta": "Ouvrir le Scanner",
+      "step1Title": "Photographiez, choisissez ou ouvrez",
+      "step1Text": "Touchez « Prendre une photo » pour photographier le document, « Choisir des photos » pour celles que vous avez déjà, ou « Ouvrir des PDF » pour les réunir. Avec « Capture automatique », l’appareil photo déclenche tout seul quand la feuille est entière et immobile.",
+      "step2Title": "Coins et filtre",
+      "step2Text": "KUMANI trouve les bords de la feuille : si besoin, faites glisser les 4 coins. Choisissez ensuite le filtre (Améliorée, Noir et blanc, Gris ou Originale), faites pivoter et touchez « Ajouter la page ».",
+      "step3Title": "Mettez les pages en ordre",
+      "step3Text": "Toutes les pages arrivent dans la même liste : déplacez-les avant ou après, faites-les pivoter, corrigez-les ou supprimez-les. Avec « Choisir des pages », vous n’enregistrez que celles dont vous avez besoin.",
+      "step4Title": "Enregistrez le PDF",
+      "step4Text": "Donnez un nom au fichier, choisissez la qualité (« Normale » ou « Légère » pour les e-mails et les portails) et touchez « Télécharger le PDF » ou « Partager ».",
+      "step4Tip": "Les documents restent sur le téléphone : KUMANI les traite dans le navigateur et ne les envoie pas sur les serveurs."
+    },
+    "fototessera": {
+      "title": "Photo d’identité",
+      "summary": "La photo d’identité 35×45 mm pour carte d’identité, passeport et permis de conduire, sans photomaton : fond blanc et bonnes dimensions.",
+      "cta": "Ouvrir Photo d’identité",
+      "step1Title": "Préparez la photo",
+      "step1Text": "Lisez les conseils : une autre personne vous photographie à environ 1,5 mètre, devant un mur clair, avec une lumière uniforme. Regardez droit devant, bouche fermée, sans chapeau ni lunettes de soleil.",
+      "step2Title": "Prise guidée",
+      "step2Text": "Avec « Prise guidée », l’appareil photo vérifie en direct la distance, la position, la tête droite, les yeux ouverts et la lumière, et déclenche tout seul quand tout est bon. Vous pouvez aussi choisir une photo que vous avez déjà.",
+      "step3Title": "Retouchez et vérifiez",
+      "step3Text": "KUMANI trouve le visage, redresse la photo, met le fond blanc et amène la tête à la bonne taille. Avec les flèches, vous déplacez et faites pivoter ; le « Contrôle de la photo » vous dit quoi améliorer.",
+      "step3Tip": "Le contrôle est indicatif : le dernier mot revient au guichet qui délivre le document (mairie, préfecture…).",
+      "step4Title": "Téléchargez ou imprimez",
+      "step4Text": "Touchez « Télécharger la photo » pour les portails en ligne, ou « Planche 10×15 avec 6 photos » à imprimer chez le photographe ou à la borne du supermarché, puis à découper le long des lignes grises."
     }
   },
   "deckTexts": {
@@ -13354,7 +13560,10 @@
     "intro_documents": "Scanner une feuille, signer un PDF, faire une photo d’identité, envoyer un document en sécurité et garder tes reçus : les démarches du quotidien depuis ton téléphone.",
     "need_family": "J’ai des enfants et une famille à organiser",
     "short_family": "Enfants et famille",
-    "intro_family": "Un coin sûr pour les petits, l’agenda de la famille, la maison sous contrôle et les objets à retrouver."
+    "intro_family": "Un coin sûr pour les petits, l’agenda de la famille, la maison sous contrôle et les objets à retrouver.",
+    "need_music": "Je joue d’un instrument ou je mesure le bruit",
+    "short_music": "Musique et son",
+    "intro_music": "Un accordeur au centième, un métronome qui vous écoute et un sonomètre pour mesurer le bruit."
   },
   "nexus": {
     "back": "Retour à Loisirs",

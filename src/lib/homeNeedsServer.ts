@@ -23,7 +23,8 @@ export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (na
   // Community: il piano della sezione; Eventi e Sorprese si guardano gratis
   const planOf = { ...(await getToolPlanOf([...marketTools.map((tool) => tool.toolName), ...Object.keys(COMMUNITY)])), events: 'free', sorprese: 'free' } as Record<string, RequiredPlan>
   // «Bambini e famiglia» compare quando l'Angolo Bambini è acceso
-  return HOME_NEEDS.filter((need) => need.key !== 'family' || !disabled.includes('angolo-bambini')).map((need) => ({
+  // Un bisogno con tutti i servizi spenti dall'Admin non si mostra (es. Audio e Strumenti in prova)
+  return HOME_NEEDS.filter((need) => (need.key !== 'family' || !disabled.includes('angolo-bambini')) && (need.items as readonly string[]).some((name) => !disabled.includes(name))).map((need) => ({
     key: need.key,
     icon: need.icon,
     label: tNeeds(`need_${need.key}`),

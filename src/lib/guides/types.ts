@@ -2,7 +2,7 @@
 // dell'app (public/guides/<lingua>/<guida>-<n>.webp, una per passo, fatte
 // con scripts/guide-screenshots.mjs).
 
-export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools' | 'security' | 'community' | 'organize' | 'pro' | 'wellness' | 'kids'
+export type GuideCategory = 'start' | 'promote' | 'wallet' | 'promoteTools' | 'security' | 'community' | 'organize' | 'pro' | 'wellness' | 'audio' | 'kids'
 
 export type GuideSlug =
   | 'registrazione'
@@ -78,6 +78,14 @@ export type GuideSlug =
   | 'tempus'
   | 'travel'
   | 'angolo-bambini'
+  | 'vocale-sospetto'
+  | 'testo-protetto'
+  | 'carte-antitruffa'
+  | 'scanner'
+  | 'fototessera'
+  | 'fonometro'
+  | 'metronomo'
+  | 'accordatore'
 
 export type GuideStep = {
   title: string

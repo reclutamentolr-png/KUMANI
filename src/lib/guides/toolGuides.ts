@@ -71,6 +71,14 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/app/tempus', slug: 'tempus' },
   { path: '/viaggi', slug: 'travel' },
   { path: '/app/angolo-bambini', slug: 'angolo-bambini' },
+  { path: '/app/vocale-sospetto', slug: 'vocale-sospetto' },
+  { path: '/app/testo-protetto', slug: 'testo-protetto' },
+  { path: '/app/carte-antitruffa', slug: 'carte-antitruffa' },
+  { path: '/app/scanner', slug: 'scanner' },
+  { path: '/app/fototessera', slug: 'fototessera' },
+  { path: '/app/fonometro', slug: 'fonometro' },
+  { path: '/app/metronomo', slug: 'metronomo' },
+  { path: '/app/accordatore', slug: 'accordatore' },
 ]
 
 // Pagine di chi arriva da un invito (risponde o entra con un link): la guida

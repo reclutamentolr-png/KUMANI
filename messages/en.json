@@ -7773,12 +7773,99 @@
         "p3": "Shifts and travel",
         "p3d": "Plans for night work and time zones.",
         "note": "Wellbeing and good habits: it does not replace your doctor’s advice."
+      },
+      "fonometro": {
+        "sub": "How much noise is there really?",
+        "tagline": "Noisy neighbours, a bar downstairs, roadworks: measure the decibels and keep the evidence.",
+        "p1": "Live decibels",
+        "p1d": "The number, the colour and the chart, second by second.",
+        "p2": "Moments above the threshold",
+        "p2d": "Time, length and peak of every loud noise.",
+        "p3": "PDF with chart",
+        "p3d": "To keep or to show to whoever needs it.",
+        "note": "Nothing is recorded: only how loud it is gets measured."
+      },
+      "metronomo": {
+        "sub": "Are you in time?",
+        "tagline": "The metronome with sound, light and vibration that listens to your playing.",
+        "p1": "30 to 250 beats",
+        "p1d": "Time signatures, accents, subdivisions and «Tap tempo».",
+        "p2": "Listen if you’re in time",
+        "p2d": "Green in time, orange early or late.",
+        "p3": "Speed up gradually",
+        "p3d": "And a practice timer that stops by itself."
+      },
+      "accordatore": {
+        "sub": "Tuned to the cent",
+        "tagline": "Guitar, bass, ukulele, violin, viola and cello: tune up in seconds.",
+        "p1": "To the cent",
+        "p1d": "Needle, strobe and reference tone.",
+        "p2": "Step by step",
+        "p2d": "A drawing of the instrument and an arrow to follow.",
+        "p3": "Many tunings",
+        "p3d": "Standard, Drop D, DADGAD, Open G and more.",
+        "note": "Nothing is recorded: the note is recognised on the phone."
+      },
+      "vocale_sospetto": {
+        "sub": "A voice message seems odd?",
+        "tagline": "«Hi mum, I changed my number», the fake police officer, the fake bank: let KUMANI listen.",
+        "p1": "Upload or play it",
+        "p1d": "The WhatsApp voice message, or its text.",
+        "p2": "The signs of a scam",
+        "p2d": "Urgency, money, codes, fake authorities: all explained.",
+        "p3": "What to do right away",
+        "p3d": "And a report to protect others too.",
+        "note": "The message stays on your phone: nobody listens to it."
+      },
+      "testo_protetto": {
+        "sub": "AI without your data",
+        "tagline": "Names, IBANs, phone numbers and addresses become neutral labels before you use ChatGPT or Gemini.",
+        "p1": "Data found automatically",
+        "p1d": "Names, tax codes, IBANs, emails, addresses.",
+        "p2": "Protected text",
+        "p2d": "Copy it and use it in the AI you prefer.",
+        "p3": "Data put back",
+        "p3d": "The real names come back in the answer, only on your side.",
+        "note": "The text never leaves the device."
+      },
+      "carte_antitruffa": {
+        "sub": "Scams, card by card",
+        "tagline": "20 real scams: read how the bait works, answer 3 questions and complete the album.",
+        "p1": "Read the card",
+        "p1d": "The bait, the signs and the defence.",
+        "p2": "3 questions",
+        "p2d": "Answer correctly and the card is yours.",
+        "p3": "Warn your loved ones",
+        "p3d": "Send the card on WhatsApp, readable even without KUMANI."
+      },
+      "scanner": {
+        "sub": "From paper to PDF",
+        "tagline": "Photograph receipts, contracts and forms: KUMANI finds the edges and straightens the sheet.",
+        "p1": "Auto capture",
+        "p1d": "It shoots by itself when the sheet is still.",
+        "p2": "Edges and filters",
+        "p2d": "Straight, readable pages, even in black and white.",
+        "p3": "One single PDF",
+        "p3d": "Merge photos and PDFs, reorder and pick pages.",
+        "note": "Documents stay on your phone."
+      },
+      "fototessera": {
+        "sub": "ID photo without a booth",
+        "tagline": "35×45 mm for ID card, passport, driving licence and residence permit.",
+        "p1": "Guided shot",
+        "p1d": "Distance, straight head and light checked live.",
+        "p2": "White background",
+        "p2d": "Face straightened and head at the right size.",
+        "p3": "10×15 sheet",
+        "p3d": "6 photos to print at a photo shop or kiosk.",
+        "note": "The photo stays on your phone."
       }
     },
     "includedSurprise": "For everyone, free account included",
     "priceSurprise": "From {price} per surprise",
     "surpriseNote": "Create it and try it for free: you only pay when you activate it.",
-    "partOf": "Part of {hub}"
+    "partOf": "Part of {hub}",
+    "cat_audio": "Audio and Instruments"
   },
   "guideTexts": {
     "categories": {
@@ -7823,8 +7910,8 @@
         "text": "The creative games of the Kids Corner, with KUMI as a guide and the parent code."
       },
       "audio": {
-        "title": "Audio & Tools",
-        "text": "Tools that use your phone’s microphone: measure, listen and understand the sounds around you."
+        "title": "Audio and Instruments",
+        "text": "Guides to the tools that use the microphone: sound meter, metronome and tuner."
       }
     },
     "registrazione": {
@@ -8882,6 +8969,125 @@
       "step9Title": "Leaving and locking the phone",
       "step9Text": "To go back to KUMANI tap the padlock at the top and enter the code: KUMI waves goodbye and you leave. The “back” button also stays inside the game.",
       "step9Tip": "To really lock the phone on KUMANI use “Guided Access” on iPhone (Settings › Accessibility) or “App pinning” on Android (Settings › Security): your child cannot leave even with the Home button."
+    },
+    "fonometro": {
+      "title": "Sound meter",
+      "summary": "Measure noise in decibels, keep a log of the loudest moments and download a PDF with a chart and times.",
+      "cta": "Open the Sound meter",
+      "step1Title": "Start measuring",
+      "step1Text": "Tap «Start measuring» and allow the microphone. Keep the phone still, with the microphone uncovered, and the screen on.",
+      "step1Tip": "Nothing is recorded: the phone only measures how loud it is.",
+      "step2Title": "Live noise",
+      "step2Text": "The big number is the decibels right now, with a colour and a phrase saying what it compares to. Below you see the chart, the average, the maximum and the moments above the threshold.",
+      "step3Title": "Threshold and calibration",
+      "step3Text": "In «Threshold and calibration» choose from how many decibels a noise is logged (at night at home 40–45 dB are already annoying). If you have a real sound meter, move the calibration until the numbers match.",
+      "step4Title": "Log and PDF",
+      "step4Text": "Tap «Stop»: you see the length, average, maximum and the list of noisy moments with time and duration. Add the place and notes, then «Save to the log» or «Download the PDF».",
+      "step4Tip": "A phone microphone is not calibrated: the values are an estimate, useful to compare times and places."
+    },
+    "metronomo": {
+      "title": "Metronome",
+      "summary": "A metronome with sound, light and vibration that can listen to your playing and tell you if you’re in time.",
+      "cta": "Open the Metronome",
+      "step1Title": "Choose the speed",
+      "step1Text": "Change the beats per minute with ±1, ±5 or the slider, from 30 to 250, or tap «Tap tempo» in rhythm and the metronome takes it from you. Then tap «Start».",
+      "step2Title": "Time, accents and subdivisions",
+      "step2Text": "Choose the time signature (2/4, 3/4, 4/4, 6/8…) and tap a beat to make it strong, normal or muted. In «Subdivision» add eighth notes, triplets or sixteenth notes between beats.",
+      "step3Title": "Sound, light and vibration",
+      "step3Text": "Choose click, woodblock or bell and the volume. With «Light only» the metronome is silent: it marks the beats with light (and vibration, where the phone allows it).",
+      "step4Title": "Speed up and practice timer",
+      "step4Text": "With «Speed up gradually» the tempo rises by a few beats every few bars, up to the speed you choose. The practice timer stops the metronome after 5, 10, 15 or 30 minutes.",
+      "step5Title": "Listen if I’m in time",
+      "step5Text": "Turn on «Listen if I’m in time»: the microphone hears your hits and compares them with the beats. Green is in time, orange early or late. At the end you see the percentage, your tendency and a chart of your hits.",
+      "step5Tip": "Use headphones or «Light only», so the microphone doesn’t hear the metronome click."
+    },
+    "accordatore": {
+      "title": "Tuner",
+      "summary": "Tune guitar, bass, ukulele, violin, viola and cello to the cent, also step by step with a drawing of the instrument.",
+      "cta": "Open the Tuner",
+      "step1Title": "Choose instrument and tuning",
+      "step1Text": "Tap the instrument and choose the tuning (standard, half step down, Drop D, DADGAD…). «Chromatic» recognises any note.",
+      "step2Title": "Start and play a string",
+      "step2Text": "Tap «Start», allow the microphone and play one string at a time. The tuner finds the nearest string by itself, or tap it yourself to hear the reference tone.",
+      "step3Title": "Read the needle",
+      "step3Text": "The needle shows how many cents are missing: on the left the note is low (tighten the string), on the right it is high (loosen it). In the green zone it’s right: after a moment the string gets a tick.",
+      "step4Title": "Step by step, one string at a time",
+      "step4Text": "With «Step by step, one string at a time» you see a drawing of the instrument: the string to tune is gold and the arrow shows which way to turn the peg. When it’s right, the guide moves to the next string by itself.",
+      "step5Title": "Settings",
+      "step5Text": "You can change the reference A (415 to 466 Hz), the note names (C D E or Do Re Mi), the precision and the sensitivity. Your choices stay saved on the phone.",
+      "step5Tip": "Nothing is recorded: the note is recognised on the phone."
+    },
+    "vocale_sospetto": {
+      "title": "Suspicious voice message?",
+      "summary": "Let KUMANI listen to a strange voice message and find out if it has the typical signs of a scam.",
+      "cta": "Check a voice message",
+      "step1Title": "Choose how to check it",
+      "step1Text": "You can upload the voice message file, let the microphone listen while it plays (even from another phone) or paste its text, if WhatsApp has already transcribed it.",
+      "step2Title": "A voice message from WhatsApp",
+      "step2Text": "In WhatsApp press and hold the voice message, tap Forward or Share, then «Save to Files». Come back here, tap «Upload the voice message» and choose it.",
+      "step2Tip": "The first time, voice recognition is downloaded (about 80 MB): Wi-Fi is better.",
+      "step3Title": "The result",
+      "step3Text": "After listening you see a colour-coded verdict (from «No scam signs found» to «Careful: this really looks like a scam»), the signs found with the sentence from the message and the transcribed text.",
+      "step4Title": "What to do now",
+      "step4Text": "Don’t send money, codes or photos of documents, and call the person back yourself on the number you know. If it’s a scam, tap «Report the number to the Anti-Scam Network» to protect others too.",
+      "step4Tip": "The message is listened to and transcribed on your phone: we don’t upload it and nobody listens to it."
+    },
+    "testo_protetto": {
+      "title": "Protected Text",
+      "summary": "Use ChatGPT or Gemini without handing over personal data: names, IBANs and addresses become neutral labels.",
+      "cta": "Open Protected Text",
+      "step1Title": "Your text",
+      "step1Text": "Paste the text or upload a file (PDF with text, Word, TXT): minutes, a report, an email, a contract. «Try an example» shows you right away how it works.",
+      "step2Title": "What I found",
+      "step2Text": "The personal data found is highlighted: names, tax codes, IBANs, phone numbers, emails, addresses, dates of birth. Tap an item to leave it visible and add words to hide.",
+      "step3Title": "Copy the protected text",
+      "step3Text": "Labels like [PERSON 1] replace the data. Tap «Copy» and paste it into the AI you prefer.",
+      "step3Tip": "Always reread the text before sharing it: recognition helps a lot but it isn’t infallible.",
+      "step4Title": "Put the data back into the answer",
+      "step4Text": "Paste the AI’s answer in step 4: the labels turn back into the real names and data, only here on your phone.",
+      "step4Tip": "The text never leaves the device: the «key» stays only in this browser for 7 days."
+    },
+    "carte_antitruffa": {
+      "title": "Anti-Scam Cards",
+      "summary": "The most common scams, card by card: read how the bait works, answer 3 questions and complete the album.",
+      "cta": "Open the Anti-Scam Cards",
+      "step1Title": "The album",
+      "step1Text": "At the top you see how many cards you have and how many are missing for the bronze, silver and gold shield. «All», «To collect» and «Mine» choose which to show.",
+      "step2Title": "Read the card",
+      "step2Text": "Tap a card: on the front there’s the bait as it really arrives, the channel and the danger. Flip it to see how to spot it and how to defend yourself.",
+      "step3Title": "Get it with 3 questions",
+      "step3Text": "Tap «Take the card: 3 questions». Answer correctly and the card goes into your album. If you get one wrong, reread it and try again tomorrow.",
+      "step3Tip": "One card a day: with the questions or captured by a check, only one arrives each day.",
+      "step4Title": "Capture them and warn your loved ones",
+      "step4Text": "When SVAT, CheckMail, the QR check or the Anti-Scam Network stop a real scam, its card arrives with a green frame. «Warn someone» sends the card on WhatsApp."
+    },
+    "scanner": {
+      "title": "Scanner",
+      "summary": "From paper to PDF in seconds: KUMANI finds the edges, straightens the page and makes it easy to read.",
+      "cta": "Open the Scanner",
+      "step1Title": "Shoot, choose or open",
+      "step1Text": "Tap «Take a photo» to photograph the document, «Pick photos» for ones you already have, or «Open PDFs» to merge them. With «Auto capture» the camera shoots by itself when the sheet is whole and still.",
+      "step2Title": "Corners and filter",
+      "step2Text": "KUMANI finds the edges of the sheet: if needed, drag the 4 corners. Then choose the filter (Enhanced, Black & white, Greyscale or Original), rotate and tap «Add page».",
+      "step3Title": "Put the pages in order",
+      "step3Text": "All pages end up in the same list: move them up or down, rotate, fix or remove them. «Choose pages» saves only the ones you need.",
+      "step4Title": "Save the PDF",
+      "step4Text": "Name the file, choose the quality («Normal», or «Light» for emails and portals) and tap «Download PDF» or «Share».",
+      "step4Tip": "Documents stay on your phone: KUMANI processes them in the browser and doesn’t upload them."
+    },
+    "fototessera": {
+      "title": "ID Photo",
+      "summary": "The 35×45 mm photo for ID card, passport and driving licence, without a photo booth: white background and the right size.",
+      "cta": "Open ID Photo",
+      "step1Title": "Get ready",
+      "step1Text": "Read the tips: someone else takes the photo from about 1.5 metres, in front of a light wall, with even light. Look straight ahead, mouth closed, no hats or sunglasses.",
+      "step2Title": "Guided shot",
+      "step2Text": "With «Guided shot» the camera checks distance, position, straight head, open eyes and light live, and shoots by itself when everything is right. You can also choose a photo you already have.",
+      "step3Title": "Adjust and check",
+      "step3Text": "KUMANI finds the face, straightens the photo, adds the white background and sizes the head correctly. Use the arrows to move and rotate; the «Photo check» tells you what to improve.",
+      "step3Tip": "The check is a guide: the final word belongs to the office that issues the document.",
+      "step4Title": "Download or print",
+      "step4Text": "Tap «Download photo» for online portals, or «10×15 sheet with 6 photos» to print at a photo shop or kiosk and cut along the grey lines."
     }
   },
   "deckTexts": {
@@ -13354,7 +13560,10 @@
     "intro_documents": "Scan a sheet, sign a PDF, take an ID photo, send a document safely and keep your receipts: everyday paperwork from your phone.",
     "need_family": "I have kids and a family to organise",
     "short_family": "Kids and family",
-    "intro_family": "A safe corner for the little ones, the family schedule, your home under control and things to find again."
+    "intro_family": "A safe corner for the little ones, the family schedule, your home under control and things to find again.",
+    "need_music": "I play an instrument or measure noise",
+    "short_music": "Music and sound",
+    "intro_music": "A tuner accurate to the cent, a metronome that listens to you and a sound meter to measure noise."
   },
   "nexus": {
     "back": "Back to Fun",

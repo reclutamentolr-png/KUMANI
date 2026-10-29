@@ -26,6 +26,8 @@ export const HOME_NEEDS = [
   // Salute e benessere (la chiave resta «relax»: è già salvata nelle scelte degli iscritti)
   { key: 'relax', icon: 'HeartPulse', items: ['aureya', 'cronobioma', 'neurobalance', 'oxygen'] },
   { key: 'unwind', icon: 'Leaf', items: ['focus', 'mandala'] },
+  // Audio e Strumenti: per chi suona e per misurare il rumore
+  { key: 'music', icon: 'Music', items: ['accordatore', 'metronomo', 'fonometro'] },
   { key: 'gift', icon: 'Gift', items: ['sorprese'] },
 ] as const
 

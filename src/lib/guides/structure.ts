@@ -6,7 +6,7 @@ import type { GuideCategory, GuideSlug } from '@/lib/guides/types'
 
 export type GuideStructure = { slug: GuideSlug; category: GuideCategory; minutes: number; steps: number; href: string }
 
-export const GUIDE_CATEGORIES: GuideCategory[] = ['start', 'promote', 'wallet', 'promoteTools', 'security', 'community', 'organize', 'pro', 'wellness', 'kids']
+export const GUIDE_CATEGORIES: GuideCategory[] = ['start', 'promote', 'wallet', 'promoteTools', 'security', 'community', 'organize', 'pro', 'wellness', 'audio', 'kids']
 
 export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'registrazione', category: 'start', minutes: 3, steps: 4, href: '/register' },
@@ -80,4 +80,12 @@ export const GUIDE_STRUCTURE: GuideStructure[] = [
   { slug: 'tempus', category: 'pro', minutes: 4, steps: 5, href: '/app/tempus' },
   { slug: 'travel', category: 'wellness', minutes: 2, steps: 2, href: '/viaggi' },
   { slug: 'angolo-bambini', category: 'kids', minutes: 5, steps: 9, href: '/app/angolo-bambini' },
+  { slug: 'vocale-sospetto', category: 'security', minutes: 2, steps: 4, href: '/app/vocale-sospetto' },
+  { slug: 'testo-protetto', category: 'security', minutes: 3, steps: 4, href: '/app/testo-protetto' },
+  { slug: 'carte-antitruffa', category: 'security', minutes: 3, steps: 4, href: '/app/carte-antitruffa' },
+  { slug: 'scanner', category: 'organize', minutes: 2, steps: 4, href: '/app/scanner' },
+  { slug: 'fototessera', category: 'organize', minutes: 3, steps: 4, href: '/app/fototessera' },
+  { slug: 'fonometro', category: 'audio', minutes: 2, steps: 4, href: '/app/fonometro' },
+  { slug: 'metronomo', category: 'audio', minutes: 3, steps: 5, href: '/app/metronomo' },
+  { slug: 'accordatore', category: 'audio', minutes: 3, steps: 5, href: '/app/accordatore' },
 ]

@@ -7773,12 +7773,99 @@
         "p3": "Schichten und Reisen",
         "p3d": "Pläne für Nachtarbeit und Zeitzonen.",
         "note": "Wohlbefinden und gute Gewohnheiten: ersetzt nicht den Rat deines Arztes."
+      },
+      "fonometro": {
+        "sub": "Wie laut ist es wirklich?",
+        "tagline": "Laute Nachbarn, eine Kneipe unten im Haus, eine Baustelle: Miss die Dezibel und sichere Beweise.",
+        "p1": "Dezibel live",
+        "p1d": "Die Zahl, die Farbe und das Diagramm, Sekunde für Sekunde.",
+        "p2": "Momente über der Schwelle",
+        "p2d": "Uhrzeit, Dauer und Spitze jedes lauten Geräuschs.",
+        "p3": "PDF mit Diagramm",
+        "p3d": "Zum Aufbewahren oder Vorzeigen, wo es nötig ist.",
+        "note": "Der Ton wird nicht aufgenommen: Gemessen wird nur, wie laut es ist."
+      },
+      "metronomo": {
+        "sub": "Bist du im Takt?",
+        "tagline": "Das Metronom mit Ton, Licht und Vibration, das deine Schläge hört.",
+        "p1": "30 bis 250 Schläge",
+        "p1d": "Taktarten, Betonungen, Unterteilungen und „Tempo tippen“.",
+        "p2": "Hört, ob du im Takt bist",
+        "p2d": "Grün im Takt, Orange zu früh oder zu spät.",
+        "p3": "Langsam schneller werden",
+        "p3d": "Und der Übungstimer, der von selbst stoppt."
+      },
+      "accordatore": {
+        "sub": "Auf den Cent gestimmt",
+        "tagline": "Gitarre, Bass, Ukulele, Geige, Bratsche und Cello: in wenigen Sekunden gestimmt.",
+        "p1": "Auf den Cent",
+        "p1d": "Nadel, Strobe und Referenzton.",
+        "p2": "Schritt für Schritt",
+        "p2d": "Die Zeichnung des Instruments und der Pfeil zum Folgen.",
+        "p3": "Viele Stimmungen",
+        "p3d": "Standard, Drop D, DADGAD, Open G und mehr.",
+        "note": "Der Ton wird nicht aufgenommen: Die Note wird im Handy erkannt."
+      },
+      "vocale_sospetto": {
+        "sub": "Eine Sprachnachricht kommt dir komisch vor?",
+        "tagline": "„Hallo Mama, ich habe eine neue Nummer“, der falsche Polizist, die falsche Bank: Lass KUMANI zuhören.",
+        "p1": "Hochladen oder vorspielen",
+        "p1d": "Die WhatsApp-Sprachnachricht oder ihr Text.",
+        "p2": "Die Anzeichen von Betrug",
+        "p2d": "Eile, Geld, Codes, falsche Behörden: alles erklärt.",
+        "p3": "Was sofort tun",
+        "p3d": "Und die Meldung, um auch andere zu schützen.",
+        "note": "Die Sprachnachricht bleibt im Handy: Niemand hört sie an."
+      },
+      "testo_protetto": {
+        "sub": "KI ohne deine Daten",
+        "tagline": "Namen, IBAN, Telefonnummern und Adressen werden zu neutralen Platzhaltern, bevor du ChatGPT oder Gemini nutzt.",
+        "p1": "Daten von selbst gefunden",
+        "p1d": "Namen, Steuernummern, IBAN, E-Mails, Adressen.",
+        "p2": "Geschützter Text",
+        "p2d": "Du kopierst ihn und nutzt ihn in der KI deiner Wahl.",
+        "p3": "Daten zurück an ihrem Platz",
+        "p3d": "In der Antwort stehen wieder die echten Namen, nur bei dir.",
+        "note": "Der Text verlässt das Gerät nicht."
+      },
+      "carte_antitruffa": {
+        "sub": "Betrug, Karte für Karte",
+        "tagline": "20 echte Betrugsmaschen: Lies, wie der Köder aussieht, beantworte 3 Fragen und vervollständige das Album.",
+        "p1": "Lies die Karte",
+        "p1d": "Der Köder, die Anzeichen und der Schutz.",
+        "p2": "3 Fragen",
+        "p2d": "Antworte richtig, und die Karte gehört dir.",
+        "p3": "Warne deine Liebsten",
+        "p3d": "Die Karte geht per WhatsApp raus und lässt sich auch ohne KUMANI lesen."
+      },
+      "scanner": {
+        "sub": "Vom Blatt zum PDF",
+        "tagline": "Fotografiere Quittungen, Verträge und Formulare: KUMANI findet die Ränder und richtet das Blatt gerade aus.",
+        "p1": "Automatische Aufnahme",
+        "p1d": "Löst von selbst aus, wenn das Blatt still liegt.",
+        "p2": "Ränder und Filter",
+        "p2d": "Gerade, gut lesbare Seiten, auch in Schwarzweiß.",
+        "p3": "Ein einziges PDF",
+        "p3d": "Fotos und PDFs zusammenfügen, ordnen und Seiten wählen.",
+        "note": "Die Dokumente bleiben auf dem Handy."
+      },
+      "fototessera": {
+        "sub": "Das Passbild ohne Fotoautomat",
+        "tagline": "35×45 mm für Personalausweis, Reisepass, Führerschein und Aufenthaltstitel.",
+        "p1": "Geführte Aufnahme",
+        "p1d": "Abstand, gerader Kopf und Licht live geprüft.",
+        "p2": "Weißer Hintergrund",
+        "p2d": "Gesicht gerade ausgerichtet, Kopf in der richtigen Größe.",
+        "p3": "10×15-Bogen",
+        "p3d": "6 Fotos zum Drucken beim Fotografen oder am Automaten.",
+        "note": "Das Foto bleibt auf dem Handy."
       }
     },
     "includedSurprise": "Für alle, auch mit dem kostenlosen Konto",
     "priceSurprise": "Ab {price} pro Überraschung",
     "surpriseNote": "Kostenlos erstellen und ausprobieren: Du zahlst erst beim Aktivieren.",
-    "partOf": "Gehört zu {hub}"
+    "partOf": "Gehört zu {hub}",
+    "cat_audio": "Audio & Werkzeuge"
   },
   "guideTexts": {
     "categories": {
@@ -7824,7 +7911,7 @@
       },
       "audio": {
         "title": "Audio & Werkzeuge",
-        "text": "Werkzeuge, die das Mikrofon des Handys nutzen: messen, hören und die Geräusche um dich herum verstehen."
+        "text": "Die Anleitungen zu den Werkzeugen, die das Mikrofon nutzen: Schallpegelmesser, Metronom und Stimmgerät."
       }
     },
     "registrazione": {
@@ -8882,6 +8969,125 @@
       "step9Title": "Verlassen und Handy sperren",
       "step9Text": "Um zu KUMANI zurückzukehren, tippen Sie oben auf das Schloss und geben den Code ein: KUMI winkt zum Abschied, und Sie sind draußen. Auch die „Zurück“-Taste bleibt im Spiel.",
       "step9Tip": "Um das Handy wirklich auf KUMANI zu sperren, nutzen Sie „Geführter Zugriff“ auf dem iPhone (Einstellungen › Bedienungshilfen) oder „App-Fixierung“ auf Android (Einstellungen › Sicherheit): Ihr Kind kann nicht einmal mit der Home-Taste hinaus."
+    },
+    "fonometro": {
+      "title": "Schallpegelmesser",
+      "summary": "Miss den Lärm in Dezibel, führe ein Protokoll der lautesten Momente und lade ein PDF mit Diagramm und Uhrzeiten herunter.",
+      "cta": "Schallpegelmesser öffnen",
+      "step1Title": "Messung starten",
+      "step1Text": "Tippe auf „Messung starten“ und erlaube das Mikrofon. Leg das Handy ruhig hin, mit freiem Mikrofon, und lass den Bildschirm an.",
+      "step1Tip": "Der Ton wird nicht aufgenommen: Das Handy misst nur, wie laut es ist.",
+      "step2Title": "Der Lärm live",
+      "step2Text": "Die große Zahl zeigt die Dezibel von jetzt, mit einer Farbe und einem Satz, womit sie vergleichbar sind. Darunter siehst du das Diagramm, den Durchschnitt, den Höchstwert und die Momente über der Schwelle.",
+      "step3Title": "Schwelle und Kalibrierung",
+      "step3Text": "Unter „Schwelle und Kalibrierung“ wählst du, ab wie vielen Dezibel ein Geräusch notiert wird (nachts zu Hause stören 40–45 dB schon). Wenn du einen echten Schallpegelmesser hast, verschiebe die Kalibrierung, bis die Zahlen übereinstimmen.",
+      "step4Title": "Protokoll und PDF",
+      "step4Text": "Tippe auf „Stopp“: Du siehst Dauer, Durchschnitt, Höchstwert und die Liste der lauten Momente mit Uhrzeit und Dauer. Trag Ort und Notizen ein, dann „Im Protokoll speichern“ oder „PDF herunterladen“.",
+      "step4Tip": "Das Handymikrofon ist nicht kalibriert: Die Werte sind eine Schätzung, nützlich zum Vergleichen von Zeiten und Orten."
+    },
+    "metronomo": {
+      "title": "Metronom",
+      "summary": "Das Metronom mit Ton, Licht und Vibration, das auf Wunsch deine Schläge hört und dir sagt, ob du im Takt bist.",
+      "cta": "Metronom öffnen",
+      "step1Title": "Wähle das Tempo",
+      "step1Text": "Ändere die Schläge pro Minute mit ±1, ±5 oder dem Schieberegler, von 30 bis 250, oder tippe im Rhythmus auf „Tempo tippen“, und das Metronom übernimmt es von dir. Dann tippe auf „Start“.",
+      "step2Title": "Takt, Betonungen und Unterteilungen",
+      "step2Text": "Wähle die Taktart (2/4, 3/4, 4/4, 6/8 …) und tippe auf einen Schlag, um ihn betont, normal oder stumm zu machen. Unter „Unterteilung“ fügst du Achtel, Triolen oder Sechzehntel zwischen den Schlägen hinzu.",
+      "step3Title": "Ton, Licht und Vibration",
+      "step3Text": "Wähle Klick, Holzblock oder Glöckchen und die Lautstärke. Mit „Nur Licht“ ist das Metronom stumm: Es zeigt die Schläge mit Licht (und Vibration, wenn das Handy es erlaubt).",
+      "step4Title": "Schneller werden und Übungstimer",
+      "step4Text": "Mit „Langsam schneller werden“ steigt das Tempo von selbst um ein paar Schläge alle paar Takte, bis zum Tempo, das du wählst. Der Übungstimer stoppt das Metronom nach 5, 10, 15 oder 30 Minuten.",
+      "step5Title": "Zuhören, ob ich im Takt bin",
+      "step5Text": "Schalte „Zuhören, ob ich im Takt bin“ ein: Das Mikrofon hört deine Schläge und vergleicht sie mit dem Takt. Grün heißt im Takt, Orange zu früh oder zu spät. Am Ende siehst du den Prozentsatz, die Tendenz und das Diagramm deiner Schläge.",
+      "step5Tip": "Nimm Kopfhörer oder „Nur Licht“: So hört das Mikrofon den Klick des Metronoms nicht."
+    },
+    "accordatore": {
+      "title": "Stimmgerät",
+      "summary": "Stimme Gitarre, Bass, Ukulele, Geige, Bratsche und Cello auf den Cent genau, auch Schritt für Schritt mit der Zeichnung des Instruments.",
+      "cta": "Stimmgerät öffnen",
+      "step1Title": "Instrument und Stimmung wählen",
+      "step1Text": "Tippe auf das Instrument und wähle die Stimmung (Standard, einen Halbton tiefer, Drop D, DADGAD …). Mit „Chromatisch“ erkennt es jeden Ton.",
+      "step2Title": "Starten und eine Saite spielen",
+      "step2Text": "Tippe auf „Start“, erlaube das Mikrofon und spiele eine Saite nach der anderen. Das Stimmgerät erkennt die nächstliegende Saite von selbst – oder du tippst sie an und hörst den Referenzton.",
+      "step3Title": "Die Nadel lesen",
+      "step3Text": "Die Nadel zeigt, wie viele Cent fehlen: Links ist der Ton zu tief (Saite spannen), rechts zu hoch (Saite lockern). Im grünen Bereich stimmt es: Nach einem Moment bekommt die Saite ein Häkchen.",
+      "step4Title": "Schritt für Schritt, eine Saite nach der anderen",
+      "step4Text": "Mit „Schritt für Schritt, eine Saite nach der anderen“ siehst du die Zeichnung des Instruments: Die zu stimmende Saite ist golden, und der Pfeil zeigt, in welche Richtung du den Wirbel drehst. Wenn sie stimmt, geht die Anleitung von selbst zur nächsten.",
+      "step5Title": "Die Einstellungen",
+      "step5Text": "Du kannst den Kammerton A (von 415 bis 466 Hz), die Notennamen (Do Re Mi oder C D E), die Genauigkeit und die Empfindlichkeit ändern. Deine Auswahl bleibt im Handy gespeichert.",
+      "step5Tip": "Der Ton wird nicht aufgenommen: Die Note wird im Handy erkannt."
+    },
+    "vocale_sospetto": {
+      "title": "Verdächtige Sprachnachricht?",
+      "summary": "Lass KUMANI eine seltsame Sprachnachricht anhören und finde heraus, ob sie die typischen Anzeichen von Betrug hat.",
+      "cta": "Sprachnachricht prüfen",
+      "step1Title": "Wähle, wie du prüfst",
+      "step1Text": "Du kannst die Datei der Sprachnachricht hochladen, sie beim Abspielen vom Mikrofon anhören lassen (auch von einem anderen Handy) oder ihren Text einfügen, wenn WhatsApp sie schon für dich abgeschrieben hat.",
+      "step2Title": "Die Sprachnachricht aus WhatsApp",
+      "step2Text": "Halte in WhatsApp die Sprachnachricht gedrückt, tippe auf Weiterleiten oder Teilen und dann auf „In Dateien sichern“. Komm hierher zurück, tippe auf „Sprachnachricht hochladen“ und wähle sie aus.",
+      "step2Tip": "Beim ersten Mal wird die Spracherkennung heruntergeladen (etwa 80 MB): am besten im WLAN.",
+      "step3Title": "Das Ergebnis",
+      "step3Text": "Nach dem Anhören siehst du die farbige Bewertung (von „Keine Betrugsanzeichen gefunden“ bis „Achtung: Das sieht sehr nach Betrug aus“), die gefundenen Anzeichen mit dem Satz aus der Nachricht und den abgeschriebenen Text.",
+      "step4Title": "Was jetzt tun",
+      "step4Text": "Schick kein Geld, keine Codes und keine Fotos von Ausweisen, und ruf die Person selbst unter der Nummer an, die du kennst. Wenn es Betrug ist, tippe auf „Nummer dem Anti-Betrugs-Netzwerk melden“: So schützt du auch andere.",
+      "step4Tip": "Die Sprachnachricht wird im Handy angehört und abgeschrieben: Wir laden sie nicht auf Server hoch, und niemand hört sie an."
+    },
+    "testo_protetto": {
+      "title": "Geschützter Text",
+      "summary": "Nutze ChatGPT oder Gemini, ohne deine persönlichen Daten preiszugeben: Namen, IBAN und Adressen werden zu neutralen Platzhaltern.",
+      "cta": "Geschützten Text öffnen",
+      "step1Title": "Dein Text",
+      "step1Text": "Füge den Text ein oder lade eine Datei hoch (PDF mit Text, Word, TXT): ein Protokoll, einen Bericht, eine E-Mail, einen Vertrag. Mit „Beispiel ausprobieren“ siehst du sofort, wie es funktioniert.",
+      "step2Title": "Was ich gefunden habe",
+      "step2Text": "Die gefundenen persönlichen Daten sind markiert: Namen, Steuernummern, IBAN, Telefonnummern, E-Mails, Adressen, Geburtsdaten. Tippe auf eine Angabe, um sie sichtbar zu lassen, und füge Wörter hinzu, die du verbergen willst.",
+      "step3Title": "Den geschützten Text kopieren",
+      "step3Text": "Statt der Daten stehen Platzhalter wie [PERSON 1] da. Tippe auf „Kopieren“ und füge ihn in die KI deiner Wahl ein.",
+      "step3Tip": "Lies den Text immer noch einmal, bevor du ihn teilst: Die Erkennung hilft sehr, ist aber nicht unfehlbar.",
+      "step4Title": "Die Daten in die Antwort zurückholen",
+      "step4Text": "Füge die Antwort der KI in Schritt 4 ein: Die Platzhalter werden wieder zu den echten Namen und Daten, nur hier in deinem Handy.",
+      "step4Tip": "Der Text verlässt das Gerät nicht: Der „Schlüssel“ bleibt nur in diesem Browser, 7 Tage lang."
+    },
+    "carte_antitruffa": {
+      "title": "Anti-Betrugs-Karten",
+      "summary": "Die häufigsten Betrugsmaschen, Karte für Karte: Lies, wie der Köder aussieht, beantworte 3 Fragen und vervollständige das Album.",
+      "cta": "Anti-Betrugs-Karten öffnen",
+      "step1Title": "Das Album",
+      "step1Text": "Oben siehst du, wie viele Karten du hast und wie viele dir noch für das Bronze-, Silber- und Goldschild fehlen. Mit „Alle“, „Noch zu holen“ und „Meine“ wählst du, welche angezeigt werden.",
+      "step2Title": "Die Karte lesen",
+      "step2Text": "Tippe auf eine Karte: Vorne steht der Köder, so wie er wirklich ankommt, der Kanal und die Gefahr. Dreh sie um, um zu sehen, wie du ihn erkennst und wie du dich schützt.",
+      "step3Title": "Mit 3 Fragen holen",
+      "step3Text": "Tippe auf „Karte holen: 3 Fragen“. Antworte richtig, und die Karte kommt ins Album. Wenn du dich irrst, lies sie noch einmal und versuch es morgen wieder.",
+      "step3Tip": "Eine Karte pro Tag: ob mit den Fragen oder durch eine Prüfung gefangen, jeden Tag kommt nur eine.",
+      "step4Title": "Fang sie und warne deine Liebsten",
+      "step4Text": "Wenn SVAT, CheckMail, die QR-Prüfung oder das Anti-Betrugs-Netzwerk einen echten Betrug stoppen, kommt seine Karte mit grünem Rahmen. Mit „Jemanden warnen“ schickst du die Karte per WhatsApp."
+    },
+    "scanner": {
+      "title": "Scanner",
+      "summary": "Vom Blatt zum PDF in wenigen Sekunden: KUMANI findet die Ränder, richtet die Seite gerade aus und macht sie gut lesbar.",
+      "cta": "Scanner öffnen",
+      "step1Title": "Fotografieren, auswählen oder öffnen",
+      "step1Text": "Tippe auf „Foto aufnehmen“, um das Dokument zu fotografieren, auf „Fotos wählen“ für Fotos, die du schon hast, oder auf „PDFs öffnen“, um sie zusammenzufügen. Mit „Automatische Aufnahme“ löst die Kamera von selbst aus, wenn das Blatt ganz drauf ist und still liegt.",
+      "step2Title": "Ecken und Filter",
+      "step2Text": "KUMANI findet die Ränder des Blatts: Falls nötig, zieh die 4 Ecken zurecht. Dann wähle den Filter (Verbessert, Schwarzweiß, Graustufen oder Original), dreh das Bild und tippe auf „Seite hinzufügen“.",
+      "step3Title": "Die Seiten ordnen",
+      "step3Text": "Alle Seiten landen in derselben Liste: Verschiebe sie nach vorne oder hinten, dreh sie, korrigiere sie oder entferne sie. Mit „Seiten wählen“ speicherst du nur die, die du brauchst.",
+      "step4Title": "Das PDF speichern",
+      "step4Text": "Gib der Datei einen Namen, wähle die Qualität („Normal“ oder „Klein“ für E-Mails und Portale) und tippe auf „PDF herunterladen“ oder „Teilen“.",
+      "step4Tip": "Die Dokumente bleiben auf dem Handy: KUMANI bearbeitet sie im Browser und lädt sie nicht auf Server hoch."
+    },
+    "fototessera": {
+      "title": "Passbild",
+      "summary": "Das Passbild 35×45 mm für Personalausweis, Reisepass und Führerschein, ohne Fotoautomat: weißer Hintergrund und richtige Maße.",
+      "cta": "Passbild öffnen",
+      "step1Title": "Das Foto vorbereiten",
+      "step1Text": "Lies die Tipps: Eine andere Person fotografiert dich aus etwa 1,5 Metern vor einer hellen Wand bei gleichmäßigem Licht. Schau geradeaus, Mund zu, kein Hut und keine Sonnenbrille.",
+      "step2Title": "Geführte Aufnahme",
+      "step2Text": "Mit „Geführte Aufnahme“ prüft die Kamera live Abstand, Position, gerade Kopfhaltung, offene Augen und Licht und löst von selbst aus, wenn alles passt. Du kannst auch ein Foto wählen, das du schon hast.",
+      "step3Title": "Nachbessern und prüfen",
+      "step3Text": "KUMANI findet das Gesicht, richtet das Foto gerade aus, macht den Hintergrund weiß und bringt den Kopf auf die richtige Größe. Mit den Pfeilen verschiebst und drehst du; die „Prüfung des Fotos“ sagt dir, was du verbessern kannst.",
+      "step3Tip": "Die Prüfung ist nur ein Hinweis: Das letzte Wort hat die Behörde, die das Dokument ausstellt.",
+      "step4Title": "Herunterladen oder drucken",
+      "step4Text": "Tippe auf „Foto herunterladen“ für Online-Portale oder auf „10×15-Bogen mit 6 Fotos“, um ihn beim Fotografen oder am Fotoautomaten im Supermarkt zu drucken und an den grauen Linien auszuschneiden."
     }
   },
   "deckTexts": {
@@ -13354,7 +13560,10 @@
     "intro_documents": "Ein Blatt scannen, ein PDF unterschreiben, ein Passfoto machen, ein Dokument sicher senden und Belege aufbewahren: der Papierkram des Alltags vom Handy aus.",
     "need_family": "Ich habe Kinder und eine Familie zu organisieren",
     "short_family": "Kinder und Familie",
-    "intro_family": "Eine sichere Ecke für die Kleinen, der Familienkalender, das Zuhause im Griff und Dinge, die man wiederfinden muss."
+    "intro_family": "Eine sichere Ecke für die Kleinen, der Familienkalender, das Zuhause im Griff und Dinge, die man wiederfinden muss.",
+    "need_music": "Ich spiele ein Instrument oder messe Lärm",
+    "short_music": "Musik und Klang",
+    "intro_music": "Stimmgerät auf den Cent genau, ein Metronom, das dir zuhört, und ein Schallpegelmesser für den Lärm."
   },
   "nexus": {
     "back": "Zurück zu Freizeit",

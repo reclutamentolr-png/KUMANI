@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowLeft, ArrowRight, BookOpen, Briefcase, Clock, Crown, Footprints, FolderOpen, Megaphone, Leaf, Palette, ShieldCheck, Sparkles, Users, Wallet, Wrench } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, Briefcase, Clock, Crown, Footprints, FolderOpen, Megaphone, Leaf, Music, Palette, ShieldCheck, Sparkles, Users, Wallet, Wrench } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/client'
 import type { GuideCategory } from '@/lib/guides/types'
@@ -40,6 +40,7 @@ const CATEGORY_ICONS: Record<GuideCategory, typeof Wallet> = {
   organize: Briefcase,
   pro: Crown,
   wellness: Leaf,
+  audio: Music,
   kids: Palette,
 }
 

@@ -11,7 +11,7 @@ type Item = { tool: string; title: string; categoryKey: string; category: string
 
 // Prima i servizi uniti (categoryKey «hub-…», già in ordine), poi le aree
 
-const CATEGORY_ORDER = ['pro', 'marketing', 'security', 'personal', 'lavoro', 'wellness', 'svago', 'community']
+const CATEGORY_ORDER = ['pro', 'marketing', 'security', 'personal', 'lavoro', 'wellness', 'svago', 'audio', 'community']
 
 const norm = (s: string) => s.toLocaleLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
 

@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Baby, FileText, ArrowRight, BriefcaseBusiness, CalendarDays, Check, Clapperboard, ChevronDown, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, X, type LucideIcon } from 'lucide-react'
+import { Baby, FileText, ArrowRight, BriefcaseBusiness, CalendarDays, Check, Clapperboard, ChevronDown, Gamepad2, Gift, HeartHandshake, HeartPulse, Plane, Info, Leaf, LifeBuoy, LoaderCircle, Lock, Megaphone, Music, PiggyBank, Plus, ShieldCheck, Smartphone, Store, Users, X, type LucideIcon } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { showFullHome, toggleWelcomeService } from '@/app/actions/welcome'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
@@ -14,7 +14,7 @@ import { marketplaceIconMap } from '@/lib/marketplaceIcons'
 // legge a cosa servono, con «Aggiungi» finiscono in «I tuoi servizi». Sotto,
 // «Inizia da qui»: servizi pronti da provare in riquadri quadrati. In fondo
 // «Mostra la Home completa».
-const NEED_ICON: Record<string, LucideIcon> = { Baby, FileText, ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift }
+const NEED_ICON: Record<string, LucideIcon> = { Baby, FileText, ShieldCheck, CalendarDays, PiggyBank, Store, Megaphone, Clapperboard, HeartHandshake, HeartPulse, Plane, BriefcaseBusiness, Users, Gamepad2, Leaf, Gift, Music }
 
 const PLAN_RANK = { free: 0, base: 1, pro: 2 } as const
 
