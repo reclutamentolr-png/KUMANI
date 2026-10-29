@@ -7,6 +7,7 @@ import Link from '@/components/LocalizedLink'
 import BusinessCardCanvas, { BLEED, CARD_H, CARD_W, FULL_H, FULL_W, type CardDesign, type CardSide } from './BusinessCardCanvas'
 import { dataUrlToFile, deliverFiles } from '@/lib/deliverFiles'
 import SideDownloadButton, { type SideChoice } from './SideDownloadButton'
+import FoldSection from '@/components/FoldSection'
 import { saveBusinessCard, type BusinessCardSettings } from '@/app/actions/businessCard'
 
 // Documenti → Il mio biglietto da visita: scelta del modello, contatti da
@@ -162,9 +163,8 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
   return (
     <div className="space-y-6">
       {/* Modello */}
-      <section className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
-        <h2 className="font-bold text-[var(--ink)]">{t('designTitle')}</h2>
-        <div className="mt-3 grid grid-cols-3 gap-3">
+      <FoldSection title={t('designTitle')}>
+        <div className="grid grid-cols-3 gap-3">
           {designs.map((d) => (
             <button
               key={d}
@@ -178,7 +178,7 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
             </button>
           ))}
         </div>
-      </section>
+      </FoldSection>
 
       {/* Anteprima */}
       <section className="space-y-3">
@@ -207,9 +207,8 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
       </section>
 
       {/* Pagina del QR */}
-      <section className="rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
-        <h2 className="font-bold text-[var(--ink)]">{t('pageTitle')}</h2>
-        <p className="mt-1 text-sm text-[var(--muted)]">{t('pageIntro')}</p>
+      <FoldSection title={t('pageTitle')}>
+        <p className="text-sm text-[var(--muted)]">{t('pageIntro')}</p>
         <div className="mt-4 space-y-2">
           {toggle('show_phone', t('showPhone'), hasPhone)}
           {toggle('show_whatsapp', t('showWhatsapp'), hasPhone)}
@@ -225,7 +224,7 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
             {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[var(--gold)]" />} {copied ? t('copied') : t('copyLink')}
           </button>
         </div>
-      </section>
+      </FoldSection>
     </div>
   )
 }

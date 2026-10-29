@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Apple, Check, Copy, LoaderCircle, Nfc, Smartphone } from 'lucide-react'
+import FoldSection from '@/components/FoldSection'
 
 // Un link scritto su un adesivo o una tessera NFC: chi avvicina il telefono
 // apre la pagina, su iPhone e su Android, senza app. Due usi:
@@ -93,11 +94,8 @@ export default function NfcTagSection({ kind, url }: { kind: 'card' | 'review'; 
   const box = 'rounded-xl border border-[var(--gold)]/20 bg-[var(--background)] p-4'
 
   return (
-    <section className="mt-6 rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm">
-      <h2 className="flex items-center gap-2 font-bold text-[var(--ink)]">
-        <Nfc className="h-5 w-5 text-[var(--gold)]" /> {t(`${kind}.title`)}
-      </h2>
-      <p className="mt-1 text-sm text-[var(--muted)]">{t(`${kind}.intro`)}</p>
+    <FoldSection className="mt-6" icon={<Nfc className="h-5 w-5 text-[var(--gold)]" />} title={t(`${kind}.title`)}>
+      <p className="text-sm text-[var(--muted)]">{t(`${kind}.intro`)}</p>
 
       {/* Cosa serve */}
       <div className={`mt-4 ${box}`}>
@@ -189,6 +187,6 @@ export default function NfcTagSection({ kind, url }: { kind: 'card' | 'review'; 
           <li>{t(`${kind}.tipQr`)}</li>
         </ul>
       </div>
-    </section>
+    </FoldSection>
   )
 }

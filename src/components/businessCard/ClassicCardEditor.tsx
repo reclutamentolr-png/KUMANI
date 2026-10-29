@@ -23,6 +23,7 @@ import { businessWebsiteUrl } from '@/lib/businessProfile'
 import ClassicCardCanvas, { classicSize, type CardColors } from './ClassicCardCanvas'
 import { dataUrlToFile, deliverFiles } from '@/lib/deliverFiles'
 import SideDownloadButton, { type SideChoice } from './SideDownloadButton'
+import FoldSection from '@/components/FoldSection'
 import { BLEED } from './BusinessCardCanvas'
 
 // Biglietto classico: stile, colori, logo, lati, QR e dati da stampare.
@@ -180,7 +181,6 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
     `rounded-xl border-2 px-3 py-2.5 text-left text-sm font-semibold transition ${
       disabled ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400' : active ? 'border-[var(--gold)] bg-[var(--gold-pale)] text-[var(--ink)]' : 'border-[var(--gold)]/20 bg-white text-[var(--ink)] hover:border-[var(--gold)]/60'
     }`
-  const section = 'rounded-2xl border border-[var(--gold)]/30 bg-white p-5 shadow-sm'
   const title = 'font-bold text-[var(--ink)]'
 
   return (
@@ -212,22 +212,23 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
         {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{t('error')}</p>}
       </section>
 
+      {/* Impostazioni: sezioni chiuse, si aprono quando servono */}
       {/* Stile */}
-      <section className={section}>
-        <h2 className={title}>{t('classic.styleTitle')}</h2>
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+      <FoldSection title={t('classic.styleTitle')}>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {CLASSIC_LAYOUTS.map((l) => (
             <button key={l} type="button" aria-pressed={s.layout === l} onClick={() => set({ layout: l })} className={chip(s.layout === l)}>
               {t(`classic.layout_${l}`)}
             </button>
           ))}
         </div>
-      </section>
+      </FoldSection>
 
       {/* Colori e logo */}
-      <section className={`${section} space-y-4`}>
+      <FoldSection title={`${t('classic.colorsTitle')} · ${t('classic.logoTitle')}`}>
+        <div className="space-y-4">
         <div>
-          <h2 className={title}>{t('classic.colorsTitle')}</h2>
+          <h3 className={title}>{t('classic.colorsTitle')}</h3>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
             {CLASSIC_PALETTES.map((p) => (
               <button key={p} type="button" disabled={p === 'brand' && !brand} aria-pressed={s.palette === p} onClick={() => set({ palette: p })} className={chip(s.palette === p, p === 'brand' && !brand)}>
@@ -242,7 +243,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
           )}
         </div>
         <div>
-          <h2 className={title}>{t('classic.logoTitle')}</h2>
+          <h3 className={title}>{t('classic.logoTitle')}</h3>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
             {CLASSIC_LOGOS.map((l) => (
               <button key={l} type="button" disabled={l === 'business' && !businessLogo} aria-pressed={s.logo === l} onClick={() => set({ logo: l })} className={chip(s.logo === l, l === 'business' && !businessLogo)}>
@@ -269,12 +270,14 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
             </div>
           )}
         </div>
-      </section>
+        </div>
+      </FoldSection>
 
       {/* Lati, retro e QR */}
-      <section className={`${section} space-y-4`}>
+      <FoldSection title={`${t('classic.sidesTitle')} · ${t('classic.qrTitle')}`}>
+        <div className="space-y-4">
         <div>
-          <h2 className={title}>{t('classic.sidesTitle')}</h2>
+          <h3 className={title}>{t('classic.sidesTitle')}</h3>
           <div className="mt-3 grid grid-cols-2 gap-2">
             {(['front', 'both'] as const).map((v) => (
               <button key={v} type="button" aria-pressed={s.sides === v} onClick={() => set({ sides: v, ...(v === 'front' && s.qr === 'back' ? { qr: 'front' as const } : {}) })} className={chip(s.sides === v)}>
@@ -285,7 +288,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
         </div>
         {s.sides === 'both' && (
           <div>
-            <h2 className={title}>{t('classic.backTitle')}</h2>
+            <h3 className={title}>{t('classic.backTitle')}</h3>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {CLASSIC_BACKS.map((b) => (
                 <button key={b} type="button" aria-pressed={s.back === b} onClick={() => set({ back: b, ...(b === 'qr' && s.qr === 'none' ? { qr: 'back' as const } : {}) })} className={chip(s.back === b)}>
@@ -296,7 +299,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
           </div>
         )}
         <div>
-          <h2 className={title}>{t('classic.qrTitle')}</h2>
+          <h3 className={title}>{t('classic.qrTitle')}</h3>
           <div className="mt-3 grid grid-cols-3 gap-2">
             {CLASSIC_QR.map((q) => (
               <button key={q} type="button" disabled={q === 'back' && s.sides !== 'both'} aria-pressed={s.qr === q} onClick={() => set({ qr: q })} className={chip(s.qr === q, q === 'back' && s.sides !== 'both')}>
@@ -318,12 +321,12 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
             </div>
           )}
         </div>
-      </section>
+        </div>
+      </FoldSection>
 
       {/* Dati da stampare */}
-      <section className={section}>
-        <h2 className={title}>{t('classic.fieldsTitle')}</h2>
-        <p className="mt-1 text-sm text-[var(--muted)]">{t('classic.fieldsHint')}</p>
+      <FoldSection title={t('classic.fieldsTitle')}>
+        <p className="text-sm text-[var(--muted)]">{t('classic.fieldsHint')}</p>
         <div className="mt-4 space-y-2">
           {CLASSIC_FIELDS.map((f) => (
             <div key={f} className={`flex items-center gap-3 rounded-xl border px-3 py-2 ${s.fields[f] ? 'border-[var(--gold)]/40 bg-[var(--gold-pale)]/30' : 'border-gray-200'}`}>
@@ -373,7 +376,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
           onChange={(e) => set({ slogan: e.target.value })}
           className="mt-1 w-full rounded-lg border border-[var(--gold)]/25 bg-white px-3 py-2 text-sm focus:border-[var(--gold)] focus:outline-none"
         />
-      </section>
+      </FoldSection>
     </div>
   )
 }
