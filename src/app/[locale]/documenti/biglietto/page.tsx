@@ -9,6 +9,7 @@ import { defaultLocale } from '../../../../../i18n'
 import BusinessCardEditor from '@/components/businessCard/BusinessCardEditor'
 import BusinessCardChooser from '@/components/businessCard/BusinessCardChooser'
 import ClassicCardEditor from '@/components/businessCard/ClassicCardEditor'
+import NfcCardSection from '@/components/businessCard/NfcCardSection'
 import type { BusinessCardSettings } from '@/app/actions/businessCard'
 import { cleanClassic, type ClassicSource } from '@/lib/businessCardClassic'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
@@ -80,27 +81,31 @@ export default async function BusinessCardPage() {
       <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
         <p className="mb-6 text-[var(--muted)]">{t('intro')}</p>
         {cardPath ? (
-          <BusinessCardChooser
-            initial={card?.kind === 'classic' ? 'classic' : 'kumani'}
-            kumani={
-              <BusinessCardEditor
-                cardUrl={`${site}${prefix}${cardPath}`}
-                cardPath={cardPath}
-                initial={{ design: card?.design ?? 'A', show_phone: card?.show_phone ?? false, show_whatsapp: card?.show_whatsapp ?? false, show_email: card?.show_email ?? false }}
-                hasPhone={Boolean(profile?.phone?.trim())}
-                hasEmail={Boolean(profile?.email?.trim())}
-              />
-            }
-            classic={
-              <ClassicCardEditor
-                initial={cleanClassic(card?.classic)}
-                source={source}
-                brand={brand.colors}
-                businessLogo={business.logoUrl}
-                urls={{ card: `${site}${prefix}${cardPath}`, bio: bioUrl, website: website ? businessWebsiteUrl(website) : null }}
-              />
-            }
-          />
+          <>
+            <BusinessCardChooser
+              initial={card?.kind === 'classic' ? 'classic' : 'kumani'}
+              kumani={
+                <BusinessCardEditor
+                  cardUrl={`${site}${prefix}${cardPath}`}
+                  cardPath={cardPath}
+                  initial={{ design: card?.design ?? 'A', show_phone: card?.show_phone ?? false, show_whatsapp: card?.show_whatsapp ?? false, show_email: card?.show_email ?? false }}
+                  hasPhone={Boolean(profile?.phone?.trim())}
+                  hasEmail={Boolean(profile?.email?.trim())}
+                />
+              }
+              classic={
+                <ClassicCardEditor
+                  initial={cleanClassic(card?.classic)}
+                  source={source}
+                  brand={brand.colors}
+                  businessLogo={business.logoUrl}
+                  urls={{ card: `${site}${prefix}${cardPath}`, bio: bioUrl, website: website ? businessWebsiteUrl(website) : null }}
+                />
+              }
+            />
+            {/* Biglietto NFC: stesso link del QR, per tutti e due i biglietti */}
+            <NfcCardSection cardUrl={`${site}${prefix}${cardPath}`} />
+          </>
         ) : (
           <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-[var(--muted)]">{t('noCode')}</p>
         )}
