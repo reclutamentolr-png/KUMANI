@@ -185,14 +185,17 @@ export default function HandsGame({
     stop()
     setStatus('loading')
     try {
-      const [hands, stream] = await Promise.all([
-        loadHands(),
-        // Video con lo stesso verso dello schermo: a schermo pieno sul telefono riempie quasi tutto
-        navigator.mediaDevices.getUserMedia({
-          video: window.innerHeight > window.innerWidth ? { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } } : { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
-          audio: false,
-        }),
-      ])
+      // Video con lo stesso verso dello schermo: a schermo pieno sul telefono riempie quasi tutto
+      const streamP = navigator.mediaDevices.getUserMedia({
+        video: window.innerHeight > window.innerWidth ? { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } } : { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+        audio: false,
+      })
+      // Se il riconoscimento delle mani non parte, la fotocamera si spegne
+      const hands = await loadHands().catch((e) => {
+        streamP.then((s) => s.getTracks().forEach((tr) => tr.stop())).catch(() => {})
+        throw e
+      })
+      const stream = await streamP
       streamRef.current = stream
       const video = videoRef.current!
       // iPhone: muto e «in linea» impostati a mano prima di play (React non sempre li scrive)

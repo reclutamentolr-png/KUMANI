@@ -10314,7 +10314,9 @@
     "side_front": "Nur Vorderseite",
     "side_back": "Nur Rückseite",
     "side_both": "Vorder- und Rückseite (2 getrennte Dateien)",
-    "side_combined": "Vorder- und Rückseite in einem PDF"
+    "side_combined": "Vorder- und Rückseite in einem PDF",
+    "fileReady": "Die Datei ist fertig.",
+    "fileReadyShare": "Teilen"
   },
   "seo": {
     "siteTitle": "KUMANI – Hände, die dir helfen",
@@ -17770,7 +17772,8 @@
     "report": "Nummer dem Anti-Betrugs-Netzwerk melden",
     "transcriptTitle": "Der Text der Sprachnachricht",
     "again": "Andere Sprachnachricht prüfen",
-    "privacy": "Die Nachricht wird auf deinem Handy angehört und abgeschrieben: Wir laden sie nicht hoch und niemand hört sie an. Die Prüfung erkennt typische Betrugsmerkmale auf Italienisch; sie kann nicht sagen, ob eine Stimme echt oder mit KI erzeugt ist."
+    "privacy": "Die Nachricht wird auf deinem Handy angehört und abgeschrieben: Wir laden sie nicht hoch und niemand hört sie an. Die Prüfung erkennt typische Betrugsmerkmale auf Italienisch; sie kann nicht sagen, ob eine Stimme echt oder mit KI erzeugt ist.",
+    "italianOnly": "Die Prüfung erkennt Betrugssätze nur auf Italienisch: Bei Nachrichten in anderen Sprachen kann sie die Warnzeichen übersehen."
   },
   "fonometro": {
     "badge": "Audio & Werkzeuge · Plus",
@@ -17824,7 +17827,9 @@
     "pdfTo": "Ende",
     "pdfFooter": "Erstellt mit KUMANI · kumani.io",
     "discard": "Diese Messung verwerfen",
-    "discardConfirm": "Diese Messung verwerfen? Falls du sie gespeichert hast, verschwindet sie auch aus dem Protokoll."
+    "discardConfirm": "Diese Messung verwerfen? Falls du sie gespeichert hast, verschwindet sie auch aus dem Protokoll.",
+    "fileReady": "Die Datei ist fertig.",
+    "fileReadyShare": "Teilen"
   },
   "metronomo": {
     "badge": "Audio & Werkzeuge · Plus",

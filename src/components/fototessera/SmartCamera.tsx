@@ -38,9 +38,12 @@ export default function SmartCamera({ onPhoto, onClose, kind = 'id' }: { onPhoto
   }, [onPhoto])
 
   // Foto a piena risoluzione, non a specchio (la fototessera è la persona com'è)
+  // Uno scatto solo: «Scatta ora» e il conto alla rovescia non scattano due volte
+  const shotRef = useRef(false)
   const shoot = useCallback(() => {
     const video = videoRef.current
-    if (!video || !video.videoWidth) return
+    if (!video || !video.videoWidth || shotRef.current) return
+    shotRef.current = true
     const c = document.createElement('canvas')
     c.width = video.videoWidth
     c.height = video.videoHeight
@@ -65,15 +68,20 @@ export default function SmartCamera({ onPhoto, onClose, kind = 'id' }: { onPhoto
 
     const run = async () => {
       try {
-        const [face, s] = await Promise.all([
-          loadLiveFace(),
-          navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1440 } }, audio: false }),
-        ])
+        // Fotocamera e riconoscimento insieme; se il riconoscimento non parte
+        // la fotocamera si spegne (altrimenti resterebbe accesa)
+        const streamP = navigator.mediaDevices.getUserMedia({ video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1440 } }, audio: false })
+        const face = await loadLiveFace().catch((e) => {
+          streamP.then((s) => s.getTracks().forEach((tr) => tr.stop())).catch(() => {})
+          throw e
+        })
+        const s = await streamP
         if (!alive) return s.getTracks().forEach((tr) => tr.stop())
         stream = s
         const video = videoRef.current!
         video.srcObject = s
         await video.play().catch(() => {})
+        if (!alive) return
         setState('live')
 
         const tick = () => {

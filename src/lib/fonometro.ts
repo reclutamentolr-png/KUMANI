@@ -2,6 +2,7 @@
 // telefono. Il microfono non è tarato: i decibel sono una stima (non pesata
 // A), utile per confrontare momenti e luoghi, non una misura legale. Tutto
 // resta nel telefono: le misure salvate stanno nella memoria del browser.
+import { loadInterFontBase64 } from '@/lib/pdfHelpers'
 
 export type NoiseEvent = { at: number; seconds: number; peak: number } // at = millisecondi dall'inizio
 export type NoiseSession = {
@@ -70,7 +71,9 @@ export function loadSessions(): NoiseSession[] {
 }
 export function saveSessions(list: NoiseSession[]): boolean {
   try {
-    localStorage.setItem(KEY, JSON.stringify(list.slice(0, 50)))
+    // Un decimale basta: le misure lunghe occupano molto meno spazio
+    const slim = list.slice(0, 50).map((x) => ({ ...x, samples: x.samples.map((v) => Math.round(v * 10) / 10) }))
+    localStorage.setItem(KEY, JSON.stringify(slim))
     return true
   } catch {
     return false
@@ -162,8 +165,14 @@ export type PdfTexts = {
 
 // PDF della misura: dati, grafico ed elenco dei momenti sopra la soglia
 export async function sessionPdf(s: NoiseSession, tx: PdfTexts, locale: string): Promise<Blob> {
-  const { jsPDF } = await import('jspdf')
+  const [{ jsPDF }, font] = await Promise.all([import('jspdf'), loadInterFontBase64().catch(() => null)])
   const pdf = new jsPDF({ unit: 'mm', format: 'a4' })
+  // Inter: anche il russo e le lettere accentate di luogo e note si leggono
+  if (font) {
+    pdf.addFileToVFS('Inter-Regular.ttf', font)
+    pdf.addFont('Inter-Regular.ttf', 'Inter', 'normal')
+    pdf.setFont('Inter')
+  }
   const st = sessionStats(s)
   const date = new Date(s.start).toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   let y = 18

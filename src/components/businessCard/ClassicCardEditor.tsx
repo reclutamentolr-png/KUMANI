@@ -144,7 +144,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
       const files: File[] = []
       if (choice === 'combined') files.push(await pdfFile(sides, `${fileBase}_fronte_retro_stampa.pdf`))
       else for (const side of sidesFor(choice)) files.push(await pdfFile([side], `${fileBase}${suffix(side)}_stampa.pdf`))
-      await deliverFiles(files)
+      await deliverFiles(files, { message: t('fileReady'), confirmLabel: t('fileReadyShare') })
     } catch (e) {
       console.error('[biglietto classico]', e)
       setError(true)
@@ -168,7 +168,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
         canvas.getContext('2d')!.drawImage(img, BLEED * 2, BLEED * 2, w * 2, h * 2, 0, 0, w * 2, h * 2)
         files.push(dataUrlToFile(canvas.toDataURL('image/png'), `${fileBase}${suffix(side)}.png`))
       }
-      await deliverFiles(files)
+      await deliverFiles(files, { message: t('fileReady'), confirmLabel: t('fileReadyShare') })
     } catch (e) {
       console.error('[biglietto classico]', e)
       setError(true)

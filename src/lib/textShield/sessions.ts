@@ -11,7 +11,11 @@ export function loadSessions(owner: string): ShieldSession[] {
   try {
     const list = JSON.parse(localStorage.getItem(`${KEY}:${owner}`) ?? '[]') as ShieldSession[]
     const now = Date.now()
-    return Array.isArray(list) ? list.filter((s) => now - s.createdAt < TTL_MS) : []
+    if (!Array.isArray(list)) return []
+    const fresh = list.filter((s) => now - s.createdAt < TTL_MS)
+    // Le chiavi scadute (con i dati veri dentro) si tolgono anche dalla memoria
+    if (fresh.length < list.length) saveSessions(owner, fresh)
+    return fresh
   } catch {
     return []
   }

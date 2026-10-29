@@ -58,7 +58,9 @@ export default function AccordatoreApp() {
   const streamRef = useRef<MediaStream | null>(null)
   const frame = useRef(0)
   const wakeRef = useRef<WakeLock | null>(null)
-  const L = useRef({ strings: [] as number[], a4: A4_DEFAULT, manual: null as number | null, tolerance: 3, sensitivity: 0.5, recent: [] as number[], held: -1, heldSince: 0, mutedUntil: 0, lastSeen: 0, strobePhase: 0 })
+  const startingRef = useRef(false)
+  const mountedRef = useRef(true)
+  const L = useRef({ strings: [] as number[], a4: A4_DEFAULT, manual: null as number | null, tolerance: 3, sensitivity: 0.5, recent: [] as number[], held: -1, heldSince: 0, confirmed: false, mutedUntil: 0, lastSeen: 0, strobePhase: 0 })
 
   const inst = instrumentOf(instrument)
   const tun = inst.tunings.find((x) => x.id === tuning) ?? inst.tunings[0]
@@ -80,8 +82,27 @@ export default function AccordatoreApp() {
     if (typeof v.sensitivity === 'number') setSensitivity(Math.min(1, Math.max(0, v.sensitivity)))
     setReady(true)
     /* eslint-enable react-hooks/set-state-in-effect */
-    return () => release()
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+      release()
+    }
   }, [])
+
+  // Tornando all'app lo schermo va tenuto acceso di nuovo (il telefono lo libera)
+  useEffect(() => {
+    if (!running) return
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible' || !streamRef.current) return
+      void ctxRef.current?.resume().catch(() => {})
+      ;(navigator as WakeNavigator).wakeLock
+        ?.request('screen')
+        .then((lock) => (wakeRef.current = lock))
+        .catch(() => {})
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [running])
 
   useEffect(() => {
     if (ready) saveTunerSettings({ instrument, tuning, a4, naming, tolerance, strobe, sensitivity })
@@ -110,7 +131,9 @@ export default function AccordatoreApp() {
   // Corda accordata: dopo un attimo si passa alla prossima ancora da accordare
   useEffect(() => {
     if (!guided || !tuned[guideIndex]) return
-    const next = tuned.findIndex((v, i) => i > guideIndex && !v)
+    // Prima le corde dopo questa, poi quelle saltate prima
+    let next = tuned.findIndex((v, i) => i > guideIndex && !v)
+    if (next < 0) next = tuned.findIndex((v, i) => i !== guideIndex && !v)
     if (next < 0) return
     const id = setTimeout(() => setGuideIndex(next), 1400)
     return () => clearTimeout(id)
@@ -134,14 +157,21 @@ export default function AccordatoreApp() {
   }
 
   const start = async () => {
+    // «Avvia» toccato due volte mentre il telefono chiede il microfono: un ascolto solo
+    if (startingRef.current || streamRef.current) return
+    startingRef.current = true
     setError(null)
     let stream: MediaStream
     try {
       // Niente filtri del telefono: cambierebbero il suono dello strumento
       stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } })
     } catch {
+      startingRef.current = false
       return setError(t('errorMic'))
     }
+    startingRef.current = false
+    // Pagina lasciata intanto: il microfono si spegne subito
+    if (!mountedRef.current) return stream.getTracks().forEach((tr) => tr.stop())
     const ctx = audio()
     await ctx.resume().catch(() => {})
     streamRef.current = stream
@@ -149,6 +179,9 @@ export default function AccordatoreApp() {
     analyser.fftSize = 8192
     ctx.createMediaStreamSource(stream).connect(analyser)
     const full = new Float32Array(analyser.fftSize)
+    // Note molto gravi (basso a 5 corde, cromatico): il suono si dimezza di
+    // campioni prima dell'analisi, quattro volte meno calcoli sui telefoni lenti
+    const half = new Float32Array(analyser.fftSize / 2)
     let lastDetect = 0
     setRunning(true)
     ;(navigator as WakeNavigator).wakeLock
@@ -169,13 +202,20 @@ export default function AccordatoreApp() {
         // Finestra adatta alla nota più grave (almeno due periodi e mezzo)
         const need = Math.ceil((ctx.sampleRate / lo) * 2.5)
         const size = Math.min(full.length, 2 ** Math.ceil(Math.log2(Math.max(1024, need))))
-        const buf = full.subarray(full.length - size)
+        let buf = full.subarray(full.length - size)
+        let rate = ctx.sampleRate
+        if (size > 4096) {
+          const n = size / 2
+          for (let i = 0; i < n; i++) half[i] = (buf[2 * i] + buf[2 * i + 1]) / 2
+          buf = half.subarray(0, n)
+          rate = ctx.sampleRate / 2
+        }
         let rms = 0
         for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i]
         rms = Math.sqrt(rms / buf.length)
         // Sensibilità: più è alta, più si ascoltano anche i suoni deboli
         const gate = 0.02 - s.sensitivity * 0.018
-        const found = rms > gate ? detectPitch(buf, ctx.sampleRate, lo, hi) : null
+        const found = rms > gate ? detectPitch(buf, rate, lo, hi) : null
         if (found && found.clarity > 0.8) {
           s.recent.push(found.freq)
           if (s.recent.length > 5) s.recent.shift()
@@ -190,7 +230,8 @@ export default function AccordatoreApp() {
           }
           const near = nearestNote(freq, s.a4)
           const cents = target ? centsBetween(freq, target) : near.cents
-          s.strobePhase = (s.strobePhase + cents * 0.6) % 1000
+          // Passo limitato: oltre i 33 centesimi le strisce sembrerebbero andare al contrario
+          s.strobePhase = (s.strobePhase + Math.max(-25, Math.min(25, cents)) * 0.6) % 1000
           setReading({ freq, midi: target ? s.strings[stringIndex!] : near.midi, cents, target, stringIndex })
           // Accordata: dentro la tolleranza per quasi un secondo
           const ok = Math.abs(cents) <= s.tolerance
@@ -199,7 +240,10 @@ export default function AccordatoreApp() {
             if (s.held !== key) {
               s.held = key
               s.heldSince = time
-            } else if (time - s.heldSince > 800 && stringIndex !== null) {
+              s.confirmed = false
+            } else if (time - s.heldSince > 800 && stringIndex !== null && !s.confirmed) {
+              // Una vibrazione sola quando la corda diventa giusta, non a ogni ascolto
+              s.confirmed = true
               setTuned((list) => (list[stringIndex!] ? list : list.map((v, i) => (i === stringIndex ? true : v))))
               navigator.vibrate?.(30)
             }

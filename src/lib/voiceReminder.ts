@@ -55,25 +55,49 @@ export function parseVoiceReminder(spoken: string, now: Date = new Date()): Voic
   let weekday: number | null = null
   let movedToNextYear = false
 
-  // --- Ora: «alle 15», «alle 15:30», «alle otto e mezza», «a mezzogiorno», «alle 3 del pomeriggio»
+  // --- Fra qualche ora: «fra due ore», «tra un'ora», «tra mezz'ora»
   let time: string | null = null
+  const relHoursRe = new RegExp(`\\b(?:tra|fra) (?:(mezz'|mezza )ora|(?:un'|una )ora(?: e mezza)?|${NUM} ore(?: e mezza)?)\\b`)
+  const relHours = text.match(relHoursRe)
+  if (relHours) {
+    const half = /mezz/.test(relHours[0])
+    const n = relHours[1] ? 0 : relHours[2] ? toNum(relHours[2]) : 1
+    const at = new Date(now.getTime() + (n * 60 + (half ? 30 : 0)) * 60000)
+    date = new Date(at.getFullYear(), at.getMonth(), at.getDate())
+    time = `${pad(at.getHours())}:${pad(at.getMinutes())}`
+    cut(relHoursRe)
+  }
+
+  // --- Parte del giorno detta a parte: «domani sera alle 8», «stamattina alle 10»
+  let dayPart = ''
+  const partRe = /\b(?:(stamattina|stamani|stanotte)|(?:di |la |in |nel |del |della )?(mattin[ao]|pomeriggio|sera|notte))\b/
+  const part = text.match(partRe)
+  if (part) {
+    dayPart = part[1] ? (part[1] === 'stanotte' ? 'notte' : 'mattina') : part[2]
+    if (part[1]) date = today
+    cut(partRe)
+  }
+
+  // --- Ora: «alle 15», «alle 15:30», «alle otto e mezza», «a mezzogiorno», «alle 3 del pomeriggio»
   const noon = text.match(/\b(a |verso )?mezzogiorno\b/)
   const midnight = text.match(/\b(a |verso )?mezzanotte\b/)
-  if (noon) {
+  if (time) {
+    // già presa da «fra due ore»
+  } else if (noon) {
     time = '12:00'
     cut(/\b(a |verso )?mezzogiorno\b/)
   } else if (midnight) {
     time = '00:00'
     cut(/\b(a |verso )?mezzanotte\b/)
   } else {
-    const re = new RegExp(`\\b(?:alle|all'|verso le|per le|ore|alle ore)\\s*${NUM}(?:\\s*(?:[:.]|e)\\s*(\\d{1,2}|mezza|mezzo|un quarto|quarto|tre quarti|${NUM.slice(1, -1)}))?(?:\\s*(del mattino|di mattina|della mattina|del pomeriggio|di pomeriggio|di sera|della sera|di notte))?`)
+    const re = new RegExp(`\\b(?:alle|all'|verso le|per le|ore|alle ore)\\s*${NUM}(?:\\s*(?:[:.]|e)\\s*(\\d{1,2}|mezza|mezzo|un quarto|quarto|tre quarti|cinque|dieci|quindici|venti|venticinque|trenta|quaranta|cinquanta)\\b)?(?:\\s*(del mattino|di mattina|della mattina|del pomeriggio|di pomeriggio|di sera|della sera|di notte))?`)
     const m = text.match(re)
     if (m) {
       let h = toNum(m[1])
       const part = m[2]
       let min = 0
       if (part) min = part === 'mezza' || part === 'mezzo' ? 30 : part === 'un quarto' || part === 'quarto' ? 15 : part === 'tre quarti' ? 45 : toNum(part)
-      const when = m[3] ?? ''
+      const when = m[3] ?? dayPart
       if (/pomeriggio|sera/.test(when) && h < 12) h += 12
       else if (!/mattin|notte/.test(when) && h >= 1 && h <= 7) h += 12 // «alle 3» per un appuntamento è quasi sempre il pomeriggio
       if (h >= 0 && h <= 23 && min >= 0 && min <= 59) time = `${pad(h)}:${pad(min)}`
@@ -148,7 +172,12 @@ export function parseVoiceReminder(spoken: string, now: Date = new Date()): Voic
   let weekdayMismatch: VoiceDraft['weekdayMismatch'] = null
   if (weekday !== null) {
     if (!date) {
-      const diff = (weekday - today.getDay() + 7) % 7 || 7
+      // Oggi stesso solo se l'ora detta deve ancora arrivare (e non «giovedì prossimo»)
+      let diff = (weekday - today.getDay() + 7) % 7
+      if (diff === 0) {
+        const ahead = time !== null && Number(time.slice(0, 2)) * 60 + Number(time.slice(3)) > now.getHours() * 60 + now.getMinutes()
+        diff = ahead && !/prossim/.test(wd?.[0] ?? '') ? 0 : 7
+      }
       date = addDays(today, diff)
     } else if (date.getDay() !== weekday) {
       // La data con quel giorno della settimana più vicina a quella detta (entro 3 giorni)
@@ -198,13 +227,19 @@ export function parseVoiceReminder(spoken: string, now: Date = new Date()): Voic
 // Riprende dal testo detto le parole del titolo con le loro maiuscole e accenti
 function restoreCase(original: string, plainTitle: string): string {
   if (!plainTitle) return ''
-  const tokens = original.split(/\s+/)
-  const plainTokens = tokens.map((t) => normalize(t).replace(/[,.;:!?]+$/g, ''))
-  const want = plainTitle.split(' ')
-  for (let i = 0; i + want.length <= plainTokens.length; i++) {
-    if (want.every((w, k) => plainTokens[i + k] === w)) return tokens.slice(i, i + want.length).join(' ').replace(/[,.;:!?]+$/g, '')
-  }
+  const tokens = original.split(/\s+/).map((t) => t.replace(/^[,.;:!?«»"]+|[,.;:!?«»"]+$/g, ''))
+  const plainTokens = tokens.map((t) => normalize(t))
+  // Parola per parola, nell'ordine: anche se in mezzo c'erano giorno e ora
+  let from = 0
   return plainTitle
+    .split(' ')
+    .map((w) => {
+      const i = plainTokens.indexOf(w, from)
+      if (i < 0) return w
+      from = i + 1
+      return tokens[i]
+    })
+    .join(' ')
 }
 
 export const WEEKDAY_NAMES_IT = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato']

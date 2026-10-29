@@ -10314,7 +10314,9 @@
     "side_front": "Recto seulement",
     "side_back": "Verso seulement",
     "side_both": "Recto et verso (2 fichiers séparés)",
-    "side_combined": "Recto et verso dans un seul PDF"
+    "side_combined": "Recto et verso dans un seul PDF",
+    "fileReady": "Le fichier est prêt.",
+    "fileReadyShare": "Partager"
   },
   "seo": {
     "siteTitle": "KUMANI – Des mains qui vous tendent la main",
@@ -17770,7 +17772,8 @@
     "report": "Signaler le numéro au Réseau Anti-arnaque",
     "transcriptTitle": "Le texte du vocal",
     "again": "Vérifier un autre vocal",
-    "privacy": "Le vocal est écouté et transcrit sur votre téléphone : nous ne l’envoyons pas sur nos serveurs et personne ne l’écoute. La vérification reconnaît les signes typiques d’arnaque en italien ; elle ne peut pas dire si une voix est réelle ou créée par IA."
+    "privacy": "Le vocal est écouté et transcrit sur votre téléphone : nous ne l’envoyons pas sur nos serveurs et personne ne l’écoute. La vérification reconnaît les signes typiques d’arnaque en italien ; elle ne peut pas dire si une voix est réelle ou créée par IA.",
+    "italianOnly": "Le contrôle reconnaît les phrases d’arnaque uniquement en italien : avec des messages dans d’autres langues, il peut ne pas trouver les signaux."
   },
   "fonometro": {
     "badge": "Audio et Outils · Plus",
@@ -17824,7 +17827,9 @@
     "pdfTo": "Fin",
     "pdfFooter": "Créé avec KUMANI · kumani.io",
     "discard": "Supprimer cette mesure",
-    "discardConfirm": "Supprimer cette mesure ? Si vous l’aviez enregistrée, elle disparaît aussi du registre."
+    "discardConfirm": "Supprimer cette mesure ? Si vous l’aviez enregistrée, elle disparaît aussi du registre.",
+    "fileReady": "Le fichier est prêt.",
+    "fileReadyShare": "Partager"
   },
   "metronomo": {
     "badge": "Audio et Outils · Plus",

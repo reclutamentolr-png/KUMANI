@@ -50,6 +50,9 @@ export default function FonometroApp() {
   const streamRef = useRef<MediaStream | null>(null)
   const frameRef = useRef(0)
   const wakeRef = useRef<WakeLock | null>(null)
+  // «Avvia» toccato due volte o pagina lasciata durante la domanda del microfono
+  const startingRef = useRef(false)
+  const mountedRef = useRef(true)
   const liveCanvas = useRef<HTMLCanvasElement>(null)
   const doneCanvas = useRef<HTMLCanvasElement>(null)
   // Dati della misura in corso (fuori dallo stato: si aggiornano molte volte al secondo)
@@ -64,8 +67,27 @@ export default function FonometroApp() {
       if (typeof s.calibration === 'number') setCalibration(s.calibration)
     } catch {}
     // Uscendo dalla pagina il microfono si spegne
-    return () => release()
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+      release()
+    }
   }, [])
+
+  // Tornando all'app lo schermo va tenuto acceso di nuovo (il telefono lo libera)
+  useEffect(() => {
+    if (!running) return
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible' || !streamRef.current) return
+      void ctxRef.current?.resume().catch(() => {})
+      ;(navigator as WakeNavigator).wakeLock
+        ?.request('screen')
+        .then((lock) => (wakeRef.current = lock))
+        .catch(() => {})
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [running])
 
   function release() {
     cancelAnimationFrame(frameRef.current)
@@ -90,12 +112,14 @@ export default function FonometroApp() {
     const v = leq(L.bucket)
     L.bucket = []
     L.samples.push(v)
-    const at = (L.samples.length - 1) * 1000
+    // Ora vera (non il numero dei secondi misurati): se l'app è rimasta in
+    // secondo piano per un po', gli orari dei momenti restano giusti
+    const at = Math.max(0, Date.now() - L.start - 1000)
     if (v >= th) {
       L.quiet = 0
       if (!L.open) L.open = { at, seconds: 1, peak: v }
       else {
-        L.open.seconds = L.samples.length - L.open.at / 1000
+        L.open.seconds += 1
         L.open.peak = Math.max(L.open.peak, v)
       }
     } else if (L.open && ++L.quiet >= 2) {
@@ -116,10 +140,12 @@ export default function FonometroApp() {
     setNow(null)
     setLiveStats(null)
     if (!L.samples.length) return
-    setSession({ id: String(L.start), start: L.start, end: L.start + L.samples.length * 1000, place: '', note: '', threshold, calibration, samples: L.samples, events: L.events })
+    setSession({ id: String(L.start), start: L.start, end: Date.now(), place: '', note: '', threshold, calibration, samples: L.samples, events: L.events })
   }
 
   const start = async () => {
+    if (startingRef.current || streamRef.current) return
+    startingRef.current = true
     setError(null)
     setSession(null)
     let stream: MediaStream
@@ -127,12 +153,19 @@ export default function FonometroApp() {
       // Niente filtri del telefono: abbasserebbero o alzerebbero il volume da soli
       stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } })
     } catch {
+      startingRef.current = false
       return setError(t('errorMic'))
     }
     const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
     const ctx = new Ctx()
     // Dopo la domanda del microfono il browser può tenere l'audio in pausa (iPhone): si riavvia
     await ctx.resume().catch(() => {})
+    startingRef.current = false
+    if (!mountedRef.current) {
+      stream.getTracks().forEach((tr) => tr.stop())
+      void ctx.close().catch(() => {})
+      return
+    }
     const source = ctx.createMediaStreamSource(stream)
     const analyser = ctx.createAnalyser()
     analyser.fftSize = 2048
@@ -147,6 +180,13 @@ export default function FonometroApp() {
     // Valore mostrato: media dell'ultimo mezzo secondo (come la scala «veloce» dei fonometri)
     const recent: number[] = []
     const loop = (ts: number) => {
+      // Audio interrotto (una telefonata su iPhone): niente secondi a zero nel registro
+      if (ctx.state !== 'running') {
+        void ctx.resume().catch(() => {})
+        live.current.bucketStart = ts
+        frameRef.current = requestAnimationFrame(loop)
+        return
+      }
       analyser.getFloatTimeDomainData(buf)
       let sum = 0
       for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i]
@@ -204,7 +244,7 @@ export default function FonometroApp() {
 
   const remove = (id: string) => {
     const list = saved.filter((s) => s.id !== id)
-    saveSessions(list)
+    if (!saveSessions(list)) setError(t('errorSave'))
     setSaved(list)
   }
 
@@ -237,7 +277,7 @@ export default function FonometroApp() {
         locale
       )
       const name = `KUMANI_rumore_${new Date(s.start).toISOString().slice(0, 10)}.pdf`
-      await deliverFiles([new File([blob], name, { type: 'application/pdf' })])
+      await deliverFiles([new File([blob], name, { type: 'application/pdf' })], { message: t('fileReady'), confirmLabel: t('fileReadyShare') })
     } catch (e) {
       console.error('[fonometro] pdf', e)
       setError(t('errorPdf'))

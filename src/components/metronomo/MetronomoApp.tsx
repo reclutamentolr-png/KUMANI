@@ -80,7 +80,9 @@ export default function MetronomoApp() {
   const streamRef = useRef<MediaStream | null>(null)
   const wakeRef = useRef<WakeLock | null>(null)
   const startedAt = useRef(0)
-  const S = useRef({ next: 0, tick: 0, bar: 0, bpm: 90, beats: 4, accents: defaultAccents('4/4'), sub: 1 as Subdivision, sound: 'click' as ClickSound, vibrate: false, accel: false, target: 120, step: 2, everyBars: 8, queue: [] as Beat[], clicks: [] as number[], offsets: [] as number[], listenFrom: 0 })
+  const startingRef = useRef(false)
+  const mountedRef = useRef(true)
+  const S = useRef({ next: 0, beatCount: 0, subStep: 0, bar: 0, bpm: 90, beats: 4, accents: defaultAccents('4/4'), sub: 1 as Subdivision, sound: 'click' as ClickSound, vibrate: false, accel: false, target: 120, step: 2, everyBars: 8, queue: [] as Beat[], clicks: [] as number[], offsets: [] as number[], listenFrom: 0 })
 
   // Impostazioni ricordate e prove salvate: si leggono solo nel browser
   useEffect(() => {
@@ -99,8 +101,27 @@ export default function MetronomoApp() {
     setHistory(loadPractices())
     setReady(true)
     /* eslint-enable react-hooks/set-state-in-effect */
-    return () => release()
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+      release()
+    }
   }, [])
+
+  // Tornando all'app lo schermo va tenuto acceso di nuovo (il telefono lo libera)
+  useEffect(() => {
+    if (!running) return
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible' || !ctxRef.current) return
+      void ctxRef.current.resume().catch(() => {})
+      ;(navigator as WakeNavigator).wakeLock
+        ?.request('screen')
+        .then((lock) => (wakeRef.current = lock))
+        .catch(() => {})
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [running])
 
   useEffect(() => {
     if (ready) saveSettings({ bpm, meter, accents, sub, sound, volume, vibrate })
@@ -126,6 +147,9 @@ export default function MetronomoApp() {
   }
 
   const start = async () => {
+    // Avvio già in corso (doppio tocco o spazio mentre si chiede il microfono): un metronomo solo
+    if (startingRef.current || timer.current) return
+    startingRef.current = true
     setError(null)
     setResult(null)
     setOffsets([])
@@ -139,10 +163,16 @@ export default function MetronomoApp() {
     out.connect(ctx.destination)
     gainRef.current = out
     let analyser: AnalyserNode | null = null
+    // Ritardo dell'audio (cuffie Bluetooth fino a 200 ms e più): il colpo si confronta con il clic come lo si sente
+    let latency = 0
+    // iPhone: il suono si sente anche con l'interruttore del silenzioso
+    const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession
+    if (session) session.type = listen ? 'play-and-record' : 'playback'
     if (listen) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } })
         streamRef.current = stream
+        latency = (stream.getAudioTracks()[0]?.getSettings() as MediaTrackSettings & { latency?: number }).latency ?? 0
         analyser = ctx.createAnalyser()
         // Finestra più lunga dell'intervallo tra due controlli: nessun colpo breve sfugge
         analyser.fftSize = 2048
@@ -153,8 +183,12 @@ export default function MetronomoApp() {
     }
     // Dopo la domanda del microfono il browser può tenere l'audio in pausa (iPhone): si riavvia
     await ctx.resume().catch(() => {})
+    startingRef.current = false
+    // Pagina lasciata mentre si chiedeva il microfono: niente metronomo fantasma
+    if (!mountedRef.current) return release()
+    latency += (ctx.outputLatency || 0) + (ctx.baseLatency || 0)
     const s = S.current
-    Object.assign(s, { next: ctx.currentTime + 0.15, tick: 0, bar: 0, queue: [], clicks: [], offsets: [] })
+    Object.assign(s, { next: ctx.currentTime + 0.15, beatCount: 0, subStep: 0, bar: 0, queue: [], clicks: [], offsets: [] })
     // Con la battuta di attacco l'ascolto parte dopo la prima battuta
     s.listenFrom = s.next + (countIn && analyser ? (60 / s.bpm) * s.beats : 0)
     startedAt.current = now()
@@ -162,9 +196,15 @@ export default function MetronomoApp() {
     // Programmatore: i colpi dei prossimi 120 millisecondi, ogni 25
     timer.current = setInterval(() => {
       while (s.next < ctx.currentTime + 0.12) {
+        // Battiti e suddivisioni contati a parte: cambiando la suddivisione
+        // mentre suona, il primo battito resta al suo posto
         const sub = s.sub
-        const beatIndex = Math.floor(s.tick / sub) % s.beats
-        const onBeat = s.tick % sub === 0
+        if (s.subStep >= sub) {
+          s.subStep = 0
+          s.beatCount += 1
+        }
+        const beatIndex = s.beatCount % s.beats
+        const onBeat = s.subStep === 0
         const accent = s.accents[beatIndex] ?? 'normal'
         if (onBeat) {
           if (accent !== 'mute') playClick(ctx, out, s.next, accent === 'strong' ? 2 : 1, s.sound)
@@ -176,8 +216,12 @@ export default function MetronomoApp() {
           if (s.clicks.length > 64) s.clicks.shift()
         }
         s.next += 60 / s.bpm / sub
-        s.tick += 1
-        if (s.tick % (sub * s.beats) === 0) {
+        s.subStep += 1
+        if (s.subStep >= sub) {
+          s.subStep = 0
+          s.beatCount += 1
+        }
+        if (s.subStep === 0 && s.beatCount % s.beats === 0) {
           s.bar += 1
           // Accelerazione: ogni tot battute qualche battito in più, fino all'obiettivo
           if (s.accel && s.bar % s.everyBars === 0 && s.bpm < s.target) {
@@ -232,13 +276,14 @@ export default function MetronomoApp() {
         if (hit) {
           lastHit = time
           // L'ora del picco dentro la finestra
-          const at = time - (buf.length - 1 - peakAt) / ctx.sampleRate
+          const heard = time - (buf.length - 1 - peakAt) / ctx.sampleRate
+          const at = heard - latency
           const interval = 60 / s.bpm
           // Il battito più vicino: si parte dall'ultimo programmato e si segue la griglia
           const known = s.queue.reduce<Beat | null>((best, x) => (!best || Math.abs(x.time - at) < Math.abs(best.time - at) ? x : best), null)
           const beatTime = known ? known.time + Math.round((at - known.time) / interval) * interval : null
           // Il clic dell'altoparlante sentito dal microfono non conta come colpo
-          const echo = s.sound !== 'none' && peak < 0.4 && s.clicks.some((c) => at - c >= 0 && at - c < 0.07)
+          const echo = s.sound !== 'none' && peak < 0.4 && s.clicks.some((c) => heard - c >= 0 && heard - c < 0.07 + latency)
           if (beatTime !== null && beatTime >= s.listenFrom - 0.01 && Math.abs(at - beatTime) <= interval / 2 && !echo) {
             const offset = Math.round((at - beatTime) * 1000)
             s.offsets.push(offset)
@@ -488,7 +533,7 @@ export default function MetronomoApp() {
             ).map(([k, v, set, min, max]) => (
               <label key={k} className="block">
                 <span className="text-xs font-semibold text-[var(--muted)]">{t(k)}</span>
-                <input type="number" min={min} max={max} value={v} onChange={(e) => set(Math.min(max, Math.max(min, Number(e.target.value) || min)))} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-[16px]" />
+                <NumberField min={min} max={max} value={v} onChange={set} />
               </label>
             ))}
           </div>
@@ -555,5 +600,29 @@ export default function MetronomoApp() {
 
       <p className="text-center text-xs text-[var(--muted)]">{t('privacy')}</p>
     </div>
+  )
+}
+
+// Numero scritto a mano: si controlla quando si esce dal campo (scrivendo
+// «140» il primo «1» non diventa subito il minimo)
+function NumberField({ min, max, value, onChange }: { min: number; max: number; value: number; onChange: (v: number) => void }) {
+  const [draft, setDraft] = useState<string | null>(null)
+  const commit = () => {
+    if (draft === null) return
+    onChange(Math.min(max, Math.max(min, Math.round(Number(draft)) || min)))
+    setDraft(null)
+  }
+  return (
+    <input
+      type="number"
+      inputMode="numeric"
+      min={min}
+      max={max}
+      value={draft ?? value}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => e.key === 'Enter' && commit()}
+      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-[16px]"
+    />
   )
 }

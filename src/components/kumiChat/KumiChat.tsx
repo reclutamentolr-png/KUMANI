@@ -280,7 +280,7 @@ export default function KumiChat() {
               <p className="truncate text-xs text-white/70">{t('subtitle')}</p>
             </div>
             {msgs.length > 0 && (
-              <button type="button" onClick={restart} title={t('restart')} className="inline-flex items-center gap-1 rounded-full border border-white/25 px-2.5 py-1.5 text-xs font-bold text-white/90 hover:bg-white/10">
+              <button type="button" onClick={restart} disabled={busy} title={t('restart')} className="disabled:opacity-40 inline-flex items-center gap-1 rounded-full border border-white/25 px-2.5 py-1.5 text-xs font-bold text-white/90 hover:bg-white/10">
                 <Trash2 className="h-3.5 w-3.5" /> {t('clearChat')}
               </button>
             )}

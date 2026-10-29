@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { AlertTriangle, CheckCircle2, FileAudio, LoaderCircle, Mic, ShieldAlert, ShieldCheck, Square, Type } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { extractAudio, joinWords } from '@/lib/vox'
@@ -21,6 +21,10 @@ const audioType = () => (typeof MediaRecorder === 'undefined' ? '' : ['audio/web
 
 export default function VocaleSospettoTool() {
   const t = useTranslations('vocaleSospetto')
+  // Il controllo conosce le frasi delle truffe in italiano: nelle altre lingue lo si dice chiaro
+  const italian = useLocale() === 'it'
+  // Pagina lasciata durante l'ascolto: niente trascrizione in sottofondo
+  const unmounted = useRef(false)
   const [phase, setPhase] = useState<Phase>('idle')
   const [text, setText] = useState('')
   const [verdict, setVerdict] = useState<VoiceVerdict | null>(null)
@@ -36,6 +40,8 @@ export default function VocaleSospettoTool() {
 
   useEffect(
     () => () => {
+      unmounted.current = true
+      if (recorder.current) recorder.current.onstop = null
       workerRef.current?.terminate()
       recorder.current?.stream.getTracks().forEach((tr) => tr.stop())
       if (timer.current) clearInterval(timer.current)
@@ -51,6 +57,7 @@ export default function VocaleSospettoTool() {
 
   // Audio → testo, nel telefono
   const transcribe = async (blob: Blob) => {
+    if (unmounted.current) return
     setError(null)
     setVerdict(null)
     setPhase('audio')
@@ -62,12 +69,20 @@ export default function VocaleSospettoTool() {
         return setError(t('errorLong'))
       }
       audio = out.audio
+      if (unmounted.current) return
     } catch {
       setPhase('idle')
       return setError(t('errorAudio'))
     }
     if (!workerRef.current) workerRef.current = new Worker('/workers/vox-worker.js', { type: 'module' })
     const worker = workerRef.current
+    // Il motore della voce non si carica (vecchio browser, connessione): niente attesa infinita
+    worker.onerror = () => {
+      worker.terminate()
+      workerRef.current = null
+      setPhase('idle')
+      setError(t('errorModel'))
+    }
     files.current = {}
     setDownloaded(0)
     setPhase('download')
@@ -112,7 +127,14 @@ export default function VocaleSospettoTool() {
       return setError(t('errorMic'))
     }
     const type = audioType()
-    const rec = new MediaRecorder(stream, type ? { mimeType: type } : undefined)
+    let rec: MediaRecorder
+    try {
+      rec = new MediaRecorder(stream, type ? { mimeType: type } : undefined)
+    } catch {
+      // Il telefono non sa registrare: il microfono si spegne subito
+      stream.getTracks().forEach((tr) => tr.stop())
+      return setError(t('errorMic'))
+    }
     const chunks: Blob[] = []
     rec.ondataavailable = (e) => e.data.size && chunks.push(e.data)
     rec.onstop = () => {
@@ -152,7 +174,13 @@ export default function VocaleSospettoTool() {
       {phase !== 'done' && (
         <section className={`${card} space-y-3`}>
           <h2 className="text-lg font-extrabold text-[var(--ink)]">{t('howTitle')}</h2>
-          <input ref={inputRef} type="file" accept="audio/*,.opus,.ogg,.m4a,.mp3,.wav,.aac,.amr,.webm" className="sr-only" onChange={(e) => e.target.files?.[0] && transcribe(e.target.files[0])} />
+          {!italian && <p className="rounded-2xl bg-amber-50 p-3 text-sm font-semibold text-amber-800">{t('italianOnly')}</p>}
+          <input ref={inputRef} type="file" accept="audio/*,.opus,.ogg,.m4a,.mp3,.wav,.aac,.amr,.webm" className="sr-only" onChange={(e) => {
+              const file = e.target.files?.[0]
+              // Si può scegliere di nuovo lo stesso file (dopo un errore)
+              e.target.value = ''
+              if (file) void transcribe(file)
+            }} />
           <button type="button" disabled={busy || phase === 'recording'} onClick={() => inputRef.current?.click()} className={option}>
             <FileAudio className="h-6 w-6 shrink-0 text-[var(--gold)]" />
             <span>
@@ -200,6 +228,7 @@ export default function VocaleSospettoTool() {
               <Icon className="h-7 w-7 shrink-0" /> {t(`risk_${verdict.risk}`)}
             </p>
             <p className="mt-1 text-sm text-[var(--ink)]/80">{t(`riskText_${verdict.risk}`)}</p>
+            {!italian && <p className="mt-2 rounded-xl bg-white/70 p-2 text-sm font-semibold text-amber-800">{t('italianOnly')}</p>}
           </section>
 
           {verdict.signals.length > 0 && (

@@ -178,8 +178,14 @@ export default function QRCheckScanner() {
     setCameraActive(false)
   }, [])
 
+  // Pagina lasciata mentre si aspettava il permesso: la fotocamera arrivata dopo si spegne
+  const mountedRef = useRef(true)
   useEffect(() => {
-    return () => stopCamera()
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+      stopCamera()
+    }
   }, [stopCamera])
 
   const analyze = useCallback(async (qrData: string) => {
@@ -230,6 +236,8 @@ export default function QRCheckScanner() {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
       })
+      if (!mountedRef.current) return stream.getTracks().forEach((track) => track.stop())
+      streamRef.current?.getTracks().forEach((track) => track.stop())
       streamRef.current = stream
       setCameraActive(true)
       let lastSeen = 0
@@ -280,12 +288,18 @@ export default function QRCheckScanner() {
         octx.fillText(label, bx + 18 * u, by + bh / 2)
       }
 
+      let lastPlay = 0
       function tick() {
+        // Fotocamera spenta (Ferma o pagina lasciata): il ciclo finisce qui
+        if (!streamRef.current) return
         const video = videoRef.current
         const canvas = canvasRef.current
         const jsQR = jsqrRef.current
         // Safari a volte mette in pausa il video: si riavvia
-        if (video?.paused && video.srcObject) void video.play().catch(() => {})
+        if (video?.paused && video.srcObject && performance.now() - lastPlay > 1000) {
+          lastPlay = performance.now()
+          void video.play().catch(() => {})
+        }
         if (!video || !canvas || !jsQR || video.readyState < video.HAVE_CURRENT_DATA || !video.videoWidth) {
           rafRef.current = requestAnimationFrame(tick)
           return

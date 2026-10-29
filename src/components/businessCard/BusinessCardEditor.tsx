@@ -107,7 +107,7 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
       const files: File[] = []
       if (choice === 'combined') files.push(await pdfFile(sides, `${fileBase}_fronte_retro_stampa.pdf`))
       else for (const side of sidesFor(choice)) files.push(await pdfFile([side], `${fileBase}${suffix(side)}_stampa.pdf`))
-      await deliverFiles(files)
+      await deliverFiles(files, { message: t('fileReady'), confirmLabel: t('fileReadyShare') })
     } catch (e) {
       console.error('[biglietto]', e)
       setError(true)
@@ -133,7 +133,7 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
         canvas.getContext('2d')!.drawImage(img, BLEED * 2, BLEED * 2, CARD_W * 2, CARD_H * 2, 0, 0, CARD_W * 2, CARD_H * 2)
         files.push(dataUrlToFile(canvas.toDataURL('image/png'), `${fileBase}${suffix(side)}.png`))
       }
-      await deliverFiles(files)
+      await deliverFiles(files, { message: t('fileReady'), confirmLabel: t('fileReadyShare') })
     } catch (e) {
       console.error('[biglietto]', e)
       setError(true)

@@ -10314,7 +10314,9 @@
     "side_front": "Solo fronte",
     "side_back": "Solo retro",
     "side_both": "Fronte e retro (2 file separati)",
-    "side_combined": "Fronte e retro in un solo PDF"
+    "side_combined": "Fronte e retro in un solo PDF",
+    "fileReady": "Il file è pronto.",
+    "fileReadyShare": "Condividi"
   },
   "seo": {
     "siteTitle": "KUMANI – Mani che ti danno una mano",
@@ -17770,7 +17772,8 @@
     "report": "Segnala il numero alla Rete Anti-Truffa",
     "transcriptTitle": "Il testo del vocale",
     "again": "Controlla un altro vocale",
-    "privacy": "Il vocale viene ascoltato e trascritto nel tuo telefono: non lo carichiamo sui server e nessuno lo ascolta. Il controllo riconosce i segnali tipici delle truffe in italiano; non può dire se una voce è vera o creata con l’IA."
+    "privacy": "Il vocale viene ascoltato e trascritto nel tuo telefono: non lo carichiamo sui server e nessuno lo ascolta. Il controllo riconosce i segnali tipici delle truffe in italiano; non può dire se una voce è vera o creata con l’IA.",
+    "italianOnly": "Il controllo riconosce le frasi delle truffe in italiano: con messaggi in altre lingue può non trovare i segnali."
   },
   "fonometro": {
     "badge": "Audio e Strumenti · Plus",
@@ -17824,7 +17827,9 @@
     "pdfTo": "Fine",
     "pdfFooter": "Creato con KUMANI · kumani.io",
     "discard": "Scarta questa misura",
-    "discardConfirm": "Scartare questa misura? Se l’avevi salvata, sparisce anche dal registro."
+    "discardConfirm": "Scartare questa misura? Se l’avevi salvata, sparisce anche dal registro.",
+    "fileReady": "Il file è pronto.",
+    "fileReadyShare": "Condividi"
   },
   "metronomo": {
     "badge": "Audio e Strumenti · Plus",

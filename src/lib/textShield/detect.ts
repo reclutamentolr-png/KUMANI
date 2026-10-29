@@ -133,7 +133,7 @@ export function detect(text: string, opts: DetectOptions = {}): Finding[] {
 
   // Telefoni (italiani e internazionali)
   found.push(
-    ...each(text, /(?:(?:\+|00)\d{1,3}[\s.-]?)?(?:\(?0\d{1,3}\)?|3\d{2})[\s./-]?\d{2,4}(?:[\s.-]?\d{2,4}){1,2}\b|(?:\+|00)\d{1,3}[\s.-]?\d{2,4}(?:[\s.-]?\d{2,4}){2,3}\b/g, (m) => {
+    ...each(text, /(?<![\d+/])(?:(?:\+|00)\d{1,3}[\s.-]?)?(?:\(?0\d{1,3}\)?|3\d{2})[\s./-]?\d{2,4}(?:[\s.-]?\d{2,4}){1,2}\b|(?<![\d+/])(?:\+|00)\d{1,3}[\s.-]?\d{2,4}(?:[\s.-]?\d{2,4}){2,3}\b/g, (m) => {
       const n = digits(m[0])
       if (n.length < 8 || n.length > 15) return null
       // Una data (12.03.2015) non è un telefono

@@ -140,7 +140,9 @@ export async function askKumi(question: string, locale: string, history: KumiTur
   // la cache è separata da quella dei visitori
   const signedIn = who === 'staff' || who === 'memberChat'
   const where = signedIn && isKumiContext(context) ? context : null
-  const norm = (signedIn ? 'm|' : '') + normalize(q)
+  // Per gli iscritti la risposta dipende anche da dove si trovano (la stessa
+  // domanda dentro SVAT o dentro Hoplà): il posto entra nella chiave
+  const norm = signedIn ? `m|${where?.kind ?? 'home'}|${(where?.tool ?? '').slice(0, 60)}|${normalize(q)}` : normalize(q)
   const turns = (Array.isArray(history) ? history : [])
     .slice(-2)
     .map((h) => ({ q: mask(String(h?.q ?? '').slice(0, 300)), a: String(h?.a ?? '').slice(0, 600) }))
@@ -397,7 +399,7 @@ export async function adminKumiTeach(question: string, answer: string, locale: s
   if (error) return { ok: false, error: error.message }
   // La vecchia risposta alla stessa domanda non vale più
   // Anche la risposta salvata per gli iscritti
-  await s.from('kumi_chat_cache').delete().in('question_norm', [norm, `m|${norm}`])
+  await forgetCached(s, norm)
   return { ok: true }
 }
 
@@ -413,7 +415,7 @@ export async function adminKumiForget(id: string): Promise<{ ok: boolean; error?
   if (!(await verifyAdmin('support.write'))) return { ok: false, error: 'Non autorizzato' }
   const s = db()
   const { data } = await s.from('kumi_chat_knowledge').delete().eq('id', id).select('question_norm').maybeSingle()
-  if (data?.question_norm) await s.from('kumi_chat_cache').delete().in('question_norm', [data.question_norm, `m|${data.question_norm}`])
+  if (data?.question_norm) await forgetCached(s, data.question_norm as string)
   return { ok: true }
 }
 
@@ -422,4 +424,16 @@ export async function adminKumiClearCache(): Promise<{ ok: boolean }> {
   if (!(await verifyAdmin('settings.write'))) return { ok: false }
   await db().from('kumi_chat_cache').delete().neq('locale', '')
   return { ok: true }
+}
+
+// Risposte salvate di una domanda: quella dei visitatori e quelle degli
+// iscritti in ogni posto (m|<posto>|<servizio>|domanda)
+async function forgetCached(s: ReturnType<typeof db>, norm: string) {
+  const like = norm.replace(/[\\%_]/g, (c) => `\\${c}`)
+  await Promise.all([
+    s.from('kumi_chat_cache').delete().eq('question_norm', norm),
+    s.from('kumi_chat_cache').delete().like('question_norm', `m|%|${like}`),
+    // Chiavi vecchie (prima del posto nella chiave)
+    s.from('kumi_chat_cache').delete().eq('question_norm', `m|${norm}`),
+  ])
 }

@@ -86,6 +86,8 @@ export default function ScanCamera({ room, onPhoto, onClose }: { room: number; o
         const video = videoRef.current!
         video.srcObject = s
         await video.play().catch(() => {})
+        // Chiusa mentre il video partiva: niente giro di controlli che resti acceso
+        if (!alive) return
         setState('live')
 
         const tick = () => {

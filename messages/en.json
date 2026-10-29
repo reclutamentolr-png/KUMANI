@@ -10314,7 +10314,9 @@
     "side_front": "Front only",
     "side_back": "Back only",
     "side_both": "Front and back (2 separate files)",
-    "side_combined": "Front and back in one PDF"
+    "side_combined": "Front and back in one PDF",
+    "fileReady": "Your file is ready.",
+    "fileReadyShare": "Share"
   },
   "seo": {
     "siteTitle": "KUMANI – Hands that lend you a hand",
@@ -17770,7 +17772,8 @@
     "report": "Report the number to the Anti-Scam Network",
     "transcriptTitle": "The text of the message",
     "again": "Check another message",
-    "privacy": "The message is listened to and transcribed on your phone: we don’t upload it and nobody listens to it. The check recognises typical scam signs in Italian; it can’t tell whether a voice is real or AI-generated."
+    "privacy": "The message is listened to and transcribed on your phone: we don’t upload it and nobody listens to it. The check recognises typical scam signs in Italian; it can’t tell whether a voice is real or AI-generated.",
+    "italianOnly": "The check recognises scam phrases in Italian only: with messages in other languages it may miss the warning signs."
   },
   "fonometro": {
     "badge": "Audio & Tools · Plus",
@@ -17824,7 +17827,9 @@
     "pdfTo": "End",
     "pdfFooter": "Created with KUMANI · kumani.io",
     "discard": "Discard this measurement",
-    "discardConfirm": "Discard this measurement? If you saved it, it’s removed from the log too."
+    "discardConfirm": "Discard this measurement? If you saved it, it’s removed from the log too.",
+    "fileReady": "Your file is ready.",
+    "fileReadyShare": "Share"
   },
   "metronomo": {
     "badge": "Audio & Tools · Plus",

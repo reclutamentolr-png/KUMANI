@@ -44,15 +44,23 @@ export async function claimScamCard(
   const questions = card ? pickQuestions(user.id, today, no, card.quiz.length) : []
   if (!card || !Array.isArray(answers) || answers.length !== questions.length) return { success: false, message: 'invalid' }
   const db = serviceClient()
-  const { data: failed } = await db.from('scam_card_fails').select('card_no').eq('user_id', user.id).eq('card_no', no).eq('failed_on', today).maybeSingle()
-  if (failed) return { success: false, message: 'tryTomorrow' }
+  // Un tentativo al giorno per carta: la riga si scrive PRIMA di guardare le
+  // risposte, così tante richieste insieme (tutte le combinazioni) non passano.
+  // Se le risposte sono giuste (o la carta non si può prendere oggi) si toglie
+  const { data: attempt } = await db
+    .from('scam_card_fails')
+    .upsert({ user_id: user.id, card_no: no, failed_on: today }, { onConflict: 'user_id,card_no,failed_on', ignoreDuplicates: true })
+    .select('card_no')
+  if (!attempt?.length) return { success: false, message: 'tryTomorrow' }
+  const forgive = () => db.from('scam_card_fails').delete().eq('user_id', user.id).eq('card_no', no).eq('failed_on', today)
   // Una carta al giorno: oggi ne è già arrivata una (con le domande o catturata)
   const { data: gained } = await db.from('scam_card_gains').select('card_no').eq('user_id', user.id).eq('day', today).maybeSingle()
-  if (gained) return { success: false, message: 'dailyLimit' }
-  if (questions.some((qi, i) => answers[i] !== card.quiz[qi].correct)) {
-    await db.from('scam_card_fails').upsert({ user_id: user.id, card_no: no, failed_on: today }, { onConflict: 'user_id,card_no,failed_on', ignoreDuplicates: true })
-    return { success: false, message: 'wrong' }
+  if (gained) {
+    await forgive()
+    return { success: false, message: 'dailyLimit' }
   }
+  if (questions.some((qi, i) => answers[i] !== card.quiz[qi].correct)) return { success: false, message: 'wrong' }
+  await forgive()
   // Carta del mese presa in questo mese: cornice arcobaleno (anche se era già oro)
   const { data: month } = await db.from('scam_card_month').select('card_no').eq('month', monthKey(today)).maybeSingle()
   const ofTheMonth = month?.card_no === no

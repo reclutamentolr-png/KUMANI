@@ -39,6 +39,8 @@ export default function BrandCamera({ onColors, onClose }: { onColors: (swatches
         video.setAttribute('playsinline', '')
         video.srcObject = s
         await video.play().catch(() => {})
+        // Chiusa mentre il video partiva: niente giro di controlli che resti acceso
+        if (!alive) return
         setState('live')
         // Ogni tanto: il quadrato al centro (60% del lato corto), rimpicciolito
         timer = window.setInterval(() => {

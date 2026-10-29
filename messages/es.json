@@ -10314,7 +10314,9 @@
     "side_front": "Solo anverso",
     "side_back": "Solo reverso",
     "side_both": "Anverso y reverso (2 archivos separados)",
-    "side_combined": "Anverso y reverso en un solo PDF"
+    "side_combined": "Anverso y reverso en un solo PDF",
+    "fileReady": "El archivo está listo.",
+    "fileReadyShare": "Compartir"
   },
   "seo": {
     "siteTitle": "KUMANI – Manos que te echan una mano",
@@ -17770,7 +17772,8 @@
     "report": "Denunciar el número a la Red Antiestafas",
     "transcriptTitle": "El texto del audio",
     "again": "Comprobar otro audio",
-    "privacy": "El audio se escucha y se transcribe en tu teléfono: no lo subimos a los servidores y nadie lo escucha. La comprobación reconoce las señales típicas de estafa en italiano; no puede decir si una voz es real o creada con IA."
+    "privacy": "El audio se escucha y se transcribe en tu teléfono: no lo subimos a los servidores y nadie lo escucha. La comprobación reconoce las señales típicas de estafa en italiano; no puede decir si una voz es real o creada con IA.",
+    "italianOnly": "El control reconoce las frases de estafa solo en italiano: con mensajes en otros idiomas puede no encontrar las señales."
   },
   "fonometro": {
     "badge": "Audio y Herramientas · Plus",
@@ -17824,7 +17827,9 @@
     "pdfTo": "Fin",
     "pdfFooter": "Creado con KUMANI · kumani.io",
     "discard": "Descartar esta medición",
-    "discardConfirm": "¿Descartar esta medición? Si la habías guardado, también desaparece del registro."
+    "discardConfirm": "¿Descartar esta medición? Si la habías guardado, también desaparece del registro.",
+    "fileReady": "El archivo está listo.",
+    "fileReadyShare": "Compartir"
   },
   "metronomo": {
     "badge": "Audio y Herramientas · Plus",

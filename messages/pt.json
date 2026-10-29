@@ -10314,7 +10314,9 @@
     "side_front": "Só frente",
     "side_back": "Só verso",
     "side_both": "Frente e verso (2 ficheiros separados)",
-    "side_combined": "Frente e verso num só PDF"
+    "side_combined": "Frente e verso num só PDF",
+    "fileReady": "O ficheiro está pronto.",
+    "fileReadyShare": "Partilhar"
   },
   "seo": {
     "siteTitle": "KUMANI – Mãos que lhe dão uma mão",
@@ -17770,7 +17772,8 @@
     "report": "Denunciar o número à Rede Antiburla",
     "transcriptTitle": "O texto do áudio",
     "again": "Verificar outro áudio",
-    "privacy": "O áudio é ouvido e transcrito no seu telemóvel: não o carregamos nos servidores e ninguém o ouve. A verificação reconhece sinais típicos de burla em italiano; não consegue dizer se uma voz é verdadeira ou criada com IA."
+    "privacy": "O áudio é ouvido e transcrito no seu telemóvel: não o carregamos nos servidores e ninguém o ouve. A verificação reconhece sinais típicos de burla em italiano; não consegue dizer se uma voz é verdadeira ou criada com IA.",
+    "italianOnly": "A verificação reconhece frases de burla apenas em italiano: com mensagens noutras línguas pode não encontrar os sinais."
   },
   "fonometro": {
     "badge": "Áudio e Ferramentas · Plus",
@@ -17824,7 +17827,9 @@
     "pdfTo": "Fim",
     "pdfFooter": "Criado com a KUMANI · kumani.io",
     "discard": "Descartar esta medição",
-    "discardConfirm": "Descartar esta medição? Se a tinha guardado, também desaparece do registo."
+    "discardConfirm": "Descartar esta medição? Se a tinha guardado, também desaparece do registo.",
+    "fileReady": "O ficheiro está pronto.",
+    "fileReadyShare": "Partilhar"
   },
   "metronomo": {
     "badge": "Áudio e Ferramentas · Plus",

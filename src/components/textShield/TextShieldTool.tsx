@@ -302,7 +302,7 @@ export default function TextShieldTool({ owner }: { owner: string }) {
                 {t('leftoverWarning', { items: [...left.longNumbers, ...left.emails].slice(0, 3).join(', ') })}
               </p>
             )}
-            <textarea readOnly value={result.text} rows={9} aria-label={t('step3Title')} className="w-full rounded-xl border border-[var(--gold)]/30 bg-[var(--background)] p-3 text-sm text-[var(--ink)]" />
+            <textarea readOnly value={result.text} onCopy={remember} rows={9} aria-label={t('step3Title')} className="w-full rounded-xl border border-[var(--gold)]/30 bg-[var(--background)] p-3 text-sm text-[var(--ink)]" />
             <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"

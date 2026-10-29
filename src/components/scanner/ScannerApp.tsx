@@ -46,6 +46,14 @@ const AUTO_KEY = "kumani_scanner_auto";
 // alleggerisci il file. Tutto nel browser: nulla viene caricato sui server.
 
 type Queued = { file: Blob; replaceId?: string; initial?: EditState };
+// Numero fisso per ogni foto in coda: l'editor si rifà solo quando cambia la
+// foto da sistemare, non a ogni nuova foto aggiunta in fondo alla coda
+const queuedIds = new WeakMap<Blob, number>();
+let nextQueuedId = 0;
+const queuedId = (file: Blob) => {
+  if (!queuedIds.has(file)) queuedIds.set(file, ++nextQueuedId);
+  return queuedIds.get(file)!;
+};
 
 const card =
   "rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-[0_12px_30px_rgba(23,23,23,0.06)] sm:p-6";
@@ -489,7 +497,7 @@ export default function ScannerApp() {
 
   const editor = queue[0] && (
     <ScanEditor
-      key={queue.length + (queue[0].replaceId ?? "")}
+      key={`${queuedId(queue[0].file)}-${queue[0].replaceId ?? ""}`}
       file={queue[0].file}
       initial={queue[0].initial}
       queued={queue.length - 1}
