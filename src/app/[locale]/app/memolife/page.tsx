@@ -7,6 +7,7 @@ import { ArrowLeft, CalendarHeart } from 'lucide-react'
 import MemoLifeApp, { type MemoContact, type MemoNote, type MemoTask } from '@/components/memolife/MemoLifeApp'
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveToolAccess } from '@/lib/subscriptionGate'
+import { getSessionIsAdmin } from '@/lib/session'
 import { loadAgenda } from '@/lib/agenda-server'
 import { addDays, monthRange, todayKey } from '@/lib/agenda'
 import { toolMetadata } from '@/lib/toolMetadata'
@@ -37,9 +38,11 @@ export default async function MemoLifePage({
   // Google Calendar collegato: riallineato aprendo l'agenda (al massimo ogni 15 minuti)
   after(() => syncGoogleCalendarIfStale(user.id))
 
-  const [spendly, lifeCalendar] = await Promise.all([
+  const [spendly, lifeCalendar, isStaff] = await Promise.all([
     hasActiveToolAccess(supabase, user.id, 'spendly'),
     hasActiveToolAccess(supabase, user.id, 'life-calendar'),
+    // Appuntamenti a voce: per ora solo lo Staff, finché non sono provati
+    getSessionIsAdmin(user.id).catch(() => false),
   ])
   const sources = { memolife: true, spendly, lifeCalendar }
   const today = todayKey()
@@ -79,6 +82,7 @@ export default async function MemoLifePage({
           contacts={(contacts ?? []) as MemoContact[]}
           initialAdd={add === 'appointment' || add === 'task' ? add : null}
           initialDate={date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null}
+          voice={isStaff}
         />
       </main>
     </div>

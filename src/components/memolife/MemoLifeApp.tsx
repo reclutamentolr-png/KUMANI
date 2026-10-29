@@ -3,25 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import {
-  BookUser,
-  CalendarClock,
-  CalendarDays,
-  CalendarSync,
-  CheckCircle2,
-  Download,
-  ExternalLink,
-  FileBadge,
-  Mail,
-  MessageCircle,
-  NotebookPen,
-  Phone,
-  Plus,
-  Receipt,
-  Search,
-  Upload,
-  Sun,
-} from 'lucide-react'
+import { BookUser, CalendarClock, CalendarDays, CalendarSync, CheckCircle2, Download, ExternalLink, FileBadge, Mail, MessageCircle, Mic, NotebookPen, Phone, Plus, Receipt, Search, Sun, Upload } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import AgendaEventRow from '@/components/agenda/AgendaEventRow'
 import { getAgendaRange } from '@/app/actions/agenda'
@@ -41,6 +23,7 @@ import {
   type NoteDraft,
   type TaskDraft,
 } from './MemoLifeForms'
+import VoiceReminder from './VoiceReminder'
 
 export type MemoTask = {
   id: string
@@ -73,6 +56,7 @@ type Editor =
   | { kind: 'note'; draft: NoteDraft }
   | { kind: 'contact'; draft: ContactDraft }
   | { kind: 'menu' }
+  | { kind: 'voice' }
   | { kind: 'import' }
   | null
 
@@ -94,6 +78,7 @@ export default function MemoLifeApp({
   contacts,
   initialAdd,
   initialDate,
+  voice = false,
 }: {
   today: string
   sources: AgendaSources
@@ -105,6 +90,8 @@ export default function MemoLifeApp({
   initialAdd: 'appointment' | 'task' | null
   // Giorno scelto nel calendario della dashboard (?date=)
   initialDate: string | null
+  // Appuntamenti e promemoria a voce (per ora solo lo Staff)
+  voice?: boolean
 }) {
   const t = useTranslations('agenda')
   const locale = useLocale()
@@ -502,6 +489,7 @@ export default function MemoLifeApp({
               { key: 'task', icon: CheckCircle2, color: 'bg-violet-500', open: () => setEditor({ kind: 'task', draft: { title: '', dueDate: tab === 'calendar' ? selectedDay : '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }) },
               { key: 'note', icon: NotebookPen, color: 'bg-amber-400', open: () => setEditor({ kind: 'note', draft: { title: '', content: '' } }) },
               { key: 'contact', icon: BookUser, color: 'bg-[var(--ink)]', open: () => setEditor({ kind: 'contact', draft: { name: '', phone: '', email: '', company: '', notes: '' } }) },
+              ...(voice ? [{ key: 'voice', icon: Mic, color: 'bg-rose-500', open: () => setEditor({ kind: 'voice' }) }] : []),
             ].map(({ key, icon: Icon, color, open }) => (
               <button key={key} type="button" onClick={open} className="flex w-full items-center gap-3 rounded-xl border border-gray-200 p-3 text-left hover:border-[var(--gold)] hover:bg-[var(--gold-pale)]/40">
                 <span className={`flex h-10 w-10 items-center justify-center rounded-lg text-white ${color}`}>
@@ -523,6 +511,19 @@ export default function MemoLifeApp({
               )}
             </div>
           </div>
+        </Sheet>
+      )}
+      {editor?.kind === 'voice' && (
+        <Sheet title={t('add_voice')} onClose={() => setEditor(null)}>
+          <VoiceReminder
+            onContinue={(d) =>
+              setEditor(
+                d.kind === 'appointment'
+                  ? { kind: 'appointment', draft: { title: d.title, date: d.date ?? today, time: d.time ?? '09:00', description: '', remind: [60] } }
+                  : { kind: 'task', draft: { title: d.title, dueDate: d.date ?? '', priority: 'medium', description: '', remindTime: '', remindDays: [0] } }
+              )
+            }
+          />
         </Sheet>
       )}
       {editor?.kind === 'appointment' && (
