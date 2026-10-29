@@ -21,6 +21,7 @@ import {
 import { saveClassicCard } from '@/app/actions/businessCard'
 import { businessWebsiteUrl } from '@/lib/businessProfile'
 import ClassicCardCanvas, { classicSize, type CardColors } from './ClassicCardCanvas'
+import { dataUrlToFile, deliverFiles } from '@/lib/deliverFiles'
 import SideDownloadButton, { type SideChoice } from './SideDownloadButton'
 import { BLEED } from './BusinessCardCanvas'
 
@@ -115,20 +116,10 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
     await document.fonts.ready
     return toPng(refFor(side).current!, { width: w + BLEED * 2, height: h + BLEED * 2, pixelRatio: 2, cacheBust: true, style: { transform: 'none' } })
   }
-  const download = (href: string, name: string) => {
-    const a = document.createElement('a')
-    a.href = href
-    a.download = name
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-  }
   const fileBase = `KUMANI_biglietto_classico_${s.layout}`
   // Lati scelti nel menu (fronte, retro o tutti e due) e nome del file
   const sidesFor = (choice: SideChoice): ('front' | 'back')[] => (choice === 'front' || choice === 'back' ? [choice] : sides)
   const suffix = (side: 'front' | 'back') => (sides.length > 1 ? (side === 'front' ? '_fronte' : '_retro') : '')
-  // Più file di fila: una piccola pausa, così il browser li scarica tutti
-  const pause = () => new Promise((r) => setTimeout(r, 400))
 
   const exportPdf = async (choice: SideChoice) => {
     setBusy('pdf')
@@ -146,16 +137,13 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
           if (i > 0) pdf.addPage(size, orientation)
           pdf.addImage(await render(side), 'PNG', -1, -1, size[0] + 2, size[1] + 2, undefined, 'FAST')
         }
-        return URL.createObjectURL(pdf.output('blob'))
+        return pdf.output('blob')
       }
-      if (choice === 'combined') {
-        download(await makePdf(sides), `${fileBase}_fronte_retro_stampa.pdf`)
-      } else {
-        for (const [i, side] of sidesFor(choice).entries()) {
-          if (i > 0) await pause()
-          download(await makePdf([side]), `${fileBase}${suffix(side)}_stampa.pdf`)
-        }
-      }
+      const pdfFile = async (list: ('front' | 'back')[], name: string) => new File([await makePdf(list)], name, { type: 'application/pdf' })
+      const files: File[] = []
+      if (choice === 'combined') files.push(await pdfFile(sides, `${fileBase}_fronte_retro_stampa.pdf`))
+      else for (const side of sidesFor(choice)) files.push(await pdfFile([side], `${fileBase}${suffix(side)}_stampa.pdf`))
+      await deliverFiles(files)
     } catch (e) {
       console.error('[biglietto classico]', e)
       setError(true)
@@ -168,8 +156,8 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
     setBusy('png')
     setError(false)
     try {
-      for (const [i, side] of sidesFor(choice).entries()) {
-        if (i > 0) await pause()
+      const files: File[] = []
+      for (const side of sidesFor(choice)) {
         const img = new Image()
         img.src = await render(side)
         await img.decode()
@@ -177,8 +165,9 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
         canvas.width = w * 2
         canvas.height = h * 2
         canvas.getContext('2d')!.drawImage(img, BLEED * 2, BLEED * 2, w * 2, h * 2, 0, 0, w * 2, h * 2)
-        download(canvas.toDataURL('image/png'), `${fileBase}${suffix(side)}.png`)
+        files.push(dataUrlToFile(canvas.toDataURL('image/png'), `${fileBase}${suffix(side)}.png`))
       }
+      await deliverFiles(files)
     } catch (e) {
       console.error('[biglietto classico]', e)
       setError(true)
