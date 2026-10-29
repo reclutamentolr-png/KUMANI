@@ -9,6 +9,8 @@ import Kumi from '@/components/kids/Kumi'
 import { askKumi, kumiChatStatus, rateKumi, type KumiStatus } from '@/app/actions/kumiChat'
 import type { KumiLink } from '@/lib/kumiChat/knowledge'
 import { kumiPlaceOf } from '@/lib/kumiChat/places'
+import { KUMI_CHIPS, kumiContextOf } from '@/lib/kumiChat/context'
+import { getMarketplaceTools } from '@/lib/marketplaceTools'
 
 // Chiedi a KUMI: KUMI in basso a destra risponde a chi visita KUMANI la prima
 // volta, in tutte le pagine pubbliche, finché non si iscrive ed entra. La
@@ -25,7 +27,6 @@ type Msg =
   | { from: 'kumi'; text: string; id?: string; links?: KumiLink[]; answered?: boolean; rated?: 1 | -1; intro?: boolean }
   | { from: 'me'; text: string }
 
-const CHIPS = ['chip1', 'chip2', 'chip3', 'chip4', 'chip5'] as const
 // Solo un saluto («Ciao!», «Buongiorno KUMI», «Hello»…): KUMI risponde da sé,
 // senza IA e senza contare una domanda
 // Minuscole, senza accenti (anche «й» → «и») e senza punteggiatura
@@ -74,6 +75,7 @@ const clearStore = () => {
 
 export default function KumiChat() {
   const t = useTranslations('kumiChat')
+  const tm = useTranslations('marketplace')
   const locale = useLocale()
   const [status, setStatus] = useState<KumiStatus | null>(null)
   const [open, setOpen] = useState(false)
@@ -160,6 +162,12 @@ export default function KumiChat() {
   const place = kumiPlaceOf(path)
   if (!place || !status.places[place.id]) return null
   if (status.memberChat && place.group !== 'member') return null
+  // Chi è già dentro (iscritto o Staff) non riceve domande per visitatori; dentro un servizio KUMI sa quale
+  const signedIn = status.staff || status.memberChat
+  const toolTitle = path.startsWith('/app/') ? (getMarketplaceTools((k) => tm(k)).find((x) => path === x.href || path.startsWith(`${x.href}/`))?.title ?? null) : null
+  const context = kumiContextOf(path, signedIn, toolTitle)
+  const chips = KUMI_CHIPS[context.kind]
+  const welcome = signedIn ? t('welcomeMember') : t('welcome')
 
   const dismissHint = () => {
     setHint(false)
@@ -196,7 +204,7 @@ export default function KumiChat() {
     if (greeting) {
       await wait(900)
       setBusy(false)
-      setMsgs((m) => [...m, { from: 'kumi', text: first ? t('welcome') : t('greetAgain'), intro: true }])
+      setMsgs((m) => [...m, { from: 'kumi', text: first ? welcome : signedIn ? t('greetAgainMember') : t('greetAgain'), intro: true }])
       return
     }
     // Le ultime due domande e risposte, per capire «e quanto costa?»
@@ -207,10 +215,10 @@ export default function KumiChat() {
       const b = talk[i + 1]
       if (a.from === 'me' && b.from === 'kumi') history.push({ q: a.text, a: b.text })
     }
-    const asking = askKumi(q, locale, history.slice(-2)).catch(() => ({ ok: false as const, error: 'busy' as const, remaining: undefined }))
+    const asking = askKumi(q, locale, history.slice(-2), context).catch(() => ({ ok: false as const, error: 'busy' as const, remaining: undefined }))
     if (first) {
       await wait(900)
-      setMsgs((m) => [...m, { from: 'kumi', text: t('welcome'), intro: true }])
+      setMsgs((m) => [...m, { from: 'kumi', text: welcome, intro: true }])
       await wait(THINK_MS)
     }
     const res = await asking
@@ -270,15 +278,15 @@ export default function KumiChat() {
             {msgs.length === 0 && <p className="text-center text-xs text-[var(--muted)]">{t('emptyHint')}</p>}
             {msgs.length === 0 && (
               <div className="flex flex-wrap gap-2">
-                {CHIPS.map((c) => (
+                {chips.map((c) => (
                   <button
                     key={c}
                     type="button"
                     disabled={outOfQuestions}
-                    onClick={() => send(t(c))}
+                    onClick={() => send(t(c, { tool: context.tool ?? '' }))}
                     className="rounded-full border border-[var(--gold)]/50 bg-white px-3 py-1.5 text-xs font-semibold text-[var(--ink)] hover:bg-[var(--gold-pale)] disabled:opacity-50"
                   >
-                    {t(c)}
+                    {t(c, { tool: context.tool ?? '' })}
                   </button>
                 ))}
               </div>
@@ -370,7 +378,7 @@ export default function KumiChat() {
             }}
             className="block py-2 pl-3.5 pr-8 text-left text-sm font-semibold text-[var(--ink)]"
           >
-            {t('bubble')}
+            {signedIn ? t('bubbleMember') : t('bubble')}
           </button>
           <button type="button" onClick={dismissHint} aria-label={t('close')} className="absolute right-1 top-1 rounded-full p-1.5 text-[var(--muted)] hover:bg-[var(--gold-pale)]">
             <X className="h-3.5 w-3.5" />
