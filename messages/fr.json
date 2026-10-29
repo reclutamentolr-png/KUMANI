@@ -492,12 +492,12 @@
     "receivedLabel": "De la Communauté",
     "receivedKumaniLabel": "reçus des Kumani",
     "peopleTabReceived": "Reçus des Kumani",
-    "peopleReceivedHint": "Des personnes invitées par d’autres Kumani et accueillies parmi vos Kumani. Elles font partie de votre étoile, mais les KU Points de leurs activations vont à la personne qui les a invitées.",
+    "peopleReceivedHint": "Des personnes invitées par d’autres Kumani et accueillies parmi vos Kumani. Les KU Points de leurs activations vont à la personne qui les a invitées.",
     "peopleEmptyReceived": "Personne pour l’instant : quand une personne invitée par un autre Kumano est accueillie parmi vos Kumani et active un abonnement, vous la trouvez ici.",
     "peopleReceivedSince": "Parmi vos Kumani depuis le {date}",
     "legendInvited": "Invités par vous",
     "legendReceived": "Reçus de la communauté",
-    "legendReceivedHint": "En bleu, les personnes invitées par d’autres Kumani et accueillies parmi vos Kumani : elles font partie de votre étoile, mais les KU Points vont à la personne qui les a invitées.",
+    "legendReceivedHint": "En bleu, les personnes invitées par d’autres Kumani et accueillies parmi vos Kumani : les KU Points vont à la personne qui les a invitées.",
     "legendWalletCta": "Vérifier dans votre portefeuille",
     "bachecaAlertText": "Vous avez reçu un message au sujet d'une Annonce de la communauté. Répondez vite : une réponse rapide fait la différence.",
     "bachecaAlertRead": "Lire les messages",
@@ -719,7 +719,7 @@
     "qualificationBlackExtra": "En plus, vous avez un bon Pro d’un an rien que pour vous et, désormais, 1 bon toutes les {every} nouvelles activations. La vitrine du Kumano du Jour, l’invitation à l’événement annuel KUMANI et le Conseil des Black vous attendent aussi.",
     "qualificationOpenWallet": "Voir vos bons",
     "rankPendingLine": "En confirmation : {acts, plural, one {+# activation} other {+# activations}}, +{points} KU Points",
-    "receivedWelcomeNote": "Elles font partie de votre étoile, mais ne vous donnent pas de KU Points : les points vont toujours à la personne qui a invité.",
+    "receivedWelcomeNote": "Elles sont parmi vos Kumani, mais ne vous donnent pas de KU Points : les points vont toujours à la personne qui a invité.",
     "karmaTodayLogin": "Connexion",
     "karmaTodayBadge": "+{n} aujourd’hui",
     "karmaTodayTitle": "Aujourd’hui tu as gagné {n} KU Karma :",
@@ -9303,7 +9303,7 @@
         },
         "2": {
           "1": "Un seul niveau",
-          "2": "Les KU Points vont seulement à la personne qui a invité : celle qui l’accueille dans son étoile ne reçoit pas de points."
+          "2": "Les KU Points vont seulement à la personne qui a invité : celle qui l’accueille parmi ses Kumani ne reçoit pas de points."
         },
         "3": {
           "1": "Une reconnaissance, pas un revenu",

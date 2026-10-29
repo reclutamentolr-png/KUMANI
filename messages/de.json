@@ -492,12 +492,12 @@
     "receivedLabel": "Aus der Community",
     "receivedKumaniLabel": "von Kumani erhalten",
     "peopleTabReceived": "Von Kumani erhalten",
-    "peopleReceivedHint": "Personen, die von anderen Kumani eingeladen und bei deinen Kumani aufgenommen wurden. Sie gehören zu deinem Stern, aber die KU Points ihrer Aktivierungen gehen an die Person, die sie eingeladen hat.",
+    "peopleReceivedHint": "Personen, die von anderen Kumani eingeladen und bei deinen Kumani aufgenommen wurden. Die KU Points ihrer Aktivierungen gehen an die Person, die sie eingeladen hat.",
     "peopleEmptyReceived": "Noch niemand: Wenn eine von einem anderen Kumano eingeladene Person bei deinen Kumani aufgenommen wird und ein Abo aktiviert, findest du sie hier.",
     "peopleReceivedSince": "Bei deinen Kumani seit {date}",
     "legendInvited": "Von dir eingeladen",
     "legendReceived": "Aus der Community erhalten",
-    "legendReceivedHint": "In Blau: Personen, die von anderen Kumani eingeladen und bei deinen Kumani aufgenommen wurden. Sie gehören zu deinem Stern, aber die KU Points gehen an die Person, die sie eingeladen hat.",
+    "legendReceivedHint": "In Blau: Personen, die von anderen Kumani eingeladen und bei deinen Kumani aufgenommen wurden. Die KU Points gehen an die Person, die sie eingeladen hat.",
     "legendWalletCta": "In deiner Brieftasche prüfen",
     "bachecaAlertText": "Du hast eine Nachricht zu einer Community-Anzeige erhalten. Antworte bald: Eine schnelle Antwort macht den Unterschied.",
     "bachecaAlertRead": "Nachrichten lesen",
@@ -719,7 +719,7 @@
     "qualificationBlackExtra": "Außerdem hast du einen Pro-Gutschein für ein Jahr nur für dich und bekommst ab jetzt 1 Gutschein alle {every} neuen Aktivierungen. Auf dich warten auch die Vitrine im Kumano des Tages, die Einladung zum jährlichen KUMANI-Event und der Rat der Black.",
     "qualificationOpenWallet": "Zu deinen Gutscheinen",
     "rankPendingLine": "In Bestätigung: {acts, plural, one {+# Aktivierung} other {+# Aktivierungen}}, +{points} KU Points",
-    "receivedWelcomeNote": "Sie gehören zu deinem Stern, bringen dir aber keine KU Points: Die Punkte gehen immer an die Person, die eingeladen hat.",
+    "receivedWelcomeNote": "Sie gehören zu deinen Kumani, bringen dir aber keine KU Points: Die Punkte gehen immer an die Person, die eingeladen hat.",
     "karmaTodayLogin": "Anmeldung",
     "karmaTodayBadge": "+{n} heute",
     "karmaTodayTitle": "Heute hast du {n} KU Karma bekommen:",
@@ -9303,7 +9303,7 @@
         },
         "2": {
           "1": "Nur eine Ebene",
-          "2": "KU Points gehen nur an die Person, die eingeladen hat: Wer sie in seinen Stern aufnimmt, bekommt keine Punkte."
+          "2": "KU Points gehen nur an die Person, die eingeladen hat: Wer sie bei seinen Kumani aufnimmt, bekommt keine Punkte."
         },
         "3": {
           "1": "Anerkennung, kein Einkommen",

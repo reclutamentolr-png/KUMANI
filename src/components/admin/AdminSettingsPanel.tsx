@@ -348,7 +348,7 @@ export default function AdminSettingsPanel() {
               </label>
             </div>
             <p className="mt-3 text-xs text-gray-500">
-              I punti vanno solo a chi ha invitato direttamente la persona: nessuna quota a chi la accoglie nella sua stella.
+              I punti vanno solo a chi ha invitato direttamente la persona: nessuna quota a chi la accoglie tra i suoi Kumani.
             </p>
           </div>
           <div>

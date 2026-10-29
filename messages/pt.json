@@ -492,12 +492,12 @@
     "receivedLabel": "Da Comunidade",
     "receivedKumaniLabel": "recebidos dos Kumani",
     "peopleTabReceived": "Recebidos dos Kumani",
-    "peopleReceivedHint": "Pessoas convidadas por outros Kumani e acolhidas entre os seus Kumani. Fazem parte da sua estrela, mas os KU Points das suas ativações vão para quem as convidou.",
+    "peopleReceivedHint": "Pessoas convidadas por outros Kumani e acolhidas entre os seus Kumani. Os KU Points das suas ativações vão para quem as convidou.",
     "peopleEmptyReceived": "Ninguém por agora: quando uma pessoa convidada por outro Kumano for acolhida entre os seus Kumani e ativar a subscrição, encontra-a aqui.",
     "peopleReceivedSince": "Entre os seus Kumani desde {date}",
     "legendInvited": "Convidados por si",
     "legendReceived": "Recebidos da comunidade",
-    "legendReceivedHint": "A azul, as pessoas convidadas por outros Kumani e acolhidas entre os seus Kumani: fazem parte da sua estrela, mas os KU Points vão para quem as convidou.",
+    "legendReceivedHint": "A azul, as pessoas convidadas por outros Kumani e acolhidas entre os seus Kumani: os KU Points vão para quem as convidou.",
     "legendWalletCta": "Verifique na sua carteira",
     "bachecaAlertText": "Recebeu uma mensagem sobre um Anúncio da comunidade. Responda depressa: uma resposta rápida faz a diferença.",
     "bachecaAlertRead": "Ler mensagens",
@@ -719,7 +719,7 @@
     "qualificationBlackExtra": "Além disso, tem um voucher Pro de um ano só para si e a partir de agora recebe 1 voucher a cada {every} novas ativações. Esperam-no também a montra do Kumano do Dia, o convite para o evento anual KUMANI e o Conselho dos Black.",
     "qualificationOpenWallet": "Ver os seus vouchers",
     "rankPendingLine": "Em confirmação: {acts, plural, one {+# ativação} other {+# ativações}}, +{points} KU Points",
-    "receivedWelcomeNote": "Fazem parte da sua estrela, mas não lhe dão KU Points: os pontos vão sempre para quem convidou a pessoa.",
+    "receivedWelcomeNote": "Estão entre os seus Kumani, mas não lhe dão KU Points: os pontos vão sempre para quem convidou a pessoa.",
     "karmaTodayLogin": "Acesso",
     "karmaTodayBadge": "+{n} hoje",
     "karmaTodayTitle": "Hoje ganhaste {n} KU Karma:",
@@ -9303,7 +9303,7 @@
         },
         "2": {
           "1": "Um só nível",
-          "2": "Os KU Points vão só para quem convidou a pessoa: quem a acolhe na sua estrela não recebe pontos."
+          "2": "Os KU Points vão só para quem convidou a pessoa: quem a acolhe entre os seus Kumani não recebe pontos."
         },
         "3": {
           "1": "Reconhecimento, não rendimento",

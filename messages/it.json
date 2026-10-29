@@ -537,12 +537,12 @@
     "receivedLabel": "Dalla Community",
     "receivedKumaniLabel": "ricevuti dai Kumani",
     "peopleTabReceived": "Ricevuti dai Kumani",
-    "peopleReceivedHint": "Persone invitate da altri Kumani e accolte tra i tuoi Kumani. Fanno parte della tua stella, ma i KU Points delle loro attivazioni vanno a chi le ha invitate.",
+    "peopleReceivedHint": "Persone invitate da altri Kumani e accolte tra i tuoi Kumani. I KU Points delle loro attivazioni vanno a chi le ha invitate.",
     "peopleEmptyReceived": "Nessuno per ora: quando una persona invitata da un altro Kumano viene accolta tra i tuoi Kumani e attiva l’abbonamento, la trovi qui.",
     "peopleReceivedSince": "Tra i tuoi Kumani dal {date}",
     "legendInvited": "Invitati da te",
     "legendReceived": "Ricevuti dalla community",
-    "legendReceivedHint": "In azzurro le persone invitate da altri Kumani e accolte tra i tuoi Kumani: fanno parte della tua stella, ma i KU Points vanno a chi le ha invitate.",
+    "legendReceivedHint": "In azzurro le persone invitate da altri Kumani e accolte tra i tuoi Kumani: i KU Points vanno a chi le ha invitate.",
     "legendWalletCta": "Verifica dal tuo Wallet",
     "bachecaAlertText": "Hai ricevuto un messaggio dalla Bacheca Annunci. Rispondi presto: una risposta veloce fa la differenza.",
     "bachecaAlertRead": "Leggi i messaggi",
@@ -764,7 +764,7 @@
     "qualificationBlackExtra": "In più hai un voucher Pro di un anno tutto per te e da ora ricevi 1 voucher ogni {every} nuove attivazioni. Ti aspettano anche la vetrina nel Kumano del Giorno, l’invito all’evento annuale KUMANI e il Consiglio dei Black.",
     "qualificationOpenWallet": "Vai ai tuoi voucher",
     "rankPendingLine": "In conferma: {acts, plural, one {+# attivazione} other {+# attivazioni}}, +{points} KU Points",
-    "receivedWelcomeNote": "Fanno parte della tua stella, ma non ti danno KU Points: i punti vanno sempre a chi ha invitato la persona.",
+    "receivedWelcomeNote": "Sono tra i tuoi Kumani, ma non ti danno KU Points: i punti vanno sempre a chi ha invitato la persona.",
     "karmaTodayLogin": "Accesso",
     "karmaTodayBadge": "+{n} oggi",
     "karmaTodayTitle": "Oggi hai preso {n} KU Karma:",
@@ -9303,7 +9303,7 @@
         },
         "2": {
           "1": "Un solo livello",
-          "2": "I KU Points vanno solo a chi ha invitato la persona: chi la accoglie nella sua stella non riceve punti."
+          "2": "I KU Points vanno solo a chi ha invitato la persona: chi la accoglie tra i suoi Kumani non riceve punti."
         },
         "3": {
           "1": "Riconoscimento, non reddito",

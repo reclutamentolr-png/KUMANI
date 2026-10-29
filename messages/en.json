@@ -537,12 +537,12 @@
     "receivedLabel": "From the Community",
     "receivedKumaniLabel": "received from Kumani",
     "peopleTabReceived": "Received from Kumani",
-    "peopleReceivedHint": "People invited by other Kumani and welcomed among your Kumani. They are part of your star, but the KU Points from their activations go to whoever invited them.",
+    "peopleReceivedHint": "People invited by other Kumani and welcomed among your Kumani. The KU Points from their activations go to whoever invited them.",
     "peopleEmptyReceived": "Nobody yet: when someone invited by another Kumano is welcomed among your Kumani and activates a subscription, you’ll find them here.",
     "peopleReceivedSince": "One of your Kumani since {date}",
     "legendInvited": "Invited by you",
     "legendReceived": "Received from the community",
-    "legendReceivedHint": "In blue, people invited by other Kumani and welcomed among your Kumani: they are part of your star, but the KU Points go to whoever invited them.",
+    "legendReceivedHint": "In blue, people invited by other Kumani and welcomed among your Kumani: the KU Points go to whoever invited them.",
     "legendWalletCta": "Check in your Wallet",
     "bachecaAlertText": "You've received a message about a Community Listing. Reply soon: a quick answer makes all the difference.",
     "bachecaAlertRead": "Read messages",
@@ -764,7 +764,7 @@
     "qualificationBlackExtra": "You also get a one-year Pro voucher just for you, and from now on 1 voucher every {every} new activations. The Kumano of the Day showcase, an invitation to the annual KUMANI event and the Black Council are waiting for you too.",
     "qualificationOpenWallet": "Go to your vouchers",
     "rankPendingLine": "Being confirmed: {acts, plural, one {+# activation} other {+# activations}}, +{points} KU Points",
-    "receivedWelcomeNote": "They are part of your star but don’t give you KU Points: points always go to whoever invited the person.",
+    "receivedWelcomeNote": "They are among your Kumani but don’t give you KU Points: points always go to whoever invited the person.",
     "karmaTodayLogin": "Sign-in",
     "karmaTodayBadge": "+{n} today",
     "karmaTodayTitle": "Today you earned {n} KU Karma:",
@@ -9303,7 +9303,7 @@
         },
         "2": {
           "1": "A single level",
-          "2": "KU Points go only to whoever invited the person: whoever welcomes them into their star receives no points."
+          "2": "KU Points go only to whoever invited the person: whoever welcomes them among their Kumani receives no points."
         },
         "3": {
           "1": "Recognition, not income",
