@@ -2,63 +2,127 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { Ear, Hand, Headphones, Minus, Play, Plus, Square, TrendingUp } from 'lucide-react'
-import { MAX_BPM, METERS, MIN_BPM, NEAR_MS, ON_TIME_MS, bpmFromTaps, clampBpm, loadPractices, playClick, practiceStats, savePractice, type ClickSound, type Meter, type Practice } from '@/lib/metronomo'
+import { Ear, Hand, Headphones, Minus, Play, Plus, Square, Timer, TrendingUp, Vibrate, Volume2 } from 'lucide-react'
+import {
+  MAX_BPM,
+  METERS,
+  MIN_BPM,
+  NEAR_MS,
+  ON_TIME_MS,
+  SOUNDS,
+  SUBDIVISIONS,
+  TIMERS,
+  bpmFromTaps,
+  clampBpm,
+  defaultAccents,
+  loadPractices,
+  loadSettings,
+  meterOf,
+  playClick,
+  practiceStats,
+  savePractice,
+  saveSettings,
+  tempoName,
+  type Accent,
+  type ClickSound,
+  type MeterId,
+  type Practice,
+  type Subdivision,
+} from '@/lib/metronomo'
 
-// Metronomo: battiti con suono e luce, tempo, accelerazione graduale e
+// Metronomo: battiti con suono, luce e vibrazione, tempi semplici e composti,
+// accenti a scelta, suddivisioni, accelerazione graduale, timer di studio e
 // ascolto dei colpi di chi suona (microfono) con il riepilogo della prova.
 
 type Beat = { time: number; index: number }
 type Verdict = 'on' | 'early' | 'late' | null
-const SOUNDS: ClickSound[] = ['click', 'wood', 'bell']
+type WakeLock = { release: () => Promise<void> }
+type WakeNavigator = Navigator & { wakeLock?: { request: (type: 'screen') => Promise<WakeLock> } }
 const now = () => performance.now()
+const NEXT_ACCENT: Record<Accent, Accent> = { strong: 'normal', normal: 'mute', mute: 'strong' }
+const SUB_LABEL: Record<Subdivision, string> = { 1: '♩', 2: '♫', 3: '³', 4: '♬' }
 
 export default function MetronomoApp() {
   const t = useTranslations('metronomo')
   const locale = useLocale()
   const [bpm, setBpm] = useState(90)
-  const [meter, setMeter] = useState<Meter>(4)
+  const [meter, setMeter] = useState<MeterId>('4/4')
+  const [accents, setAccents] = useState<Accent[]>(defaultAccents('4/4'))
+  const [sub, setSub] = useState<Subdivision>(1)
   const [sound, setSound] = useState<ClickSound>('click')
-  const [lightOnly, setLightOnly] = useState(false)
+  const [volume, setVolume] = useState(0.8)
+  const [vibrate, setVibrate] = useState(false)
+  const [canVibrate, setCanVibrate] = useState(false)
   const [running, setRunning] = useState(false)
   const [beat, setBeat] = useState(-1)
+  const [bar, setBar] = useState(0)
   const [accel, setAccel] = useState(false)
   const [target, setTarget] = useState(120)
   const [step, setStep] = useState(2)
   const [everyBars, setEveryBars] = useState(8)
+  const [timerMin, setTimerMin] = useState<(typeof TIMERS)[number]>(0)
+  const [left, setLeft] = useState<number | null>(null)
   const [listen, setListen] = useState(false)
+  const [countIn, setCountIn] = useState(false)
+  const [counting, setCounting] = useState(false)
   const [verdict, setVerdict] = useState<Verdict>(null)
   const [offsets, setOffsets] = useState<number[]>([])
-  const [result, setResult] = useState<ReturnType<typeof practiceStats> & { bpm: number } | null>(null)
+  const [result, setResult] = useState<(ReturnType<typeof practiceStats> & { bpm: number }) | null>(null)
   const [history, setHistory] = useState<Practice[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [ready, setReady] = useState(false)
   const taps = useRef<number[]>([])
 
   const ctxRef = useRef<AudioContext | null>(null)
+  const gainRef = useRef<GainNode | null>(null)
   const timer = useRef<ReturnType<typeof setInterval> | null>(null)
   const frame = useRef(0)
   const streamRef = useRef<MediaStream | null>(null)
-  const S = useRef({ next: 0, index: 0, bar: 0, bpm: 90, meter: 4 as Meter, sound: 'click' as ClickSound, lightOnly: false, accel: false, target: 120, step: 2, everyBars: 8, queue: [] as Beat[], offsets: [] as number[] })
+  const wakeRef = useRef<WakeLock | null>(null)
+  const startedAt = useRef(0)
+  const S = useRef({ next: 0, tick: 0, bar: 0, bpm: 90, beats: 4, accents: defaultAccents('4/4'), sub: 1 as Subdivision, sound: 'click' as ClickSound, vibrate: false, accel: false, target: 120, step: 2, everyBars: 8, queue: [] as Beat[], clicks: [] as number[], offsets: [] as number[], listenFrom: 0 })
 
+  // Impostazioni ricordate e prove salvate: si leggono solo nel browser
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- prove salvate nel telefono, si leggono solo qui
+    const v = loadSettings()
+    /* eslint-disable react-hooks/set-state-in-effect -- dati del telefono, letti dopo il primo disegno */
+    if (typeof v.bpm === 'number') setBpm(clampBpm(v.bpm))
+    if (v.meter && METERS.some((m) => m.id === v.meter)) {
+      setMeter(v.meter)
+      setAccents(Array.isArray(v.accents) && v.accents.length === meterOf(v.meter).beats ? v.accents : defaultAccents(v.meter))
+    }
+    if (v.sub && SUBDIVISIONS.includes(v.sub)) setSub(v.sub)
+    if (v.sound && SOUNDS.includes(v.sound)) setSound(v.sound)
+    if (typeof v.volume === 'number') setVolume(Math.min(1, Math.max(0, v.volume)))
+    if (typeof v.vibrate === 'boolean') setVibrate(v.vibrate)
+    setCanVibrate(typeof navigator.vibrate === 'function')
     setHistory(loadPractices())
+    setReady(true)
+    /* eslint-enable react-hooks/set-state-in-effect */
     return () => release()
   }, [])
 
+  useEffect(() => {
+    if (ready) saveSettings({ bpm, meter, accents, sub, sound, volume, vibrate })
+  }, [ready, bpm, meter, accents, sub, sound, volume, vibrate])
+
   // Le impostazioni si leggono dal programmatore dei battiti mentre suona
   useEffect(() => {
-    Object.assign(S.current, { bpm, meter, sound, lightOnly, accel, target, step, everyBars })
-  }, [bpm, meter, sound, lightOnly, accel, target, step, everyBars])
+    Object.assign(S.current, { bpm, beats: meterOf(meter).beats, accents, sub, sound, vibrate, accel, target, step, everyBars })
+    if (gainRef.current) gainRef.current.gain.value = volume
+  }, [bpm, meter, accents, sub, sound, volume, vibrate, accel, target, step, everyBars])
 
   function release() {
     if (timer.current) clearInterval(timer.current)
     cancelAnimationFrame(frame.current)
     streamRef.current?.getTracks().forEach((tr) => tr.stop())
     void ctxRef.current?.close().catch(() => {})
+    void wakeRef.current?.release().catch(() => {})
     timer.current = null
     streamRef.current = null
     ctxRef.current = null
+    gainRef.current = null
+    wakeRef.current = null
   }
 
   const start = async () => {
@@ -66,9 +130,14 @@ export default function MetronomoApp() {
     setResult(null)
     setOffsets([])
     setVerdict(null)
+    setBar(0)
     const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
     const ctx = new Ctx()
     ctxRef.current = ctx
+    const out = ctx.createGain()
+    out.gain.value = volume
+    out.connect(ctx.destination)
+    gainRef.current = out
     let analyser: AnalyserNode | null = null
     if (listen) {
       try {
@@ -85,18 +154,30 @@ export default function MetronomoApp() {
     // Dopo la domanda del microfono il browser può tenere l'audio in pausa (iPhone): si riavvia
     await ctx.resume().catch(() => {})
     const s = S.current
-    Object.assign(s, { next: ctx.currentTime + 0.15, index: 0, bar: 0, queue: [], offsets: [] })
+    Object.assign(s, { next: ctx.currentTime + 0.15, tick: 0, bar: 0, queue: [], clicks: [], offsets: [] })
+    // Con la battuta di attacco l'ascolto parte dopo la prima battuta
+    s.listenFrom = s.next + (countIn && analyser ? (60 / s.bpm) * s.beats : 0)
+    startedAt.current = now()
 
-    // Programmatore: i battiti dei prossimi 120 millisecondi, ogni 25
+    // Programmatore: i colpi dei prossimi 120 millisecondi, ogni 25
     timer.current = setInterval(() => {
       while (s.next < ctx.currentTime + 0.12) {
-        const accent = s.index % s.meter === 0
-        if (!s.lightOnly) playClick(ctx, s.next, accent, s.sound)
-        s.queue.push({ time: s.next, index: s.index % s.meter })
-        if (s.queue.length > 64) s.queue.shift()
-        s.next += 60 / s.bpm
-        s.index += 1
-        if (s.index % s.meter === 0) {
+        const sub = s.sub
+        const beatIndex = Math.floor(s.tick / sub) % s.beats
+        const onBeat = s.tick % sub === 0
+        const accent = s.accents[beatIndex] ?? 'normal'
+        if (onBeat) {
+          if (accent !== 'mute') playClick(ctx, out, s.next, accent === 'strong' ? 2 : 1, s.sound)
+          s.queue.push({ time: s.next, index: beatIndex })
+          if (s.queue.length > 64) s.queue.shift()
+        } else if (accent !== 'mute') playClick(ctx, out, s.next, 0, s.sound)
+        if (s.sound !== 'none') {
+          s.clicks.push(s.next)
+          if (s.clicks.length > 64) s.clicks.shift()
+        }
+        s.next += 60 / s.bpm / sub
+        s.tick += 1
+        if (s.tick % (sub * s.beats) === 0) {
           s.bar += 1
           // Accelerazione: ogni tot battute qualche battito in più, fino all'obiettivo
           if (s.accel && s.bar % s.everyBars === 0 && s.bpm < s.target) {
@@ -107,23 +188,34 @@ export default function MetronomoApp() {
       }
     }, 25)
 
-    // Luce dei battiti e ascolto dei colpi
+    // Luce, vibrazione, battute e ascolto dei colpi
     const buf = analyser ? new Float32Array(analyser.fftSize) : null
     let env = 0.01
     let lastHit = -1
     let lastBeatShown = -1
     let verdictUntil = 0
+    let beatsShown = 0
+    let wasCounting = false
     const loop = () => {
       const time = ctx.currentTime
       const due = s.queue.filter((b) => b.time <= time)
       const current = due[due.length - 1]
       if (current && current.time !== lastBeatShown) {
         lastBeatShown = current.time
+        beatsShown += 1
         setBeat(current.index)
+        if (current.index === 0) setBar(Math.max(1, Math.ceil(beatsShown / s.beats)))
+        if (s.vibrate && (s.accents[current.index] ?? 'normal') !== 'mute') navigator.vibrate?.(s.accents[current.index] === 'strong' ? 40 : 20)
       }
-      if (analyser && buf) {
+      // Battuta di attacco: si ascolta solo dopo
+      const isCounting = !!analyser && time < s.listenFrom
+      if (isCounting !== wasCounting) {
+        wasCounting = isCounting
+        setCounting(isCounting)
+      }
+      if (analyser && buf && time >= s.listenFrom) {
         analyser.getFloatTimeDomainData(buf)
-        // Il picco degli ultimi 16 ms (la parte nuova della finestra): un colpo è un picco
+        // Il picco degli ultimi 17 ms (la parte nuova della finestra): un colpo è un picco
         // che sale di colpo sopra il livello di fondo
         const fresh = Math.min(buf.length, Math.ceil(ctx.sampleRate * 0.017))
         let peak = 0
@@ -135,8 +227,7 @@ export default function MetronomoApp() {
             peakAt = i
           }
         }
-        const rms = peak
-        const hit = peak > Math.max(0.08, env * 3) && time - lastHit > 0.12
+        const hit = peak > Math.max(0.08, env * 3) && time - lastHit > 0.1
         env = env * 0.9 + peak * 0.1
         if (hit) {
           lastHit = time
@@ -144,12 +235,11 @@ export default function MetronomoApp() {
           const at = time - (buf.length - 1 - peakAt) / ctx.sampleRate
           const interval = 60 / s.bpm
           // Il battito più vicino: si parte dall'ultimo programmato e si segue la griglia
-          // (il successivo può non essere ancora in coda)
           const known = s.queue.reduce<Beat | null>((best, x) => (!best || Math.abs(x.time - at) < Math.abs(best.time - at) ? x : best), null)
           const beatTime = known ? known.time + Math.round((at - known.time) / interval) * interval : null
           // Il clic dell'altoparlante sentito dal microfono non conta come colpo
-          const echo = !s.lightOnly && beatTime !== null && at - beatTime >= 0 && at - beatTime < 0.07 && rms < 0.4
-          if (beatTime !== null && Math.abs(at - beatTime) <= interval / 2 && !echo) {
+          const echo = s.sound !== 'none' && peak < 0.4 && s.clicks.some((c) => at - c >= 0 && at - c < 0.07)
+          if (beatTime !== null && beatTime >= s.listenFrom - 0.01 && Math.abs(at - beatTime) <= interval / 2 && !echo) {
             const offset = Math.round((at - beatTime) * 1000)
             s.offsets.push(offset)
             setOffsets([...s.offsets])
@@ -165,6 +255,11 @@ export default function MetronomoApp() {
     }
     frame.current = requestAnimationFrame(loop)
     setRunning(true)
+    // Schermo acceso mentre suona
+    ;(navigator as WakeNavigator).wakeLock
+      ?.request('screen')
+      .then((lock) => (wakeRef.current = lock))
+      .catch(() => {})
   }
 
   const stop = () => {
@@ -173,12 +268,50 @@ export default function MetronomoApp() {
     setRunning(false)
     setBeat(-1)
     setVerdict(null)
+    setLeft(null)
+    setCounting(false)
     if (s.offsets.length >= 4) {
       const st = practiceStats(s.offsets)
       setResult({ ...st, bpm: s.bpm })
       setHistory(savePractice({ id: String(Date.now()), at: Date.now(), bpm: s.bpm, hits: st.hits, onTime: st.onTime, meanOffset: st.meanOffset }))
     }
   }
+  const stopRef = useRef(stop)
+  useEffect(() => {
+    stopRef.current = stop
+  })
+
+  // Timer di studio: si ferma da solo
+  useEffect(() => {
+    if (!running || !timerMin) return
+    const id = setInterval(() => {
+      const rest = Math.max(0, timerMin * 60 - Math.floor((now() - startedAt.current) / 1000))
+      setLeft(rest)
+      if (rest === 0) stopRef.current()
+    }, 500)
+    return () => clearInterval(id)
+  }, [running, timerMin])
+
+  const toggle = () => (running ? stop() : void start())
+  const toggleRef = useRef(toggle)
+  useEffect(() => {
+    toggleRef.current = toggle
+  })
+
+  // Tastiera: spazio avvia e ferma, frecce cambiano la velocità
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)) return
+      if (e.code === 'Space') {
+        e.preventDefault()
+        toggleRef.current()
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowRight') setBpm((v) => clampBpm(v + (e.shiftKey ? 5 : 1)))
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') setBpm((v) => clampBpm(v - (e.shiftKey ? 5 : 1)))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const tap = () => {
     const time = now()
@@ -187,40 +320,75 @@ export default function MetronomoApp() {
     if (v) setBpm(v)
   }
 
+  const chooseMeter = (id: MeterId) => {
+    setMeter(id)
+    setAccents(defaultAccents(id))
+  }
+  const cycleAccent = (i: number) => setAccents((a) => a.map((x, k) => (k === i ? NEXT_ACCENT[x] : x)))
+
   const change = (d: number) => setBpm((v) => clampBpm(v + d))
   const card = 'rounded-3xl border border-[var(--gold)]/25 bg-white p-5 shadow-[0_12px_30px_rgba(23,23,23,0.06)] sm:p-6'
-  const chip = (on: boolean) => `rounded-full border px-3 py-1.5 text-sm font-bold ${on ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-[var(--gold)]/40 bg-white text-[var(--ink)]'}`
+  const chip = (on: boolean) => `rounded-full border px-3 py-1.5 text-sm font-bold disabled:opacity-50 ${on ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-[var(--gold)]/40 bg-white text-[var(--ink)]'}`
   const live = practiceStats(offsets)
-  const flashColor = verdict === 'on' ? '#16a34a' : verdict === 'early' || verdict === 'late' ? '#ea580c' : beat === 0 ? '#c9a227' : '#2b2d52'
+  const flash = running && beat >= 0
+  const flashColor = verdict === 'on' ? '#16a34a' : verdict === 'early' || verdict === 'late' ? '#ea580c' : flash && accents[beat] === 'strong' ? '#c9a227' : '#2b2d52'
+  const mm = left !== null ? `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}` : null
 
   return (
     <div className="space-y-5">
       <section className={`${card} text-center`}>
         {/* Luce del battito */}
-        <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full border-4 transition-[background-color,transform] duration-75" style={{ borderColor: flashColor, background: running && beat >= 0 ? `${flashColor}22` : 'transparent', transform: running && beat === 0 ? 'scale(1.06)' : 'scale(1)' }}>
+        <div
+          className="mx-auto flex h-36 w-36 flex-col items-center justify-center rounded-full border-4 transition-[background-color,transform] duration-75"
+          style={{ borderColor: flashColor, background: flash ? `${flashColor}22` : 'transparent', transform: flash && accents[beat] === 'strong' ? 'scale(1.06)' : 'scale(1)' }}
+        >
           <span className="text-5xl font-extrabold tabular-nums text-[var(--ink)]">{bpm}</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--gold)]">{tempoName(bpm)}</span>
         </div>
-        <p className="mt-1 text-sm font-semibold text-[var(--muted)]">{t('bpm')}</p>
-        <div className="mt-3 flex justify-center gap-2" aria-hidden>
-          {Array.from({ length: meter }, (_, i) => (
-            <span key={i} className={`h-3.5 w-3.5 rounded-full ${running && beat === i ? (i === 0 ? 'bg-[var(--gold)]' : 'bg-[var(--ink)]') : 'bg-[var(--background)]'}`} />
+        <p className="mt-1 text-sm font-semibold text-[var(--muted)]">
+          {t('bpm')}
+          {running && bar > 0 ? ` · ${t('barCount', { bar })}` : ''}
+          {mm ? ` · ${mm}` : ''}
+        </p>
+
+        {/* Battiti della battuta: toccandoli si cambia l'accento */}
+        <div className="mx-auto mt-3 flex max-w-sm flex-wrap justify-center gap-2">
+          {accents.map((a, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => cycleAccent(i)}
+              aria-label={t('accentAria', { n: i + 1, accent: t(`accent_${a}`) })}
+              title={t(`accent_${a}`)}
+              className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-xs font-extrabold transition ${running && beat === i ? 'scale-110' : ''} ${a === 'strong' ? 'border-[var(--gold)] bg-[var(--gold)] text-white' : a === 'normal' ? 'border-[var(--ink)] bg-white text-[var(--ink)]' : 'border-dashed border-gray-300 bg-white text-gray-300'} ${running && beat === i ? 'ring-4 ring-[var(--gold)]/40' : ''}`}
+            >
+              {i + 1}
+            </button>
           ))}
         </div>
+        <p className="mt-1 text-xs text-[var(--muted)]">{t('accentHint')}</p>
+
         {listen && running && (
-          <p className={`mt-3 h-7 text-lg font-extrabold ${verdict === 'on' ? 'text-emerald-600' : verdict ? 'text-orange-600' : 'text-[var(--muted)]'}`}>{verdict ? t(`verdict_${verdict}`) : t('listening')}</p>
+          <p className={`mt-3 h-7 text-lg font-extrabold ${verdict === 'on' ? 'text-emerald-600' : verdict ? 'text-orange-600' : 'text-[var(--muted)]'}`}>
+            {verdict ? t(`verdict_${verdict}`) : counting ? t('countingIn') : t('listening')}
+          </p>
         )}
         {listen && running && live.hits > 0 && <p className="text-sm text-[var(--muted)]">{t('liveLine', { hits: live.hits, percent: live.percent })}</p>}
 
         <div className="mt-4 flex items-center justify-center gap-2">
-          <button type="button" onClick={() => change(-5)} className="h-11 min-w-11 rounded-full border border-[var(--gold)]/40 px-3 font-bold text-[var(--ink)]">−5</button>
+          <button type="button" onClick={() => change(-5)} className="h-11 min-w-11 rounded-full border border-[var(--gold)]/40 px-3 font-bold text-[var(--ink)]">
+            −5
+          </button>
           <button type="button" onClick={() => change(-1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--gold)]/40 text-[var(--ink)]" aria-label="−1">
             <Minus className="h-4 w-4" />
           </button>
-          <input type="range" min={MIN_BPM} max={MAX_BPM} value={bpm} onChange={(e) => setBpm(Number(e.target.value))} className="w-32 accent-[var(--gold)] sm:w-48" aria-label={t('bpm')} />
+          <input type="range" min={MIN_BPM} max={MAX_BPM} value={bpm} onChange={(e) => setBpm(Number(e.target.value))} className="w-28 accent-[var(--gold)] sm:w-48" aria-label={t('bpm')} />
           <button type="button" onClick={() => change(1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--gold)]/40 text-[var(--ink)]" aria-label="+1">
             <Plus className="h-4 w-4" />
           </button>
-          <button type="button" onClick={() => change(5)} className="h-11 min-w-11 rounded-full border border-[var(--gold)]/40 px-3 font-bold text-[var(--ink)]">+5</button>
+          <button type="button" onClick={() => change(5)} className="h-11 min-w-11 rounded-full border border-[var(--gold)]/40 px-3 font-bold text-[var(--ink)]">
+            +5
+          </button>
         </div>
 
         <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">
@@ -237,6 +405,7 @@ export default function MetronomoApp() {
             <Hand className="h-4 w-4" /> {t('tap')}
           </button>
         </div>
+        <p className="mt-2 hidden text-xs text-[var(--muted)] sm:block">{t('keysHint')}</p>
         {error && <p className="mt-3 rounded-2xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
       </section>
 
@@ -245,8 +414,21 @@ export default function MetronomoApp() {
           <p className="text-sm font-bold text-[var(--ink)]">{t('meterTitle')}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {METERS.map((m) => (
-              <button key={m} type="button" disabled={running} onClick={() => setMeter(m)} aria-pressed={meter === m} className={chip(meter === m)}>
-                {m === 6 ? '6/8' : `${m}/4`}
+              <button key={m.id} type="button" disabled={running} onClick={() => chooseMeter(m.id)} aria-pressed={meter === m.id} className={chip(meter === m.id)}>
+                {m.id}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-sm font-bold text-[var(--ink)]">{t('subTitle')}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {SUBDIVISIONS.map((d) => (
+              <button key={d} type="button" onClick={() => setSub(d)} aria-pressed={sub === d} className={chip(sub === d)}>
+                <span className="mr-1" aria-hidden>
+                  {SUB_LABEL[d]}
+                </span>
+                {t(`sub_${d}`)}
               </button>
             ))}
           </div>
@@ -255,13 +437,34 @@ export default function MetronomoApp() {
           <p className="text-sm font-bold text-[var(--ink)]">{t('soundTitle')}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {SOUNDS.map((s) => (
-              <button key={s} type="button" onClick={() => setSound(s)} aria-pressed={sound === s && !lightOnly} className={chip(sound === s && !lightOnly)}>
+              <button key={s} type="button" onClick={() => setSound(s)} aria-pressed={sound === s} className={chip(sound === s)}>
                 {t(`sound_${s}`)}
               </button>
             ))}
-            <button type="button" onClick={() => setLightOnly((v) => !v)} aria-pressed={lightOnly} className={chip(lightOnly)}>
-              {t('lightOnly')}
-            </button>
+          </div>
+          <label className="mt-3 flex items-center gap-3 text-sm font-semibold text-[var(--ink)]">
+            <Volume2 className="h-4 w-4 shrink-0 text-[var(--gold)]" aria-hidden />
+            <span className="shrink-0">{t('volume')}</span>
+            <input type="range" min={0} max={1} step={0.05} value={volume} disabled={sound === 'none'} onChange={(e) => setVolume(Number(e.target.value))} className="w-full accent-[var(--gold)] disabled:opacity-40" aria-label={t('volume')} />
+          </label>
+          {canVibrate && (
+            <label className="mt-3 flex items-center gap-3 text-sm font-semibold text-[var(--ink)]">
+              <input type="checkbox" checked={vibrate} onChange={(e) => setVibrate(e.target.checked)} className="h-5 w-5 accent-[var(--gold)]" />
+              <Vibrate className="h-4 w-4 text-[var(--gold)]" aria-hidden /> {t('vibrate')}
+            </label>
+          )}
+        </div>
+
+        <div>
+          <p className="flex items-center gap-1.5 text-sm font-bold text-[var(--ink)]">
+            <Timer className="h-4 w-4 text-[var(--gold)]" /> {t('timerTitle')}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {TIMERS.map((m) => (
+              <button key={m} type="button" disabled={running} onClick={() => setTimerMin(m)} aria-pressed={timerMin === m} className={chip(timerMin === m)}>
+                {m ? t('timerMin', { min: m }) : t('timerOff')}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -300,7 +503,13 @@ export default function MetronomoApp() {
             <span className="block text-sm text-[var(--muted)]">{t('listenHint')}</span>
           </span>
         </label>
-        {listen && !lightOnly && (
+        {listen && (
+          <label className="ml-1 flex items-center gap-3 text-sm font-semibold text-[var(--ink)]">
+            <input type="checkbox" checked={countIn} disabled={running} onChange={(e) => setCountIn(e.target.checked)} className="h-5 w-5 accent-[var(--gold)]" />
+            {t('countIn')}
+          </label>
+        )}
+        {listen && sound !== 'none' && (
           <p className="flex items-start gap-2 rounded-2xl bg-amber-50 p-3 text-sm text-amber-900">
             <Headphones className="mt-0.5 h-4 w-4 shrink-0" /> {t('headphones')}
           </p>
@@ -334,7 +543,9 @@ export default function MetronomoApp() {
           <ul className="space-y-1.5 text-sm">
             {history.slice(0, 10).map((p) => (
               <li key={p.id} className="flex justify-between gap-3 rounded-xl bg-[var(--background)] px-3 py-2">
-                <span>{new Date(p.at).toLocaleDateString(locale, { day: 'numeric', month: 'short' })} · {p.bpm} {t('bpmShort')}</span>
+                <span>
+                  {new Date(p.at).toLocaleDateString(locale, { day: 'numeric', month: 'short' })} · {p.bpm} {t('bpmShort')}
+                </span>
                 <span className="font-bold text-[var(--ink)]">{p.hits ? Math.round((p.onTime / p.hits) * 100) : 0}%</span>
               </li>
             ))}
