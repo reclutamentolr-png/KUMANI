@@ -198,6 +198,7 @@ const TOOL_GROUPS = [
   { id: 'social', label: 'Social' },
   { id: 'wellness', label: 'Benessere' },
   { id: 'fun', label: 'Svago' },
+  { id: 'audio', label: 'Audio e Strumenti' },
   { id: 'kids', label: 'Bambini' },
   { id: 'community', label: 'Community' },
   { id: 'other', label: 'Altro' },
