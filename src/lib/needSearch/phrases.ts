@@ -82,6 +82,15 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
     de: ['ausweis foto senden', 'wasserzeichen'],
     ru: ['фото паспорта', 'водяной знак'],
   },
+  'vocale-sospetto': {
+    it: ['vocale sospetto', 'messaggio vocale strano', 'vocale whatsapp truffa', 'ciao mamma ho cambiato numero', 'nuovo numero mamma', 'finto carabiniere', 'finto nipote', 'telefonata truffa', 'chiamata della banca', 'mi chiedono un codice', 'mi chiedono soldi al telefono'],
+    en: ['suspicious voice message', 'voice note scam', 'hi mum new number', 'fake bank call', 'they ask for a code'],
+    fr: ['message vocal suspect', 'arnaque vocal'],
+    es: ['mensaje de voz sospechoso', 'estafa audio'],
+    pt: ['mensagem de voz suspeita', 'burla áudio'],
+    de: ['verdächtige sprachnachricht', 'betrug sprachnachricht'],
+    ru: ['подозрительное голосовое', 'мошенничество голосовое'],
+  },
   'testo-protetto': {
     it: ['chatgpt dati personali', 'usare intelligenza artificiale', 'anonimizzare testo', 'togliere nomi', 'privacy ia'],
     en: ['chatgpt personal data', 'anonymize text', 'remove names'],

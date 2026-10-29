@@ -64,6 +64,7 @@ import {
   type LucideIcon,
   ScanText,
   Layers,
+  AudioLines,
 } from 'lucide-react'
 
 // Shared by MarketplaceCard and any other UI that renders a tool by its
@@ -72,6 +73,7 @@ import {
 // not another.
 export const marketplaceIconMap: Record<string, LucideIcon> = {
   ScanText,
+  AudioLines,
   Layers,
   CarFront,
   House,

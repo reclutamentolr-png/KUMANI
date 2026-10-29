@@ -26,6 +26,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
     { key: 'email', href: '/app/checkmail', tool: 'checkmail' },
     { key: 'photo', href: '/app/verifoto', tool: 'verifoto' },
     { key: 'iban', href: '/app/verifica-iban', tool: 'verifica-iban' },
+    { key: 'voice', href: '/app/vocale-sospetto', tool: 'vocale-sospetto' },
     { key: 'phone', href: '/app/rete-antitruffa?tab=numero', tool: 'rete-antitruffa' },
   ],
   proteggi: [
@@ -169,6 +170,7 @@ export const TOOL_HUB: Record<string, ServiceHub> = {
   svat: 'controlla',
   checkmail: 'controlla',
   verifoto: 'controlla',
+  'vocale-sospetto': 'controlla',
   'verifica-iban': 'controlla',
   'scudo-dati': 'proteggi',
   'documento-sicuro': 'proteggi',

@@ -140,6 +140,16 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       category: 'security',
     },
     {
+      toolName: 'vocale-sospetto',
+      href: '/app/vocale-sospetto',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'AudioLines',
+      title: t('vocaleSospetto'),
+      description: t('vocaleSospettoDescription'),
+      color: 'gold',
+      category: 'security',
+    },
+    {
       toolName: 'verifica-iban',
       href: '/app/verifica-iban',
       gradient: 'bg-[var(--ink)]',

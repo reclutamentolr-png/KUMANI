@@ -71,6 +71,7 @@ import {
   ShieldAlert,
   ScanText,
   Layers,
+  AudioLines,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'bambini' | 'community'
@@ -148,6 +149,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'verifoto', icon: ScanEye, title: tc('verifoto'), desc: tc('verifotoDescription'), category: 'security' },
     { name: 'checkmail', icon: MailSearch, title: tc('checkmail'), desc: tc('checkmailDescription'), category: 'security' },
     { name: 'antitruffa', icon: BookOpenCheck, title: tc('antitruffa'), desc: tc('antitruffaDescription'), category: 'security' },
+    { name: 'vocale-sospetto', icon: AudioLines, title: tc('vocaleSospetto'), desc: tc('vocaleSospettoDescription'), category: 'security' },
     { name: 'verifica-iban', icon: Landmark, title: tc('verificaIban'), desc: tc('verificaIbanDescription'), category: 'security' },
     { name: 'rete-antitruffa', icon: ShieldAlert, title: tc('reteAntitruffa'), desc: tc('reteAntitruffaDescription'), category: 'security' },
     { name: 'scudo-dati', icon: ShieldUser, title: tc('scudoDati'), desc: tc('scudoDatiDescription'), category: 'security' },

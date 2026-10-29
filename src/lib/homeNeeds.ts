@@ -6,7 +6,7 @@
 import type { RequiredPlan } from '@/lib/plans'
 
 export const HOME_NEEDS = [
-  { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro', 'testo-protetto', 'carte-antitruffa', 'tutela'] },
+  { key: 'scams', icon: 'ShieldCheck', items: ['rete-antitruffa', 'antitruffa', 'checkmail', 'vocale-sospetto', 'verifica-iban', 'svat', 'verifoto', 'scudo-dati', 'documento-sicuro', 'testo-protetto', 'carte-antitruffa', 'tutela'] },
   { key: 'organize', icon: 'CalendarDays', items: ['life-calendar', 'fototessera', 'memolife', 'findo', 'hopla'] },
   { key: 'trips', icon: 'Plane', items: ['travel', 'convivium', 'events'] },
   { key: 'money', icon: 'PiggyBank', items: ['spendly', 'fincheck', 'casa', 'garage', 'digital-receipt'] },
