@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation'
 import { CheckCircle, ChevronRight, Clock, Globe, ImagePlus, LoaderCircle, MapPin, Palette, Phone, Plus, Trash2, Wallet, XCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { saveBusinessProfile } from '@/app/actions/businessProfile'
-import { BUSINESS_SOCIALS, type BusinessProfile } from '@/lib/businessProfile'
+import { BUSINESS_SOCIALS, businessWebsiteUrl, type BusinessProfile } from '@/lib/businessProfile'
+import NfcTagSection from '@/components/NfcTagSection'
 import { validateLogoFile, logoExtension } from '@/lib/quotes'
 import { resizeImageFile } from '@/lib/resizeImage'
 import VatCheck from '@/components/ecosystem/VatCheck'
@@ -42,6 +43,7 @@ function Section({ icon, title, children }: { icon: ReactNode; title: string; ch
 // i servizi li riprendono con «Usa i dati della Scheda attività».
 export default function BusinessProfileForm({ initial, brand = null }: { initial: BusinessProfile; brand?: BrandPalette | null }) {
   const t = useTranslations('businessProfile')
+  const tNfc = useTranslations('nfcTag')
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -53,6 +55,8 @@ export default function BusinessProfileForm({ initial, brand = null }: { initial
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  // Link delle recensioni per l'adesivo NFC: solo se è un indirizzo web vero
+  const reviewLink = /^https?:\/\/[^\s/]+\.[^\s]+$/i.test(businessWebsiteUrl(form.reviewUrl)) ? businessWebsiteUrl(form.reviewUrl) : ''
 
   const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) => {
     setSaved(false)
@@ -259,6 +263,8 @@ export default function BusinessProfileForm({ initial, brand = null }: { initial
             <input className={INPUT} value={form.reviewUrl} placeholder={t('reviewUrlPlaceholder')} onChange={(e) => set('reviewUrl', e.target.value)} />
           </Field>
         </div>
+        {/* Adesivo NFC con il link diretto alle recensioni */}
+        {reviewLink ? <NfcTagSection kind="review" url={reviewLink} /> : <p className="mt-4 text-sm text-[var(--muted)]">{tNfc('review.noLink')}</p>}
       </Section>
 
       <Section icon={<Wallet className="h-5 w-5" />} title={t('paymentTitle')}>

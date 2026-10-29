@@ -9,7 +9,7 @@ import { defaultLocale } from '../../../../../i18n'
 import BusinessCardEditor from '@/components/businessCard/BusinessCardEditor'
 import BusinessCardChooser from '@/components/businessCard/BusinessCardChooser'
 import ClassicCardEditor from '@/components/businessCard/ClassicCardEditor'
-import NfcCardSection from '@/components/businessCard/NfcCardSection'
+import NfcTagSection from '@/components/NfcTagSection'
 import type { BusinessCardSettings } from '@/app/actions/businessCard'
 import { cleanClassic, type ClassicSource } from '@/lib/businessCardClassic'
 import { getMyBusinessProfile } from '@/lib/businessProfile-server'
@@ -104,7 +104,7 @@ export default async function BusinessCardPage() {
               }
             />
             {/* Biglietto NFC: stesso link del QR, per tutti e due i biglietti */}
-            <NfcCardSection cardUrl={`${site}${prefix}${cardPath}`} />
+            <NfcTagSection kind="card" url={`${site}${prefix}${cardPath}`} />
           </>
         ) : (
           <p className="rounded-2xl border border-dashed border-[var(--gold)]/40 bg-white p-6 text-[var(--muted)]">{t('noCode')}</p>
