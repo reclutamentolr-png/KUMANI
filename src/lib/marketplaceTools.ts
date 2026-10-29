@@ -691,6 +691,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'accordatore',
+      href: '/app/accordatore',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Guitar',
+      title: t('accordatore'),
+      description: t('accordatoreDescription'),
+      color: 'gold',
+      category: 'audio',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'angolo-bambini',
       href: '/app/angolo-bambini',
       gradient: 'bg-[var(--ink)]',

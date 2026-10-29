@@ -76,6 +76,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   // Audio e Strumenti
   fonometro: 'audio',
   metronomo: 'audio',
+  accordatore: 'audio',
   // Bambini
   'angolo-bambini': 'kids',
 }
@@ -92,7 +93,7 @@ export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
   social: ['tutela', 'captio', 'lumen', 'diarium'],
   wellness: ['oxygen', 'focus', 'neurobalance'],
   fun: ['nexus', 'fabula', 'mosaic', 'veritas'],
-  audio: ['fonometro', 'metronomo'],
+  audio: ['accordatore', 'metronomo', 'fonometro'],
   kids: ['angolo-bambini'],
 }
 

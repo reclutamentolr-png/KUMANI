@@ -64,6 +64,7 @@ const PAID_TOOLS = [
   'carte-antitruffa',
   'fonometro',
   'metronomo',
+  'accordatore',
   'firma-email',
   'calcolatrici',
   'angolo-bambini',

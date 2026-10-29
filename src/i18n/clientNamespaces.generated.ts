@@ -1,6 +1,7 @@
 // File generato da scripts/client-namespaces.mjs: non modificare a mano.
 // Testi usati dai componenti con useTranslations (vanno al browser).
 export const CLIENT_NAMESPACES: readonly string[] = [
+  "accordatore",
   "accountDeletion",
   "adminMessage",
   "affinity",

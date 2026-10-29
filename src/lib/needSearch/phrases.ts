@@ -82,6 +82,15 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
     de: ['ausweis foto senden', 'wasserzeichen'],
     ru: ['фото паспорта', 'водяной знак'],
   },
+  accordatore: {
+    it: ['accordatore', 'accordare la chitarra', 'accordare il violino', 'accordare ukulele', 'accordare il basso', 'chitarra scordata', 'accordatura', 'drop d', 'la 440'],
+    en: ['tuner', 'tune my guitar', 'tune violin', 'tune ukulele', 'guitar tuning'],
+    fr: ['accordeur', 'accorder la guitare'],
+    es: ['afinador', 'afinar la guitarra'],
+    pt: ['afinador', 'afinar a guitarra'],
+    de: ['stimmgerät', 'gitarre stimmen'],
+    ru: ['тюнер', 'настроить гитару'],
+  },
   metronomo: {
     it: ['metronomo', 'andare a tempo', 'suonare a tempo', 'battiti al minuto', 'bpm', 'esercitarsi con la chitarra', 'esercitarsi alla batteria', 'studiare pianoforte', 'tenere il ritmo'],
     en: ['metronome', 'play in time', 'beats per minute', 'bpm', 'keep the rhythm'],
