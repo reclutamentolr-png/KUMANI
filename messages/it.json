@@ -17645,7 +17645,8 @@
     "tool3": "I miei dati sono al sicuro qui?",
     "tool4": "Quali servizi vanno bene insieme a {tool}?",
     "moreQuestions": "Altre domande",
-    "restart": "Ricomincia la conversazione"
+    "restart": "Cancella la conversazione e ricomincia dalle prime domande",
+    "clearChat": "Pulisci chat"
   },
   "nfcTag": {
     "buyTitle": "Cosa ti serve",
@@ -17941,6 +17942,23 @@
     "strobe": "Modalità strobo (massima precisione: le strisce si fermano quando è accordata)",
     "sensitivity": "Sensibilità",
     "sensitivityHint": "Alzala in un ambiente silenzioso o con strumenti dal suono debole; abbassala se c’è rumore intorno.",
-    "privacy": "Il suono non viene registrato: la nota si riconosce nel telefono e niente lascia il dispositivo."
+    "privacy": "Il suono non viene registrato: la nota si riconosce nel telefono e niente lascia il dispositivo.",
+    "guided": "Passo passo, una corda alla volta",
+    "guidedHint": "Segui la guida qui sotto: toccando una corda la scegli tu.",
+    "guideStep": "Passo {n} di {total}",
+    "guideString": "Corda {number}: {note}",
+    "guideLowest": "la più grave (la più spessa)",
+    "guideHighest": "la più acuta (la più sottile)",
+    "guideDrawing": "Disegno dello strumento con la chiavetta da girare",
+    "guidePlay": "Suona questa corda, da sola.",
+    "guideOk": "Perfetta! Lasciala così.",
+    "guideRaise": "Gira la chiavetta come la freccia: la nota sale.",
+    "guideLower": "Gira la chiavetta come la freccia: la nota scende.",
+    "guideLeftHint": "Chiavette a sinistra: in senso antiorario la corda si tende e la nota sale.",
+    "guideRightHint": "Chiavette a destra: in senso orario la corda si tende e la nota sale.",
+    "guideBowedHint": "Usa il tiracantino sulla cordiera: in senso orario la nota sale. Se è molto lontana, gira il pirolo in alto con delicatezza, spingendolo dentro.",
+    "guideNext": "Fatto! Ora la corda {note}.",
+    "guidePrev": "Indietro",
+    "guideSkip": "Salta"
   }
 }

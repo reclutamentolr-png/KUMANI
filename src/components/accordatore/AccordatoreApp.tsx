@@ -21,6 +21,7 @@ import {
   searchRange,
   type Naming,
 } from '@/lib/accordatore'
+import GuidedTuning from './GuidedTuning'
 
 // Accordatore: chitarra, basso, ukulele, violino, viola, violoncello o
 // cromatico. Riconosce la corda da solo (o si sceglie toccandola), ago e
@@ -44,6 +45,9 @@ export default function AccordatoreApp() {
   const [sensitivity, setSensitivity] = useState(0.5)
   const [running, setRunning] = useState(false)
   const [manual, setManual] = useState<number | null>(null)
+  // «Passo passo»: una corda alla volta, con il disegno dello strumento
+  const [guided, setGuided] = useState(true)
+  const [guideIndex, setGuideIndex] = useState(0)
   const [reading, setReading] = useState<Reading | null>(null)
   const [tuned, setTuned] = useState<boolean[]>([])
   const [phase, setPhase] = useState(0)
@@ -92,8 +96,25 @@ export default function AccordatoreApp() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- nuove corde, nuovi segni di spunta
     setTuned(strings.map(() => false))
     setManual(null)
+    setGuideIndex(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stringsKey])
+
+  // Passo passo: si accorda la corda della guida
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- la guida decide la corda da ascoltare
+    if (guided && strings.length) setManual(guideIndex)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guided, guideIndex, stringsKey])
+
+  // Corda accordata: dopo un attimo si passa alla prossima ancora da accordare
+  useEffect(() => {
+    if (!guided || !tuned[guideIndex]) return
+    const next = tuned.findIndex((v, i) => i > guideIndex && !v)
+    if (next < 0) return
+    const id = setTimeout(() => setGuideIndex(next), 1400)
+    return () => clearTimeout(id)
+  }, [guided, tuned, guideIndex])
 
   function release() {
     cancelAnimationFrame(frame.current)
@@ -210,6 +231,11 @@ export default function AccordatoreApp() {
   }
 
   const pickString = (i: number) => {
+    if (guided) {
+      setGuideIndex(i)
+      L.current.recent = []
+      return
+    }
     setManual((m) => (m === i ? null : i))
     L.current.recent = []
   }
@@ -295,11 +321,36 @@ export default function AccordatoreApp() {
                 )
               })}
             </div>
-            <p className="mt-2 text-xs text-[var(--muted)]">{manual === null ? t('autoHint') : t('manualHint', { note: noteName(strings[manual], naming) })}</p>
+            <p className="mt-2 text-xs text-[var(--muted)]">{guided ? t('guidedHint') : manual === null ? t('autoHint') : t('manualHint', { note: noteName(strings[manual], naming) })}</p>
             {manual !== null && (
               <button type="button" onClick={() => reference(strings[manual])} className="mt-2 inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--gold)]/50 px-4 text-sm font-bold text-[var(--ink)]">
                 <Volume2 className="h-4 w-4 text-[var(--gold)]" /> {t('playReference')}
               </button>
+            )}
+            <label className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-[var(--ink)]">
+              <input
+                type="checkbox"
+                checked={guided}
+                onChange={(e) => {
+                  setGuided(e.target.checked)
+                  if (!e.target.checked) setManual(null)
+                }}
+                className="h-5 w-5 accent-[var(--gold)]"
+              />
+              {t('guided')}
+            </label>
+            {guided && (
+              <GuidedTuning
+                instrument={instrument}
+                strings={strings}
+                index={Math.min(guideIndex, strings.length - 1)}
+                naming={naming}
+                cents={reading && reading.stringIndex === guideIndex ? reading.cents : null}
+                tolerance={tolerance}
+                tuned={tuned}
+                onPrev={() => setGuideIndex((i) => Math.max(0, i - 1))}
+                onNext={() => setGuideIndex((i) => Math.min(strings.length - 1, i + 1))}
+              />
             )}
             {allTuned && <p className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm font-extrabold text-emerald-800">{t('allTuned')}</p>}
           </div>

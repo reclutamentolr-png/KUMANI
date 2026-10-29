@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { ListPlus, RotateCcw, Send, ThumbsDown, ThumbsUp, X } from 'lucide-react'
+import { ListPlus, Send, ThumbsDown, ThumbsUp, Trash2, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import Kumi from '@/components/kids/Kumi'
 import { askKumi, kumiChatStatus, rateKumi, type KumiStatus } from '@/app/actions/kumiChat'
@@ -280,8 +280,8 @@ export default function KumiChat() {
               <p className="truncate text-xs text-white/70">{t('subtitle')}</p>
             </div>
             {msgs.length > 0 && (
-              <button type="button" onClick={restart} aria-label={t('restart')} title={t('restart')} className="rounded-full p-2 text-white/80 hover:bg-white/10">
-                <RotateCcw className="h-5 w-5" />
+              <button type="button" onClick={restart} title={t('restart')} className="inline-flex items-center gap-1 rounded-full border border-white/25 px-2.5 py-1.5 text-xs font-bold text-white/90 hover:bg-white/10">
+                <Trash2 className="h-3.5 w-3.5" /> {t('clearChat')}
               </button>
             )}
             <button type="button" onClick={() => setOpen(false)} aria-label={t('close')} className="rounded-full p-2 text-white/80 hover:bg-white/10">

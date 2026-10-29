@@ -17645,7 +17645,8 @@
     "tool3": "¿Mis datos están seguros aquí?",
     "tool4": "¿Qué servicios van bien con {tool}?",
     "moreQuestions": "Más preguntas",
-    "restart": "Empezar de nuevo"
+    "restart": "Borra la conversación y vuelve a las primeras preguntas",
+    "clearChat": "Limpiar chat"
   },
   "nfcTag": {
     "buyTitle": "Qué necesitas",
@@ -17941,6 +17942,23 @@
     "strobe": "Modo estroboscópico (máxima precisión: las franjas se paran cuando está afinada)",
     "sensitivity": "Sensibilidad",
     "sensitivityHint": "Súbela en un lugar silencioso o con instrumentos de sonido suave; bájala si hay ruido alrededor.",
-    "privacy": "El sonido no se graba: la nota se reconoce en el teléfono y nada sale del dispositivo."
+    "privacy": "El sonido no se graba: la nota se reconoce en el teléfono y nada sale del dispositivo.",
+    "guided": "Paso a paso, una cuerda cada vez",
+    "guidedHint": "Sigue la guía de abajo: tocando una cuerda la eliges tú.",
+    "guideStep": "Paso {n} de {total}",
+    "guideString": "Cuerda {number}: {note}",
+    "guideLowest": "la más grave (la más gruesa)",
+    "guideHighest": "la más aguda (la más fina)",
+    "guideDrawing": "Dibujo del instrumento con la clavija que hay que girar",
+    "guidePlay": "Toca esta cuerda, sola.",
+    "guideOk": "¡Perfecta! Déjala así.",
+    "guideRaise": "Gira la clavija como la flecha: la nota sube.",
+    "guideLower": "Gira la clavija como la flecha: la nota baja.",
+    "guideLeftHint": "Clavijas a la izquierda: en sentido antihorario la cuerda se tensa y la nota sube.",
+    "guideRightHint": "Clavijas a la derecha: en sentido horario la cuerda se tensa y la nota sube.",
+    "guideBowedHint": "Usa el afinador fino del cordal: en sentido horario la nota sube. Si está muy lejos, gira con cuidado la clavija de arriba, empujándola hacia dentro.",
+    "guideNext": "¡Hecho! Ahora la cuerda {note}.",
+    "guidePrev": "Atrás",
+    "guideSkip": "Saltar"
   }
 }

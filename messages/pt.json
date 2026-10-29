@@ -17645,7 +17645,8 @@
     "tool3": "Os meus dados estão seguros aqui?",
     "tool4": "Que serviços combinam com {tool}?",
     "moreQuestions": "Mais perguntas",
-    "restart": "Recomeçar"
+    "restart": "Apaga a conversa e volta às primeiras perguntas",
+    "clearChat": "Limpar chat"
   },
   "nfcTag": {
     "buyTitle": "O que precisa",
@@ -17941,6 +17942,23 @@
     "strobe": "Modo estroboscópico (máxima precisão: as faixas param quando está afinada)",
     "sensitivity": "Sensibilidade",
     "sensitivityHint": "Aumente-a num local silencioso ou com instrumentos de som fraco; diminua-a se houver ruído à volta.",
-    "privacy": "O som não é gravado: a nota é reconhecida no telemóvel e nada sai do dispositivo."
+    "privacy": "O som não é gravado: a nota é reconhecida no telemóvel e nada sai do dispositivo.",
+    "guided": "Passo a passo, uma corda de cada vez",
+    "guidedHint": "Siga o guia abaixo: tocando numa corda escolhe-a você.",
+    "guideStep": "Passo {n} de {total}",
+    "guideString": "Corda {number}: {note}",
+    "guideLowest": "a mais grave (a mais grossa)",
+    "guideHighest": "a mais aguda (a mais fina)",
+    "guideDrawing": "Desenho do instrumento com a tarraxa a rodar",
+    "guidePlay": "Toque só esta corda.",
+    "guideOk": "Perfeita! Deixe-a assim.",
+    "guideRaise": "Rode a tarraxa como a seta: a nota sobe.",
+    "guideLower": "Rode a tarraxa como a seta: a nota desce.",
+    "guideLeftHint": "Tarraxas à esquerda: no sentido anti-horário a corda estica e a nota sobe.",
+    "guideRightHint": "Tarraxas à direita: no sentido horário a corda estica e a nota sobe.",
+    "guideBowedHint": "Use o micro-afinador no estandarte: no sentido horário a nota sobe. Se estiver muito longe, rode com cuidado a cravelha em cima, empurrando-a para dentro.",
+    "guideNext": "Feito! Agora a corda {note}.",
+    "guidePrev": "Voltar",
+    "guideSkip": "Saltar"
   }
 }

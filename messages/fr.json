@@ -17645,7 +17645,8 @@
     "tool3": "Mes données sont-elles en sécurité ici ?",
     "tool4": "Quels services vont bien avec {tool} ?",
     "moreQuestions": "Autres questions",
-    "restart": "Recommencer"
+    "restart": "Efface la conversation et revient aux premières questions",
+    "clearChat": "Effacer le chat"
   },
   "nfcTag": {
     "buyTitle": "Ce qu’il vous faut",
@@ -17941,6 +17942,23 @@
     "strobe": "Mode stroboscope (précision maximale : les bandes s’arrêtent quand c’est juste)",
     "sensitivity": "Sensibilité",
     "sensitivityHint": "Augmentez-la dans un endroit calme ou pour des instruments au son faible ; baissez-la s’il y a du bruit autour.",
-    "privacy": "Aucun son n’est enregistré : la note est reconnue sur le téléphone et rien ne quitte l’appareil."
+    "privacy": "Aucun son n’est enregistré : la note est reconnue sur le téléphone et rien ne quitte l’appareil.",
+    "guided": "Pas à pas, une corde à la fois",
+    "guidedHint": "Suivez le guide ci-dessous : touchez une corde pour la choisir vous-même.",
+    "guideStep": "Étape {n} sur {total}",
+    "guideString": "Corde {number} : {note}",
+    "guideLowest": "la plus grave (la plus épaisse)",
+    "guideHighest": "la plus aiguë (la plus fine)",
+    "guideDrawing": "Dessin de l’instrument avec la mécanique à tourner",
+    "guidePlay": "Jouez cette corde seule.",
+    "guideOk": "Parfait ! Laissez-la ainsi.",
+    "guideRaise": "Tournez la mécanique comme la flèche : la note monte.",
+    "guideLower": "Tournez la mécanique comme la flèche : la note descend.",
+    "guideLeftHint": "Mécaniques à gauche : dans le sens antihoraire la corde se tend et la note monte.",
+    "guideRightHint": "Mécaniques à droite : dans le sens horaire la corde se tend et la note monte.",
+    "guideBowedHint": "Utilisez le tendeur sur le cordier : dans le sens horaire la note monte. Si elle est très loin, tournez doucement la cheville en haut en l’enfonçant.",
+    "guideNext": "C’est fait ! Maintenant la corde {note}.",
+    "guidePrev": "Retour",
+    "guideSkip": "Passer"
   }
 }

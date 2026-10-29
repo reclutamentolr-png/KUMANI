@@ -17645,7 +17645,8 @@
     "tool3": "Is my data safe here?",
     "tool4": "Which services go well with {tool}?",
     "moreQuestions": "More questions",
-    "restart": "Start over"
+    "restart": "Delete the conversation and start again from the first questions",
+    "clearChat": "Clear chat"
   },
   "nfcTag": {
     "buyTitle": "What you need",
@@ -17941,6 +17942,23 @@
     "strobe": "Strobe mode (maximum precision: the stripes stop when it’s in tune)",
     "sensitivity": "Sensitivity",
     "sensitivityHint": "Raise it in a quiet room or for soft-sounding instruments; lower it if there’s noise around.",
-    "privacy": "No sound is recorded: the note is detected on your phone and nothing leaves the device."
+    "privacy": "No sound is recorded: the note is detected on your phone and nothing leaves the device.",
+    "guided": "Step by step, one string at a time",
+    "guidedHint": "Follow the guide below: tap a string to choose it yourself.",
+    "guideStep": "Step {n} of {total}",
+    "guideString": "String {number}: {note}",
+    "guideLowest": "the lowest (the thickest)",
+    "guideHighest": "the highest (the thinnest)",
+    "guideDrawing": "Drawing of the instrument with the peg to turn",
+    "guidePlay": "Play this string on its own.",
+    "guideOk": "Perfect! Leave it like that.",
+    "guideRaise": "Turn the peg the way the arrow shows: the note goes up.",
+    "guideLower": "Turn the peg the way the arrow shows: the note goes down.",
+    "guideLeftHint": "Pegs on the left: anticlockwise tightens the string and raises the note.",
+    "guideRightHint": "Pegs on the right: clockwise tightens the string and raises the note.",
+    "guideBowedHint": "Use the fine tuner on the tailpiece: clockwise raises the note. If it’s far off, gently turn the peg at the top, pushing it in.",
+    "guideNext": "Done! Now the {note} string.",
+    "guidePrev": "Back",
+    "guideSkip": "Skip"
   }
 }

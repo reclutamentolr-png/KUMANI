@@ -17645,7 +17645,8 @@
     "tool3": "Sind meine Daten hier sicher?",
     "tool4": "Welche Dienste passen zu {tool}?",
     "moreQuestions": "Weitere Fragen",
-    "restart": "Neu anfangen"
+    "restart": "Löscht das Gespräch und beginnt wieder mit den ersten Fragen",
+    "clearChat": "Chat leeren"
   },
   "nfcTag": {
     "buyTitle": "Was du brauchst",
@@ -17941,6 +17942,23 @@
     "strobe": "Stroboskop-Modus (maximale Genauigkeit: Die Streifen bleiben stehen, wenn es stimmt)",
     "sensitivity": "Empfindlichkeit",
     "sensitivityHint": "Erhöhe sie in ruhiger Umgebung oder bei leisen Instrumenten; senke sie, wenn es laut ist.",
-    "privacy": "Es wird kein Ton aufgenommen: Die Note wird auf dem Handy erkannt, nichts verlässt das Gerät."
+    "privacy": "Es wird kein Ton aufgenommen: Die Note wird auf dem Handy erkannt, nichts verlässt das Gerät.",
+    "guided": "Schritt für Schritt, eine Saite nach der anderen",
+    "guidedHint": "Folge der Anleitung unten: Tippe auf eine Saite, um sie selbst zu wählen.",
+    "guideStep": "Schritt {n} von {total}",
+    "guideString": "Saite {number}: {note}",
+    "guideLowest": "die tiefste (die dickste)",
+    "guideHighest": "die höchste (die dünnste)",
+    "guideDrawing": "Zeichnung des Instruments mit dem Wirbel zum Drehen",
+    "guidePlay": "Spiel nur diese Saite.",
+    "guideOk": "Perfekt! Lass sie so.",
+    "guideRaise": "Dreh den Wirbel wie der Pfeil: Der Ton steigt.",
+    "guideLower": "Dreh den Wirbel wie der Pfeil: Der Ton sinkt.",
+    "guideLeftHint": "Wirbel links: gegen den Uhrzeigersinn spannt sich die Saite und der Ton steigt.",
+    "guideRightHint": "Wirbel rechts: im Uhrzeigersinn spannt sich die Saite und der Ton steigt.",
+    "guideBowedHint": "Nutze den Feinstimmer am Saitenhalter: im Uhrzeigersinn steigt der Ton. Wenn er weit daneben liegt, dreh vorsichtig den Wirbel oben und drück ihn dabei hinein.",
+    "guideNext": "Geschafft! Jetzt die {note}-Saite.",
+    "guidePrev": "Zurück",
+    "guideSkip": "Überspringen"
   }
 }
