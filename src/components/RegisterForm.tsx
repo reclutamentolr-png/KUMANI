@@ -15,6 +15,7 @@ import { authErrorText } from '@/lib/authErrors'
 import { checkActivationCode, giftGiverReferral, redeemActivationCode } from '@/app/actions/codes'
 import { notifyInviterOfSignup } from '@/app/actions/notifications'
 import { GIFT_CODE_RE } from '@/lib/gifts'
+import { normalizeCode, TRIAL_CODE_RE } from '@/lib/codeFormat'
 import { isDisposableEmail } from '@/lib/disposableEmail'
 import TurnstileWidget, { useTurnstile } from '@/components/auth/TurnstileWidget'
 import PasswordStrength from '@/components/PasswordStrength'
@@ -42,6 +43,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
   // Un solo campo per tutti i codici: voucher abbonamento, Pass o regalo
   const initialCode = giftCode || initialVoucherCode
   const tg = useTranslations('gifts')
+  const td = useTranslations('dashboard')
   // Un utente che ha lasciato la verifica a metà e poi ha provato ad
   // accedere viene rimandato qui con ?verify=<email> (vedi login/page.tsx)
   // per riprendere direttamente dall'inserimento del codice.
@@ -146,7 +148,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
     setLoading(true)
 
     // Regalo senza codice invito: l'invito è di chi ha regalato
-    const typedCode = formData.voucher_code.trim().toUpperCase()
+    const typedCode = normalizeCode(formData.voucher_code)
     const cleanReferralCode =
       formData.referral_code.trim().toUpperCase() || (GIFT_CODE_RE.test(typedCode) ? await giftGiverReferral(typedCode) : '')
 
@@ -171,8 +173,10 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
 
       // 1b. Coupon di attivazione facoltativo: verificato subito (solo
       // "valido/non valido"), attivato davvero a registrazione completata.
-      const cleanVoucherCode = formData.voucher_code.trim().toUpperCase()
+      const cleanVoucherCode = normalizeCode(formData.voucher_code)
       if (cleanVoucherCode) {
+        // Codice prova: si apre dal suo link, senza iscrizione
+        if (TRIAL_CODE_RE.test(cleanVoucherCode)) throw new Error(td('activateCodeErrorTrial', { code: cleanVoucherCode }))
         if (!(await checkActivationCode(cleanVoucherCode))) throw new Error(t('invalidVoucher'))
       }
 
@@ -300,7 +304,7 @@ export default function RegisterForm({ detectedCountry = '' }: { detectedCountry
       // Codice (voucher, Pass o regalo): attivato ora. Se non va a buon fine
       // l'account resta creato: il codice si riprova dalla dashboard con
       // "Hai un codice?". Con un Pass o un regalo si apre la dashboard essenziale.
-      const activationCode = (meta.voucher_code ?? formData.voucher_code).trim().toUpperCase()
+      const activationCode = normalizeCode(meta.voucher_code ?? formData.voucher_code)
       let delay = 2000
       if (activationCode) {
         // Se il server non risponde l'account resta creato: il codice si riprova dalla dashboard

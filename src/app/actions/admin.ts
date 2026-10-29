@@ -1413,13 +1413,27 @@ export async function createVoucherBatch(input: {
       remaining = 0
       break
     }
-    if (insertError.code !== '23505') return { success: false, error: insertError.message }
+    if (insertError.code !== '23505') {
+      await discardBatch(batch.id)
+      return { success: false, error: insertError.message }
+    }
     const { count } = await service.from('subscription_vouchers').select('id', { count: 'exact', head: true }).eq('batch_id', batch.id)
     remaining = quantity - (count ?? 0)
   }
-  if (remaining > 0) return { success: false, error: 'Impossibile generare tutti i codici. Riprova.' }
+  if (remaining > 0) {
+    await discardBatch(batch.id)
+    return { success: false, error: 'Impossibile generare tutti i codici. Riprova.' }
+  }
 
   return { success: true, batchId: batch.id }
+}
+
+// Lotto non riuscito: niente lotti vuoti o a metà in Admin (i codici non
+// ancora consegnati si tolgono insieme al lotto)
+async function discardBatch(batchId: string) {
+  const service = getServiceClient()
+  await service.from('subscription_vouchers').delete().eq('batch_id', batchId).eq('status', 'active')
+  await service.from('voucher_batches').delete().eq('id', batchId)
 }
 
 export async function listVoucherBatches() {

@@ -812,7 +812,13 @@
     "inviteSelfSignup": "The invited person always signs up themselves, with their own email, password and consents: you only send them the link.",
     "inviteShareMessageNamed": "Hi {name}! I invite you to KUMANI: {tools} tools in {services} services, in one app, and a community that helps each other. Sign up with my link: {link}",
     "inviteTargetTitle": "Do you want to give a new Kumano a place among {name}’s Kumani?",
-    "inviteTargetText": "Send this special link: when the person activates a subscription they join {name}’s Kumani, if {name} still has a free tentacle (otherwise via Spillover). You remain the inviter: most of the KU Points go to you and the Welcome Bonus to {name}."
+    "inviteTargetText": "Send this special link: when the person activates a subscription they join {name}’s Kumani, if {name} still has a free tentacle (otherwise via Spillover). You remain the inviter: most of the KU Points go to you and the Welcome Bonus to {name}.",
+    "activateVoucherErrorRevoked": "This code has been cancelled.",
+    "activateVoucherErrorSubscribed": "You already have an active subscription paid by card: this code stays valid for someone else.",
+    "activateVoucherErrorUnlimited": "Your subscription is already active with no end date: this code stays valid for someone else.",
+    "activateVoucherErrorPlan": "You already have the Pro plan active: this Plus code can be used when your plan ends, or it stays valid for someone else.",
+    "activateCodeErrorIncluded": "This service is already included in your plan: the code stays valid for someone else.",
+    "activateCodeErrorTrial": "This is a trial code: open it from the link kumani.io/prova/{code}, no sign-up needed."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10312,7 +10318,12 @@
       "fieldReset": "Back to the profile value",
       "sloganTitle": "Tagline (on the back with “Tagline”, otherwise under your name)",
       "sloganPlaceholder": "E.g. At your service since 1998"
-    }
+    },
+    "chooseSide": "Which side do you want to download?",
+    "side_front": "Front only",
+    "side_back": "Back only",
+    "side_both": "Front and back (2 separate files)",
+    "side_combined": "Front and back in one PDF"
   },
   "seo": {
     "siteTitle": "KUMANI – Hands that lend you a hand",

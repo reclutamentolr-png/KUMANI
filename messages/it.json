@@ -812,7 +812,13 @@
     "inviteSelfSignup": "L’iscrizione la fa sempre la persona invitata, con la sua email, la sua password e i suoi consensi: tu le mandi solo il link.",
     "inviteShareMessageNamed": "Ciao {name}! Ti invito in KUMANI: {tools} strumenti in {services} servizi, in un’unica app, e una community che si aiuta. Iscriviti dal mio link: {link}",
     "inviteTargetTitle": "Vuoi dare un posto a un nuovo Kumano tra i Kumani di {name}?",
-    "inviteTargetText": "Manda questo link speciale: quando la persona attiva l’abbonamento entra tra i Kumani di {name}, se ha ancora un tentacolo libero (altrimenti con lo Spillover). Chi ha invitato resti tu: la maggior parte dei KU Points va a te e il Bonus Accoglienza a {name}."
+    "inviteTargetText": "Manda questo link speciale: quando la persona attiva l’abbonamento entra tra i Kumani di {name}, se ha ancora un tentacolo libero (altrimenti con lo Spillover). Chi ha invitato resti tu: la maggior parte dei KU Points va a te e il Bonus Accoglienza a {name}.",
+    "activateVoucherErrorRevoked": "Questo codice è stato annullato.",
+    "activateVoucherErrorSubscribed": "Hai già un abbonamento attivo pagato con carta: questo codice resta valido per qualcun altro.",
+    "activateVoucherErrorUnlimited": "Il tuo abbonamento è già attivo senza scadenza: questo codice resta valido per qualcun altro.",
+    "activateVoucherErrorPlan": "Hai già il piano Pro attivo: questo codice Plus si può usare quando il tuo piano scade, oppure resta valido per qualcun altro.",
+    "activateCodeErrorIncluded": "Questo servizio è già incluso nel tuo piano: il codice resta valido per qualcun altro.",
+    "activateCodeErrorTrial": "Questo è un codice di prova: si apre dal link kumani.io/prova/{code}, senza iscrizione."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10312,7 +10318,12 @@
       "fieldReset": "Torna al dato del profilo",
       "sloganTitle": "Frase (sul retro con «Frase», altrimenti sotto il nome)",
       "sloganPlaceholder": "Es. Dal 1998 al vostro servizio"
-    }
+    },
+    "chooseSide": "Quale lato vuoi scaricare?",
+    "side_front": "Solo fronte",
+    "side_back": "Solo retro",
+    "side_both": "Fronte e retro (2 file separati)",
+    "side_combined": "Fronte e retro in un solo PDF"
   },
   "seo": {
     "siteTitle": "KUMANI – Mani che ti danno una mano",

@@ -767,7 +767,13 @@
     "inviteSelfSignup": "Die Anmeldung macht immer die eingeladene Person selbst, mit eigener E-Mail, eigenem Passwort und eigenen Einwilligungen: Du schickst nur den Link.",
     "inviteShareMessageNamed": "Hallo {name}! Ich lade dich zu KUMANI ein: {tools} Tools in {services} Diensten, in einer App, und eine Community, die sich gegenseitig hilft. Melde dich über meinen Link an: {link}",
     "inviteTargetTitle": "Möchtest du einem neuen Kumano einen Platz bei den Kumani von {name} geben?",
-    "inviteTargetText": "Schick diesen besonderen Link: Wenn die Person ein Abo aktiviert, kommt sie zu den Kumani von {name}, falls dort noch ein Tentakel frei ist (sonst per Spillover). Du bleibst der Einladende: Der Großteil der KU Points geht an dich und der Willkommensbonus an {name}."
+    "inviteTargetText": "Schick diesen besonderen Link: Wenn die Person ein Abo aktiviert, kommt sie zu den Kumani von {name}, falls dort noch ein Tentakel frei ist (sonst per Spillover). Du bleibst der Einladende: Der Großteil der KU Points geht an dich und der Willkommensbonus an {name}.",
+    "activateVoucherErrorRevoked": "Dieser Code wurde storniert.",
+    "activateVoucherErrorSubscribed": "Du hast bereits ein aktives, per Karte bezahltes Abo: Dieser Code bleibt für jemand anderen gültig.",
+    "activateVoucherErrorUnlimited": "Dein Abo ist bereits ohne Ablaufdatum aktiv: Dieser Code bleibt für jemand anderen gültig.",
+    "activateVoucherErrorPlan": "Du hast bereits den Pro-Plan aktiv: Dieser Plus-Code kann nach Ablauf deines Plans verwendet werden oder bleibt für jemand anderen gültig.",
+    "activateCodeErrorIncluded": "Dieser Dienst ist bereits in deinem Plan enthalten: Der Code bleibt für jemand anderen gültig.",
+    "activateCodeErrorTrial": "Das ist ein Testcode: Er wird über den Link kumani.io/prova/{code} geöffnet, ohne Anmeldung."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10312,7 +10318,12 @@
       "fieldReset": "Zurück zum Profilwert",
       "sloganTitle": "Slogan (auf der Rückseite mit „Slogan“, sonst unter dem Namen)",
       "sloganPlaceholder": "z. B. Seit 1998 für Sie da"
-    }
+    },
+    "chooseSide": "Welche Seite möchtest du herunterladen?",
+    "side_front": "Nur Vorderseite",
+    "side_back": "Nur Rückseite",
+    "side_both": "Vorder- und Rückseite (2 getrennte Dateien)",
+    "side_combined": "Vorder- und Rückseite in einem PDF"
   },
   "seo": {
     "siteTitle": "KUMANI – Hände, die dir helfen",

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Check, Copy, Download, ExternalLink, FileText, LoaderCircle } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import BusinessCardCanvas, { BLEED, CARD_H, CARD_W, FULL_H, FULL_W, type CardDesign, type CardSide } from './BusinessCardCanvas'
+import SideDownloadButton, { type SideChoice } from './SideDownloadButton'
 import { saveBusinessCard, type BusinessCardSettings } from '@/app/actions/businessCard'
 
 // Documenti → Il mio biglietto da visita: scelta del modello, contatti da
@@ -90,20 +91,35 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
   }
 
   const fileBase = `KUMANI_biglietto_${settings.design}`
+  // Lati scelti nel menu (fronte, retro o tutti e due) e nome del file
+  const sidesFor = (choice: SideChoice): CardSide[] => (choice === 'front' || choice === 'back' ? [choice] : sides)
+  const suffix = (side: CardSide) => (sides.length > 1 ? (side === 'front' ? '_fronte' : '_retro') : '')
+  // Più file di fila: una piccola pausa, così il browser li scarica tutti
+  const pause = () => new Promise((r) => setTimeout(r, 400))
 
-  const exportPdf = async () => {
+  const exportPdf = async (choice: SideChoice) => {
     setBusy('pdf')
     setError(false)
     try {
       const { jsPDF } = await import('jspdf')
       // 85×55 mm + 2 mm di abbondanza per lato (come chiedono le tipografie
       // online): il disegno ha 3 mm, il millimetro in più resta fuori pagina
-      const pdf = new jsPDF({ unit: 'mm', format: [89, 59], orientation: 'landscape' })
-      for (const [i, side] of sides.entries()) {
-        if (i > 0) pdf.addPage([89, 59], 'landscape')
-        pdf.addImage(await render(side), 'PNG', -1, -1, 91, 61, undefined, 'FAST')
+      const makePdf = async (list: CardSide[]) => {
+        const pdf = new jsPDF({ unit: 'mm', format: [89, 59], orientation: 'landscape' })
+        for (const [i, side] of list.entries()) {
+          if (i > 0) pdf.addPage([89, 59], 'landscape')
+          pdf.addImage(await render(side), 'PNG', -1, -1, 91, 61, undefined, 'FAST')
+        }
+        return URL.createObjectURL(pdf.output('blob'))
       }
-      download(URL.createObjectURL(pdf.output('blob')), `${fileBase}_stampa.pdf`)
+      if (choice === 'combined') {
+        download(await makePdf(sides), `${fileBase}_fronte_retro_stampa.pdf`)
+      } else {
+        for (const [i, side] of sidesFor(choice).entries()) {
+          if (i > 0) await pause()
+          download(await makePdf([side]), `${fileBase}${suffix(side)}_stampa.pdf`)
+        }
+      }
     } catch (e) {
       console.error('[biglietto]', e)
       setError(true)
@@ -113,11 +129,12 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
   }
 
   // Immagine senza margine di taglio (per inviarla o stamparla in casa)
-  const exportPng = async () => {
+  const exportPng = async (choice: SideChoice) => {
     setBusy('png')
     setError(false)
     try {
-      for (const side of sides) {
+      for (const [i, side] of sidesFor(choice).entries()) {
+        if (i > 0) await pause()
         const full = await render(side)
         const img = new Image()
         img.src = full
@@ -126,7 +143,7 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
         canvas.width = CARD_W * 2
         canvas.height = CARD_H * 2
         canvas.getContext('2d')!.drawImage(img, BLEED * 2, BLEED * 2, CARD_W * 2, CARD_H * 2, 0, 0, CARD_W * 2, CARD_H * 2)
-        download(canvas.toDataURL('image/png'), `${fileBase}${sides.length > 1 ? (side === 'front' ? '_fronte' : '_retro') : ''}.png`)
+        download(canvas.toDataURL('image/png'), `${fileBase}${suffix(side)}.png`)
       }
     } catch (e) {
       console.error('[biglietto]', e)
@@ -190,12 +207,12 @@ export default function BusinessCardEditor({ cardUrl, cardPath, initial, hasPhon
           ))}
         </div>
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={exportPdf} disabled={busy !== null || !qrSvg} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-extrabold text-[var(--ink)] shadow-sm transition hover:brightness-105 disabled:opacity-60">
+          <SideDownloadButton hasBack={sides.length > 1} allowCombined onPick={exportPdf} disabled={busy !== null || !qrSvg} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-extrabold text-[var(--ink)] shadow-sm transition hover:brightness-105 disabled:opacity-60">
             {busy === 'pdf' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <FileText className="h-5 w-5" />} {busy === 'pdf' ? t('generating') : t('downloadPdf')}
-          </button>
-          <button type="button" onClick={exportPng} disabled={busy !== null || !qrSvg} className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-white px-5 py-3 font-bold text-[var(--ink)] transition hover:border-[var(--gold)] disabled:opacity-60">
+          </SideDownloadButton>
+          <SideDownloadButton hasBack={sides.length > 1} onPick={exportPng} disabled={busy !== null || !qrSvg} className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-white px-5 py-3 font-bold text-[var(--ink)] transition hover:border-[var(--gold)] disabled:opacity-60">
             {busy === 'png' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5 text-[var(--gold)]" />} {busy === 'png' ? t('generating') : t('downloadImage')}
-          </button>
+          </SideDownloadButton>
         </div>
         <p className="text-xs text-[var(--muted)]">{t('printHint')}</p>
         {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{t('error')}</p>}

@@ -767,7 +767,13 @@
     "inviteSelfSignup": "A inscrição é sempre feita pela pessoa convidada, com o seu email, palavra-passe e consentimentos: você só lhe envia o link.",
     "inviteShareMessageNamed": "Olá, {name}! Convido-te para o KUMANI: {tools} ferramentas em {services} serviços, numa só app, e uma comunidade que se ajuda. Inscreve-te com a minha ligação: {link}",
     "inviteTargetTitle": "Quer dar um lugar a um novo Kumano entre os Kumani de {name}?",
-    "inviteTargetText": "Envie este link especial: quando a pessoa ativar a subscrição entra entre os Kumani de {name}, se ainda tiver um tentáculo livre (senão, com o Spillover). Quem convida continua a ser você: a maior parte dos KU Points vai para si e o Bónus Acolhimento para {name}."
+    "inviteTargetText": "Envie este link especial: quando a pessoa ativar a subscrição entra entre os Kumani de {name}, se ainda tiver um tentáculo livre (senão, com o Spillover). Quem convida continua a ser você: a maior parte dos KU Points vai para si e o Bónus Acolhimento para {name}.",
+    "activateVoucherErrorRevoked": "Este código foi anulado.",
+    "activateVoucherErrorSubscribed": "Já tem uma assinatura ativa paga com cartão: este código continua válido para outra pessoa.",
+    "activateVoucherErrorUnlimited": "A sua assinatura já está ativa sem data de fim: este código continua válido para outra pessoa.",
+    "activateVoucherErrorPlan": "Já tem o plano Pro ativo: este código Plus pode ser usado quando o seu plano terminar, ou continua válido para outra pessoa.",
+    "activateCodeErrorIncluded": "Este serviço já está incluído no seu plano: o código continua válido para outra pessoa.",
+    "activateCodeErrorTrial": "Este é um código de teste: abre-se pelo link kumani.io/prova/{code}, sem registo."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10312,7 +10318,12 @@
       "fieldReset": "Voltar ao dado do perfil",
       "sloganTitle": "Frase (no verso com «Frase», senão por baixo do nome)",
       "sloganPlaceholder": "Ex. Ao seu serviço desde 1998"
-    }
+    },
+    "chooseSide": "Que lado quer descarregar?",
+    "side_front": "Só frente",
+    "side_back": "Só verso",
+    "side_both": "Frente e verso (2 ficheiros separados)",
+    "side_combined": "Frente e verso num só PDF"
   },
   "seo": {
     "siteTitle": "KUMANI – Mãos que lhe dão uma mão",

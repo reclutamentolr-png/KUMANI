@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redeemGiftCode } from '@/app/actions/gifts'
 import { redeemToolPassCode } from '@/app/actions/toolPasses'
 import { redeemVoucher } from '@/app/actions/vouchers'
+import { normalizeCode, TRIAL_CODE_RE } from '@/lib/codeFormat'
 import { GIFT_CODE_RE } from '@/lib/gifts'
 
 // Un solo campo "Hai un codice?" (registrazione e dashboard) per tutti i
@@ -12,10 +13,12 @@ import { GIFT_CODE_RE } from '@/lib/gifts'
 // (PASS-) e regali comprati da un utente (GIFT-).
 
 export type ActivationKind = 'voucher' | 'pass' | 'gift'
-export type ActivationResult = { success: boolean; kind: ActivationKind; reason: string | null; expiresAt: string | null }
+// subscription: il codice ha attivato un abbonamento Plus/Pro (voucher o
+// regalo di un piano), non un singolo servizio; tool: il servizio attivato
+export type ActivationResult = { success: boolean; kind: ActivationKind; reason: string | null; expiresAt: string | null; subscription?: boolean; tool?: string | null }
 
 const kindOf = (code: string): ActivationKind => (GIFT_CODE_RE.test(code) ? 'gift' : code.startsWith('PASS-') ? 'pass' : 'voucher')
-const clean = (code: string) => code.trim().toUpperCase()
+const clean = normalizeCode
 
 const service = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -57,10 +60,12 @@ export async function redeemActivationCode(raw: string, options: { welcome?: boo
   const code = clean(raw)
   const kind = kindOf(code)
   if (!code) return { success: false, kind, reason: 'not_found', expiresAt: null }
+  // Codice prova (PR-…): non si attiva qui, si apre dal suo link
+  if (TRIAL_CODE_RE.test(code)) return { success: false, kind, reason: 'trial_code', expiresAt: null }
 
   if (kind === 'gift') {
     const result = await redeemGiftCode(code)
-    return { success: result.success, kind, reason: result.reason, expiresAt: result.expiresAt }
+    return { success: result.success, kind, reason: result.reason, expiresAt: result.expiresAt, subscription: result.kind === 'plan', tool: result.tool }
   }
 
   if (kind === 'pass') {
@@ -76,11 +81,11 @@ export async function redeemActivationCode(raw: string, options: { welcome?: boo
         if (plan === 'none') await db.from('profiles').update({ gift_welcome: true }).eq('id', user.id)
       }
     }
-    return { success: result.success, kind, reason: result.reason, expiresAt: result.expiresAt }
+    return { success: result.success, kind, reason: result.reason, expiresAt: result.expiresAt, tool: result.tool }
   }
 
   const result = await redeemVoucher(code)
   return result.success
-    ? { success: true, kind, reason: null, expiresAt: result.expiresAt }
+    ? { success: true, kind, reason: null, expiresAt: result.expiresAt, subscription: true }
     : { success: false, kind, reason: result.message, expiresAt: null }
 }

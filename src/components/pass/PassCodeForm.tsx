@@ -4,13 +4,17 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { LoaderCircle } from 'lucide-react'
-import { redeemToolPassCode } from '@/app/actions/toolPasses'
+import { redeemActivationCode } from '@/app/actions/codes'
+import { activationErrorText } from '@/lib/activationMessages'
 
 // Attivazione di un codice pass (dalla pagina del servizio o dal Wallet).
 // Il codice attiva il servizio per cui è stato creato, anche se diverso da
-// quello della pagina.
+// quello della pagina. Accetta anche voucher (KV-/KVA-) e regali (GIFT-):
+// stessa attivazione di «Hai un codice?».
 export default function PassCodeForm({ tool, initialCode = '', compact = false }: { tool?: string; initialCode?: string; compact?: boolean }) {
   const t = useTranslations('toolPass')
+  const td = useTranslations('dashboard')
+  const tg = useTranslations('gifts')
   const locale = useLocale()
   const router = useRouter()
   const [code, setCode] = useState(initialCode)
@@ -22,15 +26,19 @@ export default function PassCodeForm({ tool, initialCode = '', compact = false }
     if (!code.trim()) return
     setBusy(true)
     setMessage(null)
-    const result = await redeemToolPassCode(code)
+    const result = await redeemActivationCode(code).catch(() => ({ success: false, kind: 'pass' as const, reason: 'error', expiresAt: null, subscription: false, tool: null }))
     setBusy(false)
     if (!result.success) {
-      const reason = result.reason === 'not_found' || result.reason === 'already_used' ? result.reason : 'error'
-      setMessage({ ok: false, text: t(`code_${reason}`) })
+      setMessage({ ok: false, text: activationErrorText(result, code.trim().toUpperCase(), td, tg) })
       return
     }
     const date = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }) : ''
-    setMessage({ ok: true, text: !tool || result.tool === tool ? t('codeDone', { date }) : t('codeDoneOther', { date }) })
+    const text = result.subscription
+      ? td('activateVoucherSuccess', { date })
+      : !tool || result.tool === tool
+        ? t('codeDone', { date })
+        : t('codeDoneOther', { date })
+    setMessage({ ok: true, text })
     setCode('')
     router.refresh()
   }

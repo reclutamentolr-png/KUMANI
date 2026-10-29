@@ -21,6 +21,7 @@ import {
 import { saveClassicCard } from '@/app/actions/businessCard'
 import { businessWebsiteUrl } from '@/lib/businessProfile'
 import ClassicCardCanvas, { classicSize, type CardColors } from './ClassicCardCanvas'
+import SideDownloadButton, { type SideChoice } from './SideDownloadButton'
 import { BLEED } from './BusinessCardCanvas'
 
 // Biglietto classico: stile, colori, logo, lati, QR e dati da stampare.
@@ -123,8 +124,13 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
     a.remove()
   }
   const fileBase = `KUMANI_biglietto_classico_${s.layout}`
+  // Lati scelti nel menu (fronte, retro o tutti e due) e nome del file
+  const sidesFor = (choice: SideChoice): ('front' | 'back')[] => (choice === 'front' || choice === 'back' ? [choice] : sides)
+  const suffix = (side: 'front' | 'back') => (sides.length > 1 ? (side === 'front' ? '_fronte' : '_retro') : '')
+  // Più file di fila: una piccola pausa, così il browser li scarica tutti
+  const pause = () => new Promise((r) => setTimeout(r, 400))
 
-  const exportPdf = async () => {
+  const exportPdf = async (choice: SideChoice) => {
     setBusy('pdf')
     setError(false)
     try {
@@ -134,12 +140,22 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
       // più resta fuori pagina
       const size: [number, number] = vertical ? [59, 89] : [89, 59]
       const orientation = vertical ? 'portrait' : 'landscape'
-      const pdf = new jsPDF({ unit: 'mm', format: size, orientation })
-      for (const [i, side] of sides.entries()) {
-        if (i > 0) pdf.addPage(size, orientation)
-        pdf.addImage(await render(side), 'PNG', -1, -1, size[0] + 2, size[1] + 2, undefined, 'FAST')
+      const makePdf = async (list: ('front' | 'back')[]) => {
+        const pdf = new jsPDF({ unit: 'mm', format: size, orientation })
+        for (const [i, side] of list.entries()) {
+          if (i > 0) pdf.addPage(size, orientation)
+          pdf.addImage(await render(side), 'PNG', -1, -1, size[0] + 2, size[1] + 2, undefined, 'FAST')
+        }
+        return URL.createObjectURL(pdf.output('blob'))
       }
-      download(URL.createObjectURL(pdf.output('blob')), `${fileBase}_stampa.pdf`)
+      if (choice === 'combined') {
+        download(await makePdf(sides), `${fileBase}_fronte_retro_stampa.pdf`)
+      } else {
+        for (const [i, side] of sidesFor(choice).entries()) {
+          if (i > 0) await pause()
+          download(await makePdf([side]), `${fileBase}${suffix(side)}_stampa.pdf`)
+        }
+      }
     } catch (e) {
       console.error('[biglietto classico]', e)
       setError(true)
@@ -148,11 +164,12 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
     }
   }
 
-  const exportPng = async () => {
+  const exportPng = async (choice: SideChoice) => {
     setBusy('png')
     setError(false)
     try {
-      for (const side of sides) {
+      for (const [i, side] of sidesFor(choice).entries()) {
+        if (i > 0) await pause()
         const img = new Image()
         img.src = await render(side)
         await img.decode()
@@ -160,7 +177,7 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
         canvas.width = w * 2
         canvas.height = h * 2
         canvas.getContext('2d')!.drawImage(img, BLEED * 2, BLEED * 2, w * 2, h * 2, 0, 0, w * 2, h * 2)
-        download(canvas.toDataURL('image/png'), `${fileBase}${sides.length > 1 ? (side === 'front' ? '_fronte' : '_retro') : ''}.png`)
+        download(canvas.toDataURL('image/png'), `${fileBase}${suffix(side)}.png`)
       }
     } catch (e) {
       console.error('[biglietto classico]', e)
@@ -194,12 +211,12 @@ export default function ClassicCardEditor({ initial, source, brand, businessLogo
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <button type="button" onClick={exportPdf} disabled={busy !== null} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-extrabold text-[var(--ink)] shadow-sm transition hover:brightness-105 disabled:opacity-60">
+          <SideDownloadButton hasBack={sides.length > 1} allowCombined onPick={exportPdf} disabled={busy !== null} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-5 py-3 font-extrabold text-[var(--ink)] shadow-sm transition hover:brightness-105 disabled:opacity-60">
             {busy === 'pdf' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <FileText className="h-5 w-5" />} {busy === 'pdf' ? t('generating') : t('downloadPdf')}
-          </button>
-          <button type="button" onClick={exportPng} disabled={busy !== null} className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-white px-5 py-3 font-bold text-[var(--ink)] transition hover:border-[var(--gold)] disabled:opacity-60">
+          </SideDownloadButton>
+          <SideDownloadButton hasBack={sides.length > 1} onPick={exportPng} disabled={busy !== null} className="inline-flex items-center gap-2 rounded-xl border border-[var(--gold)]/50 bg-white px-5 py-3 font-bold text-[var(--ink)] transition hover:border-[var(--gold)] disabled:opacity-60">
             {busy === 'png' ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5 text-[var(--gold)]" />} {busy === 'png' ? t('generating') : t('downloadImage')}
-          </button>
+          </SideDownloadButton>
           <span className="h-4 text-xs font-semibold text-emerald-700">{saved ? t('saved') : ''}</span>
         </div>
         <p className="text-xs text-[var(--muted)]">{t('printHint')}</p>

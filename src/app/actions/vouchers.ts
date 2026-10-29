@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { getSessionUser } from '@/lib/session'
+import { normalizeCode } from '@/lib/codeFormat'
 
 const db = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -57,7 +58,7 @@ export async function redeemVoucher(code: string) {
   } = await supabase.auth.getUser()
   if (!user) return { success: false as const, message: 'notLoggedIn' as const }
 
-  const trimmed = code.trim().toUpperCase()
+  const trimmed = normalizeCode(code)
   if (!trimmed) return { success: false as const, message: 'notFound' as const }
 
   const { data, error } = await supabase

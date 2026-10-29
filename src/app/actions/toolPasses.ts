@@ -3,11 +3,12 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { redeemGiftCode } from '@/app/actions/gifts'
+import { normalizeCode } from '@/lib/codeFormat'
 
 // Attiva un codice pass per l'utente collegato
 export async function redeemToolPassCode(code: string) {
   const supabase = await createClient()
-  const clean = code.trim().toUpperCase()
+  const clean = normalizeCode(code)
   if (!clean) return { success: false, reason: 'not_found', tool: null, expiresAt: null }
   // Codice regalo (GIFT-…) inserito qui: si attiva come regalo
   if (clean.startsWith('GIFT-')) {

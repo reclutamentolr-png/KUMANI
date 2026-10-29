@@ -767,7 +767,13 @@
     "inviteSelfSignup": "La inscripción siempre la hace la persona invitada, con su email, su contraseña y sus consentimientos: tú solo le envías el enlace.",
     "inviteShareMessageNamed": "¡Hola, {name}! Te invito a KUMANI: {tools} herramientas en {services} servicios, en una sola app, y una comunidad que se ayuda. Regístrate con mi enlace: {link}",
     "inviteTargetTitle": "¿Quieres dar un lugar a un nuevo Kumano entre los Kumani de {name}?",
-    "inviteTargetText": "Envía este enlace especial: cuando la persona active la suscripción entrará entre los Kumani de {name}, si aún tiene un tentáculo libre (si no, con el Spillover). Quien invita sigues siendo tú: la mayor parte de los KU Points va para ti y el Bonus Acogida para {name}."
+    "inviteTargetText": "Envía este enlace especial: cuando la persona active la suscripción entrará entre los Kumani de {name}, si aún tiene un tentáculo libre (si no, con el Spillover). Quien invita sigues siendo tú: la mayor parte de los KU Points va para ti y el Bonus Acogida para {name}.",
+    "activateVoucherErrorRevoked": "Este código ha sido anulado.",
+    "activateVoucherErrorSubscribed": "Ya tienes una suscripción activa pagada con tarjeta: este código sigue siendo válido para otra persona.",
+    "activateVoucherErrorUnlimited": "Tu suscripción ya está activa sin fecha de vencimiento: este código sigue siendo válido para otra persona.",
+    "activateVoucherErrorPlan": "Ya tienes el plan Pro activo: este código Plus se puede usar cuando venza tu plan, o sigue siendo válido para otra persona.",
+    "activateCodeErrorIncluded": "Este servicio ya está incluido en tu plan: el código sigue siendo válido para otra persona.",
+    "activateCodeErrorTrial": "Este es un código de prueba: se abre desde el enlace kumani.io/prova/{code}, sin registrarse."
   },
   "marketplace": {
     "fabula": "Kumani Fabula",
@@ -10312,7 +10318,12 @@
       "fieldReset": "Volver al dato del perfil",
       "sloganTitle": "Frase (en el reverso con «Frase», si no bajo el nombre)",
       "sloganPlaceholder": "Ej. A su servicio desde 1998"
-    }
+    },
+    "chooseSide": "¿Qué cara quieres descargar?",
+    "side_front": "Solo anverso",
+    "side_back": "Solo reverso",
+    "side_both": "Anverso y reverso (2 archivos separados)",
+    "side_combined": "Anverso y reverso en un solo PDF"
   },
   "seo": {
     "siteTitle": "KUMANI – Manos que te echan una mano",

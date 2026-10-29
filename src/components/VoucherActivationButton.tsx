@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { Ticket, LoaderCircle, X } from 'lucide-react'
 import { redeemActivationCode } from '@/app/actions/codes'
+import { activationErrorText } from '@/lib/activationMessages'
 
 // "Hai un codice?" in dashboard: un solo campo per voucher abbonamento
 // (KV-/KVA-), codici Pass (PASS-) e regali (GIFT-), riconosciuti dal codice.
@@ -31,30 +32,19 @@ export default function VoucherActivationButton({ className }: { className?: str
     if (!code.trim()) return
     setLoading(true)
     setMessage(null)
-    const result = await redeemActivationCode(code)
+    // Connessione caduta: messaggio di errore, il pulsante non resta bloccato
+    const result = await redeemActivationCode(code).catch(() => ({ success: false, kind: 'voucher' as const, reason: 'error', expiresAt: null, subscription: false }))
     setLoading(false)
 
     if (!result.success) {
-      if (result.kind === 'gift') {
-        setMessage({ type: 'error', text: tg(`redeem_${result.reason ?? 'error'}`) })
-        return
-      }
-      const key =
-        result.reason === 'already_used'
-          ? 'activateVoucherErrorUsed'
-          : result.reason === 'self_redemption'
-            ? 'activateVoucherErrorSelf'
-            : result.reason === 'not_found'
-              ? 'activateVoucherErrorNotFound'
-              : 'activateVoucherErrorGeneric'
-      setMessage({ type: 'error', text: t(key) })
+      setMessage({ type: 'error', text: activationErrorText(result, code.trim().toUpperCase(), t, tg) })
       return
     }
 
     const date = result.expiresAt ? new Date(result.expiresAt).toLocaleDateString(locale) : ''
     setMessage({
       type: 'success',
-      text: result.kind === 'voucher' ? t('activateVoucherSuccess', { date }) : t('activateCodeSuccessService', { date }),
+      text: result.subscription ? t('activateVoucherSuccess', { date }) : t('activateCodeSuccessService', { date }),
     })
     setTimeout(() => {
       setOpen(false)

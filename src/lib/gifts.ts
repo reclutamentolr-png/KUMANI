@@ -2,6 +2,8 @@
 // o per un anno di KUMANI Plus/Pro, da mandare a chi si vuole (link
 // /regalo/CODICE). Regole nelle funzioni SQL *gift* (migration gifts).
 
+import { normalizeCode } from '@/lib/codeFormat'
+
 export const GIFT_TYPE = 'gift'
 export const GIFT_MAX_QUANTITY = 10
 export const GIFT_MESSAGE_MAX = 300
@@ -51,7 +53,7 @@ export type GiftOrder = {
   codes: GiftOrderCode[]
 }
 
-export const normalizeGiftCode = (code: string) => code.trim().toUpperCase()
+export const normalizeGiftCode = normalizeCode
 
 // Percorso della pagina del regalo (senza prefisso lingua)
 export const giftPath = (code: string) => `/regalo/${encodeURIComponent(code)}`
