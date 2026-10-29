@@ -115,24 +115,23 @@ export async function adminReportAgents(): Promise<{ agents: AgentRanking } | { 
 }
 
 // ---------- 4. Voucher della community: i primi 20 per voucher attivati
-export type VoucherRanking = { person: ReportPerson; created: number; redeemed: number; gifted: number; sold: number }[]
+export type VoucherRanking = { person: ReportPerson; created: number; redeemed: number; gifted: number }[]
 
 export async function adminReportCommunityVouchers(): Promise<{ top: VoucherRanking } | { error: string }> {
   if (!(await verifyAdmin('stats.read'))) return { error: 'Non autorizzato' }
   const { data, error } = await db()
     .from('subscription_vouchers')
-    .select('created_by, status, purpose, code')
+    .select('created_by, status, code')
     .is('batch_id', null)
     .neq('status', 'revoked')
   if (error) return { error: error.message }
   const byUser = new Map<string, Omit<VoucherRanking[number], 'person'>>()
   for (const v of data ?? []) {
     if (!v.created_by || v.code?.startsWith('KVA-')) continue
-    const entry = byUser.get(v.created_by) ?? { created: 0, redeemed: 0, gifted: 0, sold: 0 }
+    const entry = byUser.get(v.created_by) ?? { created: 0, redeemed: 0, gifted: 0 }
     entry.created += 1
     if (v.status === 'redeemed') entry.redeemed += 1
-    if (v.purpose === 'sale') entry.sold += 1
-    else entry.gifted += 1
+    entry.gifted += 1
     byUser.set(v.created_by, entry)
   }
   const ranked = [...byUser.entries()].sort((a, b) => b[1].redeemed - a[1].redeemed || b[1].created - a[1].created).slice(0, 20)

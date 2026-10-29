@@ -119,7 +119,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     kuWalletData,
     tku,
     networkWallet,
-    { data: welcomeAwards },
     [donationSummary, myDonations, tdon],
     { data: achievementRows },
     [{ count: receiptsPendingCount }, { count: receiptsConfirmedCount }, { count: receiptsReturnedCount }],
@@ -139,9 +138,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
     getTranslations('kuRewards'),
     // KU Points, attivazioni e regole delle qualifiche
     getMyNetworkWallet(supabase),
-    // KU Points ricevuti con il Bonus Accoglienza (registro dei punti, tipo
-    // 'matrix'; esclusi quelli annullati)
-    supabase.from('network_point_awards').select('points').eq('user_id', user.id).eq('kind', 'matrix').is('reversed_at', null),
     // Donazioni (sezione visibile solo con un'associazione attiva)
     Promise.all([getPublicDonationSummary(), getMyDonations(), getTranslations('donations')]),
     // Data in cui ogni badge è stato raggiunto (registrata dal database)
@@ -186,7 +182,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
   const receivedList = (receivedReceipts ?? []) as ReceivedReceipt[]
   const renewal = featureConfig<KuRenewalConfig>(kuWalletData.features, 'renewal_discount')
   const { ranks } = networkWallet
-  const welcomeBonusPoints = (welcomeAwards ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0)
   const achievements = new Map(
     ((achievementRows ?? []) as { rank_key: string; achieved_at: string }[]).map((row) => [row.rank_key, row])
   )
@@ -438,10 +433,6 @@ export default async function WalletPage({ params }: { params: Promise<{ locale:
                   <Network className="h-4 w-4 text-[var(--gold)]" /> {t('networkPointsTitle')}
                 </p>
                 <p className="mt-1 text-4xl font-bold text-[var(--ink)]">{networkWallet.networkPoints}</p>
-                {/* Quanti ne sono arrivati con il Bonus Accoglienza */}
-                <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-sky-300 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
-                  <Gift className="h-3.5 w-3.5" /> {t('welcomeBonusReceived', { points: welcomeBonusPoints })}
-                </p>
                 <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('networkPointsDisclaimer')}</p>
                 {rewardsEnabled && (
                   <Link

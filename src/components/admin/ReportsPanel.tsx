@@ -197,7 +197,7 @@ export default function ReportsPanel({ initialTab = 'sessions' }: { initialTab?:
         <>
           <p className="text-sm text-gray-600">I 20 Kumani con più voucher attivati (creati con il credito dei KU Points, esclusi omaggi dello Staff e lotti negozi).</p>
           <Table
-            head={['#', 'Kumano', 'Attivati', 'Creati', 'Da regalare', 'Da vendere']}
+            head={['#', 'Kumano', 'Attivati', 'Creati', 'Da regalare']}
             empty="Nessun voucher creato dalla community."
             rows={(current as { top: VoucherRanking }).top.map((v, i) => [
               <Rank key="r" n={i + 1} />,
@@ -205,7 +205,6 @@ export default function ReportsPanel({ initialTab = 'sessions' }: { initialTab?:
               <b key="a">{num(v.redeemed)}</b>,
               num(v.created),
               num(v.gifted),
-              num(v.sold),
             ])}
           />
         </>

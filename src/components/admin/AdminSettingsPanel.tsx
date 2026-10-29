@@ -347,34 +347,8 @@ export default function AdminSettingsPanel() {
                 />
               </label>
             </div>
-            <p className="mt-5 mb-2 text-sm font-semibold text-gray-800">Bonus Accoglienza (ceduto dallo sponsor)</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-              <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Plus</span>
-                <input
-                  type="number"
-                  min="0"
-                  value={systemSettings.welcome_bonus_base ?? 2}
-                  onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_base: parseInt(e.target.value, 10) || 0 })}
-                  className={INPUT}
-                />
-              </label>
-              <label className="block max-w-xs">
-                <span className="mb-1 block text-xs font-medium text-gray-600">Punti ceduti per un Pro</span>
-                <input
-                  type="number"
-                  min="0"
-                  value={systemSettings.welcome_bonus_pro ?? 15}
-                  onChange={(e) => setSystemSettings({ ...systemSettings, welcome_bonus_pro: parseInt(e.target.value, 10) || 0 })}
-                  className={INPUT}
-                />
-              </label>
-            </div>
-            <p className="mt-2 text-xs text-gray-500">
-              Esempio con i valori attuali: se la persona è accolta da un altro Kumano lo sponsor riceve{' '}
-              {(systemSettings.network_points_activation_base ?? 12) - (systemSettings.welcome_bonus_base ?? 2)} punti per un Plus e{' '}
-              {(systemSettings.network_points_activation_pro ?? 144) - (systemSettings.welcome_bonus_pro ?? 15)} per un Pro; chi accoglie riceve{' '}
-              {systemSettings.welcome_bonus_base ?? 2} e {systemSettings.welcome_bonus_pro ?? 15}.
+            <p className="mt-3 text-xs text-gray-500">
+              I punti vanno solo a chi ha invitato direttamente la persona: nessuna quota a chi la accoglie nella sua stella.
             </p>
           </div>
           <div>

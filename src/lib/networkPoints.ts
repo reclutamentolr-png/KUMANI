@@ -53,21 +53,9 @@ export async function awardActivationPoints(invoice: Stripe.Invoice): Promise<vo
     awarded?: boolean
     sponsor_id?: string | null
     points?: number
-    welcome_user?: string | null
-    welcome_points?: number
   } | null
-  // Bonus Accoglienza a chi ha accolto la persona nella propria stella
-  if (row?.awarded && row.welcome_user && (row.welcome_points ?? 0) > 0) {
-    const { data: person } = await db().from('profiles').select('first_name').eq('id', customer).maybeSingle()
-    const name = person?.first_name || 'Kumano'
-    const points = row.welcome_points ?? 0
-    await notifyUser(row.welcome_user, 'network', (t, locale) => ({
-      title: t('welcomeTitle'),
-      body: t('welcomeBody', { name, points }),
-      url: localizedPath(locale, '/dashboard/rete'),
-      tag: `welcome-${invoice.id}`,
-    }))
-  }
+  // I punti vanno solo a chi ha invitato: nessuna quota a chi accoglie la
+  // persona nella sua stella (programma a un solo livello)
   if (row?.awarded && row.sponsor_id) {
     const { data: person } = await db().from('profiles').select('first_name').eq('id', customer).maybeSingle()
     const name = person?.first_name || 'Kumano'

@@ -334,11 +334,11 @@ export default function TermsEn({ lastUpdate }: { lastUpdate: string }) {
               <p>
                 <strong className="text-gray-900">KU Points.</strong> The user receives KU Points when a person they
                 invited directly activates a subscription paid by card (Plus or Pro), upgrades from the Plus plan to the Pro plan (in
-                proportion to the amount paid) or buys a pass, and through the Welcome Bonus. An invited person takes their place
-                in the network (&ldquo;Your Kumani&rdquo;) only when they activate the subscription: until then they do not occupy any place. The Welcome
-                Bonus is awarded when one of the user&apos;s five direct places is taken by a person invited
-                by another user (spillover, or a place indicated by the person who invited them) who activates the subscription by card: part
-                of the KU Points from the activation goes not to the person who invited them but to the user who welcomes that person among their Kumani.
+                proportion to the amount paid) or buys a pass. The programme has a single level: KU Points always and only go to
+                the person who directly invited the new user, never to other users. An invited person takes their place
+                in the network (&ldquo;Your Kumani&rdquo;) only when they activate the subscription: until then they do not occupy any place. If the
+                person is welcomed among another user&apos;s Kumani (spillover, or a place indicated by the person who invited them), that user
+                receives no KU Points: places in the network serve to organise the community and give no rewards.
                 The amounts are set by the Platform and shown in the personal area. KU
                 Points become final 15 days after the payment that generated them (the period for any withdrawal): until
                 then they are visible but do not count towards qualifications and cannot be used. Activations via voucher and renewals do not earn KU Points; if the
@@ -417,11 +417,10 @@ export default function TermsEn({ lastUpdate }: { lastUpdate: string }) {
                 not yet used are cancelled. Vouchers are not refundable or convertible into money with KUMANI.
               </p>
               <p>
-                KUMANI grants Vouchers as a promotional incentive in the form of a 100% discount on its own services.
-                Any transfer, monetisation or resale of Vouchers to third parties by the user (Promoter) takes place
-                entirely independently and under their sole responsibility: KUMANI is not a party to the transfer and the receipt that the
-                Platform allows the user to prepare is the user&apos;s own document. It is the Promoter&apos;s responsibility to fulfil the tax and
-                reporting obligations laid down by the legislation of their country of residence with regard to income deriving from such activities.
+                KUMANI grants Vouchers as a promotional incentive in the form of a 100% discount on its own services. Vouchers are
+                used or given away free of charge: selling them, transferring them for payment or exchanging them for money or other
+                goods is prohibited. A Voucher transferred for payment may be cancelled. The rewards of the programme are always and
+                only KUMANI services (vouchers and passes), never money.
               </p>
               <p>
                 <strong className="text-gray-900">7.9 Service pass.</strong> Some services, indicated on their page, can be
@@ -439,9 +438,9 @@ export default function TermsEn({ lastUpdate }: { lastUpdate: string }) {
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <p className="text-amber-800 text-sm leading-relaxed">
-                KU Points depend on the subscriptions paid by the people invited (section 6). No earnings are guaranteed or
-                promised: the value of vouchers is a discount on KUMANI services, and whatever the user obtains by transferring them to
-                third parties depends solely on them and falls under their responsibility (section 7.8).
+                KU Points depend on the subscriptions paid by the people invited directly by the user (section 6). No earnings
+                are guaranteed or promised: rewards are KUMANI services, the value of vouchers is a discount on those services and
+                vouchers cannot be sold (section 7.8).
               </p>
             </div>
           </section>

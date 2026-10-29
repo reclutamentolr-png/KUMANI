@@ -31,7 +31,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ loca
   // subito e lo usa solo dopo le sue letture.
   const [communityItems, network] = await Promise.all([
     getCommunityItems(supabase, user.id),
-    getDashboardNetworkData(supabase, user, getSessionProfile(), locale, { tree: false, claims: 'skip' }),
+    getDashboardNetworkData(supabase, user, getSessionProfile(), locale, { tree: false }),
   ])
 
   return (

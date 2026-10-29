@@ -24,14 +24,11 @@ export async function getDashboardNetworkData(
   // tree: albero completo della rete (solo la pagina "La mia rete"; la
   // dashboard mostra un riepilogo e non lo carica, altrimenti chi sta in
   // cima leggerebbe tutta la matrice; nella stella si possono aprire le
-  // stelle dei propri Kumani fino al 5° livello). claims: 'inline' riscuote i bonus
-  // prima di rispondere, 'skip' li lascia a deferNetworkClaims().
-  options: { tree?: boolean; claims?: 'inline' | 'skip' } = {}
+  // stelle dei propri Kumani fino al 5° livello). Qualifiche e premi si
+  // aggiornano dopo la risposta con deferNetworkClaims().
+  options: { tree?: boolean } = {}
 ) {
-  const { tree = true, claims: claimsMode = 'inline' } = options
-  // Bonus da riscuotere (vedi claimNetworkBonuses): partono subito, uno
-  // dopo l'altro come prima, ma in parallelo alle letture invece che dopo.
-  const claims = claimsMode === 'inline' ? claimNetworkBonuses(supabase) : Promise.resolve()
+  const { tree = true } = options
 
   // Letture indipendenti tutte insieme: nodo matrice dell'utente, la stella
   // (i Kumani attivi fino al 5° livello; cognome e codice solo dei propri
@@ -152,7 +149,6 @@ export async function getDashboardNetworkData(
   const achievedKeys = achievements.map((row) => row.rank_key)
   const currentRank = getCurrentRank(achievedKeys, ranks)
   const newlyAchievedRank = getNewlyAchievedRank(achievedKeys, profile?.qualifications_seen || [], ranks)
-  await claims
 
   const loginUrl = `${SITE_URL}/${locale}/login`
 
@@ -263,20 +259,11 @@ async function loadNetworkSummary(supabase: SupabaseClient): Promise<{ list: Spo
 
 export type DashboardNetworkData = Awaited<ReturnType<typeof getDashboardNetworkData>>
 
-// Bonus della rete riscossi a ogni apertura della dashboard (idempotente e
-// verificato dal database). I Punti Community delle attivazioni arrivano
-// invece dal webhook di Stripe (award_activation_points); i vecchi bonus
-// (qualifiche, 6° diretto, ringraziamento, extra Pro) non esistono più.
-async function claimNetworkBonuses(supabase: SupabaseClient) {
-  // "Bonus Accoglienza": pays out for matrix slots filled since the last
-  // check, whether by personal sponsorship or by someone else's spillover
-  // landing in one of this Kumano's 5 direct positions.
-  await supabase.rpc('claim_matrix_slot_bonus')
-}
-
-// Riscuote i bonus della rete DOPO aver risposto (non cambiano nulla di
+// Ricalcola qualifiche e premi DOPO aver risposto (non cambiano nulla di
 // quello che la pagina mostra: i punti sono già stati letti), così la
-// pagina non aspetta 5 richieste in fila. Dopo la risposta i cookie non si
+// pagina non aspetta. I KU Points arrivano solo dal webhook di Stripe
+// (award_activation_points), e solo a chi ha invitato: i bonus della stella
+// (posti e Bonus Accoglienza) non esistono più. Dopo la risposta i cookie non si
 // possono più leggere: si usa il token della sessione appena verificata.
 export async function deferNetworkClaims(supabase: SupabaseClient) {
   const {
@@ -290,9 +277,7 @@ export async function deferNetworkClaims(supabase: SupabaseClient) {
       auth: { persistSession: false, autoRefreshToken: false },
     })
     try {
-      await claimNetworkBonuses(client)
-      // Qualifiche e premi ricalcolati dopo aver mostrato la pagina
-      // (my_rank_achievements ora legge soltanto)
+      // my_rank_achievements legge soltanto: qui si aggiornano
       await client.rpc('refresh_my_qualifications')
     } catch (error) {
       console.error('[deferNetworkClaims]', error)

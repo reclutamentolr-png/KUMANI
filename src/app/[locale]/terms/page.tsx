@@ -16,9 +16,9 @@ export async function generateMetadata({ params }: LocaleProps): Promise<Metadat
   return pageMetadata('/terms', { title: t('termsTitle'), description: t('termsDescription') })
 }
 
-const LAST_UPDATE = '27 ottobre 2026'
+const LAST_UPDATE = '29 ottobre 2026'
 // Stessa data per la traduzione inglese (da aggiornare insieme a LAST_UPDATE)
-const LAST_UPDATE_EN = '27 October 2026'
+const LAST_UPDATE_EN = '29 October 2026'
 
 // Il testo italiano è quello ufficiale; per le altre lingue si mostra la
 // traduzione inglese, con la nota che in caso di differenze prevale l'italiano

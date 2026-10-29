@@ -329,11 +329,11 @@ export default function TermsIt({ lastUpdate }: { lastUpdate: string }) {
               <p>
                 <strong className="text-gray-900">KU Points.</strong> L&apos;utente riceve KU Points quando una persona che ha
                 invitato direttamente attiva un abbonamento pagato con carta (Plus o Pro), passa dal piano Plus al piano Pro (in
-                proporzione a quanto pagato) o acquista un pass, e con il Bonus Accoglienza. Una persona invitata prende il suo posto
-                nella rete («I tuoi Kumani») solo quando attiva l&apos;abbonamento: fino ad allora non occupa alcun posto. Il Bonus
-                Accoglienza è riconosciuto quando uno dei cinque posti diretti dell&apos;utente viene occupato da una persona invitata
-                da un altro utente (spillover, oppure posto indicato da chi ha invitato) che attiva l&apos;abbonamento con carta: una
-                parte dei KU Points dell&apos;attivazione non va a chi ha invitato ma a chi accoglie la persona tra i propri Kumani.
+                proporzione a quanto pagato) o acquista un pass. Il programma è a un solo livello: i KU Points vanno sempre e solo
+                a chi ha invitato direttamente la persona, mai ad altri utenti. Una persona invitata prende il suo posto nella rete
+                («I tuoi Kumani») solo quando attiva l&apos;abbonamento: fino ad allora non occupa alcun posto. Se la persona viene
+                accolta tra i Kumani di un altro utente (spillover, oppure posto indicato da chi ha invitato), quell&apos;utente non
+                riceve KU Points: il posto nella rete serve a organizzare la community, non dà premi.
                 Le quantità sono stabilite dalla Piattaforma e indicate nell&apos;area personale. I KU
                 Points diventano definitivi 15 giorni dopo il pagamento che li ha generati (il tempo per l&apos;eventuale recesso): fino ad
                 allora sono visibili ma non contano per le qualifiche e non si possono utilizzare. Le attivazioni tramite voucher e i rinnovi non danno KU Points; in caso di rimborso del
@@ -412,11 +412,10 @@ export default function TermsIt({ lastUpdate }: { lastUpdate: string }) {
                 non ancora utilizzati vengono annullati. I voucher non sono rimborsabili né convertibili in denaro presso KUMANI.
               </p>
               <p>
-                KUMANI concede i Voucher come incentivo promozionale sotto forma di sconto del 100% sui propri servizi.
-                L&apos;eventuale cessione, monetizzazione o rivendita dei Voucher a terzi da parte dell&apos;utente (Promotore) avviene in
-                totale autonomia e sotto la sua esclusiva responsabilità: KUMANI non è parte della cessione e la ricevuta che la
-                Piattaforma permette di preparare è un documento dell&apos;utente. È cura del Promotore adempiere agli obblighi fiscali e
-                dichiarativi previsti dalla normativa del proprio Paese di residenza in merito agli incassi derivanti da tali attività.
+                KUMANI concede i Voucher come incentivo promozionale sotto forma di sconto del 100% sui propri servizi. I Voucher si
+                usano o si regalano gratuitamente: è vietato venderli, cederli a pagamento o scambiarli con denaro o altri beni. Un
+                Voucher ceduto a pagamento può essere annullato. I premi del programma sono sempre e solo servizi KUMANI (voucher e
+                pass), mai denaro.
               </p>
               <p>
                 <strong className="text-gray-900">7.9 Pass servizio.</strong> Alcuni servizi, indicati sulla loro scheda, possono essere
@@ -434,9 +433,9 @@ export default function TermsIt({ lastUpdate }: { lastUpdate: string }) {
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <p className="text-amber-800 text-sm leading-relaxed">
-                I KU Points dipendono dagli abbonamenti pagati dalle persone invitate (sezione 6). Non sono garantiti né
-                promessi guadagni: il valore dei voucher è uno sconto sui servizi KUMANI, e ciò che l&apos;utente ne ricava cedendoli a
-                terzi dipende solo da lui e ricade sotto la sua responsabilità (sezione 7.8).
+                I KU Points dipendono dagli abbonamenti pagati dalle persone invitate direttamente dall&apos;utente (sezione 6).
+                Non sono garantiti né promessi guadagni: i premi sono servizi KUMANI, il valore dei voucher è uno sconto su quei
+                servizi e i voucher non si possono vendere (sezione 7.8).
               </p>
             </div>
           </section>

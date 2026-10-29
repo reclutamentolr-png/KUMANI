@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import VoucherCardShare from '@/components/voucherCard/VoucherCardShare'
 import { useRouter } from 'next/navigation'
-import { Award, Check, ChevronDown, Copy, LoaderCircle, Printer, Receipt, Share2, Star, Ticket } from 'lucide-react'
+import { Award, Check, ChevronDown, Copy, LoaderCircle, Printer, Share2, Star, Ticket } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { redeemVoucher, type MyVoucher } from '@/app/actions/vouchers'
 import type { RankDefinition } from '@/lib/ranks'
@@ -18,7 +18,7 @@ type Rules = { base: number; pro: number; upgrade: number; welcomeBase: number; 
 // Voucher e KU Points nel Wallet:
 // 1. come si guadagnano i KU Points;
 // 2. qualifiche e premi (voucher automatici);
-// 3. i voucher ricevuti in premio, da regalare (o vendere, con la ricevuta);
+// 3. i voucher ricevuti in premio, da usare o regalare (non si vendono);
 // 4. riscatto di un voucher ricevuto da qualcuno.
 export default function WalletVoucherSection({
   points,
@@ -49,7 +49,6 @@ export default function WalletVoucherSection({
   const tTrial = useTranslations('trials')
   const locale = useLocale()
   const router = useRouter()
-  const euro = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
 
   const [copied, setCopied] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -148,10 +147,6 @@ export default function WalletVoucherSection({
           <li>{t('ruleBase', { points: rules.base })}</li>
           <li>{t('rulePro', { points: rules.pro })}</li>
           <li>{t('ruleUpgrade', { points: rules.upgrade })}</li>
-          <li>{t('ruleWelcomeGive', { from: rules.welcomeFrom, base: rules.welcomeBase, pro: rules.welcomePro, baseKeep: rules.base - rules.welcomeBase, proKeep: rules.pro - rules.welcomePro })}</li>
-          <li>{t('ruleWelcomeGet', { base: rules.welcomeBase, pro: rules.welcomePro })}</li>
-          {/* Tetto naturale: solo le persone accolte nei 5 posti diretti */}
-          <li className="font-semibold text-[var(--ink)]">{t('ruleWelcomeCap', { maxBase: rules.welcomeBase * 5, maxPro: rules.welcomePro * 5 })}</li>
           <li>{t('rulePass')}</li>
         </ul>
       </div>
@@ -240,7 +235,6 @@ export default function WalletVoucherSection({
                             v.personal && v.status === 'active' && <p className="mt-1 text-xs font-semibold text-[var(--gold)]">{t('personalProHint')}</p>
                           )}
                           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
-                            {v.purpose === 'sale' && <span>{v.sale_price_cents !== null ? t('soldFor', { price: euro(v.sale_price_cents) }) : t('purposeSale')}{v.buyer_name ? ` · ${v.buyer_name}` : ''}</span>}
                             {v.status === 'active' && !isGift(v) && (
                               <>
                                 <button type="button" onClick={() => handleCopy(v.code)} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
@@ -261,11 +255,6 @@ export default function WalletVoucherSection({
                                 </Link>
                               </>
                             )}
-                            {v.status !== 'revoked' && !isGift(v) && (
-                              <Link href={`/wallet/voucher/${v.id}`} className="inline-flex items-center gap-1 font-semibold text-[var(--gold)] hover:text-[var(--ink)]">
-                                <Receipt className="h-3.5 w-3.5" /> {t('receiptLink')}
-                              </Link>
-                            )}
                           </div>
                         </div>
                       )
@@ -275,7 +264,7 @@ export default function WalletVoucherSection({
                 )
               })}
             </div>
-            <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('saleNote')}</p>
+            <p className="mt-2 text-xs leading-5 text-[var(--muted)]">{t('giftOnlyNote')}</p>
           </>
         )}
       </div>

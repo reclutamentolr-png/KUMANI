@@ -88,7 +88,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   )
   // La dashboard mostra solo un riepilogo della rete (il dettaglio è in
   // /dashboard/rete), ma servono anche per i popup qualifiche/rinnovo.
-  const networkPromise = getDashboardNetworkData(supabase, user, profilePromise, locale, { tree: false, claims: 'skip' })
+  const networkPromise = getDashboardNetworkData(supabase, user, profilePromise, locale, { tree: false })
   const wellnessPromise = Promise.resolve(supabase.rpc('wellness_path_today').then((r) => r))
   // KU Karma di oggi: non dipende da niente, parte subito
   const karmaPromise = getKarmaToday(supabase, user.id).catch(() => null)
