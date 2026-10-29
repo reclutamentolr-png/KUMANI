@@ -680,6 +680,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'metronomo',
+      href: '/app/metronomo',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'Metronome',
+      title: t('metronomo'),
+      description: t('metronomoDescription'),
+      color: 'gold',
+      category: 'audio',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'angolo-bambini',
       href: '/app/angolo-bambini',
       gradient: 'bg-[var(--ink)]',

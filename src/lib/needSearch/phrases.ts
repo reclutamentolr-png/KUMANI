@@ -82,6 +82,15 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
     de: ['ausweis foto senden', 'wasserzeichen'],
     ru: ['фото паспорта', 'водяной знак'],
   },
+  metronomo: {
+    it: ['metronomo', 'andare a tempo', 'suonare a tempo', 'battiti al minuto', 'bpm', 'esercitarsi con la chitarra', 'esercitarsi alla batteria', 'studiare pianoforte', 'tenere il ritmo'],
+    en: ['metronome', 'play in time', 'beats per minute', 'bpm', 'keep the rhythm'],
+    fr: ['métronome', 'jouer en rythme'],
+    es: ['metrónomo', 'tocar a tiempo'],
+    pt: ['metrónomo', 'tocar a tempo'],
+    de: ['metronom', 'im takt spielen'],
+    ru: ['метроном', 'играть в такт'],
+  },
   fonometro: {
     it: ['fonometro', 'misurare il rumore', 'decibel', 'vicini rumorosi', 'rumore di notte', 'rumore del locale', 'cantiere rumoroso', 'quanto rumore', 'esposto per rumore', 'misurare i decibel'],
     en: ['sound level meter', 'measure noise', 'decibel', 'noisy neighbours', 'noise at night'],

@@ -73,6 +73,7 @@ import {
   Layers,
   AudioLines,
   AudioWaveform,
+  Metronome,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'audio' | 'bambini' | 'community'
@@ -189,6 +190,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'fabula', icon: Dices, title: tc('fabula'), desc: tc('fabulaDescription'), category: 'svago' },
     { name: 'nexus', icon: Puzzle, title: tc('nexus'), desc: tc('nexusDescription'), category: 'svago' },
     { name: 'fonometro', icon: AudioWaveform, title: tc('fonometro'), desc: tc('fonometroDescription'), category: 'audio' },
+    { name: 'metronomo', icon: Metronome, title: tc('metronomo'), desc: tc('metronomoDescription'), category: 'audio' },
     { name: 'angolo-bambini', icon: Palette, title: tc('angoloBambini'), desc: tc('angoloBambiniDescription'), category: 'bambini' },
     { name: 'listings', icon: Tag, title: t('toolListingsTitle'), desc: t('toolListingsDescription'), category: 'community' },
     { name: 'spotlight', icon: Star, title: tc('kumanoDelGiorno'), desc: tc('kumanoDelGiornoDescription'), category: 'community' },
