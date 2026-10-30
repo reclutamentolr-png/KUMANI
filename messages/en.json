@@ -334,7 +334,9 @@
     "planProCtaSoon": "Discover the Pro plan",
     "planProTrialNoteSoon": "The Pro plan and the 15-day free trial open on {date}.",
     "why5TextSoon": "Start for free, no credit card, and use it right away.",
-    "ctaNoteSoon": "✓ Free sign-up ✓ Plus €59/year and Pro €169/year from {date} ✓ KU Karma only from using the services"
+    "ctaNoteSoon": "✓ Free sign-up ✓ Plus €59/year and Pro €169/year from {date} ✓ KU Karma only from using the services",
+    "planSurpriseBaseVoucher": "KUMANI Surprise: gift vouchers included every month",
+    "planSurpriseProVoucher": "KUMANI Surprise: more gift vouchers included every month"
   },
   "authRegister": {
     "registerTitle": "Create your account",
@@ -7636,11 +7638,11 @@
       },
       "sorprese": {
         "sub": "Give an experience",
-        "tagline": "A gift voucher or a surprise journey that unfolds day by day, sent with a link.",
+        "tagline": "A gift voucher that opens with an animation, sent with a link.",
         "p1": "For every occasion",
-        "p1d": "Birthday, love, Christmas: colours, music and effects.",
-        "p2": "3- or 7-day journeys",
-        "p2d": "Photos, videos, riddles, places and songs.",
+        "p1d": "16 ready-made templates, 9 openings, colours and music.",
+        "p2": "Who hands over the gift",
+        "p2d": "Unique code and QR: collected with one tap.",
         "p3": "With your points too",
         "p3d": "By card, with KU Karma or KU Points."
       },
@@ -8668,18 +8670,19 @@
     },
     "sorprese": {
       "title": "KUMANI Surprise",
-      "summary": "Give an experience with a gift voucher or a surprise journey that unfolds day by day: create it for free, activate it by card or with your points and send it with a link.",
+      "summary": "Give an experience with a gift voucher that opens with an animation: create it for free, activate it by card, with your points or with your Plus or Pro plan, and send it with a link.",
       "cta": "Create a surprise",
-      "step1Title": "Choose where to start",
-      "step1Text": "In the Wallet tap “Create a surprise”, or open kumani.io/sorprese. Pick a ready-made template (mum, anniversary, birthday, thank you) or tap “Create a surprise” to start from scratch. Then choose the type: gift voucher, 3-day or 7-day journey.",
-      "step1Tip": "Creating and trying out the surprise is free: you only pay when you activate it to send it.",
-      "step2Title": "Occasion, colours, opening and music",
-      "step2Text": "Write who it’s for, who it’s from and your message. Choose the occasion (birthday, love, Christmas…): icon, colours and opening effect adapt by themselves. You can pick one of 10 colours, how it opens (box, envelope with a letter, scratch to reveal) and background music or your own audio.",
-      "step3Title": "The steps of the journey",
-      "step3Text": "In journeys you add the steps for each day: a message, a gallery of up to 6 photos, a riddle with its answer, a place with a map or a song. You can attach photos, videos or a voice message recorded on your phone: they are compressed automatically and stay under 10 MB.",
-      "step3Tip": "Tap “Preview” to see the surprise as the recipient will, opening included.",
-      "step4Title": "Activate it by card or with points",
-      "step4Text": "When it’s ready, at the bottom of the page activate it by card or with your points: KU Karma or confirmed KU Points. As soon as it’s active you get the link to send on WhatsApp, by email or however you like.",
+      "step1Title": "Pick a template or start from scratch",
+      "step1Text": "In the Wallet tap “Create a surprise”, or open kumani.io/sorprese. Tap “Choose a template”: a list opens with 16 ready-made gift vouchers (Christmas, romantic dinner, spa for two, weekend, birthday, graduation…). Tap one, or tap “Create a surprise” to start from scratch.",
+      "step1Tip": "Creating and trying out the voucher is free: you only pay when you activate it to send it.",
+      "step2Title": "The gift, the occasion and how it opens",
+      "step2Text": "Write who it’s for, who it’s from, what you’re giving and your message. Choose the occasion: colours, music and opening adapt by themselves. There are 9 openings: box, envelope with a letter, scratch to reveal, candles (they can also be blown out into the microphone), balloon, fortune cookie, curtain, developing photo and a safe with a 4-digit code.",
+      "step2Tip": "Tap “Preview” to see the voucher as the recipient will, opening included.",
+      "step3Title": "Who hands over the gift",
+      "step3Text": "If someone else provides the gift (a massage, a dinner, a lesson), fill in “Who hands over the gift?” with their name, business, phone, email and where to collect it. The recipient sees the voucher with a unique code and QR and taps “Collect your gift”: the provider gets an email with the link, confirms the appointment and finally marks the gift as delivered.",
+      "step3Tip": "It’s optional and costs nothing extra. The voucher can’t be used twice, and you can follow its progress in “My surprises”.",
+      "step4Title": "Activate it by card, points or plan",
+      "step4Text": "When it’s ready, at the bottom of the page activate it by card or with your points: KU Karma or confirmed KU Points. With the Plus and Pro plans some vouchers are included every month: tap “Activate for free”. As soon as it’s active you get the link to send on WhatsApp, by email or with the QR code.",
       "step4Tip": "Below the payment button you can see how many points are needed and how many you have: if they’re not enough, the button stays grey.",
       "step5Title": "The thank-you and tidying up",
       "step5Text": "When the recipient opens the gift you know right away, and they can reply with a reaction, a message or a photo: you’ll find it with the pink envelope in “My surprises” and in a box as soon as you open your dashboard. Drafts you no longer need can be deleted with the bin; surprises already paid for stay."
@@ -13604,7 +13607,9 @@
     "templatesOpen": "Choose a template",
     "templatesCount": "{n} ready-made templates",
     "templatesClose": "Close templates",
-    "templatesTextVoucher": "Text, opening and style ready-made: change whatever you like."
+    "templatesTextVoucher": "Text, opening and style ready-made: change whatever you like.",
+    "payTextVoucher": "Prepared everything and checked the preview? Activate the link to send it. After payment you can still fix the texts.",
+    "occasion_valentineVoucher": "Valentine's Day is coming: prepare a gift voucher that opens with an animation."
   },
   "surpriseTpl": {
     "mom_name": "A massage for Mum",
@@ -14072,7 +14077,8 @@
     "intro_family": "A safe corner for the little ones, the family schedule, your home under control and things to find again.",
     "need_music": "I play an instrument or measure noise",
     "short_music": "Music and sound",
-    "intro_music": "A tuner accurate to the cent, a metronome that listens to you and a sound meter to measure noise."
+    "intro_music": "A tuner accurate to the cent, a metronome that listens to you and a sound meter to measure noise.",
+    "intro_giftVoucher": "A gift voucher to send with a link."
   },
   "nexus": {
     "back": "Back to Fun",

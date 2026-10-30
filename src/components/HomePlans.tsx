@@ -10,6 +10,8 @@ import { getPlanPrices } from '@/lib/planPrices'
 import PlanDetails, { type PlanDetailsTool } from '@/components/PlanDetails'
 import type { MarketplaceCategory } from '@/lib/marketplaceTools'
 import { collapseByHub, HUB_ICON_NAME, hubLabel } from '@/lib/serviceHubs'
+import { getEnabledSurpriseKinds } from '@/lib/surpriseServer'
+import { voucherOnly } from '@/lib/surprise'
 
 export type ToolRow = { tool_name: string; is_enabled: boolean; required_plan: string | null; pass_enabled?: boolean | null; pass_price_cents?: number | null }
 
@@ -38,14 +40,17 @@ export default async function HomePlans() {
   // Piani non ancora aperti: la prova Pro parte con l'apertura
   const [gate, gateLocale] = await Promise.all([getPlansGate(), getLocale()])
   const openDate = gate.closed ? formatOpenDate(gateLocale, gate.openDate) : null
-  const [t, marketplaceT, hubsT, locale, prices, rows] = await Promise.all([
+  const [t, marketplaceT, hubsT, locale, prices, rows, surpriseKinds] = await Promise.all([
     getTranslations('landingHome'),
     getTranslations('marketplace'),
     getTranslations('serviceHubs'),
     getLocale(),
     getPlanPrices(),
     fetchToolRows().catch(() => [] as ToolRow[]),
+    getEnabledSurpriseKinds(),
   ])
+  // Percorsi di KUMANI Sorpresa spenti dall'Admin: si parla solo dei buoni regalo
+  const sv = voucherOnly(surpriseKinds) ? 'Voucher' : ''
   const byName = new Map(rows.map((row) => [row.tool_name, row]))
   const tools = getMarketplaceTools((key) => marketplaceT(key)).filter((tool) => byName.get(tool.toolName)?.is_enabled !== false)
   const planOf = (name: string) => byName.get(name)?.required_plan ?? 'base'
@@ -156,7 +161,7 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-300">{t('planBaseDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planBaseIncluded', { count: base.length })}</p>
           {list(base)}
-          {surprises(t('planSurpriseBase'))}
+          {surprises(t(`planSurpriseBase${sv}`))}
           <PlanDetails
             planName={t('planBaseName')}
             price={`${eur(prices.base)} ${t('planPerYear')}`}
@@ -186,7 +191,7 @@ export default async function HomePlans() {
           <p className="mt-2 min-h-[40px] text-sm text-gray-300">{t('planProDescription')}</p>
           <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-[var(--gold-bright)]">{t('planProIncluded', { count: pro.length })}</p>
           {list(pro, true)}
-          {surprises(t('planSurprisePro'))}
+          {surprises(t(`planSurprisePro${sv}`))}
           <PlanDetails
             planName={t('planProName')}
             price={`${eur(prices.pro)} ${t('planPerYear')}`}

@@ -142,7 +142,7 @@ export async function askKumi(question: string, locale: string, history: KumiTur
   const signedIn = who === 'staff' || who === 'memberChat'
   // Nella pagina KUMANI Sorpresa il posto conta anche per i visitatori
   const where = isKumiContext(context) && (signedIn || context.kind === 'surprise') ? context : null
-  const surprise = where?.kind === 'surprise' ? await surpriseKnowledge(lang) : null
+  const surprise = where?.kind === 'surprise' ? await surpriseKnowledge(lang, signedIn) : null
   // Per gli iscritti la risposta dipende anche da dove si trovano (la stessa
   // domanda dentro SVAT o dentro Hoplà): il posto entra nella chiave
   // Sorpresa: la chiave cambia anche con i tipi accesi (i percorsi spenti non si propongono)

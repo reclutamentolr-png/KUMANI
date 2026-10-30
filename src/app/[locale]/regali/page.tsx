@@ -13,6 +13,8 @@ import { formatOpenDate, getPlansGate } from '@/lib/plansGate'
 import { SITE_URL } from '@/lib/siteUrl'
 import { getMyGiftOrders } from '@/app/actions/gifts'
 import { confirmGiftSession, giftItemName } from '@/lib/giftsServer'
+import { getEnabledSurpriseKinds } from '@/lib/surpriseServer'
+import { voucherOnly } from '@/lib/surprise'
 import { defaultLocale } from '../../../../i18n'
 
 const ERRORS = ['quantity', 'item', 'unavailable', 'business', 'vat', 'terms', 'payment', 'soon'] as const
@@ -36,6 +38,8 @@ export default async function GiftsPage({
 
   const t = await getTranslations('gifts')
   const ts = await getTranslations('surprise')
+  // Percorsi di KUMANI Sorpresa spenti dall'Admin: si parla solo del buono regalo
+  const surpriseVoucherOnly = voucherOnly(await getEnabledSurpriseKinds())
   const tm = await getTranslations('marketplace')
 
   // Ritorno dal pagamento: i codici si creano anche senza webhook
@@ -147,7 +151,7 @@ export default async function GiftsPage({
           <Sparkles className="h-6 w-6 shrink-0 text-[var(--gold-bright)]" />
           <span className="min-w-0 flex-1">
             <span className="block font-bold">{ts('regaliTitle')}</span>
-            <span className="block text-sm text-white/75">{ts('walletText')}</span>
+            <span className="block text-sm text-white/75">{ts(surpriseVoucherOnly ? 'walletTextVoucher' : 'walletText')}</span>
           </span>
           <ArrowRight className="h-5 w-5 shrink-0 text-[var(--gold-bright)]" />
         </Link>

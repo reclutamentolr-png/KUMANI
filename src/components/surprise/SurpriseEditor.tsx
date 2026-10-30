@@ -82,7 +82,7 @@ const STEP_ICON: Record<StepKind, LucideIcon> = { message: MessageSquareText, ga
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
 const card = (on: boolean) =>
-  `flex min-w-0 cursor-pointer flex-col items-center gap-1 rounded-xl border-2 p-3 text-center text-sm hyphens-auto transition-colors [overflow-wrap:anywhere] ${on ? 'border-[var(--gold)] bg-[var(--gold-pale)]/60 font-bold text-[var(--ink)]' : 'border-gray-200 text-gray-700 hover:border-[var(--gold)]/60'}`
+  `flex min-w-0 cursor-pointer flex-col items-center gap-1 rounded-xl border-2 px-1.5 py-3 text-center text-sm hyphens-auto transition-colors [overflow-wrap:anywhere] ${on ? 'border-[var(--gold)] bg-[var(--gold-pale)]/60 font-bold text-[var(--ink)]' : 'border-gray-200 text-gray-700 hover:border-[var(--gold)]/60'}`
 
 // Data e ora locali per <input type="datetime-local">
 function toLocalInput(iso: string | null): string {

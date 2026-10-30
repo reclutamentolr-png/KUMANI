@@ -27,7 +27,7 @@ export default async function SurpriseDashboardCard() {
       </span>
       <span className="min-w-0 flex-1">
         <span className="block font-bold sm:text-lg">{t('dashboardTitle')}</span>
-        <span className="block text-sm text-white/75">{when ? t(`occasion_${when}`) : t(voucherOnly(kinds) ? 'dashboardTextVoucher' : 'dashboardText')}</span>
+        <span className="block text-sm text-white/75">{when === 'valentine' ? t(voucherOnly(kinds) ? 'occasion_valentineVoucher' : 'occasion_valentine') : when ? t(`occasion_${when}`) : t(voucherOnly(kinds) ? 'dashboardTextVoucher' : 'dashboardText')}</span>
       </span>
       <span className="hidden shrink-0 items-center gap-1 rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-[var(--gold-bright)] group-hover:bg-white/15 sm:inline-flex">
         {t('dashboardCta')} <ArrowRight className="h-4 w-4" />

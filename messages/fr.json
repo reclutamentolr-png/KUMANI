@@ -289,7 +289,9 @@
     "planProCtaSoon": "Découvrir la formule Pro",
     "planProTrialNoteSoon": "La formule Pro et l’essai gratuit de 15 jours ouvrent le {date}.",
     "why5TextSoon": "On commence gratuitement, sans carte, et on l’utilise tout de suite.",
-    "ctaNoteSoon": "✓ Inscription gratuite ✓ Plus 59 €/an et Pro 169 €/an dès le {date} ✓ KU Karma uniquement liés à l’utilisation"
+    "ctaNoteSoon": "✓ Inscription gratuite ✓ Plus 59 €/an et Pro 169 €/an dès le {date} ✓ KU Karma uniquement liés à l’utilisation",
+    "planSurpriseBaseVoucher": "KUMANI Surprise : des bons cadeaux inclus chaque mois",
+    "planSurpriseProVoucher": "KUMANI Surprise : plus de bons cadeaux inclus chaque mois"
   },
   "authRegister": {
     "registerTitle": "Créez votre compte",
@@ -7636,11 +7638,11 @@
       },
       "sorprese": {
         "sub": "Offrez une expérience",
-        "tagline": "Un bon cadeau ou un parcours surprise qui se dévoile jour après jour, à envoyer avec un lien.",
+        "tagline": "Un bon cadeau qui s’ouvre avec une animation, à envoyer avec un lien.",
         "p1": "Pour chaque occasion",
-        "p1d": "Anniversaire, amour, Noël : couleurs, musique et effets.",
-        "p2": "Parcours de 3 ou 7 jours",
-        "p2d": "Photos, vidéos, énigmes, lieux et chansons.",
+        "p1d": "16 modèles prêts, 9 ouvertures, couleurs et musique.",
+        "p2": "Qui remet le cadeau",
+        "p2d": "Code unique et QR : on le récupère d’un geste.",
         "p3": "Aussi avec vos points",
         "p3d": "Par carte, avec les KU Karma ou les KU Points."
       },
@@ -8668,18 +8670,19 @@
     },
     "sorprese": {
       "title": "KUMANI Surprise",
-      "summary": "Offrez une expérience avec un bon cadeau ou un parcours surprise qui se dévoile jour après jour : vous le créez gratuitement, l’activez par carte ou avec vos points et l’envoyez avec un lien.",
+      "summary": "Offrez une expérience avec un bon cadeau qui s’ouvre avec une animation : vous le créez gratuitement, l’activez par carte, avec vos points ou avec votre offre Plus ou Pro, et l’envoyez avec un lien.",
       "cta": "Créer une surprise",
-      "step1Title": "Choisissez par où commencer",
-      "step1Text": "Dans le Wallet, touchez « Créer une surprise », ou ouvrez kumani.io/sorprese. Choisissez un modèle prêt (maman, anniversaire de couple, anniversaire, merci) ou touchez « Créer une surprise » pour partir de zéro. Choisissez ensuite le type : bon cadeau, parcours de 3 jours ou de 7 jours.",
-      "step1Tip": "Créer et essayer la surprise est gratuit : vous ne payez que lorsque vous l’activez pour l’envoyer.",
-      "step2Title": "Occasion, couleurs, ouverture et musique",
-      "step2Text": "Indiquez pour qui c’est, de la part de qui et votre message. Choisissez l’occasion (anniversaire, amour, Noël…) : icône, couleurs et effet à l’ouverture s’adaptent tout seuls. Vous pouvez choisir parmi 10 couleurs, le mode d’ouverture (boîte, enveloppe avec lettre, à gratter) et une musique de fond ou votre propre audio.",
-      "step3Title": "Les étapes du parcours",
-      "step3Text": "Dans les parcours, ajoutez les étapes de chaque jour : un message, une galerie jusqu’à 6 photos, une énigme avec sa réponse, un lieu avec la carte ou une chanson. Vous pouvez joindre des photos, des vidéos ou un message vocal enregistré sur votre téléphone : ils sont compressés automatiquement et restent sous 10 Mo.",
-      "step3Tip": "Touchez « Aperçu » pour voir la surprise comme la verra la personne qui la reçoit, ouverture comprise.",
-      "step4Title": "Activez-la par carte ou avec vos points",
-      "step4Text": "Quand elle est prête, en bas de la page, activez-la par carte ou avec vos points : KU Karma ou KU Points confirmés. Dès qu’elle est activée, vous recevez le lien à envoyer sur WhatsApp, par e-mail ou comme vous le souhaitez.",
+      "step1Title": "Choisissez un modèle ou partez de zéro",
+      "step1Text": "Dans le Wallet, touchez « Créer une surprise », ou ouvrez kumani.io/sorprese. Touchez « Choisir un modèle » : une liste s’ouvre avec 16 bons cadeaux prêts (Noël, dîner romantique, spa à deux, week-end, anniversaire, diplôme…). Touchez-en un, ou touchez « Créer une surprise » pour partir de zéro.",
+      "step1Tip": "Créer et essayer le bon est gratuit : vous ne payez que lorsque vous l’activez pour l’envoyer.",
+      "step2Title": "Le cadeau, l’occasion et l’ouverture",
+      "step2Text": "Indiquez pour qui c’est, de la part de qui, ce que vous offrez et votre message. Choisissez l’occasion : couleurs, musique et ouverture s’adaptent tout seuls. Il y a 9 ouvertures : boîte, enveloppe avec lettre, à gratter, bougies (on peut aussi les souffler dans le micro), ballon, biscuit de la chance, rideau, photo qui se révèle et coffre-fort avec un code à 4 chiffres.",
+      "step2Tip": "Touchez « Aperçu » pour voir le bon comme le verra la personne qui le reçoit, ouverture comprise.",
+      "step3Title": "Qui remet le cadeau",
+      "step3Text": "Si le cadeau est offert par une autre personne (un massage, un dîner, un cours), dans « Qui remet le cadeau ? » indiquez son nom, son activité, son téléphone, son e-mail et où le récupérer. La personne qui le reçoit voit le bon avec un code unique et le QR et touche « Récupérez votre cadeau » : la personne qui le remet reçoit un e-mail avec le lien, confirme le rendez-vous et indique enfin le cadeau comme remis.",
+      "step3Tip": "C’est facultatif et sans frais supplémentaires. Le bon ne peut pas servir deux fois, et vous suivez où il en est dans « Mes surprises ».",
+      "step4Title": "Activez-le par carte, points ou offre",
+      "step4Text": "Quand il est prêt, en bas de la page, activez-le par carte ou avec vos points : KU Karma ou KU Points confirmés. Avec les offres Plus et Pro, certains bons sont inclus chaque mois : touchez « Activer gratuitement ». Dès qu’il est activé, vous recevez le lien à envoyer sur WhatsApp, par e-mail ou avec le QR code.",
       "step4Tip": "Sous le bouton de paiement, vous voyez combien de points il faut et combien vous en avez : s’ils ne suffisent pas, le bouton reste gris.",
       "step5Title": "Le remerciement et le rangement",
       "step5Text": "Quand la personne ouvre le cadeau, vous le savez tout de suite, et elle peut vous répondre par une réaction, un message ou une photo : vous le trouvez avec l’enveloppe rose dans « Mes surprises » et dans un encadré dès que vous ouvrez votre tableau de bord. Les brouillons dont vous n’avez plus besoin se suppriment avec la corbeille ; les surprises déjà payées restent."
@@ -13604,7 +13607,9 @@
     "templatesOpen": "Choisir un modèle",
     "templatesCount": "{n} modèles prêts",
     "templatesClose": "Fermer les modèles",
-    "templatesTextVoucher": "Texte, ouverture et style déjà prêts : changez ce que vous voulez."
+    "templatesTextVoucher": "Texte, ouverture et style déjà prêts : changez ce que vous voulez.",
+    "payTextVoucher": "Tout est prêt et vous avez vu l'aperçu ? Activez le lien pour l'envoyer. Après le paiement, vous pouvez encore corriger les textes.",
+    "occasion_valentineVoucher": "La Saint-Valentin approche : préparez un bon cadeau qui s’ouvre avec une animation."
   },
   "surpriseTpl": {
     "mom_name": "Un massage pour maman",
@@ -14072,7 +14077,8 @@
     "intro_family": "Un coin sûr pour les petits, l’agenda de la famille, la maison sous contrôle et les objets à retrouver.",
     "need_music": "Je joue d’un instrument ou je mesure le bruit",
     "short_music": "Musique et son",
-    "intro_music": "Un accordeur au centième, un métronome qui vous écoute et un sonomètre pour mesurer le bruit."
+    "intro_music": "Un accordeur au centième, un métronome qui vous écoute et un sonomètre pour mesurer le bruit.",
+    "intro_giftVoucher": "Un bon cadeau à envoyer avec un lien."
   },
   "nexus": {
     "back": "Retour à Loisirs",

@@ -2,6 +2,8 @@ import { getTranslations } from 'next-intl/server'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { HOME_NEEDS, type HomeNeed, type HomeNeedItem } from '@/lib/homeNeeds'
 import { getDisabledTools, getToolPlanOf } from '@/lib/freeTools'
+import { getEnabledSurpriseKinds } from '@/lib/surpriseServer'
+import { voucherOnly } from '@/lib/surprise'
 import type { RequiredPlan } from '@/lib/plans'
 import { collapseByHub, HUB_HOME, HUB_ICON_NAME, HUB_PUBLIC_HREF, HUB_REPRESENTATIVE, HUB_TABS } from '@/lib/serviceHubs'
 
@@ -17,7 +19,9 @@ const COMMUNITY: Record<string, { titleKey: string; href: string; iconName: stri
 }
 
 export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (name) => `/strumenti/${name}`): Promise<HomeNeed[]> {
-  const [tNeeds, tMarket, tSurprise, tHubs, disabled] = await Promise.all([getTranslations('homeNeeds'), getTranslations('marketplace'), getTranslations('surprise'), getTranslations('serviceHubs'), getDisabledTools()])
+  const [tNeeds, tMarket, tSurprise, tHubs, disabled, surpriseKinds] = await Promise.all([getTranslations('homeNeeds'), getTranslations('marketplace'), getTranslations('surprise'), getTranslations('serviceHubs'), getDisabledTools(), getEnabledSurpriseKinds()])
+  // Percorsi di KUMANI Sorpresa spenti dall'Admin: si parla solo del buono regalo
+  const sv = voucherOnly(surpriseKinds) ? 'Voucher' : ''
   const marketTools = getMarketplaceTools(tMarket)
   const toolsByName = new Map(marketTools.map((tool) => [tool.toolName, tool]))
   // Community: il piano della sezione; Eventi e Sorprese si guardano gratis
@@ -29,7 +33,7 @@ export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (na
     icon: need.icon,
     label: tNeeds(`need_${need.key}`),
     short: tNeeds(`short_${need.key}`),
-    intro: tNeeds(`intro_${need.key}`),
+    intro: tNeeds(need.key === 'gift' ? `intro_gift${sv}` : `intro_${need.key}`),
     // La sicurezza come tre servizi (Home pubblica: le loro pagine aperte a tutti)
     items: collapseByHub(
       (need.items as readonly string[]).filter((name) => !disabled.includes(name)).flatMap((name): HomeNeedItem[] => {
@@ -37,7 +41,7 @@ export async function buildHomeNeeds(hrefFor: (toolName: string) => string = (na
       // Sezioni della Community (non sono servizi del Marketplace)
       const community = COMMUNITY[name]
       if (community) return [{ name, title: tMarket(community.titleKey), description: tMarket(`${community.titleKey}Description`), href: community.href, iconName: community.iconName, plan: planOf[name] }]
-      if (name === 'sorprese') return [{ name, title: `KUMANI ${tSurprise('title')}`, description: tSurprise('intro'), href: '/sorprese', iconName: 'Gift', plan: planOf.sorprese }]
+      if (name === 'sorprese') return [{ name, title: `KUMANI ${tSurprise('title')}`, description: tSurprise(`intro${sv}`), href: '/sorprese', iconName: 'Gift', plan: planOf.sorprese }]
       const tool = toolsByName.get(name)
       return tool ? [{ name, title: tool.title.split(/\s[-–—]\s/)[0], description: tool.description, href: hrefFor(name), iconName: tool.iconName, plan: planOf[name] }] : []
       }).map((item) => ({ ...item, toolName: item.name })),

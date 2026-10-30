@@ -289,7 +289,9 @@
     "planProCtaSoon": "Descobre o plano Pro",
     "planProTrialNoteSoon": "O plano Pro e o teste gratuito de 15 dias abrem a {date}.",
     "why5TextSoon": "Começas grátis, sem cartão, e usas logo.",
-    "ctaNoteSoon": "✓ Registo gratuito ✓ Plus 59 €/ano e Pro 169 €/ano a partir de {date} ✓ KU Karma só pela utilização dos serviços"
+    "ctaNoteSoon": "✓ Registo gratuito ✓ Plus 59 €/ano e Pro 169 €/ano a partir de {date} ✓ KU Karma só pela utilização dos serviços",
+    "planSurpriseBaseVoucher": "KUMANI Surpresa: vales-presente incluídos todos os meses",
+    "planSurpriseProVoucher": "KUMANI Surpresa: mais vales-presente incluídos todos os meses"
   },
   "authRegister": {
     "registerTitle": "Crie a sua conta",
@@ -7636,11 +7638,11 @@
       },
       "sorprese": {
         "sub": "Oferece uma experiência",
-        "tagline": "Um vale-presente ou um percurso surpresa que se revela dia após dia, para enviar com um link.",
+        "tagline": "Um vale-presente que se abre com uma animação, para enviar com um link.",
         "p1": "Para cada ocasião",
-        "p1d": "Aniversário, amor, Natal: cores, música e efeitos.",
-        "p2": "Percursos de 3 ou 7 dias",
-        "p2d": "Fotos, vídeos, adivinhas, lugares e canções.",
+        "p1d": "16 modelos prontos, 9 aberturas, cores e música.",
+        "p2": "Quem entrega o presente",
+        "p2d": "Código único e QR: levanta-se com um toque.",
         "p3": "Também com os teus pontos",
         "p3d": "Com cartão, KU Karma ou KU Points."
       },
@@ -8668,18 +8670,19 @@
     },
     "sorprese": {
       "title": "KUMANI Surpresa",
-      "summary": "Oferece uma experiência com um vale-presente ou um percurso surpresa que se revela dia após dia: crias de graça, ativas com cartão ou com os teus pontos e envias com um link.",
+      "summary": "Oferece uma experiência com um vale-presente que se abre com uma animação: crias de graça, ativas com cartão, com os teus pontos ou com o teu plano Plus ou Pro e envias com um link.",
       "cta": "Criar uma surpresa",
-      "step1Title": "Escolhe por onde começar",
-      "step1Text": "No Wallet toca em «Criar uma surpresa», ou abre kumani.io/sorprese. Escolhe um modelo pronto (mãe, aniversário de casamento, aniversário, obrigado) ou toca em «Criar uma surpresa» para começar do zero. Depois escolhe o tipo: vale-presente, percurso de 3 dias ou de 7 dias.",
-      "step1Tip": "Criar e experimentar a surpresa é grátis: só pagas quando a ativas para a enviar.",
-      "step2Title": "Ocasião, cores, abertura e música",
-      "step2Text": "Escreve para quem é, da parte de quem e a tua mensagem. Escolhe a ocasião (aniversário, amor, Natal…): o ícone, as cores e o efeito ao abrir adaptam-se sozinhos. Podes escolher entre 10 cores, como se abre (caixa, envelope com carta, raspar e descobrir) e uma música de fundo ou um áudio teu.",
-      "step3Title": "As etapas do percurso",
-      "step3Text": "Nos percursos adicionas as etapas de cada dia: uma mensagem, uma galeria até 6 fotos, uma adivinha com a resposta, um lugar com o mapa ou uma canção. Podes anexar fotos, vídeos ou uma mensagem de voz gravada no telemóvel: são comprimidos automaticamente e ficam abaixo dos 10 MB.",
-      "step3Tip": "Toca em «Pré-visualizar» para ver a surpresa como a verá quem a recebe, abertura incluída.",
-      "step4Title": "Ativa-a com cartão ou com pontos",
-      "step4Text": "Quando estiver pronta, no fim da página ativa-a com cartão ou com os teus pontos: KU Karma ou KU Points confirmados. Assim que fica ativa recebes o link para enviar por WhatsApp, por email ou como preferires.",
+      "step1Title": "Escolhe um modelo ou começa do zero",
+      "step1Text": "No Wallet toca em «Criar uma surpresa», ou abre kumani.io/sorprese. Toca em «Escolher um modelo»: abre-se a lista com 16 vales-presente já prontos (Natal, jantar romântico, spa a dois, fim de semana, aniversário, licenciatura…). Toca num deles, ou toca em «Criar uma surpresa» para começar do zero.",
+      "step1Tip": "Criar e experimentar o vale é grátis: só pagas quando o ativas para o enviar.",
+      "step2Title": "O presente, a ocasião e como se abre",
+      "step2Text": "Escreve para quem é, da parte de quem, o que ofereces e a tua mensagem. Escolhe a ocasião: as cores, a música e a abertura adaptam-se sozinhas. Há 9 aberturas: caixa, envelope com carta, raspar e descobrir, velas (também se apagam a soprar para o microfone), balão, bolacha da sorte, cortina, foto que se revela e cofre com um código de 4 algarismos.",
+      "step2Tip": "Toca em «Pré-visualizar» para ver o vale como o verá quem o recebe, abertura incluída.",
+      "step3Title": "Quem entrega o presente",
+      "step3Text": "Se o presente é dado por outra pessoa (uma massagem, um jantar, uma aula), em «Quem entrega o presente?» escreve o nome, a atividade, o telefone, o email e onde se levanta. Quem o recebe vê o vale com um código único e o QR e toca em «Levante o seu presente»: quem entrega recebe um email com o link, confirma a marcação e no fim marca o presente como entregue.",
+      "step3Tip": "É opcional e não custa nada a mais. O vale não pode ser usado duas vezes e vês em que ponto está em «As minhas surpresas».",
+      "step4Title": "Ativa-o com cartão, pontos ou plano",
+      "step4Text": "Quando estiver pronto, no fim da página ativa-o com cartão ou com os teus pontos: KU Karma ou KU Points confirmados. Com os planos Plus e Pro alguns vales estão incluídos todos os meses: toca em «Ativar grátis». Assim que fica ativo recebes o link para enviar por WhatsApp, por email ou com o código QR.",
       "step4Tip": "Por baixo do botão de pagamento vês quantos pontos são precisos e quantos tens: se não chegarem, o botão fica cinzento.",
       "step5Title": "O agradecimento e a arrumação",
       "step5Text": "Quando quem a recebe abre o presente ficas logo a saber, e pode responder-te com uma reação, uma mensagem ou uma foto: encontras isso com o envelope cor-de-rosa em «As minhas surpresas» e num quadro assim que entras no painel. Os rascunhos de que já não precisas apagam-se com o caixote do lixo; as surpresas já pagas ficam."
@@ -13604,7 +13607,9 @@
     "templatesOpen": "Escolher um modelo",
     "templatesCount": "{n} modelos prontos",
     "templatesClose": "Fechar modelos",
-    "templatesTextVoucher": "Texto, abertura e estilo já prontos: muda o que quiseres."
+    "templatesTextVoucher": "Texto, abertura e estilo já prontos: muda o que quiseres.",
+    "payTextVoucher": "Preparou tudo e viu a pré-visualização? Ative a ligação para a enviar. Depois do pagamento ainda pode corrigir os textos.",
+    "occasion_valentineVoucher": "O Dia dos Namorados está a chegar: prepare um vale-presente que se abre com uma animação."
   },
   "surpriseTpl": {
     "mom_name": "Uma massagem para a mãe",
@@ -14072,7 +14077,8 @@
     "intro_family": "Um cantinho seguro para os mais pequenos, a agenda da família, a casa sob controlo e os objetos a encontrar.",
     "need_music": "Toco um instrumento ou meço o ruído",
     "short_music": "Música e som",
-    "intro_music": "Afinador ao cêntimo, metrónomo que o ouve e sonómetro para medir o ruído."
+    "intro_music": "Afinador ao cêntimo, metrónomo que o ouve e sonómetro para medir o ruído.",
+    "intro_giftVoucher": "Um vale-presente para enviar com um link."
   },
   "nexus": {
     "back": "Voltar a Lazer",

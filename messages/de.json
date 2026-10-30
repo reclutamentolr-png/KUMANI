@@ -289,7 +289,9 @@
     "planProCtaSoon": "Den Pro-Tarif entdecken",
     "planProTrialNoteSoon": "Der Pro-Tarif und der 15-tägige Gratistest starten am {date}.",
     "why5TextSoon": "Kostenlos starten, ohne Kreditkarte, und sofort nutzen.",
-    "ctaNoteSoon": "✓ Kostenlose Anmeldung ✓ Plus 59 €/Jahr und Pro 169 €/Jahr ab {date} ✓ KU Karma nur durch Nutzung der Dienste"
+    "ctaNoteSoon": "✓ Kostenlose Anmeldung ✓ Plus 59 €/Jahr und Pro 169 €/Jahr ab {date} ✓ KU Karma nur durch Nutzung der Dienste",
+    "planSurpriseBaseVoucher": "KUMANI Überraschung: jeden Monat Geschenkgutscheine inklusive",
+    "planSurpriseProVoucher": "KUMANI Überraschung: jeden Monat mehr Geschenkgutscheine inklusive"
   },
   "authRegister": {
     "registerTitle": "Konto erstellen",
@@ -7636,11 +7638,11 @@
       },
       "sorprese": {
         "sub": "Verschenke ein Erlebnis",
-        "tagline": "Ein Geschenkgutschein oder eine Überraschungsreise, die sich Tag für Tag enthüllt – per Link verschickt.",
+        "tagline": "Ein Geschenkgutschein, der sich mit einer Animation öffnet – per Link verschickt.",
         "p1": "Für jeden Anlass",
-        "p1d": "Geburtstag, Liebe, Weihnachten: Farben, Musik und Effekte.",
-        "p2": "Reisen über 3 oder 7 Tage",
-        "p2d": "Fotos, Videos, Rätsel, Orte und Lieder.",
+        "p1d": "16 fertige Vorlagen, 9 Öffnungen, Farben und Musik.",
+        "p2": "Wer das Geschenk übergibt",
+        "p2d": "Eindeutiger Code und QR: mit einem Tipp abholen.",
         "p3": "Auch mit deinen Punkten",
         "p3d": "Mit Karte, KU Karma oder KU Points."
       },
@@ -8668,18 +8670,19 @@
     },
     "sorprese": {
       "title": "KUMANI Überraschung",
-      "summary": "Verschenke ein Erlebnis mit einem Geschenkgutschein oder einer Überraschungsreise, die sich Tag für Tag enthüllt: kostenlos erstellen, mit Karte oder Punkten aktivieren und per Link verschicken.",
+      "summary": "Verschenke ein Erlebnis mit einem Geschenkgutschein, der sich mit einer Animation öffnet: kostenlos erstellen, mit Karte, Punkten oder deinem Plus- oder Pro-Tarif aktivieren und per Link verschicken.",
       "cta": "Überraschung erstellen",
-      "step1Title": "Wähle, wie du anfängst",
-      "step1Text": "Tippe im Wallet auf „Überraschung erstellen“ oder öffne kumani.io/sorprese. Wähle eine fertige Vorlage (Mama, Jahrestag, Geburtstag, Danke) oder tippe auf „Überraschung erstellen“, um bei null anzufangen. Wähle dann die Art: Geschenkgutschein, 3-Tage- oder 7-Tage-Reise.",
-      "step1Tip": "Erstellen und Ausprobieren ist kostenlos: Du zahlst erst, wenn du sie zum Verschicken aktivierst.",
-      "step2Title": "Anlass, Farben, Öffnung und Musik",
-      "step2Text": "Schreib, für wen sie ist, von wem und deine Nachricht. Wähle den Anlass (Geburtstag, Liebe, Weihnachten …): Symbol, Farben und Effekt beim Öffnen passen sich von selbst an. Du kannst aus 10 Farben wählen, wie sie sich öffnet (Schachtel, Umschlag mit Brief, Rubbeln) und Hintergrundmusik oder eigenes Audio.",
-      "step3Title": "Die Etappen der Reise",
-      "step3Text": "Bei Reisen fügst du die Etappen jedes Tages hinzu: eine Nachricht, eine Galerie mit bis zu 6 Fotos, ein Rätsel mit Lösung, einen Ort mit Karte oder ein Lied. Du kannst Fotos, Videos oder eine mit dem Handy aufgenommene Sprachnachricht anhängen: Sie werden automatisch komprimiert und bleiben unter 10 MB.",
-      "step3Tip": "Tippe auf „Vorschau“, um die Überraschung so zu sehen, wie der Empfänger sie sieht – mit Öffnung.",
-      "step4Title": "Mit Karte oder Punkten aktivieren",
-      "step4Text": "Wenn sie fertig ist, aktiviere sie unten auf der Seite mit Karte oder mit deinen Punkten: KU Karma oder bestätigte KU Points. Sobald sie aktiv ist, bekommst du den Link zum Verschicken per WhatsApp, E-Mail oder wie du möchtest.",
+      "step1Title": "Vorlage wählen oder bei null anfangen",
+      "step1Text": "Tippe im Wallet auf „Überraschung erstellen“ oder öffne kumani.io/sorprese. Tippe auf „Vorlage auswählen“: Es öffnet sich eine Liste mit 16 fertigen Geschenkgutscheinen (Weihnachten, romantisches Abendessen, Spa zu zweit, Wochenende, Geburtstag, Abschluss …). Tippe auf einen oder auf „Überraschung erstellen“, um bei null anzufangen.",
+      "step1Tip": "Erstellen und Ausprobieren ist kostenlos: Du zahlst erst, wenn du den Gutschein zum Verschicken aktivierst.",
+      "step2Title": "Geschenk, Anlass und Öffnung",
+      "step2Text": "Schreib, für wen er ist, von wem, was du schenkst, und deine Nachricht. Wähle den Anlass: Farben, Musik und Öffnung passen sich von selbst an. Es gibt 9 Öffnungen: Schachtel, Umschlag mit Brief, Rubbeln, Kerzen (auch durch Pusten ins Mikrofon), Luftballon, Glückskeks, Vorhang, Foto, das sich entwickelt, und Tresor mit 4-stelligem Code.",
+      "step2Tip": "Tippe auf „Vorschau“, um den Gutschein so zu sehen, wie der Empfänger ihn sieht – mit Öffnung.",
+      "step3Title": "Wer das Geschenk übergibt",
+      "step3Text": "Wenn jemand anderes das Geschenk erbringt (eine Massage, ein Abendessen, eine Unterrichtsstunde), trag unter „Wer übergibt das Geschenk?“ Name, Geschäft, Telefon, E-Mail und Abholort ein. Der Empfänger sieht den Gutschein mit einem eindeutigen Code und QR und tippt auf „Hol dein Geschenk ab“: Wer übergibt, bekommt eine E-Mail mit dem Link, bestätigt den Termin und markiert das Geschenk am Ende als übergeben.",
+      "step3Tip": "Das ist freiwillig und kostet nichts extra. Der Gutschein kann nicht zweimal benutzt werden, und unter „Meine Überraschungen“ siehst du, wie weit er ist.",
+      "step4Title": "Mit Karte, Punkten oder Tarif aktivieren",
+      "step4Text": "Wenn er fertig ist, aktiviere ihn unten auf der Seite mit Karte oder mit deinen Punkten: KU Karma oder bestätigte KU Points. Mit den Tarifen Plus und Pro sind jeden Monat einige Gutscheine inklusive: Tippe auf „Kostenlos aktivieren“. Sobald er aktiv ist, bekommst du den Link zum Verschicken per WhatsApp, E-Mail oder QR-Code.",
       "step4Tip": "Unter dem Bezahlknopf siehst du, wie viele Punkte nötig sind und wie viele du hast: Reichen sie nicht, bleibt der Knopf grau.",
       "step5Title": "Das Dankeschön und Aufräumen",
       "step5Text": "Wenn der Empfänger das Geschenk öffnet, weißt du es sofort, und er kann dir mit einer Reaktion, einer Nachricht oder einem Foto antworten: Du findest es mit dem rosa Umschlag unter „Meine Überraschungen“ und in einem Kasten, sobald du dein Dashboard öffnest. Entwürfe, die du nicht mehr brauchst, löschst du mit dem Papierkorb; bereits bezahlte Überraschungen bleiben."
@@ -13604,7 +13607,9 @@
     "templatesOpen": "Vorlage auswählen",
     "templatesCount": "{n} fertige Vorlagen",
     "templatesClose": "Vorlagen schließen",
-    "templatesTextVoucher": "Text, Öffnung und Stil fertig vorbereitet: Ändere, was du willst."
+    "templatesTextVoucher": "Text, Öffnung und Stil fertig vorbereitet: Ändere, was du willst.",
+    "payTextVoucher": "Alles vorbereitet und die Vorschau angesehen? Aktiviere den Link zum Verschicken. Nach der Zahlung kannst du die Texte noch korrigieren.",
+    "occasion_valentineVoucher": "Valentinstag naht: Bereite einen Geschenkgutschein vor, der sich mit einer Animation öffnet."
   },
   "surpriseTpl": {
     "mom_name": "Eine Massage für Mama",
@@ -14072,7 +14077,8 @@
     "intro_family": "Eine sichere Ecke für die Kleinen, der Familienkalender, das Zuhause im Griff und Dinge, die man wiederfinden muss.",
     "need_music": "Ich spiele ein Instrument oder messe Lärm",
     "short_music": "Musik und Klang",
-    "intro_music": "Stimmgerät auf den Cent genau, ein Metronom, das dir zuhört, und ein Schallpegelmesser für den Lärm."
+    "intro_music": "Stimmgerät auf den Cent genau, ein Metronom, das dir zuhört, und ein Schallpegelmesser für den Lärm.",
+    "intro_giftVoucher": "Ein Geschenkgutschein, per Link verschickt."
   },
   "nexus": {
     "back": "Zurück zu Freizeit",

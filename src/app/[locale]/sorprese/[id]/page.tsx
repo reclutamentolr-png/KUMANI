@@ -258,7 +258,7 @@ export default async function SurpriseEditPage({
         {row.status === 'draft' && (
           <section id="pay" className="mt-6 scroll-mt-6 rounded-2xl border-2 border-[var(--gold)]/50 bg-white p-5 shadow-sm">
             <h2 className="text-lg font-bold text-[var(--ink)]">{t('payTitle')}</h2>
-            <p className="mt-1 text-sm text-gray-600">{t('payText')}</p>
+            <p className="mt-1 text-sm text-gray-600">{t(row.kind === 'voucher' ? 'payTextVoucher' : 'payText')}</p>
             {error && <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800">{t(`error_${error}`)}</p>}
             {!ready ? (
               <p className="mt-3 flex items-start gap-2 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-700">
