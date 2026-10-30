@@ -16,6 +16,8 @@ export type SurpriseTemplate = {
 }
 
 export const SURPRISE_TEMPLATES: SurpriseTemplate[] = [
+  // Natale per primo: è la festa dei regali
+  { key: 'christmas', kind: 'voucher', occasion: 'christmas', reveal: 'box', music: 'jingle', theme: 'ruby', steps: [] },
   { key: 'mom', kind: 'voucher', occasion: 'parents', reveal: 'envelope', music: 'lullaby', theme: 'rose', steps: [] },
   {
     key: 'anniversary',
@@ -45,6 +47,20 @@ export const SURPRISE_TEMPLATES: SurpriseTemplate[] = [
     ],
   },
   { key: 'thanks', kind: 'voucher', occasion: 'thanks', reveal: 'scratch', music: 'gymno', theme: 'sky', steps: [] },
+  // Buoni regalo con le esperienze più regalate (cofanetti, feste e ricorrenze)
+  { key: 'romanticDinner', kind: 'voucher', occasion: 'love', reveal: 'candles', music: 'nocturne', theme: 'rose', steps: [] },
+  { key: 'spaCouple', kind: 'voucher', occasion: 'love', reveal: 'curtain', music: 'air', theme: 'lilac', steps: [] },
+  { key: 'weekend', kind: 'voucher', occasion: 'generic', reveal: 'polaroid', music: 'danube', theme: 'teal', steps: [] },
+  { key: 'birthdayVoucher', kind: 'voucher', occasion: 'birthday', reveal: 'candles', music: 'birthday', theme: 'gold', steps: [] },
+  { key: 'wine', kind: 'voucher', occasion: 'generic', reveal: 'envelope', music: 'clair', theme: 'coral', steps: [] },
+  { key: 'cooking', kind: 'voucher', occasion: 'party', reveal: 'cookie', music: 'radetzky', theme: 'coral', steps: [] },
+  { key: 'balloonFlight', kind: 'voucher', occasion: 'birthday', reveal: 'balloon', music: 'joy', theme: 'sky', steps: [] },
+  { key: 'concert', kind: 'voucher', occasion: 'party', reveal: 'curtain', music: 'pomp', theme: 'night', steps: [] },
+  { key: 'graduation', kind: 'voucher', occasion: 'graduation', reveal: 'box', music: 'pomp', theme: 'gold', steps: [] },
+  { key: 'baby', kind: 'voucher', occasion: 'baby', reveal: 'balloon', music: 'twinkle', theme: 'sky', steps: [] },
+  { key: 'honeymoon', kind: 'voucher', occasion: 'wedding', reveal: 'envelope', music: 'air', theme: 'silver', steps: [] },
+  { key: 'dad', kind: 'voucher', occasion: 'parents', reveal: 'scratch', music: 'radetzky', theme: 'green', steps: [] },
+  { key: 'photoShoot', kind: 'voucher', occasion: 'generic', reveal: 'polaroid', music: 'gymno', theme: 'silver', steps: [] },
 ]
 
 export const templateByKey = (key: string) => SURPRISE_TEMPLATES.find((t) => t.key === key) ?? null

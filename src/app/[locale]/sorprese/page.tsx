@@ -4,7 +4,7 @@ import { ArrowLeft, CalendarHeart, Gift, Heart, LogIn, Mail, Route, Sparkles, Us
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
 import { getEnabledSurpriseKinds, getSurprisePrices } from '@/lib/surpriseServer'
-import { parseSurprisePlan, planFreeFor, type SurpriseKind } from '@/lib/surprise'
+import { parseSurprisePlan, planFreeFor, voucherOnly, type SurpriseKind } from '@/lib/surprise'
 import SurprisePlanSummary from '@/components/surprise/SurprisePlanSummary'
 import NewSurpriseButton from '@/components/surprise/NewSurpriseButton'
 import TemplatePicker from '@/components/surprise/TemplatePicker'
@@ -18,10 +18,11 @@ export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   setRequestLocale((await params).locale)
-  const t = await getTranslations('surprise')
+  const [t, kinds] = await Promise.all([getTranslations('surprise'), getEnabledSurpriseKinds()])
+  const v = voucherOnly(kinds) ? 'Voucher' : ''
   return pageMetadata('/sorprese', {
-    title: t('metaTitle'),
-    description: t('metaDescription'),
+    title: t(`metaTitle${v}`),
+    description: t(`metaDescription${v}`),
   })
 }
 
@@ -57,6 +58,8 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
     // Regali con consegna: a che punto sono (le regole mostrano solo i propri)
     user ? supabase.from('surprise_deliveries').select('gift_id, status') : Promise.resolve({ data: null }),
   ])
+  // Percorsi spenti dall'Admin: i testi parlano solo del buono regalo
+  const v = voucherOnly(kinds) ? 'Voucher' : ''
   const deliveryStatus = new Map((deliveries ?? []).map((d) => [d.gift_id as string, d.status as string]))
   const plan = parseSurprisePlan(planRaw)
   const replyCount = new Map<string, { all: number; unread: number }>()
@@ -95,7 +98,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
           <h1 className="mt-4 flex items-center gap-3 text-3xl font-bold sm:text-4xl">
             <Sparkles className="h-8 w-8 text-[var(--gold-bright)]" /> {t('title')}
           </h1>
-          <p className="mt-2 max-w-2xl text-white/80">{t('intro')}</p>
+          <p className="mt-2 max-w-2xl text-white/80">{t(`intro${v}`)}</p>
           <ol className="mt-5 grid gap-2 text-sm text-white/85 sm:grid-cols-3">
             {(['how1', 'how2', 'how3'] as const).map((k, i) => (
               <li key={k} className="rounded-xl bg-white/10 px-3 py-2">
@@ -127,7 +130,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
           })}
         </div>
         <p className="mt-3 text-center text-sm text-[var(--muted)]">{t('freeUntilPay')}</p>
-        {user && <SurprisePlanSummary status={plan} />}
+        {user && <SurprisePlanSummary status={plan} kinds={kinds} />}
 
         {!user ? (
           <>
@@ -147,7 +150,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
             </div>
             <h2 className="mt-10 text-xl font-bold text-[var(--ink)]">{t('examplesTitle')}</h2>
             <ul className="mt-3 grid gap-3 sm:grid-cols-3">
-              {(['example1', 'example2', 'example3'] as const).map((k) => (
+              {(v ? (['example1', 'example2Voucher', 'example3Voucher'] as const) : (['example1', 'example2', 'example3'] as const)).map((k) => (
                 <li key={k} className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-[var(--ink)] shadow-sm">
                   <Heart className="mt-0.5 h-5 w-5 shrink-0 text-rose-500" /> {t(k)}
                 </li>

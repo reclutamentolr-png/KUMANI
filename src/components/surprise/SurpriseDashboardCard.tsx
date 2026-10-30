@@ -1,4 +1,6 @@
 import { getTranslations } from 'next-intl/server'
+import { getEnabledSurpriseKinds } from '@/lib/surpriseServer'
+import { voucherOnly } from '@/lib/surprise'
 import { ArrowRight, Gift } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 
@@ -13,7 +15,7 @@ function occasion(now = new Date()): 'valentine' | 'christmas' | null {
 }
 
 export default async function SurpriseDashboardCard() {
-  const t = await getTranslations('surprise')
+  const [t, kinds] = await Promise.all([getTranslations('surprise'), getEnabledSurpriseKinds()])
   const when = occasion()
   return (
     <Link
@@ -25,7 +27,7 @@ export default async function SurpriseDashboardCard() {
       </span>
       <span className="min-w-0 flex-1">
         <span className="block font-bold sm:text-lg">{t('dashboardTitle')}</span>
-        <span className="block text-sm text-white/75">{when ? t(`occasion_${when}`) : t('dashboardText')}</span>
+        <span className="block text-sm text-white/75">{when ? t(`occasion_${when}`) : t(voucherOnly(kinds) ? 'dashboardTextVoucher' : 'dashboardText')}</span>
       </span>
       <span className="hidden shrink-0 items-center gap-1 rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-[var(--gold-bright)] group-hover:bg-white/15 sm:inline-flex">
         {t('dashboardCta')} <ArrowRight className="h-4 w-4" />

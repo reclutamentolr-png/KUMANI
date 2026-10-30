@@ -28,6 +28,9 @@ export function parseEnabledKinds(raw: unknown): SurpriseKind[] {
   return list.length ? list : DEFAULT_ENABLED_KINDS
 }
 
+// Solo il buono regalo acceso: i testi non parlano dei percorsi
+export const voucherOnly = (kinds: SurpriseKind[]) => !kinds.includes('journey3') && !kinds.includes('journey7')
+
 export const DEFAULT_SURPRISE_PRICES: Record<SurpriseKind, number> = { voucher: 290, journey3: 990, journey7: 1590 }
 export const SURPRISE_PRICE_KEYS: Record<SurpriseKind, string> = {
   voucher: 'surprise_price_voucher_cents',
