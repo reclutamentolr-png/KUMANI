@@ -1,5 +1,6 @@
 'use server'
 
+import { getEnabledSurpriseKinds } from '@/lib/surpriseServer'
 import { headers } from 'next/headers'
 import { SITE_URL } from '@/lib/siteUrl'
 
@@ -103,6 +104,7 @@ const GENERAL_SETTINGS_KEYS = new Set([
   'rewards_catalog_enabled',
   'network_points_activation_base', 'network_points_activation_pro', 'network_points_upgrade_pro',
   'qualifications', 'black_plus_every', 'voucher_value_base_eur', 'voucher_value_pro_eur',
+  'surprise_kinds_enabled',
 ])
 
 // Salva solo le impostazioni cambiate (il modulo manda le differenze), così
@@ -160,6 +162,12 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
     const key = 'prelaunch_key' in settings ? settings.prelaunch_key : (await getServiceClient().from('system_settings').select('value').eq('key', 'prelaunch_key').maybeSingle()).data?.value
     if (!key || !PRELAUNCH_KEY_PATTERN.test(String(key).replace(/"/g, ''))) return { success: false, error: 'Per accendere il pre-lancio serve la chiave del link d’anteprima.' }
   }
+  // KUMANI Sorpresa: tipi che si possono creare (almeno uno)
+  if ('surprise_kinds_enabled' in settings) {
+    const kinds = settings.surprise_kinds_enabled
+    const ok = Array.isArray(kinds) && kinds.length > 0 && kinds.every((k) => k === 'voucher' || k === 'journey3' || k === 'journey7') && new Set(kinds).size === kinds.length
+    if (!ok) return { success: false, error: 'Tipi di KUMANI Sorpresa non validi: lasciane acceso almeno uno.' }
+  }
   if (Object.keys(settings).length === 0) return { success: true }
   const rows = Object.entries(settings).map(([key, value]) => ({ key, value: JSON.stringify(value) }))
   const { error } = await getServiceClient().from('system_settings').upsert(rows, { onConflict: 'key' })
@@ -168,6 +176,13 @@ export async function adminSaveSystemSettings(settings: Record<string, unknown>)
 }
 
 // Prezzi dei piani come li vede il sito (letti da Stripe)
+// KUMANI Sorpresa: tipi che si possono creare (Strumenti e interruttori)
+export async function adminGetSurpriseKinds() {
+  const admin = await verifyAdmin('settings.read')
+  if (!admin) return null
+  return getEnabledSurpriseKinds()
+}
+
 export async function adminGetPlanPrices() {
   const admin = await verifyAdmin('settings.read')
   if (!admin) return null

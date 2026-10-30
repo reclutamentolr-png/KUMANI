@@ -79,6 +79,12 @@ export const TOOL_GUIDES: { path: string; slug: GuideSlug }[] = [
   { path: '/app/fonometro', slug: 'fonometro' },
   { path: '/app/metronomo', slug: 'metronomo' },
   { path: '/app/accordatore', slug: 'accordatore' },
+  { path: '/app/lettera-presentazione', slug: 'lettera-presentazione' },
+  { path: '/app/registro-ore', slug: 'registro-ore' },
+  { path: '/app/candidature', slug: 'candidature' },
+  { path: '/app/ricevuta-occasionale', slug: 'ricevuta-occasionale' },
+  { path: '/app/note-spese', slug: 'note-spese' },
+  { path: '/app/documento-componibile', slug: 'documento-componibile' },
 ]
 
 // Pagine di chi arriva da un invito (risponde o entra con un link): la guida

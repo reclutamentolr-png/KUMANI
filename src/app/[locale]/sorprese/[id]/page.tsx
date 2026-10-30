@@ -17,7 +17,7 @@ import { createClient } from '@/lib/supabase/server'
 import MarkRepliesRead from '@/components/surprise/MarkRepliesRead'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { SITE_URL } from '@/lib/siteUrl'
-import { confirmSurpriseSession, getSurprisePrices, STEP_SELECT } from '@/lib/surpriseServer'
+import { confirmSurpriseSession, getEnabledSurpriseKinds, getSurprisePrices, STEP_SELECT } from '@/lib/surpriseServer'
 import { bookingLabel, DELIVERY_OWNER_SELECT, DELIVERY_STEPS, deliveryStep, firstName, type DeliveryRow } from '@/lib/surpriseDelivery'
 import { bonusReason, parseSurprisePlan, planFreeFor, SURPRISE_KINDS, stepIncomplete, surpriseDays, surprisePath, surpriseWhatsAppUrl, voucherUnlockAt, type SurpriseRow, type SurpriseStepRow } from '@/lib/surprise'
 
@@ -68,7 +68,7 @@ export default async function SurpriseEditPage({
   ].filter(Boolean) as string[]
   const { data: signed } = paths.length ? await supabase.storage.from('surprise-media').createSignedUrls(paths, 3600) : { data: [] }
   const mediaUrls = Object.fromEntries((signed ?? []).filter((s) => s.path && s.signedUrl).map((s) => [s.path as string, s.signedUrl as string]))
-  const prices = await getSurprisePrices()
+  const [prices, enabledKinds] = await Promise.all([getSurprisePrices(), getEnabledSurpriseKinds()])
   const row = gift as SurpriseRow
   const money = (cents: number) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100)
   // Ora italiana: la pagina si crea sul server (Vercel), che è in UTC
@@ -252,7 +252,7 @@ export default async function SurpriseEditPage({
         )}
 
         <div className="mt-6">
-          <SurpriseEditor userId={user.id} gift={row} steps={(steps ?? []) as SurpriseStepRow[]} mediaUrls={mediaUrls} prices={prices} freeLeft={freeLeft} delivery={delivery} />
+          <SurpriseEditor userId={user.id} gift={row} steps={(steps ?? []) as SurpriseStepRow[]} mediaUrls={mediaUrls} prices={prices} freeLeft={freeLeft} delivery={delivery} enabledKinds={enabledKinds} />
         </div>
 
         {row.status === 'draft' && (

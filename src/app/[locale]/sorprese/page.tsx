@@ -3,8 +3,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { ArrowLeft, CalendarHeart, Gift, Heart, LogIn, Mail, Route, Sparkles, UserPlus } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
-import { getSurprisePrices } from '@/lib/surpriseServer'
-import { parseSurprisePlan, planFreeFor, SURPRISE_KINDS, type SurpriseKind } from '@/lib/surprise'
+import { getEnabledSurpriseKinds, getSurprisePrices } from '@/lib/surpriseServer'
+import { parseSurprisePlan, planFreeFor, type SurpriseKind } from '@/lib/surprise'
 import SurprisePlanSummary from '@/components/surprise/SurprisePlanSummary'
 import NewSurpriseButton from '@/components/surprise/NewSurpriseButton'
 import TemplatePicker from '@/components/surprise/TemplatePicker'
@@ -40,7 +40,8 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [prices, { data: gifts }, { data: replies }, { data: planRaw }, { data: deliveries }] = await Promise.all([
+  const [kinds, prices, { data: gifts }, { data: replies }, { data: planRaw }, { data: deliveries }] = await Promise.all([
+    getEnabledSurpriseKinds(),
     getSurprisePrices(),
     user
       ? supabase
@@ -106,8 +107,8 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
       </div>
 
       <div className="mx-auto -mt-6 max-w-3xl px-4">
-        <div className="grid gap-3 sm:grid-cols-3">
-          {SURPRISE_KINDS.map((kind) => {
+        <div className={`grid gap-3 ${kinds.length === 1 ? 'sm:mx-auto sm:max-w-sm' : kinds.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
+          {kinds.map((kind) => {
             const Icon = ICON[kind]
             return (
               <div key={kind} className="rounded-2xl border border-[var(--gold)]/30 bg-white p-4 shadow-sm">
@@ -156,7 +157,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
         ) : (
           <>
             <div className="mt-8">
-              <TemplatePicker prices={prices} />
+              <TemplatePicker prices={prices} kinds={kinds} />
             </div>
             <div className="mt-6 flex flex-col items-center gap-2">
               <p className="text-sm text-[var(--muted)]">{t('orFromScratch')}</p>

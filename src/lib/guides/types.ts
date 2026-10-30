@@ -86,6 +86,12 @@ export type GuideSlug =
   | 'fonometro'
   | 'metronomo'
   | 'accordatore'
+  | 'lettera-presentazione'
+  | 'registro-ore'
+  | 'candidature'
+  | 'ricevuta-occasionale'
+  | 'note-spese'
+  | 'documento-componibile'
 
 export type GuideStep = {
   title: string

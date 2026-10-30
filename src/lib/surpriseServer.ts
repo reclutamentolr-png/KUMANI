@@ -8,6 +8,9 @@ import {
   isSurpriseKind,
   SURPRISE_KINDS,
   SURPRISE_PRICE_KEYS,
+  SURPRISE_KINDS_KEY,
+  DEFAULT_ENABLED_KINDS,
+  parseEnabledKinds,
   SURPRISE_TYPE,
   surpriseDays,
   unlockAt,
@@ -27,6 +30,16 @@ export const surpriseDb = () =>
   createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
+
+// Tipi di sorpresa che si possono creare (Admin → Strumenti e interruttori)
+export async function getEnabledSurpriseKinds(): Promise<SurpriseKind[]> {
+  try {
+    const { data } = await surpriseDb().from('system_settings').select('value').eq('key', SURPRISE_KINDS_KEY).maybeSingle()
+    return parseEnabledKinds(data?.value)
+  } catch {
+    return DEFAULT_ENABLED_KINDS
+  }
+}
 
 export async function getSurprisePrices(): Promise<Record<SurpriseKind, number>> {
   const prices = { ...DEFAULT_SURPRISE_PRICES }

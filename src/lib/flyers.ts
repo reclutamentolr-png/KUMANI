@@ -92,6 +92,13 @@ export const FLYERS: FlyerConfig[] = [
   { tool: 'metronomo', style: 'phone', category: 'audio', icon: 'Drum', points: ['Timer', 'Ear', 'ChartLine'], shot: 'metronomo-1' },
   { tool: 'accordatore', style: 'phone', category: 'audio', icon: 'Guitar', points: ['Gauge', 'Guitar', 'ListChecks'], shot: 'accordatore-4' },
   { tool: 'trova-lavoro', style: 'photo', category: 'lavoro', icon: 'BriefcaseBusiness', points: ['SlidersHorizontal', 'ShieldCheck', 'Bookmark'], photo: '/flyers/photos/job-search.webp' },
+  // KUMANI Lavoro e Documento componibile (ottobre 2026): la schermata della guida «Come si usa»
+  { tool: 'lettera-presentazione', style: 'phone', category: 'lavoro', icon: 'Mail', points: ['PenLine', 'IdCard', 'FileDown'], shot: 'lettera-presentazione-4' },
+  { tool: 'candidature', style: 'phone', category: 'lavoro', icon: 'Send', points: ['BellRing', 'ListChecks', 'CalendarCheck'], shot: 'candidature-2' },
+  { tool: 'registro-ore', style: 'phone', category: 'lavoro', icon: 'Clock', points: ['Timer', 'CalendarDays', 'FileDown'], shot: 'registro-ore-4' },
+  { tool: 'ricevuta-occasionale', style: 'phone', category: 'lavoro', icon: 'Receipt', points: ['Percent', 'FileDown', 'ChartColumn'], shot: 'ricevuta-occasionale-3' },
+  { tool: 'note-spese', style: 'phone', category: 'lavoro', icon: 'Wallet', points: ['Camera', 'Car', 'FileDown'], shot: 'note-spese-2' },
+  { tool: 'documento-componibile', style: 'phone', category: 'lavoro', icon: 'FileText', points: ['Puzzle', 'ClipboardList', 'FileDown'], shot: 'documento-componibile-4' },
 ]
 
 export const flyerKey = (tool: string) => tool.replace(/-/g, '_')

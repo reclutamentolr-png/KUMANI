@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowRight, BookMarked, Crown } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import { createClient } from '@/lib/supabase/server'
-import { getCommunityItems, getServicesCatalog } from '@/lib/servicesCatalog'
+import { getCommunityItems, getServicesCatalog, type ServiceItem } from '@/lib/servicesCatalog'
 import { getPlanPrices } from '@/lib/planPrices'
 import AppHeader from '@/components/nav/AppHeader'
 import ServicesBrowser from '@/components/services/ServicesBrowser'
@@ -42,6 +42,11 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   const formatEur = (value: number) =>
     new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(value)
   const lockedCount = items.filter((item) => !item.open).length
+  // Regali e sorprese: non sono servizi del piano (si pagano a parte), aperti a tutti
+  const giftItems: ServiceItem[] = [
+    { toolName: 'kumani-sorpresa', title: t('giftSurpriseTitle'), description: t('giftSurpriseDesc'), iconName: 'Gift', href: '/sorprese', group: 'gifts', open: true, plan: 'free', unlock: null, passPrice: null, guide: null, badge: t('giftsBadge'), extra: true },
+    { toolName: 'regala-kumani', title: t('giftKumaniTitle'), description: t('giftKumaniDesc'), iconName: 'PartyPopper', href: '/regali', group: 'gifts', open: true, plan: 'free', unlock: null, passPrice: null, guide: null, badge: t('giftsBadge'), extra: true },
+  ]
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -61,7 +66,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
           </span>
           <ArrowRight className="h-4 w-4 shrink-0" />
         </Link>
-        <ServicesBrowser items={items} favorites={favorites} initialView={resolveServicesView(user.user_metadata)} community={communityItems} />
+        <ServicesBrowser items={[...items, ...giftItems]} favorites={favorites} initialView={resolveServicesView(user.user_metadata)} community={communityItems} />
 
 
         {/* Sblocca tutto: solo a chi ha ancora servizi chiusi */}

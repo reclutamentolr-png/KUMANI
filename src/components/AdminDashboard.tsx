@@ -15,6 +15,7 @@ import { getMarketplaceTools } from '@/lib/marketplaceTools'
 import { serviceGroupOf } from '@/lib/serviceGroups'
 import AdminUserPicker from '@/components/admin/AdminUserPicker'
 import ToolTestersPanel from '@/components/admin/ToolTestersPanel'
+import SurpriseKindsPanel from '@/components/admin/SurpriseKindsPanel'
 import AdminGiftSubscriptionPanel from '@/components/admin/AdminGiftSubscriptionPanel'
 import ListingsReviewPanel from '@/components/admin/ListingsReviewPanel'
 import FoundersPanel from '@/components/admin/FoundersPanel'
@@ -1168,6 +1169,8 @@ L'accesso viene registrato.`))) return
             strumento resta nascosto agli iscritti, mentre tu e lo Staff lo usate per provarlo prima di accenderlo.
           </p>
         </div>
+
+        <SurpriseKindsPanel />
 
         {toolGroups.map((group, index) => {
           const isOpen = openToolGroups.has(group.id)

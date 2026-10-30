@@ -1,5 +1,6 @@
 'use server'
 
+import { getEnabledSurpriseKinds } from '@/lib/surpriseServer'
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { templateByKey } from '@/lib/surpriseTemplates'
@@ -32,6 +33,8 @@ export async function createSurprise(locale: string, templateKey?: string): Prom
   if (!g) return { success: false, message: 'notLoggedIn' }
   const lang = /^[a-z]{2}$/.test(locale) ? locale : 'it'
   const tpl = templateKey ? templateByKey(templateKey) : null
+  // Modello di un tipo spento dall'Admin (es. percorso di 7 giorni): non si crea
+  if (tpl && !(await getEnabledSurpriseKinds()).includes(tpl.kind)) return { success: false, message: 'kindOff' }
   const t = tpl ? await getTranslations({ locale: lang, namespace: 'surpriseTpl' }) : null
   const { data, error } = await g.supabase
     .from('surprise_gifts')
@@ -99,10 +102,12 @@ export async function saveSurprise(id: string, input: SurpriseInput): Promise<Re
   const coverPath = input.coverPath && input.coverPath.startsWith(`${g.userId}/`) ? input.coverPath : null
   const safeCode = String(input.safeCode ?? '').trim()
   if (input.revealStyle === 'safe' && !SAFE_CODE_RE.test(safeCode)) return { success: false, message: 'safeCode' }
+  // Si passa solo a un tipo acceso dall'Admin (quello già scelto resta com'è)
+  const kindAllowed = isSurpriseKind(input.kind) && (await getEnabledSurpriseKinds()).includes(input.kind)
   const { error } = await g.supabase
     .from('surprise_gifts')
     .update({
-      ...(isSurpriseKind(input.kind) ? { kind: input.kind } : {}),
+      ...(kindAllowed ? { kind: input.kind } : {}),
       ...(isSurpriseTheme(input.theme) ? { theme: input.theme } : {}),
       recipient_name: clip(input.recipientName, SURPRISE_MAX.recipient),
       sender_name: clip(input.senderName, SURPRISE_MAX.sender),

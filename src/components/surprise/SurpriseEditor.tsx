@@ -515,12 +515,15 @@ export default function SurpriseEditor({
   prices,
   freeLeft = {},
   delivery = null,
+  enabledKinds = SURPRISE_KINDS as unknown as SurpriseKind[],
 }: {
   userId: string
   gift: SurpriseRow
   steps: SurpriseStepRow[]
   mediaUrls: Record<string, string>
   prices: Record<SurpriseKind, number>
+  // Tipi accesi dall'Admin: gli altri non si propongono
+  enabledKinds?: SurpriseKind[]
   // Sorprese incluse nel piano Plus o Pro ancora disponibili, per tipo (quota + regali)
   freeLeft?: Partial<Record<SurpriseKind, number>>
   // Chi consegna il regalo (facoltativo)
@@ -684,7 +687,7 @@ export default function SurpriseEditor({
         <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
           <h2 className="text-lg font-bold text-[var(--ink)]">{t('sectionKind')}</h2>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            {SURPRISE_KINDS.map((kind) => {
+            {SURPRISE_KINDS.filter((k) => enabledKinds.includes(k) || k === gift.kind).map((kind) => {
               const Icon = KIND_ICON[kind]
               const selected = form.kind === kind
               return (

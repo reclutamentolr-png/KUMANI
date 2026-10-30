@@ -10,7 +10,8 @@ import { THEME_STYLE, type SurpriseKind } from '@/lib/surprise'
 import { OCCASION_ICON } from './SurpriseExperience'
 
 // «Inizia da un modello»: sorprese già impostate (tipo, stile, testi e tappe)
-export default function TemplatePicker({ prices }: { prices: Record<SurpriseKind, number> }) {
+// kinds: solo i modelli dei tipi accesi dall'Admin
+export default function TemplatePicker({ prices, kinds }: { prices: Record<SurpriseKind, number>; kinds: SurpriseKind[] }) {
   const t = useTranslations('surprise')
   const tt = useTranslations('surpriseTpl')
   const locale = useLocale()
@@ -35,7 +36,7 @@ export default function TemplatePicker({ prices }: { prices: Record<SurpriseKind
       <h2 className="text-xl font-bold text-[var(--ink)]">{t('templatesTitle')}</h2>
       <p className="mt-1 text-sm text-[var(--muted)]">{t('templatesText')}</p>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        {SURPRISE_TEMPLATES.map((tpl) => {
+        {SURPRISE_TEMPLATES.filter((tpl) => kinds.includes(tpl.kind)).map((tpl) => {
           const Icon = OCCASION_ICON[tpl.occasion]
           const accent = THEME_STYLE[tpl.theme].accent
           return (

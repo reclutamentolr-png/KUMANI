@@ -8,6 +8,7 @@ import {
   Baby,
   BookOpen,
   BriefcaseBusiness,
+  Gift,
   ClipboardList,
   FileText,
   Gamepad2,
@@ -51,6 +52,7 @@ const GROUP_ICON: Record<ServiceGroup, LucideIcon> = {
   docs: FileText,
   wellness: Leaf,
   fun: Gamepad2,
+  gifts: Gift,
   audio: Music,
   kids: Baby,
   manage: ClipboardList,
@@ -565,6 +567,11 @@ function CategoryCover({ group, items, size, open, onClick }: { group: ServiceGr
       className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white p-3.5 text-left shadow-[0_6px_18px_rgba(23,23,23,0.06)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] hover:shadow-md sm:p-4"
     >
       <span className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" aria-hidden />
+      {group === 'gifts' && (
+        <span className="absolute right-2.5 top-3 rounded-full bg-gradient-to-r from-[#f3a6b8] via-[var(--gold-bright)] to-[#9fd3f5] px-2 py-0.5 text-[10px] font-extrabold text-[var(--ink)] shadow-sm">
+          {t('giftsBadgeShort')}
+        </span>
+      )}
       <span className="mt-1 flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--ink)] text-[var(--gold-bright)]">
         <Icon className="h-6 w-6" aria-hidden />
       </span>
@@ -633,7 +640,12 @@ export function ServiceCard({
         <span className={`flex min-w-0 flex-1 flex-col ${compact ? '' : 'pr-7'}`}>
           <span className={`text-[var(--ink)] ${compact ? 'truncate font-bold' : `line-clamp-2 leading-snug ${brand ? 'text-[16px] font-extrabold' : 'font-bold'}`}`}>{compact ? toolTitle : item.title}</span>
           {compact && compactNote && <span className="truncate text-xs text-[var(--muted)]">{compactNote}</span>}
-          {!compact && <PlanTag plan={item.plan} className="mt-1" />}
+          {!compact &&
+            (item.badge ? (
+              <span className="mt-1 w-fit rounded-full bg-gradient-to-r from-[#f3a6b8] via-[var(--gold-bright)] to-[#9fd3f5] px-2.5 py-0.5 text-[11px] font-extrabold text-[var(--ink)]">{item.badge}</span>
+            ) : (
+              <PlanTag plan={item.plan} className="mt-1" />
+            ))}
           {!compact && <span className="mt-0.5 line-clamp-3 text-xs leading-5 text-[var(--muted)]">{item.description}</span>}
           {!compact && (
             <span className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -656,7 +668,7 @@ export function ServiceCard({
       </Link>
       {!compact && (
         <>
-          <FavoriteStarButton toolName={item.toolName} initialIsFavorite={isFavorite} variant="light" onToggle={onToggle} />
+          {!item.extra && <FavoriteStarButton toolName={item.toolName} initialIsFavorite={isFavorite} variant="light" onToggle={onToggle} />}
           {item.guide && (
             <Link
               href={`/guida/${item.guide}?from=${encodeURIComponent(item.href)}`}

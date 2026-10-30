@@ -2,7 +2,7 @@
 // accesso), non per prezzo: chi entra cerca "mi serve qualcosa contro le
 // truffe", non "cosa c'è nel Plus". Ogni servizio sta in un solo gruppo.
 
-export const SERVICE_GROUPS = ['security', 'money', 'work', 'docs', 'wellness', 'fun', 'audio', 'kids', 'manage', 'business', 'social'] as const
+export const SERVICE_GROUPS = ['security', 'money', 'work', 'docs', 'wellness', 'fun', 'gifts', 'audio', 'kids', 'manage', 'business', 'social'] as const
 export type ServiceGroup = (typeof SERVICE_GROUPS)[number]
 
 // Le due parti della pagina Servizi: la vita di tutti i giorni e chi ha
@@ -14,7 +14,7 @@ export const SERVICES_CATEGORY_EVENT = 'kumani:servizi-categoria'
 export const SERVICE_SEGMENTS = ['me', 'biz'] as const
 export type ServiceSegment = (typeof SERVICE_SEGMENTS)[number]
 export const SEGMENT_GROUPS: Record<ServiceSegment, ServiceGroup[]> = {
-  me: ['security', 'money', 'work', 'docs', 'wellness', 'fun', 'audio', 'kids', 'business', 'social'],
+  me: ['security', 'money', 'work', 'docs', 'wellness', 'fun', 'gifts', 'audio', 'kids', 'business', 'social'],
   biz: ['manage', 'business', 'social', 'docs'],
 }
 
@@ -132,6 +132,8 @@ export const STARTER_SERVICES: Record<ServiceGroup, string[]> = {
   wellness: ['oxygen', 'focus', 'neurobalance'],
   fun: ['nexus', 'fabula', 'mosaic', 'veritas'],
   audio: ['accordatore', 'metronomo', 'fonometro'],
+  // Regali e sorprese: non sono servizi del piano (si pagano a parte), solo nella pagina Servizi
+  gifts: [],
   kids: ['angolo-bambini'],
 }
 
@@ -147,5 +149,6 @@ export const GROUP_STYLE: Record<ServiceGroup, { dot: string; tile: string; colo
   audio: { dot: 'bg-[#0e7490]', tile: 'bg-[#dff4f8] text-[#0e7490]', color: '#0e7490', soft: '#dff4f8' },
   docs: { dot: 'bg-[#475569]', tile: 'bg-[#e8edf3] text-[#475569]', color: '#475569', soft: '#e8edf3' },
   manage: { dot: 'bg-[#1f4e5f]', tile: 'bg-[#e0eef2] text-[#1f4e5f]', color: '#1f4e5f', soft: '#e0eef2' },
+  gifts: { dot: 'bg-[#c0266d]', tile: 'bg-[#fde4ef] text-[#b0215f]', color: '#c0266d', soft: '#fde4ef' },
   kids: { dot: 'bg-[#e85d2a]', tile: 'bg-[#ffe8dc] text-[#c2410c]', color: '#e85d2a', soft: '#ffe8dc' },
 }

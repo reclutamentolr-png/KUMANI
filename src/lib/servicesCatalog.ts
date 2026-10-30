@@ -26,6 +26,10 @@ export type ServiceItem = {
   // Bloccato: dove si sblocca (Pass del singolo servizio, Pro o Plus)
   unlock: 'pass' | 'pro' | 'base' | null
   passPrice: string | null
+  // Etichetta al posto del piano (es. «Perfetto da regalare») e niente
+  // preferiti: per le voci che non sono servizi del piano (Regali e sorprese)
+  badge?: string
+  extra?: boolean
   // Pass da comprare per aprirlo: il suo, oppure quello del gruppo (es. il
   // Pass KUMANI CV per la Lettera di presentazione)
   passTool?: string

@@ -9,6 +9,25 @@ export type SurpriseKind = (typeof SURPRISE_KINDS)[number]
 export const SURPRISE_THEMES = ['gold', 'rose', 'sky', 'green', 'night', 'coral', 'ruby', 'lilac', 'teal', 'silver'] as const
 export type SurpriseTheme = (typeof SURPRISE_THEMES)[number]
 
+// Tipi che si possono creare, scelti dall'Admin (system_settings
+// «surprise_kinds_enabled», elenco JSON). Senza impostazione: solo il buono
+// regalo (i percorsi di 3 e 7 giorni sono nascosti finché l'Admin non li accende).
+// Le sorprese già create di un tipo spento restano com'erano.
+export const SURPRISE_KINDS_KEY = 'surprise_kinds_enabled'
+export const DEFAULT_ENABLED_KINDS: SurpriseKind[] = ['voucher']
+export function parseEnabledKinds(raw: unknown): SurpriseKind[] {
+  let value = raw
+  if (typeof value === 'string') {
+    try {
+      value = JSON.parse(value)
+    } catch {
+      value = null
+    }
+  }
+  const list = Array.isArray(value) ? SURPRISE_KINDS.filter((k) => (value as unknown[]).includes(k)) : []
+  return list.length ? list : DEFAULT_ENABLED_KINDS
+}
+
 export const DEFAULT_SURPRISE_PRICES: Record<SurpriseKind, number> = { voucher: 290, journey3: 990, journey7: 1590 }
 export const SURPRISE_PRICE_KEYS: Record<SurpriseKind, string> = {
   voucher: 'surprise_price_voucher_cents',
