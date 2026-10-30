@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-import { ArrowLeft, CheckCircle2, HandHeart, Heart, Info, MessageCircle, PartyPopper, Send, Smile, Sparkles, X } from 'lucide-react'
+import { ArrowLeft, Check, CheckCircle2, Clock, HandHeart, PackageCheck, Heart, Info, MessageCircle, PartyPopper, Send, Smile, Sparkles, X } from 'lucide-react'
 import Link from '@/components/LocalizedLink'
 import CheckoutForm from '@/components/billing/CheckoutForm'
 import PlansComingSoonCard from '@/components/plans/PlansComingSoonCard'
@@ -18,6 +18,7 @@ import MarkRepliesRead from '@/components/surprise/MarkRepliesRead'
 import { getCheckoutTexts } from '@/lib/checkoutTexts'
 import { SITE_URL } from '@/lib/siteUrl'
 import { confirmSurpriseSession, getSurprisePrices, STEP_SELECT } from '@/lib/surpriseServer'
+import { bookingLabel, DELIVERY_OWNER_SELECT, DELIVERY_STEPS, deliveryStep, firstName, type DeliveryRow } from '@/lib/surpriseDelivery'
 import { bonusReason, parseSurprisePlan, planFreeFor, SURPRISE_KINDS, stepIncomplete, surpriseDays, surprisePath, surpriseWhatsAppUrl, voucherUnlockAt, type SurpriseRow, type SurpriseStepRow } from '@/lib/surprise'
 
 // Editor di una sorpresa: contenuto, anteprima, pagamento (bozza) oppure
@@ -56,6 +57,9 @@ export default async function SurpriseEditPage({
   const { data: steps } = await supabase.from('surprise_steps').select(STEP_SELECT).eq('gift_id', id)
   // Ringraziamenti di chi ha ricevuto la sorpresa
   const { data: replies } = await supabase.from('surprise_replies').select('id, reaction, message, photo_path, created_at, read_at').eq('gift_id', id).order('created_at', { ascending: false })
+  // Regalo con consegna: chi consegna e a che punto è
+  const { data: deliveryRaw } = await supabase.from('surprise_deliveries').select(DELIVERY_OWNER_SELECT).eq('gift_id', id).maybeSingle()
+  const delivery = (deliveryRaw as DeliveryRow | null) ?? null
   const paths = [
     gift.cover_path,
     gift.music_path,
@@ -174,6 +178,50 @@ export default async function SurpriseEditPage({
           </section>
         )}
 
+        {/* Regalo con consegna: inviato → aperto → richiesto → appuntamento → consegnato */}
+        {row.status === 'active' && delivery && !row.refunded_at && (
+          <section className="mt-5 rounded-2xl border border-[var(--gold)]/40 bg-white p-5 shadow-sm">
+            <h2 className="flex items-center gap-2 text-lg font-bold text-[var(--ink)]">
+              <PackageCheck className="h-5 w-5 text-[var(--gold)]" aria-hidden /> {t('dlvTrackTitle')}
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              {t('dlvTrackWho', { name: delivery.provider_name })} · <span className="font-mono font-bold text-[var(--ink)]">{delivery.code}</span>
+            </p>
+            {(() => {
+              const reached = DELIVERY_STEPS.indexOf(deliveryStep(row, delivery))
+              const dates: Record<(typeof DELIVERY_STEPS)[number], string | null> = {
+                sent: row.paid_at,
+                opened: row.opened_at ?? row.link_opened_at ?? null,
+                requested: delivery.requested_at,
+                booked: delivery.booked_at,
+                delivered: delivery.delivered_at,
+              }
+              const name = row.recipient_name || '—'
+              return (
+                <ol className="mt-4 space-y-3">
+                  {DELIVERY_STEPS.map((s, i) => {
+                    const done = i <= reached
+                    const extra = s === 'booked' && done ? bookingLabel(delivery.booking_text, delivery.booking_at, locale) : ''
+                    return (
+                      <li key={s} className="flex items-start gap-3">
+                        <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${done ? 'bg-[var(--gold)] text-[var(--ink)]' : 'border-2 border-gray-200 text-gray-300'}`}>
+                          {done ? <Check className="h-3.5 w-3.5" aria-hidden /> : <Clock className="h-3 w-3" aria-hidden />}
+                        </span>
+                        <span className="min-w-0">
+                          <span className={`block text-sm font-bold ${done ? 'text-[var(--ink)]' : 'text-gray-400'}`}>
+                            {t(`dlvStep_${s}`, { name, provider: firstName(delivery.provider_name) })}
+                          </span>
+                          {done && (extra || dates[s]) && <span className="block text-xs text-gray-500">{extra || when(dates[s]!)}</span>}
+                        </span>
+                      </li>
+                    )
+                  })}
+                </ol>
+              )
+            })()}
+          </section>
+        )}
+
         {/* Aprendo la sorpresa i ringraziamenti diventano letti (qui si vedono ancora come «nuovi») */}
         {replies?.some((r) => !r.read_at) && <MarkRepliesRead giftId={row.id} />}
         {!!replies?.length && (
@@ -204,7 +252,7 @@ export default async function SurpriseEditPage({
         )}
 
         <div className="mt-6">
-          <SurpriseEditor userId={user.id} gift={row} steps={(steps ?? []) as SurpriseStepRow[]} mediaUrls={mediaUrls} prices={prices} freeLeft={freeLeft} />
+          <SurpriseEditor userId={user.id} gift={row} steps={(steps ?? []) as SurpriseStepRow[]} mediaUrls={mediaUrls} prices={prices} freeLeft={freeLeft} delivery={delivery} />
         </div>
 
         {row.status === 'draft' && (

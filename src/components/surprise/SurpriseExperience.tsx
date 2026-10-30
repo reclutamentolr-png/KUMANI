@@ -32,9 +32,11 @@ import Link from '@/components/LocalizedLink'
 import { resizeImageFile } from '@/lib/resizeImage'
 import { audioUrl } from '@/lib/audioUrl'
 import { musicFile, OCCASION_STYLE, REACTIONS, THEME_STYLE, type Reaction, type SurpriseOccasion, type SurpriseView, type SurpriseViewStep } from '@/lib/surprise'
-import { markSurpriseLinkOpened, markSurpriseOpened, sendSurpriseReply, solveSurpriseRiddle } from '@/app/actions/surprisePublic'
+import { checkSurpriseSafe, markSurpriseLinkOpened, markSurpriseOpened, sendSurpriseReply, solveSurpriseRiddle } from '@/app/actions/surprisePublic'
+import { checkMySafeCode } from '@/app/actions/surprise'
 import Celebration from './Celebration'
 import Reveal from './Reveal'
+import { DeliveryPickup, DeliveryTicket } from './DeliveryGift'
 import { letterFont } from './surpriseFonts'
 
 // Pagina di chi riceve (e anteprima di chi crea): apertura scelta da chi
@@ -372,7 +374,20 @@ function ReplyForm({ token, senderName, accent }: { token: string; senderName: s
 
 const openedKey = (token: string) => `kumani_surprise_opened_${token}`
 
-export default function SurpriseExperience({ view, preview = false, editorHref, token }: { view: SurpriseView; preview?: boolean; editorHref?: string; token?: string }) {
+export default function SurpriseExperience({
+  view,
+  preview = false,
+  editorHref,
+  token,
+  previewGiftId,
+}: {
+  view: SurpriseView
+  preview?: boolean
+  editorHref?: string
+  token?: string
+  // Anteprima: per provare il codice della cassaforte
+  previewGiftId?: string
+}) {
   const t = useTranslations('surprise')
   const style = THEME_STYLE[view.theme]
   const occasion = OCCASION_STYLE[view.occasion]
@@ -536,7 +551,16 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
           <div className="h-72" />
         ) : !opened ? (
           <div className="mt-12">
-            <Reveal style={view.revealStyle} accent={accent} Icon={Icon} name={view.recipientName} onOpen={open} />
+            <Reveal
+              style={view.revealStyle}
+              accent={accent}
+              Icon={Icon}
+              name={view.recipientName}
+              onOpen={open}
+              coverUrl={view.voucher.coverUrl}
+              safeHint={view.safeHint}
+              checkSafe={preview ? (previewGiftId ? (code) => checkMySafeCode(previewGiftId, code) : undefined) : token ? (code) => checkSurpriseSafe(token, code) : undefined}
+            />
           </div>
         ) : (
           <div className="mt-10 space-y-5">
@@ -568,7 +592,12 @@ export default function SurpriseExperience({ view, preview = false, editorHref, 
               />
             ))}
 
-            {v.open ? (
+            {v.open && view.delivery ? (
+              <>
+                <DeliveryTicket view={view} delivery={view.delivery} />
+                <DeliveryPickup view={view} delivery={view.delivery} token={preview ? undefined : token} preview={preview} />
+              </>
+            ) : v.open ? (
               <Ticket view={view} accent={accent} Icon={Icon} />
             ) : (
               <div className="rounded-3xl border-2 border-dashed border-white/25 p-7 text-center">

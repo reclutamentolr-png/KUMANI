@@ -18,6 +18,7 @@ import {
   type SurpriseView,
   type SurpriseViewStep,
 } from '@/lib/surprise'
+import { DELIVERY_OWNER_SELECT, toDeliveryView, type DeliveryRow } from '@/lib/surpriseDelivery'
 
 // KUMANI Sorpresa lato server: prezzi, pagamento (ritorno da Stripe e
 // webhook), rimborso e pagina pubblica di chi riceve.
@@ -147,7 +148,7 @@ export function fullStep(s: SurpriseStepRow, day: number, at: Date, urls: Map<st
 // Contenuto da mostrare: con revealAll (anteprima di chi crea) tutto aperto;
 // altrimenti solo le tappe già arrivate al loro momento, e degli indovinelli
 // non ancora risolti solo la domanda.
-export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRow[], revealAll: boolean): Promise<SurpriseView> {
+export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRow[], revealAll: boolean, delivery: DeliveryRow | null = null): Promise<SurpriseView> {
   const days = surpriseDays(gift.kind)
   const startAt = gift.start_at ?? new Date().toISOString()
   const now = Date.now()
@@ -170,7 +171,9 @@ export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRo
     kind: gift.kind,
     theme: gift.theme,
     occasion: gift.occasion ?? 'generic',
-    revealStyle: gift.reveal_style ?? 'box',
+    // Cassaforte senza codice (non dovrebbe capitare): si apre come una scatola
+    revealStyle: gift.reveal_style === 'safe' && !gift.safe_code ? 'box' : (gift.reveal_style ?? 'box'),
+    ...(gift.reveal_style === 'safe' && gift.safe_code ? { safeHint: gift.safe_hint ?? '' } : {}),
     music: gift.music ?? null,
     musicUrl: gift.music === 'own' && gift.music_path ? (urls.get(gift.music_path) ?? null) : null,
     recipientName: gift.recipient_name,
@@ -195,7 +198,15 @@ export async function buildSurpriseView(gift: SurpriseRow, steps: SurpriseStepRo
           coverUrl: gift.cover_path ? (urls.get(gift.cover_path) ?? null) : null,
         }
       : { unlockAt: voucherAt.toISOString(), open: false },
+    // Chi consegna il regalo e i suoi contatti: solo a buono aperto
+    delivery: voucherOpen && delivery ? toDeliveryView(delivery) : null,
   }
+}
+
+// Dati di chi consegna il regalo (se la sorpresa ne ha uno)
+export async function loadDeliveryRow(giftId: string): Promise<DeliveryRow | null> {
+  const { data } = await surpriseDb().from('surprise_deliveries').select(DELIVERY_OWNER_SELECT).eq('gift_id', giftId).maybeSingle()
+  return (data as DeliveryRow | null) ?? null
 }
 
 // Link firmati per una sola tappa (indovinello appena risolto)
@@ -212,8 +223,8 @@ export async function loadPublicSurprise(token: string): Promise<SurpriseView | 
   const db = surpriseDb()
   const { data: gift } = await db.from('surprise_gifts').select('*').eq('public_token', token).eq('status', 'active').is('refunded_at', null).maybeSingle()
   if (!gift) return null
-  const { data: steps } = await db.from('surprise_steps').select(STEP_SELECT).eq('gift_id', gift.id)
-  return buildSurpriseView(gift as SurpriseRow, (steps ?? []) as SurpriseStepRow[], false)
+  const [{ data: steps }, delivery] = await Promise.all([db.from('surprise_steps').select(STEP_SELECT).eq('gift_id', gift.id), loadDeliveryRow(gift.id as string)])
+  return buildSurpriseView(gift as SurpriseRow, (steps ?? []) as SurpriseStepRow[], false, delivery)
 }
 
 // Solo i dati dell'anteprima del link (titolo e immagine): nessun contenuto

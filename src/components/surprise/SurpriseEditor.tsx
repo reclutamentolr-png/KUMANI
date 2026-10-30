@@ -4,7 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import {
+  Cake,
   CalendarHeart,
+  Cookie,
+  Drama,
+  Image as ImageIcon,
+  KeyRound,
+  PartyPopper,
   ChevronDown,
   Eye,
   Gift,
@@ -23,6 +29,7 @@ import {
   Route,
   Save,
   Sparkles,
+  Store,
   Trash2,
   Undo2,
   Upload,
@@ -37,12 +44,15 @@ import { compressAudio, compressVideo, MediaTooLongError } from '@/lib/compressM
 import { askConfirm } from '@/lib/confirm'
 import { audioUrl } from '@/lib/audioUrl'
 import { deleteSurprise, deleteSurpriseStep, saveSurprise, saveSurpriseStep } from '@/app/actions/surprise'
+import { saveSurpriseDelivery } from '@/app/actions/surpriseDelivery'
+import { DELIVERY_MAX, type DeliveryRow } from '@/lib/surpriseDelivery'
 import {
   GALLERY_MAX,
   MUSIC_TRACKS,
   musicFile,
   OCCASION_STYLE,
   REVEAL_STYLES,
+  SAFE_HINT_MAX,
   STEP_KINDS,
   SURPRISE_KINDS,
   SURPRISE_MAX,
@@ -67,12 +77,12 @@ import VoiceRecorder from './VoiceRecorder'
 
 type MediaType = 'image' | 'video' | 'audio'
 const KIND_ICON: Record<SurpriseKind, LucideIcon> = { voucher: Gift, journey3: Route, journey7: CalendarHeart }
-const REVEAL_ICON: Record<RevealStyle, LucideIcon> = { box: Gift, envelope: Mail, scratch: Sparkles }
+const REVEAL_ICON: Record<RevealStyle, LucideIcon> = { box: Gift, envelope: Mail, scratch: Sparkles, candles: Cake, balloon: PartyPopper, cookie: Cookie, curtain: Drama, polaroid: ImageIcon, safe: KeyRound }
 const STEP_ICON: Record<StepKind, LucideIcon> = { message: MessageSquareText, gallery: Images, riddle: HelpCircle, place: MapPin, song: Music2 }
 const input = 'w-full rounded-xl border border-gray-300 px-3 py-2.5 text-[15px] focus:border-[var(--gold)] focus:outline-none focus:ring-2 focus:ring-[var(--gold)]/30'
 const label = 'mb-1 block text-sm font-semibold text-gray-700'
 const card = (on: boolean) =>
-  `flex cursor-pointer flex-col items-center gap-1 rounded-xl border-2 p-3 text-center text-sm transition-colors ${on ? 'border-[var(--gold)] bg-[var(--gold-pale)]/60 font-bold text-[var(--ink)]' : 'border-gray-200 text-gray-700 hover:border-[var(--gold)]/60'}`
+  `flex min-w-0 cursor-pointer flex-col items-center gap-1 rounded-xl border-2 p-3 text-center text-sm hyphens-auto transition-colors [overflow-wrap:anywhere] ${on ? 'border-[var(--gold)] bg-[var(--gold-pale)]/60 font-bold text-[var(--ink)]' : 'border-gray-200 text-gray-700 hover:border-[var(--gold)]/60'}`
 
 // Data e ora locali per <input type="datetime-local">
 function toLocalInput(iso: string | null): string {
@@ -504,6 +514,7 @@ export default function SurpriseEditor({
   mediaUrls,
   prices,
   freeLeft = {},
+  delivery = null,
 }: {
   userId: string
   gift: SurpriseRow
@@ -512,6 +523,8 @@ export default function SurpriseEditor({
   prices: Record<SurpriseKind, number>
   // Sorprese incluse nel piano Plus o Pro ancora disponibili, per tipo (quota + regali)
   freeLeft?: Partial<Record<SurpriseKind, number>>
+  // Chi consegna il regalo (facoltativo)
+  delivery?: DeliveryRow | null
 }) {
   const t = useTranslations('surprise')
   const locale = useLocale()
@@ -532,7 +545,19 @@ export default function SurpriseEditor({
     validUntil: gift.valid_until ?? '',
     startAt: toLocalInput(gift.start_at),
     coverPath: gift.cover_path,
+    safeCode: gift.safe_code ?? '',
+    safeHint: gift.safe_hint ?? '',
+    // Regalo con consegna
+    dlvOn: !!delivery,
+    dlvName: delivery?.provider_name ?? '',
+    dlvBusiness: delivery?.provider_business ?? '',
+    dlvPhone: delivery?.provider_phone ?? '',
+    dlvEmail: delivery?.provider_email ?? '',
+    dlvPickup: delivery?.pickup_info ?? '',
+    dlvAgreed: !!delivery,
   }
+  // Dopo la prima richiesta i dati di chi consegna non cambiano più
+  const dlvLocked = !!delivery && delivery.status !== 'pending'
   const [form, setForm] = useState(initial)
   // Ultima versione salvata: dopo «Salva» il modulo risulta subito salvato
   // (Anteprima attiva) anche se il server ripulisce i testi
@@ -549,16 +574,36 @@ export default function SurpriseEditor({
 
   const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) => setForm((f) => ({ ...f, [key]: value }))
 
-  // Scelta dell'occasione: colori e musica consigliati (la musica propria resta)
+  // Scelta dell'occasione: colori, musica e apertura consigliati (la musica
+  // propria e la cassaforte già preparata restano)
   const chooseOccasion = (occasion: SurpriseOccasion) =>
-    setForm((f) => ({ ...f, occasion, theme: OCCASION_STYLE[occasion].theme, music: f.music === 'own' ? f.music : OCCASION_STYLE[occasion].music }))
+    setForm((f) => ({
+      ...f,
+      occasion,
+      theme: OCCASION_STYLE[occasion].theme,
+      music: f.music === 'own' ? f.music : OCCASION_STYLE[occasion].music,
+      revealStyle: f.revealStyle === 'safe' && f.safeCode ? f.revealStyle : OCCASION_STYLE[occasion].reveal,
+    }))
 
   const save = async () => {
     setBusy(true)
     setNotice(null)
     const r = await saveSurprise(gift.id, { ...form, startAt: form.startAt ? new Date(form.startAt).toISOString() : null })
+    if (!r.success) {
+      setBusy(false)
+      return setNotice({ ok: false, text: t(`error_${r.message}`) })
+    }
+    if (!dlvLocked) {
+      const d = await saveSurpriseDelivery(
+        gift.id,
+        form.dlvOn ? { name: form.dlvName, business: form.dlvBusiness, phone: form.dlvPhone, email: form.dlvEmail, pickup: form.dlvPickup, agreed: form.dlvAgreed } : null
+      )
+      if (!d.success) {
+        setBusy(false)
+        return setNotice({ ok: false, text: t(`error_${d.message}`) })
+      }
+    }
     setBusy(false)
-    if (!r.success) return setNotice({ ok: false, text: t(`error_${r.message}`) })
     setSaved(form)
     setNotice({ ok: true, text: t('saved') })
     router.refresh()
@@ -706,6 +751,28 @@ export default function SurpriseEditor({
                 )
               })}
             </div>
+            <p className="mt-1 text-xs text-gray-500">{t(`revealHint_${form.revealStyle}`)}</p>
+            {form.revealStyle === 'safe' && (
+              <div className="mt-3 grid gap-3 rounded-xl bg-[var(--gold-pale)]/40 p-3 sm:grid-cols-[10rem_minmax(0,1fr)]">
+                <label className="block">
+                  <span className={label}>{t('safeCodeLabel')} *</span>
+                  <input
+                    value={form.safeCode}
+                    inputMode="numeric"
+                    autoComplete="off"
+                    maxLength={4}
+                    placeholder="1408"
+                    onChange={(e) => set('safeCode', e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    className={`${input} font-mono tracking-[0.4em]`}
+                  />
+                </label>
+                <label className="block">
+                  <span className={label}>{t('safeHintLabel')}</span>
+                  <input value={form.safeHint} maxLength={SAFE_HINT_MAX} placeholder={t('safeHintPlaceholder')} onChange={(e) => set('safeHint', e.target.value)} className={input} />
+                </label>
+                <p className="text-xs text-gray-600 sm:col-span-2">{t('safeCodeNote')}</p>
+              </div>
+            )}
           </div>
           <div>
             <span className={label}>{t('themeLabel')}</span>
@@ -800,6 +867,70 @@ export default function SurpriseEditor({
           )}
         </div>
         <p className="text-xs text-gray-500">{t('mediaRights')}</p>
+      </section>
+
+      {/* Chi consegna il regalo (facoltativo, nessun costo in più) */}
+      <section className="rounded-2xl border-2 border-[var(--gold)] bg-[var(--gold-pale)]/40 p-5 shadow-sm">
+        <h2 className="flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--ink)]">
+          <Store className="h-5 w-5 text-[var(--gold)]" aria-hidden /> {t('dlvSectionTitle')}
+          <span className="rounded-full bg-[var(--ink)] px-2 py-0.5 text-[10px] font-bold uppercase text-[var(--gold-bright)]">{t('dlvNew')}</span>
+        </h2>
+        <p className="mt-1 text-sm text-gray-600">{t('dlvSectionHint')}</p>
+        {dlvLocked ? (
+          <div className="mt-3 rounded-xl bg-white p-4 text-sm text-[var(--ink)]">
+            <p className="font-bold">{form.dlvName}</p>
+            {form.dlvBusiness && <p className="text-gray-600">{form.dlvBusiness}</p>}
+            <p className="text-gray-600">{[form.dlvPhone, form.dlvEmail].filter(Boolean).join(' · ')}</p>
+            {form.dlvPickup && <p className="mt-1 whitespace-pre-wrap text-gray-600">{form.dlvPickup}</p>}
+            <p className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+              <Lock className="h-3.5 w-3.5" aria-hidden /> {t('dlvLockedNote', { name: form.dlvName })}
+            </p>
+          </div>
+        ) : (
+          <>
+            <label className="mt-3 flex min-h-11 cursor-pointer items-center gap-3 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[var(--ink)]">
+              <input type="checkbox" checked={form.dlvOn} onChange={(e) => set('dlvOn', e.target.checked)} className="h-5 w-5 accent-[var(--gold)]" />
+              {t('dlvToggle')}
+            </label>
+            {form.dlvOn && (
+              <div className="mt-3 space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label className="block">
+                    <span className={label}>{t('dlvNameLabel')} *</span>
+                    <input value={form.dlvName} maxLength={DELIVERY_MAX.name} placeholder={t('dlvNamePlaceholder')} onChange={(e) => set('dlvName', e.target.value)} className={input} />
+                  </label>
+                  <label className="block">
+                    <span className={label}>{t('dlvBusinessLabel')}</span>
+                    <input value={form.dlvBusiness} maxLength={DELIVERY_MAX.business} placeholder={t('dlvBusinessPlaceholder')} onChange={(e) => set('dlvBusiness', e.target.value)} className={input} />
+                  </label>
+                  <label className="block">
+                    <span className={label}>{t('dlvPhoneLabel')}</span>
+                    <input value={form.dlvPhone} type="tel" inputMode="tel" autoComplete="off" maxLength={DELIVERY_MAX.phone} placeholder="+39 333 000 0000" onChange={(e) => set('dlvPhone', e.target.value)} className={input} />
+                  </label>
+                  <label className="block">
+                    <span className={label}>{t('dlvEmailLabel')} *</span>
+                    <input value={form.dlvEmail} type="email" inputMode="email" autoComplete="off" maxLength={DELIVERY_MAX.email} placeholder={t('dlvEmailPlaceholder')} onChange={(e) => set('dlvEmail', e.target.value)} className={input} />
+                  </label>
+                </div>
+                <label className="block">
+                  <span className={label}>{t('dlvPickupLabel')}</span>
+                  <textarea value={form.dlvPickup} maxLength={DELIVERY_MAX.pickup} rows={2} placeholder={t('dlvPickupPlaceholder')} onChange={(e) => set('dlvPickup', e.target.value)} className={input} />
+                </label>
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-white p-3 text-sm text-[var(--ink)]">
+                  <input type="checkbox" checked={form.dlvAgreed} onChange={(e) => set('dlvAgreed', e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--gold)]" />
+                  <span>
+                    {t('dlvAgree')} *
+                  </span>
+                </label>
+                <ul className="space-y-1 text-xs text-gray-600">
+                  {(['dlvExplain1', 'dlvExplain2', 'dlvExplain3'] as const).map((k) => (
+                    <li key={k}>• {t(k)}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
       </section>
 
       {/* Salva */}

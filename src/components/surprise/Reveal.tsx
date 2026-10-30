@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { LucideIcon } from 'lucide-react'
 import type { RevealStyle } from '@/lib/surprise'
+import { Balloon, Candles, Curtain, FortuneCookie, Polaroid, Safe } from './RevealMore'
 
 // Il momento dell'apertura: scatola che si apre, busta con la lettera che
-// esce, oppure carta da grattare col dito. Con «meno movimento» si apre
-// subito, senza animazione.
+// esce, carta da grattare col dito, più le sei aperture di RevealMore.tsx.
+// Con «meno movimento» si apre subito, senza animazione.
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -191,8 +192,34 @@ function ScratchCard({ accent, Icon, onOpen }: { accent: string; Icon: LucideIco
   )
 }
 
-export default function Reveal({ style, accent, Icon, name, onOpen }: { style: RevealStyle; accent: string; Icon: LucideIcon; name: string; onOpen: () => void }) {
+export default function Reveal({
+  style,
+  accent,
+  Icon,
+  name,
+  onOpen,
+  coverUrl,
+  safeHint,
+  checkSafe,
+}: {
+  style: RevealStyle
+  accent: string
+  Icon: LucideIcon
+  name: string
+  onOpen: () => void
+  // Foto che si sviluppa: la copertina della sorpresa, se c'è
+  coverUrl?: string | null
+  // Cassaforte: indizio e controllo del codice (sul server)
+  safeHint?: string
+  checkSafe?: (code: string) => Promise<{ ok: boolean; reason?: string }>
+}) {
   if (style === 'envelope') return <Envelope accent={accent} name={name} onOpen={onOpen} />
   if (style === 'scratch') return <ScratchCard accent={accent} Icon={Icon} onOpen={onOpen} />
+  if (style === 'candles') return <Candles accent={accent} onOpen={onOpen} />
+  if (style === 'balloon') return <Balloon accent={accent} onOpen={onOpen} />
+  if (style === 'cookie') return <FortuneCookie onOpen={onOpen} />
+  if (style === 'curtain') return <Curtain Icon={Icon} accent={accent} onOpen={onOpen} />
+  if (style === 'polaroid') return <Polaroid name={name} coverUrl={coverUrl} onOpen={onOpen} />
+  if (style === 'safe') return <Safe accent={accent} hint={safeHint} check={checkSafe} onOpen={onOpen} />
   return <GiftBox accent={accent} Icon={Icon} onOpen={onOpen} />
 }

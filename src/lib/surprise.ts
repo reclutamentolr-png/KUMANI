@@ -1,3 +1,5 @@
+import type { DeliveryView } from '@/lib/surpriseDelivery'
+
 // KUMANI Sorpresa: regole comuni a server e browser (tipi, temi, giorni e
 // sblocco delle tappe). Vedi la migrazione 20270208100000_surprise_gifts.sql.
 
@@ -16,7 +18,7 @@ export const SURPRISE_PRICE_KEYS: Record<SurpriseKind, string> = {
 
 export const SURPRISE_OCCASIONS = ['generic', 'birthday', 'love', 'wedding', 'baby', 'christmas', 'parents', 'graduation', 'party', 'thanks'] as const
 export type SurpriseOccasion = (typeof SURPRISE_OCCASIONS)[number]
-export const REVEAL_STYLES = ['box', 'envelope', 'scratch'] as const
+export const REVEAL_STYLES = ['box', 'envelope', 'scratch', 'candles', 'balloon', 'cookie', 'curtain', 'polaroid', 'safe'] as const
 export type RevealStyle = (typeof REVEAL_STYLES)[number]
 // Musica: registrazioni vere libere da diritti (pubblico dominio o CC0, da
 // Wikimedia Commons) su Cloudflare R2 in «sorprese/<brano>.mp3», oppure un
@@ -37,19 +39,25 @@ export const isMusic = (v: unknown): v is SurpriseMusic => v === 'own' || (typeo
 export const isStepKind = (v: unknown): v is StepKind => typeof v === 'string' && (STEP_KINDS as readonly string[]).includes(v)
 export const isReaction = (v: unknown): v is Reaction => typeof v === 'string' && (REACTIONS as readonly string[]).includes(v)
 
-// Ogni occasione: tema di colori consigliato, effetto all'apertura e musica
-export const OCCASION_STYLE: Record<SurpriseOccasion, { theme: SurpriseTheme; particles: 'confetti' | 'hearts' | 'snow' | 'stars'; music: MusicTrack }> = {
-  generic: { theme: 'gold', particles: 'confetti', music: 'gymno' },
-  birthday: { theme: 'gold', particles: 'confetti', music: 'birthday' },
-  love: { theme: 'rose', particles: 'hearts', music: 'clair' },
-  wedding: { theme: 'gold', particles: 'hearts', music: 'danube' },
-  baby: { theme: 'sky', particles: 'stars', music: 'twinkle' },
-  christmas: { theme: 'green', particles: 'snow', music: 'jingle' },
-  parents: { theme: 'rose', particles: 'hearts', music: 'lullaby' },
-  graduation: { theme: 'night', particles: 'stars', music: 'pomp' },
-  party: { theme: 'night', particles: 'confetti', music: 'radetzky' },
-  thanks: { theme: 'sky', particles: 'stars', music: 'air' },
+// Ogni occasione: tema di colori consigliato, effetto all'apertura, musica e
+// modo di aprire il regalo (chi crea può cambiarli)
+export const OCCASION_STYLE: Record<SurpriseOccasion, { theme: SurpriseTheme; particles: 'confetti' | 'hearts' | 'snow' | 'stars'; music: MusicTrack; reveal: RevealStyle }> = {
+  generic: { theme: 'gold', particles: 'confetti', music: 'gymno', reveal: 'box' },
+  birthday: { theme: 'gold', particles: 'confetti', music: 'birthday', reveal: 'candles' },
+  love: { theme: 'rose', particles: 'hearts', music: 'clair', reveal: 'cookie' },
+  wedding: { theme: 'gold', particles: 'hearts', music: 'danube', reveal: 'polaroid' },
+  baby: { theme: 'sky', particles: 'stars', music: 'twinkle', reveal: 'balloon' },
+  christmas: { theme: 'green', particles: 'snow', music: 'jingle', reveal: 'box' },
+  parents: { theme: 'rose', particles: 'hearts', music: 'lullaby', reveal: 'polaroid' },
+  graduation: { theme: 'night', particles: 'stars', music: 'pomp', reveal: 'curtain' },
+  party: { theme: 'night', particles: 'confetti', music: 'radetzky', reveal: 'balloon' },
+  thanks: { theme: 'sky', particles: 'stars', music: 'air', reveal: 'cookie' },
 }
+
+// Cassaforte: codice di 4 cifre (controllato sul server) e indizio
+export const SAFE_CODE_RE = /^[0-9]{4}$/
+export const SAFE_HINT_MAX = 120
+export const SAFE_FREE_AFTER = 5
 
 // Risposta dell'indovinello: senza maiuscole, accenti, spazi e punteggiatura
 export function normalizeAnswer(value: string): string {
@@ -143,6 +151,9 @@ export type SurpriseRow = {
   theme: SurpriseTheme
   occasion: SurpriseOccasion
   reveal_style: RevealStyle
+  // Cassaforte: il codice resta sul server (mai nella pagina di chi riceve)
+  safe_code?: string | null
+  safe_hint?: string
   music: SurpriseMusic | null
   music_path: string | null
   recipient_name: string
@@ -194,6 +205,8 @@ export type SurpriseView = {
   theme: SurpriseTheme
   occasion: SurpriseOccasion
   revealStyle: RevealStyle
+  // Cassaforte: solo l'indizio (il codice si controlla sul server)
+  safeHint?: string
   music: SurpriseMusic | null
   musicUrl: string | null
   recipientName: string
@@ -210,6 +223,8 @@ export type SurpriseView = {
     validUntil?: string | null
     coverUrl?: string | null
   }
+  // Regalo con consegna (solo a buono aperto): chi lo consegna, codice e stato
+  delivery?: DeliveryView | null
 }
 
 export function surprisePath(token: string) {
@@ -219,7 +234,7 @@ export function surprisePath(token: string) {
 // WhatsApp con il messaggio già scritto: alla persona giusta se c'è il numero
 // (+39…), altrimenti si sceglie il contatto in WhatsApp
 export function surpriseWhatsAppUrl(text: string, phone?: string | null) {
-  const digits = (phone ?? '').replace(/D/g, '')
+  const digits = (phone ?? '').replace(/\D/g, '')
   return `https://wa.me/${digits.length >= 6 ? digits : ''}?text=${encodeURIComponent(text)}`
 }
 

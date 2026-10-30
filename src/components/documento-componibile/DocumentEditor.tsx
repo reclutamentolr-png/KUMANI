@@ -512,7 +512,12 @@ export default function DocumentEditor({ id, initial }: { id: string; initial: D
                   )}
                   {(isField(b) || b.type === 'signature') && (
                     <label className={smallLabel}>
-                      {b.type === 'signature' ? t('signatureLabel') : t('fieldLabel')}
+                      {b.type === 'signature'
+                        ? t('signatureLabel')
+                        : b.type === 'checkbox' && t.has('checkboxName')
+                          ? // La casella mostra solo il testo accanto: l'etichetta è il nome del campo nel PDF
+                            t('checkboxName')
+                          : t('fieldLabel')}
                       <input className={`${inputClass} mt-1`} value={b.label ?? ''} maxLength={DOC_LIMITS.label} onChange={(e) => update(b.id, { label: e.target.value })} />
                     </label>
                   )}

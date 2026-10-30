@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto'
 import { headers } from 'next/headers'
 import { notifyUser } from '@/lib/push'
 import { clientIp } from '@/lib/securityCore'
-import { normalizeAnswer, isReaction, surpriseDays, unlockAt, SURPRISE_MAX, type SurpriseStepRow, type SurpriseViewStep } from '@/lib/surprise'
+import { normalizeAnswer, isReaction, SAFE_CODE_RE, surpriseDays, unlockAt, SURPRISE_MAX, type SurpriseStepRow, type SurpriseViewStep } from '@/lib/surprise'
 import { markLinkOpened, markOpened, signedStep, STEP_SELECT, surpriseDb } from '@/lib/surpriseServer'
 import { createClient } from '@/lib/supabase/server'
 
@@ -111,4 +111,17 @@ export async function markSurpriseOpened(token: string): Promise<void> {
   const ip = clientIp(await headers()) ?? 'x'
   if (tooMany(`open:${ip}`, 30, 60 * 60_000)) return
   await markOpened(token, await viewerId())
+}
+
+// Cassaforte: il codice scritto da chi riceve si controlla qui (il browser
+// non lo conosce). Freno: 10 tentativi ogni 10 minuti per regalo e rete.
+export async function checkSurpriseSafe(token: string, code: string): Promise<{ ok: boolean; reason?: 'wrong' | 'wait' | 'invalid' }> {
+  if (!/^[A-Za-z0-9_-]{16,40}$/.test(token)) return { ok: false, reason: 'invalid' }
+  const ip = clientIp(await headers()) ?? 'x'
+  if (tooMany(`safe:${ip}:${token}`, 10, 10 * 60_000)) return { ok: false, reason: 'wait' }
+  const given = String(code ?? '')
+  if (!SAFE_CODE_RE.test(given)) return { ok: false, reason: 'wrong' }
+  const { data } = await surpriseDb().from('surprise_gifts').select('safe_code').eq('public_token', token).eq('status', 'active').is('refunded_at', null).maybeSingle()
+  if (!data) return { ok: false, reason: 'invalid' }
+  return data.safe_code && data.safe_code === given ? { ok: true } : { ok: false, reason: 'wrong' }
 }

@@ -6,7 +6,7 @@ import { templateByKey } from '@/lib/surpriseTemplates'
 import { limitError } from '@/lib/appLimits'
 import { surpriseDb } from '@/lib/surpriseServer'
 import { phoneInfo } from '@/lib/scamNetPhone'
-import { GALLERY_MAX, isMusic, isOccasion, isRevealStyle, isStepKind, isSurpriseKind, isSurpriseTheme, SURPRISE_MAX, type StepExtra } from '@/lib/surprise'
+import { SAFE_CODE_RE, SAFE_HINT_MAX, GALLERY_MAX, isMusic, isOccasion, isRevealStyle, isStepKind, isSurpriseKind, isSurpriseTheme, SURPRISE_MAX, type StepExtra } from '@/lib/surprise'
 
 // KUMANI Sorpresa: azioni di chi crea il regalo. Tutto passa dalle regole
 // del database (solo le proprie sorprese; stato, pagamento e link li decide
@@ -86,6 +86,9 @@ export type SurpriseInput = {
   revealStyle: string
   music: string | null
   musicPath: string | null
+  // Cassaforte: codice di 4 cifre e indizio
+  safeCode?: string
+  safeHint?: string
 }
 
 export async function saveSurprise(id: string, input: SurpriseInput): Promise<Result> {
@@ -94,6 +97,8 @@ export async function saveSurprise(id: string, input: SurpriseInput): Promise<Re
   const startAt = input.startAt ? new Date(input.startAt) : null
   if (startAt && Number.isNaN(startAt.getTime())) return { success: false, message: 'invalid' }
   const coverPath = input.coverPath && input.coverPath.startsWith(`${g.userId}/`) ? input.coverPath : null
+  const safeCode = String(input.safeCode ?? '').trim()
+  if (input.revealStyle === 'safe' && !SAFE_CODE_RE.test(safeCode)) return { success: false, message: 'safeCode' }
   const { error } = await g.supabase
     .from('surprise_gifts')
     .update({
@@ -110,6 +115,8 @@ export async function saveSurprise(id: string, input: SurpriseInput): Promise<Re
       ...(isOccasion(input.occasion) ? { occasion: input.occasion } : {}),
       ...(isRevealStyle(input.revealStyle) ? { reveal_style: input.revealStyle } : {}),
       music: isMusic(input.music) ? input.music : null,
+      safe_code: input.revealStyle === 'safe' ? safeCode : null,
+      safe_hint: input.revealStyle === 'safe' ? clip(input.safeHint, SAFE_HINT_MAX) : '',
       music_path: input.music === 'own' && input.musicPath && input.musicPath.startsWith(`${g.userId}/`) ? input.musicPath : null,
     })
     .eq('id', id)
@@ -283,4 +290,14 @@ export async function claimSurpriseWithPlan(giftId: string): Promise<Result> {
     .maybeSingle<{ success: boolean; reason: string | null; credit: string | null }>()
   if (error || !data) return { success: false, message: 'payment' }
   return data.success ? { success: true, id: giftId } : { success: false, message: data.reason ?? 'payment' }
+}
+
+// Anteprima della cassaforte: chi crea prova il suo codice
+export async function checkMySafeCode(giftId: string, code: string): Promise<{ ok: boolean; reason?: 'wrong' | 'invalid' }> {
+  const g = await me()
+  if (!g) return { ok: false, reason: 'invalid' }
+  if (!/^[0-9a-f-]{36}$/i.test(giftId) || !SAFE_CODE_RE.test(String(code ?? ''))) return { ok: false, reason: 'wrong' }
+  const { data } = await g.supabase.from('surprise_gifts').select('safe_code').eq('id', giftId).eq('user_id', g.userId).maybeSingle()
+  if (!data) return { ok: false, reason: 'invalid' }
+  return data.safe_code === code ? { ok: true } : { ok: false, reason: 'wrong' }
 }

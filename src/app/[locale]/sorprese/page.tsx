@@ -40,7 +40,7 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [prices, { data: gifts }, { data: replies }, { data: planRaw }] = await Promise.all([
+  const [prices, { data: gifts }, { data: replies }, { data: planRaw }, { data: deliveries }] = await Promise.all([
     getSurprisePrices(),
     user
       ? supabase
@@ -53,7 +53,10 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
     user ? supabase.from('surprise_replies').select('gift_id, read_at') : Promise.resolve({ data: null }),
     // Sorprese incluse nel piano Plus o Pro
     user ? supabase.rpc('my_surprise_plan') : Promise.resolve({ data: null }),
+    // Regali con consegna: a che punto sono (le regole mostrano solo i propri)
+    user ? supabase.from('surprise_deliveries').select('gift_id, status') : Promise.resolve({ data: null }),
   ])
+  const deliveryStatus = new Map((deliveries ?? []).map((d) => [d.gift_id as string, d.status as string]))
   const plan = parseSurprisePlan(planRaw)
   const replyCount = new Map<string, { all: number; unread: number }>()
   for (const r of replies ?? []) {
@@ -185,29 +188,41 @@ export default async function SurprisesPage({ params }: { params: Promise<{ loca
                           <Mail className="h-3.5 w-3.5" /> {replyCount.get(g.id)!.unread ? t('repliesNew', { n: replyCount.get(g.id)!.unread }) : replyCount.get(g.id)!.all}
                         </span>
                       )}
-                      <span
-                        className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          g.refunded_at
-                            ? 'bg-gray-100 text-gray-600'
-                            : g.status === 'draft'
-                              ? 'bg-amber-100 text-amber-800'
-                              : g.opened_at
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : g.link_opened_at
-                                  ? 'bg-violet-100 text-violet-800'
-                                  : 'bg-sky-100 text-sky-800'
-                        }`}
-                      >
-                        {g.refunded_at
-                          ? t('status_refunded')
-                          : g.status === 'draft'
-                            ? t('status_draft')
-                            : g.opened_at
-                              ? t('status_seen')
-                              : g.link_opened_at
-                                ? t('status_opened')
-                                : t('status_active')}
-                      </span>
+                      {(() => {
+                        // Regalo con consegna: dopo la richiesta lo stato della consegna prende il posto di quello della sorpresa
+                        const st = deliveryStatus.get(g.id)
+                        if (st && st !== 'pending' && !g.refunded_at)
+                          return (
+                            <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${st === 'delivered' ? 'bg-emerald-600 text-white' : 'bg-[var(--ink)] text-[var(--gold-bright)]'}`}>
+                              {t(`dlvStatus_${st as 'requested' | 'booked' | 'delivered'}`)}
+                            </span>
+                          )
+                        return (
+                          <span
+                            className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                              g.refunded_at
+                                ? 'bg-gray-100 text-gray-600'
+                                : g.status === 'draft'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : g.opened_at
+                                    ? 'bg-emerald-100 text-emerald-800'
+                                    : g.link_opened_at
+                                      ? 'bg-violet-100 text-violet-800'
+                                      : 'bg-sky-100 text-sky-800'
+                            }`}
+                          >
+                            {g.refunded_at
+                              ? t('status_refunded')
+                              : g.status === 'draft'
+                                ? t('status_draft')
+                                : g.opened_at
+                                  ? t('status_seen')
+                                  : g.link_opened_at
+                                    ? t('status_opened')
+                                    : t('status_active')}
+                          </span>
+                        )
+                      })()}
                     </Link>
                     {/* Solo le bozze: dietro le altre c'è un pagamento */}
                     {g.status === 'draft' ? <DeleteSurpriseButton id={g.id} title={g.title || t('untitled')} /> : <span aria-hidden className="w-11 shrink-0" />}

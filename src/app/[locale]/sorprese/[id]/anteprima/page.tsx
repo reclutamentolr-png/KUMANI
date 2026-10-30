@@ -5,6 +5,7 @@ import SurpriseExperience from '@/components/surprise/SurpriseExperience'
 import { createClient } from '@/lib/supabase/server'
 import { buildSurpriseView, STEP_SELECT } from '@/lib/surpriseServer'
 import type { SurpriseRow, SurpriseStepRow } from '@/lib/surprise'
+import { DELIVERY_OWNER_SELECT, type DeliveryRow } from '@/lib/surpriseDelivery'
 
 // Anteprima per chi crea: tutto aperto, come se il tempo fosse già passato
 export const dynamic = 'force-dynamic'
@@ -21,7 +22,10 @@ export default async function SurprisePreviewPage({ params }: { params: Promise<
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound()
   const { data: gift } = await supabase.from('surprise_gifts').select('*').eq('id', id).eq('user_id', user.id).maybeSingle()
   if (!gift) notFound()
-  const { data: steps } = await supabase.from('surprise_steps').select(STEP_SELECT).eq('gift_id', id)
-  const view = await buildSurpriseView(gift as SurpriseRow, (steps ?? []) as SurpriseStepRow[], true)
-  return <SurpriseExperience view={view} preview editorHref={`/sorprese/${id}`} />
+  const [{ data: steps }, { data: delivery }] = await Promise.all([
+    supabase.from('surprise_steps').select(STEP_SELECT).eq('gift_id', id),
+    supabase.from('surprise_deliveries').select(DELIVERY_OWNER_SELECT).eq('gift_id', id).maybeSingle(),
+  ])
+  const view = await buildSurpriseView(gift as SurpriseRow, (steps ?? []) as SurpriseStepRow[], true, (delivery as DeliveryRow | null) ?? null)
+  return <SurpriseExperience view={view} preview editorHref={`/sorprese/${id}`} previewGiftId={id} />
 }
