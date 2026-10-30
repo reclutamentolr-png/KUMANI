@@ -80,6 +80,7 @@ import {
   ReceiptText,
   Wallet,
   FilePenLine,
+  FileInput,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'audio' | 'bambini' | 'community'
@@ -189,6 +190,7 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'magazzino', icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
     { name: 'calcolatrici', icon: Calculator, title: tc('calcolatrici'), desc: tc('calcolatriciDescription'), category: 'lavoro' },
     { name: 'trova-lavoro', icon: BriefcaseBusiness, title: tc('trovaLavoro'), desc: tc('trovaLavoroDescription'), category: 'lavoro' },
+    { name: 'documento-componibile', icon: FileInput, title: tc('documentoComponibile'), desc: tc('documentoComponibileDescription'), category: 'lavoro' },
     { name: 'lettera-presentazione', icon: FilePenLine, title: tc('letteraPresentazione'), desc: tc('letteraPresentazioneDescription'), category: 'lavoro' },
     { name: 'note-spese', icon: Wallet, title: tc('noteSpese'), desc: tc('noteSpeseDescription'), category: 'lavoro' },
     { name: 'ricevuta-occasionale', icon: ReceiptText, title: tc('ricevutaOccasionale'), desc: tc('ricevutaOccasionaleDescription'), category: 'lavoro' },

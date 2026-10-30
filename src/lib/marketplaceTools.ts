@@ -531,6 +531,17 @@ export function getMarketplaceTools(t: (key: string) => string): MarketplaceTool
       requiresSubscription: true,
     },
     {
+      toolName: 'documento-componibile',
+      href: '/app/documento-componibile',
+      gradient: 'bg-[var(--ink)]',
+      iconName: 'FileInput',
+      title: t('documentoComponibile'),
+      description: t('documentoComponibileDescription'),
+      color: 'gold',
+      category: 'lavoro',
+      requiresSubscription: true,
+    },
+    {
       toolName: 'trova-lavoro',
       href: '/app/trova-lavoro',
       gradient: 'bg-[var(--ink)]',

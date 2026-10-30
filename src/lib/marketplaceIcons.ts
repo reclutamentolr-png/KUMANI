@@ -73,6 +73,7 @@ import {
   ReceiptText,
   Wallet,
   FilePenLine,
+  FileInput,
 } from 'lucide-react'
 
 // Shared by MarketplaceCard and any other UI that renders a tool by its
@@ -80,6 +81,7 @@ import {
 // tool's icon never silently falls back to the default in one place but
 // not another.
 export const marketplaceIconMap: Record<string, LucideIcon> = {
+  FileInput,
   FilePenLine,
   Wallet,
   ReceiptText,

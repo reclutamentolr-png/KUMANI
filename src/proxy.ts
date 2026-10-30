@@ -67,6 +67,7 @@ const PAID_TOOLS = [
   'accordatore',
   'firma-email',
   'calcolatrici',
+  'documento-componibile',
   'lettera-presentazione',
   'note-spese',
   'ricevuta-occasionale',

@@ -331,6 +331,15 @@ export const NEED_PHRASES: Record<string, ToolPhrases> = {
     pt: ["tenho de escrever uma carta de apresentação", "carta para enviar com o currículo", "como escrever uma carta de candidatura", "carta de motivação para um emprego", "candidatura espontânea a uma empresa", "responder a um anúncio de emprego", "carta para pedir trabalho"],
     ru: ["нужно написать сопроводительное письмо", "письмо к резюме", "как написать письмо работодателю", "мотивационное письмо для работы", "откликнуться на вакансию", "письмо с просьбой о работе", "инициативный отклик в компанию"],
   },
+  'documento-componibile': {
+    it: ["devo fare un modulo da far compilare", "creare un pdf compilabile", "modulo di iscrizione per il corso", "liberatoria per le foto dei bambini", "fare una delega per ritirare documenti", "modulo richiesta preventivo per i clienti", "un documento con i campi da riempire", "fare un modulo con spazio per la firma"],
+    en: ["I need to make a form people can fill in", "create a fillable pdf", "registration form for my course", "photo release form for children", "write an authorisation to collect documents", "quote request form for customers", "a document with fields to fill in", "make a form with a space to sign"],
+    es: ["necesito hacer un formulario para rellenar", "crear un pdf rellenable", "formulario de inscripción para el curso", "autorización para fotos de niños", "hacer una autorización para recoger documentos", "formulario de solicitud de presupuesto", "un documento con campos para rellenar", "hacer un formulario con espacio para firmar"],
+    fr: ["je dois faire un formulaire à remplir", "créer un pdf à remplir", "formulaire d’inscription pour mon cours", "autorisation photo pour les enfants", "faire une procuration pour retirer des documents", "formulaire de demande de devis", "un document avec des champs à remplir", "faire un formulaire avec un espace pour signer"],
+    de: ["ich muss ein Formular zum Ausfüllen machen", "ausfüllbares pdf erstellen", "Anmeldeformular für meinen Kurs", "Einwilligung für Fotos von Kindern", "Vollmacht zum Abholen von Dokumenten schreiben", "Formular für Angebotsanfragen", "ein Dokument mit Feldern zum Ausfüllen", "Formular mit Platz für die Unterschrift"],
+    pt: ["preciso de fazer um formulário para preencher", "criar um pdf preenchível", "ficha de inscrição para o curso", "autorização de fotos de crianças", "fazer uma procuração para levantar documentos", "formulário de pedido de orçamento", "um documento com campos para preencher", "fazer um formulário com espaço para assinar"],
+    ru: ["нужно сделать форму для заполнения", "создать заполняемый pdf", "анкета для записи на курс", "согласие на фото детей", "написать доверенность на получение документов", "форма запроса сметы для клиентов", "документ с полями для заполнения", "сделать форму с местом для подписи"],
+  },
   // ---------------- La tua attività ----------------
   shop: {
     it: ['negozio online', 'vendere online', 'e-commerce', 'vendere prodotti'],

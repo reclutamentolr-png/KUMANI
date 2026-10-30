@@ -32,6 +32,7 @@ export const CLIENT_NAMESPACES: readonly string[] = [
   "dashboard",
   "diarium",
   "digitalReceipt",
+  "documentoComponibile",
   "documentoSicuro",
   "documents",
   "donations",

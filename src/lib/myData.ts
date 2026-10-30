@@ -30,6 +30,7 @@ export const MY_DATA_SERVICES: MyDataService[] = [
   { key: 'candidature', tool: 'candidature', tables: [t('job_application_events'), t('job_applications')], buckets: [] },
   { key: 'ricevuta-occasionale', tool: 'ricevuta-occasionale', tables: [t('occasional_receipts'), t('occasional_receipt_clients'), t('occasional_receipt_profiles')], buckets: [] },
   { key: 'note-spese', tool: 'note-spese', tables: [t('expense_items'), t('expense_reports')], buckets: ['expense-receipts'] },
+  { key: 'documento-componibile', tool: 'documento-componibile', tables: [t('composable_documents')], buckets: [] },
   { key: 'magazzino', tool: 'magazzino', tables: [t('inventory_movements', 'owner_id'), t('inventory_products', 'owner_id'), t('inventory_categories', 'owner_id')], buckets: [] },
   { key: 'aureya', tool: 'aureya', tables: [t('aureya_test_results')], buckets: [] },
   { key: 'cronobioma', tool: 'cronobioma', tables: [t('cronobioma_sleep_logs', 'owner_id'), t('cronobioma_profiles', 'owner_id')], buckets: [] },

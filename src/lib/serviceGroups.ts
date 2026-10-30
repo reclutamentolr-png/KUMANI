@@ -60,6 +60,7 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   // Cerco o ho un lavoro (privati); Gestire la tua attività (manage) e
   // Documenti e file (docs) sono le cartelle Gestione e Ufficio
   'trova-lavoro': 'work',
+  'documento-componibile': 'docs',
   'lettera-presentazione': 'work',
   'note-spese': 'work',
   'ricevuta-occasionale': 'work',
