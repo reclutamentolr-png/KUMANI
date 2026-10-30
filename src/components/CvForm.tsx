@@ -10,6 +10,7 @@ import { useFromDashboardSuffix } from '@/lib/useFromDashboard'
 import { locales } from '../../i18n'
 import {
   CEFR_LEVELS,
+  CEFR_SKILLS,
   SKILL_LEVELS,
   emptyExperience,
   emptyEducation,
@@ -21,6 +22,7 @@ import {
   emptyCvForm,
   cvPhotoExtension,
   type CvFormData,
+  type CvExtras,
 } from '@/lib/cv'
 import CvTemplatePicker from '@/components/cv/CvTemplatePicker'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
@@ -62,6 +64,9 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
   const [mobileView, setMobileView] = useState<'edit' | 'preview'>('edit')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const [detailOpen, setDetailOpen] = useState<Record<number, boolean>>({})
+  const setExtra = (patch: Partial<CvExtras>) => setForm((p) => ({ ...p, extras: { ...p.extras, ...patch } }))
 
   const isValid = form.title.trim().length > 0 && form.fullName.trim().length > 0
 
@@ -143,6 +148,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
     skills: form.skills,
     languages: form.languages,
     certifications: form.certifications,
+    extras: form.extras,
     contentLanguage: form.contentLanguage,
   }
 
@@ -179,6 +185,7 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
       <div>
         <label className={labelClass}>{t('templateField')}</label>
         <CvTemplatePicker value={form.template} onChange={(template) => setForm((p) => ({ ...p, template }))} />
+        {form.template === 'europeo' && <p className="mt-2 text-xs text-[var(--muted)]">{t('templateEuropeoHint')}</p>}
       </div>
 
       {/* Photo */}
@@ -277,7 +284,10 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
                 <input type="checkbox" checked={exp.current} onChange={(e) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, current: e.target.checked } : x)) }))} className="rounded text-[var(--gold)] accent-[var(--gold)]" />
                 {t('currentField')}
               </label>
-              <textarea placeholder={t('descriptionField')} value={exp.description} onChange={(e) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, description: e.target.value } : x)) }))} rows={2} className={inputClass} />
+              <div>
+                <textarea placeholder={t('descriptionField')} value={exp.description} onChange={(e) => setForm((p) => ({ ...p, experiences: p.experiences.map((x, idx) => (idx === i ? { ...x, description: e.target.value } : x)) }))} rows={3} className={inputClass} />
+                <p className="mt-1 text-xs text-[var(--muted)]">{t('descriptionHint')}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -368,12 +378,41 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input placeholder={t('languageNamePlaceholder')} value={l.name} onChange={(e) => setForm((p) => ({ ...p, languages: p.languages.map((x, idx) => (idx === i ? { ...x, name: e.target.value } : x)) }))} className={inputClass} />
-                <select value={l.level} onChange={(e) => setForm((p) => ({ ...p, languages: p.languages.map((x, idx) => (idx === i ? { ...x, level: e.target.value as typeof x.level } : x)) }))} className={inputClass}>
+                <select disabled={l.native} value={l.level} onChange={(e) => setForm((p) => ({ ...p, languages: p.languages.map((x, idx) => (idx === i ? { ...x, level: e.target.value as typeof x.level } : x)) }))} className={`${inputClass} disabled:opacity-50`}>
                   {CEFR_LEVELS.map((lvl) => (
                     <option key={lvl} value={lvl}>{lvl}</option>
                   ))}
                 </select>
               </div>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <label className="flex items-center gap-2 text-xs text-[var(--muted)]">
+                  <input type="checkbox" checked={!!l.native} onChange={(e) => setForm((p) => ({ ...p, languages: p.languages.map((x, idx) => (idx === i ? { ...x, native: e.target.checked } : x)) }))} className="rounded accent-[var(--gold)]" />
+                  {t('nativeField')}
+                </label>
+                {!l.native && (
+                  <button type="button" onClick={() => setDetailOpen((d) => ({ ...d, [i]: !d[i] }))} className="text-xs font-medium text-[var(--gold)] hover:underline">
+                    {t('detailToggle')}
+                  </button>
+                )}
+              </div>
+              {!l.native && (detailOpen[i] || !!l.detail) && (
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                  {CEFR_SKILLS.map((k) => (
+                    <label key={k} className="text-[11px] text-[var(--muted)]">
+                      {t(`cefr_${k}`)}
+                      <select
+                        value={l.detail?.[k] || l.level}
+                        onChange={(e) => setForm((p) => ({ ...p, languages: p.languages.map((x, idx) => (idx === i ? { ...x, detail: { ...x.detail, [k]: e.target.value as typeof x.level } } : x)) }))}
+                        className={`${inputClass} mt-0.5 px-2 py-1.5`}
+                      >
+                        {CEFR_LEVELS.map((lvl) => (
+                          <option key={lvl} value={lvl}>{lvl}</option>
+                        ))}
+                      </select>
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -407,6 +446,41 @@ export default function CvForm({ mode, cvId, initialData, initialPhotoUrl }: Pro
         <button type="button" onClick={() => setForm((p) => ({ ...p, certifications: [...p.certifications, emptyCertification()] }))} className="mt-3 flex items-center gap-1.5 text-sm font-medium text-[var(--gold)] hover:underline">
           <Plus className="w-4 h-4" /> {t('addCertificationAction')}
         </button>
+      </div>
+
+      {/* Dati dello standard europeo */}
+      <div className="border-t border-[var(--gold)]/15 pt-6">
+        <h3 className="font-bold text-[var(--ink)] mb-1">{t('extrasSection')}</h3>
+        <p className="text-xs text-[var(--muted)] mb-4">{t('extrasHint')}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>{t('birthDateField')}</label>
+            <input type="date" value={form.extras.birthDate || ''} max={new Date().toISOString().slice(0, 10)} onChange={(e) => setExtra({ birthDate: e.target.value })} className={inputClass} />
+          </div>
+          <div>
+            <label className={labelClass}>{t('nationalityField')}</label>
+            <input type="text" value={form.extras.nationality || ''} onChange={(e) => setExtra({ nationality: e.target.value })} className={inputClass} />
+          </div>
+          <div className="sm:col-span-2">
+            <label className={labelClass}>{t('drivingLicenceField')}</label>
+            <input type="text" value={form.extras.drivingLicence || ''} placeholder={t('drivingLicencePlaceholder')} onChange={(e) => setExtra({ drivingLicence: e.target.value })} className={inputClass} />
+          </div>
+          <div className="sm:col-span-2">
+            <label className={labelClass}>{t('digitalSkillsField')}</label>
+            <textarea value={form.extras.digitalSkills || ''} placeholder={t('digitalSkillsPlaceholder')} onChange={(e) => setExtra({ digitalSkills: e.target.value })} rows={2} className={inputClass} />
+          </div>
+          <div className="sm:col-span-2">
+            <label className={labelClass}>{t('interestsField')}</label>
+            <input type="text" value={form.extras.interests || ''} placeholder={t('interestsPlaceholder')} onChange={(e) => setExtra({ interests: e.target.value })} className={inputClass} />
+          </div>
+          <label className="sm:col-span-2 flex items-start gap-2 text-sm text-[var(--ink)]">
+            <input type="checkbox" checked={form.extras.privacyConsent === true} onChange={(e) => setExtra({ privacyConsent: e.target.checked })} className="mt-0.5 rounded accent-[var(--gold)]" />
+            <span>
+              {t('privacyField')}
+              <span className="block text-xs text-[var(--muted)]">{t('privacyHint')}</span>
+            </span>
+          </label>
+        </div>
       </div>
 
       {/* Links */}

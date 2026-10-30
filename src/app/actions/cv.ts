@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { hasActiveCvAccess } from '@/lib/cv-server'
 import { generateShortCode } from '@/lib/shortLink'
-import type { CvFormData } from '@/lib/cv'
+import { CEFR_LEVELS, CEFR_SKILLS, cleanExtras, type CefrLevel, type CvFormData } from '@/lib/cv'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { normalizeExternalUrl } from '@/lib/linkUtils'
 
@@ -26,6 +26,7 @@ async function requireActiveCvAccess(): Promise<{ ok: true; userId: string } | {
 // Dati puliti prima di salvarli (anche il database ha gli stessi limiti):
 // testi accorciati, elenchi con un massimo di voci, link con https://
 const text = (value: unknown, max: number) => String(value ?? '').trim().slice(0, max)
+const cefr = (value: unknown): CefrLevel | null => ((CEFR_LEVELS as readonly string[]).includes(String(value)) ? (String(value) as CefrLevel) : null)
 const list = <T,>(value: unknown, max: number, map: (item: Record<string, unknown>) => T): T[] =>
   (Array.isArray(value) ? value : []).slice(0, max).map((item) => map((item ?? {}) as Record<string, unknown>))
 
@@ -59,8 +60,16 @@ function toRow(form: CvFormData) {
       current: e.current === true,
     })),
     skills: list(form.skills, 40, (s) => ({ name: text(s.name, 60), level: [1, 2, 3, 4].includes(Number(s.level)) ? Number(s.level) : 2 })),
-    languages: list(form.languages, 15, (l) => ({ name: text(l.name, 40), level: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(String(l.level)) ? String(l.level) : 'B1' })),
+    languages: list(form.languages, 15, (l) => ({
+      name: text(l.name, 40),
+      level: cefr(l.level) || 'B1',
+      ...(l.native === true ? { native: true } : {}),
+      ...(l.detail && typeof l.detail === 'object' && !l.native
+        ? { detail: Object.fromEntries(CEFR_SKILLS.map((k) => [k, cefr((l.detail as Record<string, unknown>)[k])]).filter(([, v]) => v)) }
+        : {}),
+    })),
     certifications: list(form.certifications, 30, (c) => ({ name: text(c.name, 160), issuer: text(c.issuer, 120), date: text(c.date, 10) })),
+    extras: cleanExtras(form.extras),
   }
 }
 

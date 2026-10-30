@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Share2, MessageCircle, Mail, Printer, LoaderCircle } from 'lucide-react'
 import type { CvForPdf } from '@/lib/cvPdf'
-import { loadImageAsDataUrl, loadInterFontBase64 } from '@/lib/pdfHelpers'
 
 type Props = {
   cv: CvForPdf
@@ -18,16 +17,8 @@ export default function CvShareButtons({ cv, photoUrl, publicUrl }: Props) {
 
   const buildBlob = async (): Promise<Blob> => {
     // jsPDF e qrcode solo al clic, fuori dal bundle iniziale
-    const [{ generateCvPdfBlob }, QRCode] = await Promise.all([
-      import('@/lib/cvPdf'),
-      import('qrcode').then((m) => m.default),
-    ])
-    const [fontBase64, photoDataUrl, qrDataUrl] = await Promise.all([
-      loadInterFontBase64(),
-      photoUrl ? loadImageAsDataUrl(photoUrl) : Promise.resolve(null),
-      QRCode.toDataURL(publicUrl, { width: 240, margin: 1, errorCorrectionLevel: 'H' }),
-    ])
-    return generateCvPdfBlob({ cv, photoDataUrl, fontBase64, publicUrl, qrDataUrl })
+    const { buildCvPdfBlob } = await import('@/lib/cvPdf')
+    return buildCvPdfBlob({ cv, photoUrl, publicUrl })
   }
 
   const summaryText = t('shareSummaryText', { name: cv.full_name, url: publicUrl })

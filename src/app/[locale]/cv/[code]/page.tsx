@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import Link from '@/components/LocalizedLink'
 import { Crown } from 'lucide-react'
 import CvTemplateRenderer from '@/components/cv/CvTemplateRenderer'
-import type { CvTemplate, CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification } from '@/lib/cv'
+import type { CvTemplate, CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification, CvExtras } from '@/lib/cv'
 import PublicPageOffline from '@/components/PublicPageOffline'
 import { signedPhotoUrl } from '@/lib/privatePhotos'
 
@@ -36,6 +36,7 @@ interface PublicCvRow {
   skills: CvSkill[]
   languages: CvLanguage[]
   certifications: CvCertification[]
+  extras: CvExtras | null
   updated_at: string
 }
 
@@ -75,6 +76,7 @@ export default async function CvPublicPage({ params }: { params: Promise<{ code:
             skills: data.skills || [],
             languages: data.languages || [],
             certifications: data.certifications || [],
+            extras: data.extras || {},
             contentLanguage: data.content_language,
           }}
         />

@@ -5,6 +5,76 @@ import { CV_TEMPLATES, type CvTemplate } from '@/lib/cv'
 import { Check } from 'lucide-react'
 
 const PREVIEW_SHAPE: Record<CvTemplate, React.ReactNode> = {
+  moderno: (
+    <div className="w-full h-full p-2">
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5 border-l-2 border-gray-800 pl-1">
+          <div className="h-1.5 w-10 bg-gray-800 rounded" />
+          <div className="h-1 w-7 bg-gray-300 rounded" />
+        </div>
+        <div className="h-5 w-5 rounded-full bg-gray-300" />
+      </div>
+      <div className="mt-2 flex gap-1.5">
+        <div className="w-1/3 space-y-1">
+          <div className="h-0.5 w-full bg-gray-400" />
+          <div className="h-1 w-full bg-gray-100 rounded" />
+          <div className="h-1 w-2/3 bg-gray-100 rounded" />
+        </div>
+        <div className="flex-1 border-l border-gray-300 pl-1.5 space-y-1">
+          <div className="h-1 w-full bg-gray-200 rounded" />
+          <div className="h-1 w-5/6 bg-gray-100 rounded" />
+          <div className="h-1 w-full bg-gray-200 rounded" />
+        </div>
+      </div>
+    </div>
+  ),
+  professionale: (
+    <div className="w-full h-full flex">
+      <div className="w-[38%] h-full bg-[#0f2a4a] p-1.5 space-y-1">
+        <div className="h-4 w-4 rounded-full bg-white/40" />
+        <div className="h-1 w-full bg-white/70 rounded" />
+        <div className="h-1 w-2/3 bg-sky-300/70 rounded" />
+      </div>
+      <div className="flex-1 p-1.5 space-y-1">
+        <div className="flex items-center gap-1"><div className="h-2 w-2 rounded-full bg-sky-200" /><div className="h-1 flex-1 bg-sky-100" /></div>
+        <div className="h-1 w-full bg-gray-100 rounded" />
+        <div className="ml-1 border-l border-sky-200 pl-1 space-y-1">
+          <div className="h-1 w-5/6 bg-[#0f2a4a]/40 rounded" />
+          <div className="h-1 w-2/3 bg-gray-100 rounded" />
+        </div>
+      </div>
+    </div>
+  ),
+  elegante: (
+    <div className="w-full h-full p-2 bg-[#fbfbfa]">
+      <div className="h-0.5 w-6 bg-gray-300 rounded" />
+      <div className="mt-0.5 h-2.5 w-2/3 bg-gray-500 rounded-sm" />
+      <div className="mt-1.5 h-px w-full bg-gray-300" />
+      <div className="mt-1.5 flex gap-1.5">
+        <div className="w-1/3 space-y-1 border-r border-gray-300 pr-1">
+          <div className="h-1 w-full bg-gray-200 rounded" />
+          <div className="h-1 w-2/3 bg-gray-200 rounded" />
+        </div>
+        <div className="flex-1 space-y-1">
+          <div className="h-1 w-full bg-gray-200 rounded" />
+          <div className="h-1 w-5/6 bg-gray-100 rounded" />
+        </div>
+      </div>
+    </div>
+  ),
+  europeo: (
+    <div className="w-full h-full p-2">
+      <div className="h-1.5 w-1/2 bg-gray-700 rounded" />
+      <div className="mt-1 h-0.5 w-full bg-[#1d4f91]" />
+      {[0, 1, 2].map((n) => (
+        <div key={n} className="mt-1.5 flex gap-1.5">
+          <div className="w-1/4 h-1 bg-gray-200 rounded" />
+          <div className="flex-1 h-1 bg-gray-100 rounded" />
+        </div>
+      ))}
+      <div className="mt-1.5 h-2 w-full bg-[#1d4f91]/25 rounded-sm" />
+    </div>
+  ),
   minimal: (
     <div className="w-full h-full p-2 space-y-1">
       <div className="h-2 w-2/3 bg-gray-300 rounded" />
@@ -39,7 +109,7 @@ export default function CvTemplatePicker({ value, onChange }: { value: CvTemplat
   const t = useTranslations('kumaniCv')
 
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-3">
       {CV_TEMPLATES.map((template) => (
         <button
           key={template}

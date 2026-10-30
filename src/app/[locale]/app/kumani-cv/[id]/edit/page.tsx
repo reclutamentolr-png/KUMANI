@@ -6,7 +6,7 @@ import Link from '@/components/LocalizedLink'
 import { ArrowLeft, FileUser } from 'lucide-react'
 import { hasActiveCvAccess } from '@/lib/cv-server'
 import CvForm from '@/components/CvForm'
-import type { CvFormData } from '@/lib/cv'
+import { cleanExtras, type CvFormData } from '@/lib/cv'
 import { signedPhotoUrl } from '@/lib/privatePhotos'
 import HubBar from '@/components/hubs/HubBar'
 
@@ -54,6 +54,7 @@ export default async function EditCvPage({
     skills: cv.skills?.length ? cv.skills : [],
     languages: cv.languages?.length ? cv.languages : [],
     certifications: cv.certifications?.length ? cv.certifications : [],
+    extras: cleanExtras(cv.extras),
   }
 
   return (

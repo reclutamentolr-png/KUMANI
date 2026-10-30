@@ -10,14 +10,17 @@ import {
   CvLanguageItem,
   CvCertificationItem,
   CvLinkItem,
+  CvExtrasBlock,
+  CvPrivacyNote,
 } from './CvSectionParts'
+import { byMostRecent } from '@/lib/cv'
 
 // ATS-friendly: single column, no graphics/color blocks, clean hierarchy.
 export default function CvTemplateMinimal({ cv }: { cv: CvTemplateData }) {
   const t = useTranslations('kumaniCv')
 
   return (
-    <div className="bg-white p-8 sm:p-10 text-[var(--ink)]">
+    <div className="@container bg-white p-8 @md:p-10 text-[var(--ink)]">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">{cv.fullName || t('previewPlaceholderName')}</h1>
         {cv.roleTitle && <p className="text-sm font-medium text-[var(--gold)] mt-1">{cv.roleTitle}</p>}
@@ -29,7 +32,7 @@ export default function CvTemplateMinimal({ cv }: { cv: CvTemplateData }) {
       {cv.experiences.length > 0 && (
         <div className="mb-6">
           <CvSectionHeading>{t('experienceSection')}</CvSectionHeading>
-          {cv.experiences.map((exp, i) => (
+          {byMostRecent(cv.experiences).map((exp, i) => (
             <CvExperienceItem key={i} item={exp} contentLanguage={cv.contentLanguage} />
           ))}
         </div>
@@ -38,13 +41,13 @@ export default function CvTemplateMinimal({ cv }: { cv: CvTemplateData }) {
       {cv.education.length > 0 && (
         <div className="mb-6">
           <CvSectionHeading>{t('educationSection')}</CvSectionHeading>
-          {cv.education.map((ed, i) => (
+          {byMostRecent(cv.education).map((ed, i) => (
             <CvEducationItem key={i} item={ed} contentLanguage={cv.contentLanguage} />
           ))}
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 @md:grid-cols-2 gap-6">
         {cv.skills.length > 0 && (
           <div>
             <CvSectionHeading>{t('skillsSection')}</CvSectionHeading>
@@ -57,7 +60,7 @@ export default function CvTemplateMinimal({ cv }: { cv: CvTemplateData }) {
           <div>
             <CvSectionHeading>{t('languagesSection')}</CvSectionHeading>
             {cv.languages.map((l, i) => (
-              <CvLanguageItem key={i} item={l} />
+              <CvLanguageItem key={i} item={l} contentLanguage={cv.contentLanguage} />
             ))}
           </div>
         )}
@@ -78,6 +81,11 @@ export default function CvTemplateMinimal({ cv }: { cv: CvTemplateData }) {
           </div>
         )}
       </div>
+
+      <div className="mt-6">
+        <CvExtrasBlock cv={cv} />
+      </div>
+      <CvPrivacyNote cv={cv} className="mt-6" />
     </div>
   )
 }

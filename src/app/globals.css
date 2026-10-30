@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+/* Carattere con le grazie del modello CV «Elegante» (PT Serif, licenza OFL):
+   scaricato solo dalle pagine che lo usano */
+@font-face {
+  font-family: 'KumaniCvSerif';
+  src: url('/fonts/ptserif/PTSerif-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'KumaniCvSerif';
+  src: url('/fonts/ptserif/PTSerif-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
 :root {
   --background: #f4f1e8;
   --foreground: #171717;

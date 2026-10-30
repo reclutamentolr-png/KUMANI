@@ -1,4 +1,4 @@
-import type { CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification } from '@/lib/cv'
+import type { CvLink, CvExperience, CvEducation, CvSkill, CvLanguage, CvCertification, CvExtras } from '@/lib/cv'
 
 export type CvTemplateData = {
   fullName: string
@@ -14,5 +14,6 @@ export type CvTemplateData = {
   skills: CvSkill[]
   languages: CvLanguage[]
   certifications: CvCertification[]
+  extras: CvExtras
   contentLanguage: string
 }

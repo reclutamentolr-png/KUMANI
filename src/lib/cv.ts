@@ -1,4 +1,4 @@
-export const CV_TEMPLATES = ['minimal', 'classic', 'sidebar'] as const
+export const CV_TEMPLATES = ['moderno', 'professionale', 'elegante', 'europeo', 'minimal', 'classic', 'sidebar'] as const
 export type CvTemplate = (typeof CV_TEMPLATES)[number]
 
 export const SKILL_LEVELS = [1, 2, 3, 4] as const
@@ -37,9 +37,26 @@ export interface CvSkill {
   level: SkillLevel
 }
 
+// Livelli Europass per abilità (Ascolto, Lettura, Interazione, Produzione
+// orale, Scrittura): facoltativi, se mancano vale «level» per tutte
+export const CEFR_SKILLS = ['listening', 'reading', 'interaction', 'production', 'writing'] as const
+export type CefrSkill = (typeof CEFR_SKILLS)[number]
+
 export interface CvLanguage {
   name: string
   level: CefrLevel
+  native?: boolean
+  detail?: Partial<Record<CefrSkill, CefrLevel>>
+}
+
+// Dati in più dello standard europeo, tutti facoltativi
+export interface CvExtras {
+  birthDate?: string // yyyy-mm-dd
+  nationality?: string
+  drivingLicence?: string
+  digitalSkills?: string
+  interests?: string
+  privacyConsent?: boolean
 }
 
 export interface CvCertification {
@@ -64,6 +81,7 @@ export interface CvFormData {
   skills: CvSkill[]
   languages: CvLanguage[]
   certifications: CvCertification[]
+  extras: CvExtras
 }
 
 export function emptyExperience(): CvExperience {
@@ -121,7 +139,7 @@ export function cvPhotoExtension(file: File): string {
 export function emptyCvForm(): CvFormData {
   return {
     title: '',
-    template: 'minimal',
+    template: 'moderno',
     contentLanguage: 'it',
     fullName: '',
     roleTitle: '',
@@ -135,5 +153,65 @@ export function emptyCvForm(): CvFormData {
     skills: [emptySkill()],
     languages: [emptyLanguage()],
     certifications: [],
+    extras: { privacyConsent: true },
   }
+}
+
+// Esperienze e studi dal più recente, come chiede lo standard europeo:
+// prima quelli in corso, poi per data di fine (o di inizio) decrescente
+export function byMostRecent<T extends { startDate: string; endDate: string; current: boolean }>(items: T[]): T[] {
+  const key = (x: T) => (x.current ? '9999' : x.endDate || x.startDate || '')
+  return items
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => key(b.item).localeCompare(key(a.item)) || b.item.startDate.localeCompare(a.item.startDate) || a.index - b.index)
+    .map((x) => x.item)
+}
+
+// Descrizione divisa in punti: righe che iniziano con -, • o * diventano un elenco
+export function descriptionLines(text: string): { bullets: boolean; lines: string[] } {
+  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
+  const bullets = lines.length > 1 && lines.every((l) => /^[-•*–]\s*/.test(l))
+  return { bullets, lines: bullets ? lines.map((l) => l.replace(/^[-•*–]\s*/, '')) : lines }
+}
+
+// Livello di una lingua per una singola abilità
+export function cefrFor(lang: CvLanguage, skill: CefrSkill): CefrLevel {
+  return lang.detail?.[skill] || lang.level
+}
+
+export function cleanExtras(value: unknown): CvExtras {
+  const v = (value && typeof value === 'object' ? value : {}) as Record<string, unknown>
+  const str = (x: unknown, max: number) => String(x ?? '').trim().slice(0, max)
+  return {
+    birthDate: /^\d{4}-\d{2}-\d{2}$/.test(String(v.birthDate ?? '')) ? String(v.birthDate) : '',
+    nationality: str(v.nationality, 80),
+    drivingLicence: str(v.drivingLicence, 60),
+    digitalSkills: str(v.digitalSkills, 1500),
+    interests: str(v.interests, 600),
+    privacyConsent: v.privacyConsent !== false,
+  }
+}
+
+// Nome su una o più righe, divise tra le parole (mai a metà del cognome):
+// fino a «oneLineMax» lettere resta su una riga, altrimenti righe bilanciate
+// (al massimo «maxLines») con la riga più lunga il più corta possibile
+export function nameLines(name: string, oneLineMax = 16, maxLines = 2): string[] {
+  const words = name.trim().split(/\s+/).filter(Boolean)
+  const whole = words.join(' ')
+  if (words.length < 2 || whole.length <= oneLineMax) return [whole]
+  let best: string[] = [whole]
+  let bestMax = whole.length
+  const consider = (parts: string[]) => {
+    const longest = Math.max(...parts.map((p) => p.length))
+    if (longest < bestMax) {
+      bestMax = longest
+      best = parts
+    }
+  }
+  for (let i = 1; i < words.length; i++) consider([words.slice(0, i).join(' '), words.slice(i).join(' ')])
+  if (maxLines >= 3)
+    for (let i = 1; i < words.length - 1; i++)
+      for (let j = i + 1; j < words.length; j++)
+        consider([words.slice(0, i).join(' '), words.slice(i, j).join(' '), words.slice(j).join(' ')])
+  return best
 }

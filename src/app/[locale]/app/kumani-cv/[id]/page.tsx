@@ -62,6 +62,7 @@ export default async function CvDetailPage({
     skills: cv.skills || [],
     languages: cv.languages || [],
     certifications: cv.certifications || [],
+    extras: cv.extras || {},
     contentLanguage: cv.content_language,
   }
 
