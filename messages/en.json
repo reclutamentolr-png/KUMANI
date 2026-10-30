@@ -6935,7 +6935,10 @@
     "walletCouponTitle": "{service} pass – 1 year",
     "walletCouponHint": "Activate it yourself or give away the code:",
     "error_terms": "To continue, please accept the Terms of Service and the Privacy Policy.",
-    "error_soon": "Payments on KUMANI open when plans open: please try again in a few days."
+    "error_soon": "Payments on KUMANI open when plans open: please try again in a few days.",
+    "bundleIncludes": "With this Pass you also get: {services}",
+    "bundleChild": "This service is unlocked by the {services} Pass: for one year you get every service in “Looking for or have a job”.",
+    "bundleChildCta": "Go to the {service} Pass"
   },
   "toolTiers": {
     "intro": "Three levels: start with the free services, unlock the rest with a subscription or activate a single service with a Pass.",
@@ -17924,7 +17927,11 @@
     "tool4": "Which services go well with {tool}?",
     "moreQuestions": "More questions",
     "restart": "Delete the conversation and start again from the first questions",
-    "clearChat": "Clear chat"
+    "clearChat": "Clear chat",
+    "cat1": "Which “{tool}” service is right for me?",
+    "cat2": "Where do I start in “{tool}”?",
+    "cat3": "What can I do with the “{tool}” services?",
+    "cat4": "Which “{tool}” services are in my plan?"
   },
   "nfcTag": {
     "buyTitle": "What you need",

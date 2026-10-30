@@ -6,6 +6,7 @@ import { getFavoriteToolNames } from '@/lib/favorites'
 import { serviceGroupOf, type ServiceGroup } from '@/lib/serviceGroups'
 import { hubTabKey, TOOL_HUB } from '@/lib/serviceHubs'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
+import { passParentsOf } from '@/lib/passBundles'
 import type { CommunityItem } from '@/components/dashboard/CommunityBlock'
 
 // Tutti i servizi accesi dall'Admin, pronti per la pagina Servizi e la Home:
@@ -25,6 +26,9 @@ export type ServiceItem = {
   // Bloccato: dove si sblocca (Pass del singolo servizio, Pro o Plus)
   unlock: 'pass' | 'pro' | 'base' | null
   passPrice: string | null
+  // Pass da comprare per aprirlo: il suo, oppure quello del gruppo (es. il
+  // Pass KUMANI CV per la Lettera di presentazione)
+  passTool?: string
   guide: string | null
   // Sezioni della Community mostrate come servizi (icone, Home): colore
   // proprio (azzurro) e niente Pass né pagina pubblica (lib/communityItems)
@@ -53,7 +57,13 @@ export async function getServicesCatalog(
     .map((tool) => {
       const open = access.isToolEnabled(tool.toolName)
       const plan = access.requiredPlan(tool.toolName)
-      const passCents = open ? null : access.passPriceCents(tool.toolName)
+      // Senza un Pass suo, il Pass di un servizio del gruppo che lo apre
+      const passTool = open
+        ? undefined
+        : access.passPriceCents(tool.toolName) !== null
+          ? tool.toolName
+          : passParentsOf(tool.toolName).find((parent) => access.passPriceCents(parent) !== null)
+      const passCents = passTool ? access.passPriceCents(passTool) : null
       return {
         toolName: tool.toolName,
         // Sicurezza: il servizio e la scheda («Speculum · Email»)
@@ -67,6 +77,7 @@ export async function getServicesCatalog(
         plan,
         unlock: open ? null : passCents !== null ? 'pass' : plan === 'pro' ? 'pro' : 'base',
         passPrice: passCents !== null ? money(passCents) : null,
+        passTool,
         guide: toolGuideFor(tool.href),
       }
     })

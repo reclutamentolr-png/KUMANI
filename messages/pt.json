@@ -6935,7 +6935,10 @@
     "walletCouponTitle": "Passe {service} – 1 ano",
     "walletCouponHint": "Ative-o você ou ofereça o código:",
     "error_terms": "Para continuar, aceite os Termos de serviço e a Política de privacidade.",
-    "error_soon": "Os pagamentos na KUMANI abrem com a abertura dos planos: tenta de novo dentro de alguns dias."
+    "error_soon": "Os pagamentos na KUMANI abrem com a abertura dos planos: tenta de novo dentro de alguns dias.",
+    "bundleIncludes": "Com este Passe também usa: {services}",
+    "bundleChild": "Este serviço desbloqueia-se com o Passe de {services}: durante um ano abre todos os serviços de «Procuro ou tenho trabalho».",
+    "bundleChildCta": "Ir para o Passe {service}"
   },
   "toolTiers": {
     "intro": "Três níveis: comece pelos serviços gratuitos, desbloqueie o resto com uma subscrição ou ative um só serviço com um Passe.",
@@ -17924,7 +17927,11 @@
     "tool4": "Que serviços combinam com {tool}?",
     "moreQuestions": "Mais perguntas",
     "restart": "Apaga a conversa e volta às primeiras perguntas",
-    "clearChat": "Limpar chat"
+    "clearChat": "Limpar chat",
+    "cat1": "Que serviço de «{tool}» é o indicado para mim?",
+    "cat2": "Por onde começo em «{tool}»?",
+    "cat3": "O que posso fazer com os serviços de «{tool}»?",
+    "cat4": "Que serviços de «{tool}» estão no meu plano?"
   },
   "nfcTag": {
     "buyTitle": "O que precisa",

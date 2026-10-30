@@ -8,6 +8,9 @@ export type ServiceGroup = (typeof SERVICE_GROUPS)[number]
 // Le due parti della pagina Servizi: la vita di tutti i giorni e chi ha
 // un'attività (partita IVA, negozio, studio). «Documenti e file» sta in
 // tutte e due; la ricerca cerca sempre in tutti i servizi.
+// Avviso della pagina Servizi quando cambia categoria (lo ascolta la chat di KUMI)
+export const SERVICES_CATEGORY_EVENT = 'kumani:servizi-categoria'
+
 export const SERVICE_SEGMENTS = ['me', 'biz'] as const
 export type ServiceSegment = (typeof SERVICE_SEGMENTS)[number]
 export const SEGMENT_GROUPS: Record<ServiceSegment, ServiceGroup[]> = {

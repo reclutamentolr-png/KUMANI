@@ -208,7 +208,8 @@ export async function askKumi(question: string, locale: string, history: KumiTur
 
   const { data: knowledgeRows } = await s.from('kumi_chat_knowledge').select('id, question, answer').order('created_at', { ascending: false }).limit(200)
   const staffChunks: Chunk[] = (knowledgeRows ?? []).map((k) => ({ id: `staff:${k.id}`, title: k.question as string, text: `${k.question} ${k.answer}` }))
-  const knowledge = await pickKnowledge(lang, [q, ...turns.map((h) => h.q)].join(' '), staffChunks)
+  // Nella categoria aperta si cercano anche i testi dei suoi servizi
+  const knowledge = await pickKnowledge(lang, [q, ...turns.map((h) => h.q), where?.kind === 'category' ? where.tool ?? '' : ''].join(' '), staffChunks)
   const links = new Map<string, string>(Object.entries(fixedLinks))
   for (const c of knowledge.chunks) if (c.href?.startsWith('/guida/')) links.set(c.href, t('linkGuide', { name: c.title }))
 
@@ -228,7 +229,11 @@ export async function askKumi(question: string, locale: string, history: KumiTur
         ...(signedIn
           ? [
               'IMPORTANT: this person is ALREADY a KUMANI member and is logged in. Never invite them to sign up or register and never explain how to sign up. Help them use KUMANI and its services.',
-              where?.kind === 'tool' && where.tool ? `They are inside the service "${where.tool.slice(0, 60)}": questions without a name are about this service.` : `They are in the members' area (${where?.kind ?? 'home'}).`,
+              where?.kind === 'tool' && where.tool
+                ? `They are inside the service "${where.tool.slice(0, 60)}": questions without a name are about this service.`
+                : where?.kind === 'category' && where.tool
+                  ? `They are on the Services page, looking at the category "${where.tool.slice(0, 60)}": questions without a name are about the services of this category; suggest the right one for what they need.`
+                  : `They are in the members' area (${where?.kind ?? 'home'}).`,
             ]
           : ['When it helps, invite the person to sign up for free.']),
         'Choose up to 2 links from LINKS that really help, using the exact href.',

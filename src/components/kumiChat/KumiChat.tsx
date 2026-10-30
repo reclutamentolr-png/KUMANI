@@ -10,6 +10,7 @@ import { askKumi, kumiChatStatus, rateKumi, type KumiStatus } from '@/app/action
 import type { KumiLink } from '@/lib/kumiChat/knowledge'
 import { kumiPlaceOf } from '@/lib/kumiChat/places'
 import { KUMI_CHIPS, kumiContextOf } from '@/lib/kumiChat/context'
+import { SERVICES_CATEGORY_EVENT } from '@/lib/serviceGroups'
 import { getMarketplaceTools } from '@/lib/marketplaceTools'
 
 // Chiedi a KUMI: KUMI in basso a destra risponde a chi visita KUMANI la prima
@@ -76,6 +77,9 @@ const clearStore = () => {
 export default function KumiChat() {
   const t = useTranslations('kumiChat')
   const tm = useTranslations('marketplace')
+  const th = useTranslations('hub')
+  // Pagina Servizi: la categoria aperta (?categoria=…), per domande e risposte su quella
+  const [category, setCategory] = useState<string | null>(null)
   const locale = useLocale()
   const [status, setStatus] = useState<KumiStatus | null>(null)
   const [open, setOpen] = useState(false)
@@ -90,6 +94,17 @@ export default function KumiChat() {
   const restored = useRef(false)
   const pathname = usePathname()
   const path = pathname.replace(LOCALE_RE, '') || '/'
+
+  useEffect(() => {
+    const read = () => setCategory(new URLSearchParams(window.location.search).get('categoria'))
+    read()
+    window.addEventListener(SERVICES_CATEGORY_EVENT, read)
+    window.addEventListener('popstate', read)
+    return () => {
+      window.removeEventListener(SERVICES_CATEGORY_EVENT, read)
+      window.removeEventListener('popstate', read)
+    }
+  }, [pathname])
 
   // Si ricontrolla a ogni cambio di pagina finché la chat è per un visitatore:
   // appena la persona entra con il suo account, KUMI sparisce
@@ -167,7 +182,8 @@ export default function KumiChat() {
   // Chi è già dentro (iscritto o Staff) non riceve domande per visitatori; dentro un servizio KUMI sa quale
   const signedIn = status.staff || status.memberChat
   const toolTitle = path.startsWith('/app/') ? (getMarketplaceTools((k) => tm(k)).find((x) => path === x.href || path.startsWith(`${x.href}/`))?.title ?? null) : null
-  const context = kumiContextOf(path, signedIn, toolTitle)
+  const categoryName = category && th.has(`group_${category}`) ? th(`group_${category}`) : null
+  const context = kumiContextOf(path, signedIn, toolTitle, categoryName)
   const chips = KUMI_CHIPS[context.kind]
   const welcome = signedIn ? t('welcomeMember') : t('welcome')
 

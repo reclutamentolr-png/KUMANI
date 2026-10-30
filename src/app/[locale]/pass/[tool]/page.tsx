@@ -1,4 +1,5 @@
 import { notFound, redirect } from 'next/navigation'
+import { passBundleTools, passParentsOf } from '@/lib/passBundles'
 import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, BookOpen, CheckCircle2, Crown, Gift, Sparkles, Ticket } from 'lucide-react'
 import { toolGuideFor } from '@/lib/guides/toolGuides'
@@ -60,6 +61,15 @@ export default async function ToolPassPage({
   const price = fmtPrice(offer.priceCents / 100)
   const date = (iso: string) => new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
   const Icon = marketplaceIconMap[info.iconName] || Ticket
+  // Pass di gruppo: quali altri servizi apre, o quale Pass apre questo
+  const allTools = getMarketplaceTools((key) => marketplaceT(key))
+  const bundleNames = passBundleTools(tool)
+    .filter((name) => name !== tool)
+    .map((name) => allTools.find((item) => item.toolName === name)?.title)
+    .filter((name): name is string => !!name)
+  const parentTools = passParentsOf(tool)
+    .map((name) => allTools.find((item) => item.toolName === name))
+    .filter((item): item is NonNullable<typeof item> => !!item)
   const error = ERRORS.find((key) => key === sp.error)
 
   return (
@@ -127,7 +137,7 @@ export default async function ToolPassPage({
                 <span className="pb-1 text-sm text-[var(--muted)]">{t('priceLabel')}</span>
               </div>
               <ul className="mt-4 space-y-1.5 text-sm text-[var(--ink)]">
-                {[t('point1', { service: info.title }), t('point2'), t('point3')].map((line) => (
+                {[t('point1', { service: info.title }), ...(bundleNames.length ? [t('bundleIncludes', { services: bundleNames.join(', ') })] : []), t('point2'), t('point3')].map((line) => (
                   <li key={line} className="flex items-start gap-2">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--gold)]" /> {line}
                   </li>
@@ -160,7 +170,22 @@ export default async function ToolPassPage({
               )}
             </section>
           ) : (
-            !passExpiry && <p className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[var(--muted)]">{t('notForSale')}</p>
+            !passExpiry &&
+            (parentTools.length ? (
+              // Servizio aperto dal Pass di un altro servizio del gruppo
+              <section className="rounded-2xl border border-[var(--gold)]/45 bg-[var(--paper)] p-5 text-sm text-[var(--ink)]">
+                <p>{t('bundleChild', { services: parentTools.map((p) => p.title).join(' / ') })}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {parentTools.map((p) => (
+                    <Link key={p.toolName} href={`/pass/${p.toolName}`} className="rounded-xl bg-[var(--ink)] px-4 py-2.5 text-sm font-bold text-[var(--gold-bright)]">
+                      {t('bundleChildCta', { service: p.title })}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <p className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[var(--muted)]">{t('notForSale')}</p>
+            ))
           ))}
 
         {/* Codice pass */}

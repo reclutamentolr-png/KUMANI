@@ -33,7 +33,7 @@ import HubCards from '@/components/hubs/HubCards'
 import PlanTag from '@/components/PlanTag'
 import { HUB_GROUP, SERVICE_HUBS, TOOL_HUB } from '@/lib/serviceHubs'
 import { marketplaceIconMap } from '@/lib/marketplaceIcons'
-import { GROUP_PARTS, GROUP_STYLE, SEGMENT_GROUPS, SEGMENT_ONLY_PLANS, SERVICE_GROUPS, type ServiceGroup, type ServiceSegment } from '@/lib/serviceGroups'
+import { GROUP_PARTS, GROUP_STYLE, SEGMENT_GROUPS, SEGMENT_ONLY_PLANS, SERVICE_GROUPS, SERVICES_CATEGORY_EVENT, type ServiceGroup, type ServiceSegment } from '@/lib/serviceGroups'
 import type { ServiceItem } from '@/lib/servicesCatalog'
 import ServicesIcons from './ServicesIcons'
 import { CommunityBlock, type CommunityItem } from '@/components/dashboard/CommunityBlock'
@@ -66,7 +66,7 @@ const GROUP_KEY = 'kumani-servizi-categoria'
 // si sblocca (Pass del singolo servizio, Pro o Plus)
 export function serviceHref(item: ServiceItem) {
   if (item.open) return `${item.href}?from=dashboard`
-  if (item.unlock === 'pass') return `/pass/${item.toolName}`
+  if (item.unlock === 'pass') return `/pass/${item.passTool ?? item.toolName}`
   if (item.unlock === 'pro') return `/pro?tool=${item.toolName}`
   return '/billing'
 }
@@ -132,8 +132,12 @@ export default function ServicesBrowser({
 
   useEffect(() => {
     try {
-      const seg = localStorage.getItem(SEGMENT_KEY)
-      const group = localStorage.getItem(GROUP_KEY) as ServiceGroup | null
+      // Prima l'indirizzo (link condiviso, KUMI), poi l'ultima scelta ricordata
+      const url = new URLSearchParams(window.location.search)
+      const urlGroup = url.get('categoria') as ServiceGroup | null
+      const urlSeg = url.get('parte')
+      const seg = urlSeg === 'me' || urlSeg === 'biz' ? urlSeg : urlGroup ? (SEGMENT_GROUPS.me.includes(urlGroup) ? 'me' : 'biz') : localStorage.getItem(SEGMENT_KEY)
+      const group = urlGroup ?? (localStorage.getItem(GROUP_KEY) as ServiceGroup | null)
       if (seg !== 'me' && seg !== 'biz') return
       queueMicrotask(() => {
         setSegment(seg)
@@ -144,6 +148,17 @@ export default function ServicesBrowser({
     }
   }, [])
   const remember = (seg: ServiceSegment, group: ServiceGroup | null) => {
+    // Nell'indirizzo, senza ricaricare: link da condividere e KUMI sa dove si è
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.set('parte', seg)
+      if (group) url.searchParams.set('categoria', group)
+      else url.searchParams.delete('categoria')
+      window.history.replaceState(window.history.state, '', url)
+      window.dispatchEvent(new Event(SERVICES_CATEGORY_EVENT))
+    } catch {
+      // facoltativo
+    }
     try {
       localStorage.setItem(SEGMENT_KEY, seg)
       if (group) localStorage.setItem(GROUP_KEY, group)
