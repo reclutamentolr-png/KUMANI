@@ -13,6 +13,7 @@ import {
   isStatus,
   romeLocalToDate,
   romeToday,
+  safeAdUrl,
   type ApplicationEvent,
   type ApplicationForm,
   type ApplicationStatus,
@@ -58,6 +59,7 @@ function toApplication(row: Record<string, unknown>): JobApplication {
 type Fields = Record<string, string | number | null>
 
 function fields(form: ApplicationForm): { ok: true; row: Fields } | { ok: false; message: string } {
+  if (!form || typeof form !== 'object') return { ok: false, message: 'saveError' }
   const company = clip(form.company, APPLICATION_LIMITS.company)
   if (!company) return { ok: false, message: 'companyRequired' }
 
@@ -66,7 +68,8 @@ function fields(form: ApplicationForm): { ok: true; row: Fields } | { ok: false;
 
   const rawUrl = clip(form.adUrl, APPLICATION_LIMITS.adUrl)
   const url = rawUrl ? normalizeExternalUrl(rawUrl) : ''
-  if (url && (!/^https?:\/\/[^\s/]+\.[^\s]+/i.test(url) || url.length > APPLICATION_LIMITS.adUrl)) return { ok: false, message: 'badUrl' }
+  // Solo http/https con un dominio, senza spazi (niente javascript:, mailto:, //…)
+  if (url && !safeAdUrl(url)) return { ok: false, message: 'badUrl' }
 
   let interviewAt: string | null = null
   if (form.interviewAt) {
@@ -80,6 +83,8 @@ function fields(form: ApplicationForm): { ok: true; row: Fields } | { ok: false;
   if (rawSalary) {
     // «1.400», «1400,50», «1 400 €»: si tengono cifre e separatori
     const cleaned = rawSalary.replace(/[^\d.,]/g, '')
+    // «da definire», «-»: senza cifre non è uno stipendio (prima diventava 0 €)
+    if (!/\d/.test(cleaned)) return { ok: false, message: 'badSalary' }
     const normalized = /,\d{1,2}$/.test(cleaned) ? cleaned.replace(/\./g, '').replace(',', '.') : cleaned.replace(/[.,](?=\d{3}(\D|$))/g, '').replace(',', '.')
     salary = Number(normalized)
     if (!Number.isFinite(salary) || salary < 0 || salary > 10_000_000) return { ok: false, message: 'badSalary' }

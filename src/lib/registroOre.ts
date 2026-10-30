@@ -66,6 +66,11 @@ export function romeParts(ms: number): { date: string; time: string } {
  *   si va avanti di un'ora, come fa l'orologio (02:30 → 03:30).
  */
 export function romeLocalToMs(date: string, time: string): number {
+  return romeLocalCandidates(date, time)[0]
+}
+
+/** Tutti gli istanti in cui l'orologio italiano segna quel giorno e quell'ora (due nell'ora doppia), in ordine. */
+function romeLocalCandidates(date: string, time: string): number[] {
   const [y, m, d] = date.split('-').map(Number)
   const [h, mi] = time.split(':').map(Number)
   const naive = Date.UTC(y, m - 1, d, h, mi)
@@ -73,8 +78,17 @@ export function romeLocalToMs(date: string, time: string): number {
     const p = romeParts(ms)
     return p.date === date && p.time === time
   })
-  if (valid.length) return Math.min(...valid)
-  return naive - HOUR
+  return valid.length ? valid : [naive - HOUR]
+}
+
+/**
+ * Prima volta dopo startMs in cui l'orologio segna «time», il giorno «date»
+ * o quello dopo. Nell'ora doppia (ritorno all'ora solare) un turno
+ * 02:30–02:15 dura 45 minuti: la fine è la seconda 02:15, non il giorno dopo.
+ */
+function firstAfter(startMs: number, date: string, time: string): number {
+  const next = [...romeLocalCandidates(date, time), ...romeLocalCandidates(addDays(date, 1), time)].find((ms) => ms > startMs)
+  return next ?? romeLocalToMs(addDays(date, 1), time)
 }
 
 export function addDays(date: string, days: number): string {
@@ -198,8 +212,7 @@ export function shiftTimes(
   const startMs = romeLocalToMs(date, start)
   if (end === null) return { ok: true, startMs, endMs: null }
   if (end === start) return { ok: false, error: 'same' }
-  let endMs = romeLocalToMs(date, end)
-  if (endMs <= startMs) endMs = romeLocalToMs(addDays(date, 1), end)
+  const endMs = firstAfter(startMs, date, end)
   if (endMs - startMs > 24 * HOUR) return { ok: false, error: 'tooLong' }
   return { ok: true, startMs, endMs }
 }
@@ -207,10 +220,14 @@ export function shiftTimes(
 /** Fine di un turno già iniziato: la prima volta dopo l'inizio in cui l'orologio segna «end». */
 export function endAfter(startMs: number, end: string): number | null {
   if (!TIME_RE.test(end)) return null
-  const day = romeParts(startMs).date
-  let endMs = romeLocalToMs(day, end)
-  if (endMs <= startMs) endMs = romeLocalToMs(addDays(day, 1), end)
-  return endMs
+  return firstAfter(startMs, romeParts(startMs).date, end)
+}
+
+/** I due intervalli [inizio, fine) si sovrappongono (fine null = turno in corso, fino ad adesso). */
+export function shiftsOverlap(aStart: number, aEnd: number | null, bStart: number, bEnd: number | null, now = Date.now()): boolean {
+  const ae = aEnd ?? Math.max(now, aStart + MINUTE)
+  const be = bEnd ?? Math.max(now, bStart + MINUTE)
+  return aStart < be && bStart < ae
 }
 
 /** Minuti dall'inizio alla fine (tempo vero, pausa compresa). */

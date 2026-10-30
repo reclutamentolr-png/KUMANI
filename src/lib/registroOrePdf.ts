@@ -217,7 +217,8 @@ export async function buildRegistroPdf(params: {
           cells: {
             day: index === 0 ? dayLabel : '',
             place: placeById.get(s.place_id)?.name ?? '',
-            time: `${romeTime(s.starts_at)}–${romeTime(s.ends_at!)}${endsNextDay(s) ? ` ${L.nextDay}` : ''}`,
+            time: `${romeTime(s.starts_at)}–${romeTime(s.ends_at!)}`,
+            timeNext: endsNextDay(s) ? L.nextDay : '',
             break: s.break_minutes ? String(s.break_minutes) : '',
             hours: formatHM(workedMinutes(s)),
             over: over ? formatHM(over) : '',
@@ -230,7 +231,15 @@ export async function buildRegistroPdf(params: {
       font(false, 8)
       const noteLines = row.notes.length && row.notes[0] ? (doc.splitTextToSize(row.notes[0], colW.notes - 8) as string[]) : []
       const placeLines = multiPlace && row.cells.place ? (doc.splitTextToSize(row.cells.place, colW.place - 8) as string[]) : []
-      const h = Math.max(16, Math.max(noteLines.length, placeLines.length, 1) * 10 + 6)
+      // Orario con «+1 giorno»: se non ci sta va a capo invece di finire sulla colonna dopo
+      font(false, 8.5)
+      const fullTime = row.cells.time ? `${row.cells.time}${row.cells.timeNext ? ` ${row.cells.timeNext}` : ''}` : ''
+      const timeLines = !fullTime
+        ? []
+        : doc.getTextWidth(fullTime) <= colW.time - 8 || !row.cells.timeNext
+          ? [fullTime]
+          : [row.cells.time, row.cells.timeNext]
+      const h = Math.max(16, Math.max(noteLines.length, placeLines.length, timeLines.length, 1) * 10 + 6)
       ensure(h)
       if (special) {
         doc.setFillColor(...SOFT)
@@ -245,6 +254,11 @@ export async function buildRegistroPdf(params: {
         if (c.key === 'place') {
           font(false, 8)
           if (placeLines.length) doc.text(placeLines, colX.place + 4, y + 11)
+          continue
+        }
+        if (c.key === 'time') {
+          font(false, 8.5)
+          if (timeLines.length) doc.text(timeLines, colX.time + 4, y + 11, { lineHeightFactor: 10 / 8.5 })
           continue
         }
         const text = row.cells[c.key] ?? ''

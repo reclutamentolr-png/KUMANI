@@ -44,7 +44,7 @@ export default function ToolPassSetting({
   }
 
   return (
-    <div className="mb-4 rounded-lg border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-3">
+    <div className="mb-3 rounded-lg border border-[var(--gold)]/30 bg-[var(--gold-pale)]/40 p-2.5">
       <div className="flex flex-wrap items-center gap-3">
         <label className="flex items-center gap-2 text-xs font-semibold uppercase text-gray-600">
           <input type="checkbox" checked={on} onChange={(e) => setOn(e.target.checked)} className="h-4 w-4 accent-[var(--gold)]" />

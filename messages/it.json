@@ -18416,7 +18416,11 @@
     "error_breakTooLong": "La pausa è più lunga del turno.",
     "error_future": "Un turno in corso non può cominciare nel futuro.",
     "error_nothingYesterday": "Ieri non hai segnato turni da ripetere.",
-    "error_saveError": "Non sono riuscito a salvare. Riprova tra poco."
+    "error_saveError": "Non sono riuscito a salvare. Riprova tra poco.",
+    "error_overlap": "Questo turno si sovrappone a un altro già segnato (anche in un altro posto, o al turno in corso). Controlla gli orari.",
+    "error_alreadyClosed": "Questo turno è già stato chiuso, forse da un altro dispositivo. Ho aggiornato la pagina.",
+    "error_alreadyRepeated": "I turni di ieri sono già stati copiati su oggi.",
+    "error_loadError": "Non sono riuscito a caricare i turni. Controlla la connessione e riprova."
   },
   "candidature": {
     "back": "Torna all’Ecosistema",
@@ -18580,10 +18584,10 @@
     "profileSavedFirst": "Dati salvati. Ora puoi fare la tua prima ricevuta.",
     "saveProfile": "Salva i miei dati",
     "fieldKind": "Chi ti paga?",
-    "kindPrivate": "Un privato",
-    "kindPrivateText": "Una persona, per sé o per la sua famiglia. Nessuna ritenuta.",
-    "kindWithholding": "Azienda, professionista o ente",
-    "kindWithholdingText": "Ha la partita IVA o è un ente: trattiene il 20% e lo versa allo Stato per te (sostituto d’imposta).",
+    "kindPrivate": "Senza ritenuta",
+    "kindPrivateText": "Un privato (per sé o per la famiglia), chi ha la partita IVA nel regime forfettario o chi è all’estero.",
+    "kindWithholding": "Con ritenuta (sostituto d’imposta)",
+    "kindWithholdingText": "Azienda, professionista in regime ordinario, ente o condominio: trattiene il 20% e lo versa allo Stato per te. Nel dubbio chiedi al cliente se applica la ritenuta.",
     "fieldClientName": "Nome e cognome o ragione sociale",
     "fieldClientTaxId": "Codice fiscale o partita IVA",
     "optional": "(facoltativo)",
@@ -18618,7 +18622,7 @@
     "calcStampCharged": "Marca da bollo (la paga il cliente)",
     "calcTotal": "Totale ricevuta",
     "calcWithholding": "Ritenuta d’acconto 20% su {base}",
-    "calcNoWithholding": "Nessuna ritenuta: paga un privato.",
+    "calcNoWithholding": "Nessuna ritenuta: il cliente non è sostituto d’imposta.",
     "calcNet": "Netto da pagare",
     "calcChooseClient": "Scegli il cliente per sapere se c’è la ritenuta.",
     "stampRequired": "L’importo supera 77,47 €: sull’originale serve una marca da bollo da 2 €. Chi la paga?",
@@ -18697,7 +18701,7 @@
     "error_clientNameRequired": "Scrivi il nome del cliente.",
     "error_clientTaxIdFormat": "Il codice del cliente non è scritto bene: 16 caratteri (codice fiscale) o 11 cifre (partita IVA).",
     "error_clientTaxIdChecksum": "Il codice fiscale o la partita IVA del cliente non torna: controlla di averlo copiato bene.",
-    "error_clientTaxIdRequired": "Per un’azienda, un professionista o un ente serve il codice fiscale o la partita IVA.",
+    "error_clientTaxIdRequired": "Se il cliente applica la ritenuta serve il suo codice fiscale o la sua partita IVA.",
     "error_profileMissing": "Prima scrivi i tuoi dati.",
     "error_dateInvalid": "Una data non è valida.",
     "error_periodInvalid": "Il periodo non torna: il giorno finale viene prima di quello iniziale.",
@@ -18706,7 +18710,8 @@
     "error_expensesInvalid": "Il rimborso spese non è valido.",
     "error_stampIdInvalid": "Il numero della marca da bollo contiene solo cifre.",
     "error_clientMissing": "Scegli il cliente.",
-    "error_notLast": "Si può eliminare solo l’ultima ricevuta dell’anno. Questa puoi annullarla."
+    "error_notLast": "Si può eliminare solo l’ultima ricevuta dell’anno. Questa puoi annullarla.",
+    "loadError": "Non siamo riusciti a leggere le ricevute. Ricarica la pagina."
   },
   "noteSpese": {
     "title": "Note spese",
@@ -18840,7 +18845,9 @@
     "error_rateInvalid": "Scrivi la tariffa al km, ad esempio 0,45.",
     "error_dateRequired": "Scegli la data della spesa.",
     "error_tooManyItems": "Questa nota spese ha troppe voci. Creane una nuova.",
-    "error_pdf": "Non sono riuscito a creare il PDF. Riprova."
+    "error_pdf": "Non sono riuscito a creare il PDF. Riprova.",
+    "error_load": "Non sono riuscito a leggere le tue note spese. Ricarica la pagina tra poco: i dati non sono persi.",
+    "pdfPhotosMissing": "{n, plural, one {Il PDF è pronto, ma # foto di scontrino non si è scaricata. Controlla la connessione e scarica di nuovo il PDF.} other {Il PDF è pronto, ma # foto di scontrini non si sono scaricate. Controlla la connessione e scarica di nuovo il PDF.}}"
   },
   "letteraPresentazione": {
     "title": "Lettera di presentazione",
@@ -18942,6 +18949,7 @@
     "error_deleteError": "Non è stato possibile eliminare la lettera. Riprova.",
     "error_noAccess": "Questo servizio non è attivo per il tuo account.",
     "error_titleRequired": "Scrivi il nome della lettera.",
-    "error_notFound": "Questa lettera non c’è più."
+    "error_notFound": "Questa lettera non c’è più.",
+    "leaveConfirm": "La lettera ha modifiche non salvate. Se esci adesso le perdi. Vuoi uscire lo stesso?"
   }
 }

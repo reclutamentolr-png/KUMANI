@@ -18416,7 +18416,11 @@
     "error_breakTooLong": "La pausa es más larga que el turno.",
     "error_future": "Un turno en curso no puede empezar en el futuro.",
     "error_nothingYesterday": "Ayer no apuntaste turnos para repetir.",
-    "error_saveError": "No he podido guardar. Inténtalo de nuevo en un momento."
+    "error_saveError": "No he podido guardar. Inténtalo de nuevo en un momento.",
+    "error_overlap": "Este turno se solapa con otro ya registrado (también en otro lugar de trabajo o con el turno en curso). Revisa los horarios.",
+    "error_alreadyClosed": "Este turno ya se ha cerrado, quizá desde otro dispositivo. He actualizado la página.",
+    "error_alreadyRepeated": "Los turnos de ayer ya se han copiado a hoy.",
+    "error_loadError": "No he podido cargar los turnos. Revisa la conexión e inténtalo de nuevo."
   },
   "candidature": {
     "back": "Volver al Ecosistema",
@@ -18580,10 +18584,10 @@
     "profileSavedFirst": "Datos guardados. Ya puedes hacer tu primer recibo.",
     "saveProfile": "Guardar mis datos",
     "fieldKind": "¿Quién te paga?",
-    "kindPrivate": "Un particular",
-    "kindPrivateText": "Una persona, para sí o para su familia. Sin retención.",
-    "kindWithholding": "Empresa, profesional o entidad",
-    "kindWithholdingText": "Tiene número de IVA o es una entidad: retiene el 20 % y lo paga al Estado por ti (retenedor).",
+    "kindPrivate": "Sin retención",
+    "kindPrivateText": "Un particular (para sí o para su familia), quien tiene número de IVA en el régimen forfettario o quien está en el extranjero.",
+    "kindWithholding": "Con retención (sostituto d’imposta)",
+    "kindWithholdingText": "Empresa, profesional en régimen ordinario, entidad o comunidad de vecinos: retiene el 20% y lo ingresa al Estado por ti. Si tienes dudas, pregunta al cliente si aplica la retención.",
     "fieldClientName": "Nombre y apellidos o razón social",
     "fieldClientTaxId": "Código fiscal o número de IVA",
     "optional": "(opcional)",
@@ -18618,7 +18622,7 @@
     "calcStampCharged": "Timbre fiscal (lo paga el cliente)",
     "calcTotal": "Total del recibo",
     "calcWithholding": "Retención a cuenta 20 % sobre {base}",
-    "calcNoWithholding": "Sin retención: paga un particular.",
+    "calcNoWithholding": "Sin retención: el cliente no es agente de retención.",
     "calcNet": "Neto a pagar",
     "calcChooseClient": "Elige el cliente para saber si hay retención.",
     "stampRequired": "El importe supera 77,47 €: el original necesita un timbre fiscal de 2 €. ¿Quién lo paga?",
@@ -18697,7 +18701,7 @@
     "error_clientNameRequired": "Escribe el nombre del cliente.",
     "error_clientTaxIdFormat": "El código del cliente no está bien escrito: 16 caracteres (código fiscal) u 11 cifras (número de IVA).",
     "error_clientTaxIdChecksum": "El código fiscal o el número de IVA del cliente no cuadra: comprueba que lo has copiado bien.",
-    "error_clientTaxIdRequired": "Para una empresa, un profesional o una entidad hace falta el código fiscal o el número de IVA.",
+    "error_clientTaxIdRequired": "Si el cliente aplica la retención, hace falta su código fiscal o su número de IVA.",
     "error_profileMissing": "Primero escribe tus datos.",
     "error_dateInvalid": "Una fecha no es válida.",
     "error_periodInvalid": "El periodo no cuadra: el día final va antes del inicial.",
@@ -18706,7 +18710,8 @@
     "error_expensesInvalid": "El reembolso de gastos no es válido.",
     "error_stampIdInvalid": "El número del timbre fiscal solo tiene cifras.",
     "error_clientMissing": "Elige el cliente.",
-    "error_notLast": "Solo se puede eliminar el último recibo del año. Este puedes anularlo."
+    "error_notLast": "Solo se puede eliminar el último recibo del año. Este puedes anularlo.",
+    "loadError": "No hemos podido cargar los recibos. Vuelve a cargar la página."
   },
   "noteSpese": {
     "title": "Notas de gastos",
@@ -18840,7 +18845,9 @@
     "error_rateInvalid": "Escribe la tarifa por km, por ejemplo 0,45.",
     "error_dateRequired": "Elige la fecha del gasto.",
     "error_tooManyItems": "Esta nota de gastos tiene demasiados gastos. Crea una nueva.",
-    "error_pdf": "No se pudo crear el PDF. Inténtalo de nuevo."
+    "error_pdf": "No se pudo crear el PDF. Inténtalo de nuevo.",
+    "error_load": "No he podido cargar tus notas de gastos. Vuelve a cargar la página dentro de un momento: tus datos no se han perdido.",
+    "pdfPhotosMissing": "{n, plural, one {El PDF está listo, pero no se ha podido descargar # foto de ticket. Comprueba la conexión y descarga de nuevo el PDF.} other {El PDF está listo, pero no se han podido descargar # fotos de tickets. Comprueba la conexión y descarga de nuevo el PDF.}}"
   },
   "letteraPresentazione": {
     "title": "Carta de presentación",
@@ -18942,6 +18949,7 @@
     "error_deleteError": "No se ha podido eliminar la carta. Inténtalo de nuevo.",
     "error_noAccess": "Este servicio no está activo en tu cuenta.",
     "error_titleRequired": "Escribe el nombre de la carta.",
-    "error_notFound": "Esta carta ya no existe."
+    "error_notFound": "Esta carta ya no existe.",
+    "leaveConfirm": "La carta tiene cambios sin guardar. Si sales ahora, se perderán. ¿Quieres salir de todos modos?"
   }
 }

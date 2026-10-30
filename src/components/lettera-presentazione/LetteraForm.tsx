@@ -6,6 +6,7 @@ import { CheckCircle, Eye, FileUser, LoaderCircle, Pencil, Plus, XCircle } from 
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { createCoverLetter, updateCoverLetter } from '@/app/actions/letteraPresentazione'
 import { limitTextOf } from '@/lib/limitText'
+import { askConfirm } from '@/lib/confirm'
 import CvTemplatePicker from '@/components/cv/CvTemplatePicker'
 import LetteraPreview from './LetteraPreview'
 import LetteraPdfButtons from './LetteraPdfButtons'
@@ -57,6 +58,10 @@ export default function LetteraForm({ mode, id, initial, cvSender }: Props) {
   const [savedNote, setSavedNote] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const caret = useRef<number | null>(null)
+  const leaving = useRef(false)
+  // Lettera nuova già creata: il pulsante resta fermo mentre si apre la
+  // pagina della lettera (un secondo tocco ne creerebbe un'altra uguale)
+  const [created, setCreated] = useState(false)
 
   const dirty = JSON.stringify(form) !== JSON.stringify(saved)
   const phrases = LETTER_PHRASES[form.language]
@@ -65,10 +70,34 @@ export default function LetteraForm({ mode, id, initial, cvSender }: Props) {
   // Uscendo con modifiche non salvate il browser chiede conferma
   useEffect(() => {
     if (!dirty) return
-    const warn = (e: BeforeUnloadEvent) => e.preventDefault()
+    const warn = (e: BeforeUnloadEvent) => {
+      if (!leaving.current) e.preventDefault()
+    }
     window.addEventListener('beforeunload', warn)
     return () => window.removeEventListener('beforeunload', warn)
   }, [dirty])
+
+  // Anche i collegamenti dentro il sito («Le mie lettere», barra in alto…):
+  // il browser non chiede niente, quindi si chiede qui prima di uscire
+  useEffect(() => {
+    if (!dirty) return
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      const a = e.target instanceof Element ? e.target.closest('a[href]') : null
+      if (!(a instanceof HTMLAnchorElement) || (a.target && a.target !== '_self') || a.hasAttribute('download')) return
+      const url = new URL(a.href, window.location.href)
+      if (url.origin !== window.location.origin || (url.pathname === window.location.pathname && url.search === window.location.search)) return
+      e.preventDefault()
+      e.stopPropagation()
+      void askConfirm(t.has('leaveConfirm') ? t('leaveConfirm') : t('unsaved'), { tone: 'warning' }).then((ok) => {
+        if (!ok) return
+        leaving.current = true
+        window.location.assign(url.href)
+      })
+    }
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
+  }, [dirty, t])
 
   // Ruolo cercato: l'oggetto lo segue finché non lo si cambia a mano
   const setPosition = (position: string) =>
@@ -123,7 +152,7 @@ export default function LetteraForm({ mode, id, initial, cvSender }: Props) {
   const isValid = form.title.trim().length > 0
 
   const handleSave = async () => {
-    if (!isValid || saving) return
+    if (!isValid || saving || created) return
     setSaving(true)
     setError(null)
     try {
@@ -133,6 +162,7 @@ export default function LetteraForm({ mode, id, initial, cvSender }: Props) {
           setError(limitTextOf(result) ?? (t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')))
           return
         }
+        setCreated(true)
         setSaved(form)
         router.replace(`/app/lettera-presentazione/${result.data.id}`)
       } else {
@@ -350,7 +380,7 @@ export default function LetteraForm({ mode, id, initial, cvSender }: Props) {
         <button
           type="button"
           onClick={handleSave}
-          disabled={!isValid || saving || (mode === 'edit' && !dirty)}
+          disabled={!isValid || saving || created || (mode === 'edit' && !dirty)}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)] px-6 py-3 font-bold text-[var(--ink)] shadow-md transition-all hover:brightness-105 disabled:opacity-50"
         >
           {saving ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <CheckCircle className="h-5 w-5" />}

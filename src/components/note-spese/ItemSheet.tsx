@@ -22,9 +22,11 @@ import {
   formatCents,
   formatKm,
   formatRate,
+  kmToInput,
   mileageCents,
   parseDecimal,
   receiptExtension,
+  roundTo,
   type ExpenseCategory,
   type ExpenseItem,
   type ItemFormData,
@@ -70,7 +72,7 @@ export default function ItemSheet({
           amount: item.category === 'mileage' ? '' : centsToInput(item.amount_cents, locale),
           routeFrom: item.route_from ?? '',
           routeTo: item.route_to ?? '',
-          km: item.km ? formatKm(item.km, locale) : '',
+          km: item.km ? kmToInput(item.km, locale) : '',
           roundTrip: item.round_trip,
           kmRate: rateText(item.km_rate),
         }
@@ -112,25 +114,31 @@ export default function ItemSheet({
     const preview = URL.createObjectURL(original)
     previews.current.push(preview)
     setPhoto({ kind: 'uploading', preview })
-    // Foto del telefono ridotta prima del caricamento (da 3–5 MB a circa 300 KB)
-    const file = await resizeImageFile(original, RECEIPT_MAX_SIDE, RECEIPT_QUALITY, { keepIfUnderBytes: 400 * 1024 })
     const fail = (message: string) => {
       if (seq !== uploadSeq.current) return
       setPhotoError(message)
       setPhoto(item?.receipt_path && !removeReceipt ? { kind: 'saved', url: item.receipt_url } : { kind: 'none' })
     }
-    if (!file || !RECEIPT_TYPES.includes(file.type)) return fail(t('photoTypeError'))
-    if (file.size > RECEIPT_MAX_BYTES) return fail(t('photoSizeError'))
-    const supabase = createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) return fail(t('photoError'))
-    const path = `${user.id}/${reportId}/${crypto.randomUUID()}.${receiptExtension(file)}`
-    const { error: upError } = await supabase.storage.from(EXPENSE_BUCKET).upload(path, file, { contentType: file.type, upsert: false })
-    if (upError) return fail(/row-level security/i.test(upError.message) ? t('photoLimitError') : t('photoError'))
-    if (seq !== uploadSeq.current) return
-    setPhoto({ kind: 'ready', preview, path })
+    // Rete caduta o errore imprevisto: la finestra non resta bloccata su «Caricamento»
+    try {
+      // Foto del telefono ridotta prima del caricamento (da 3–5 MB a circa 300 KB)
+      const file = await resizeImageFile(original, RECEIPT_MAX_SIDE, RECEIPT_QUALITY, { keepIfUnderBytes: 400 * 1024 })
+      if (!file || !RECEIPT_TYPES.includes(file.type)) return fail(t('photoTypeError'))
+      if (file.size > RECEIPT_MAX_BYTES) return fail(t('photoSizeError'))
+      const supabase = createClient()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return fail(t('photoError'))
+      const path = `${user.id}/${reportId}/${crypto.randomUUID()}.${receiptExtension(file)}`
+      const { error: upError } = await supabase.storage.from(EXPENSE_BUCKET).upload(path, file, { contentType: file.type, upsert: false })
+      if (upError) return fail(/row-level security/i.test(upError.message) ? t('photoLimitError') : t('photoError'))
+      if (seq !== uploadSeq.current) return
+      setPhoto({ kind: 'ready', preview, path })
+    } catch (e) {
+      console.error('[NoteSpese] upload', e)
+      fail(t('photoError'))
+    }
   }
 
   // Foto arrivata dal pulsante «Foto scontrino»: si carica subito
@@ -158,15 +166,25 @@ export default function ItemSheet({
   // Importo dei chilometri calcolato mentre si scrive
   const km = parseDecimal(form.km)
   const rate = parseDecimal(form.kmRate)
-  const mileage = isMileage && km && rate && km > 0 && rate > 0 ? mileageCents(Math.round(km * 10) / 10, form.roundTrip, Math.round(rate * 10000) / 10000) : null
+  const kmRounded = km ? roundTo(km, 1) : 0
+  const rateRounded = rate ? roundTo(rate, 4) : 0
+  const mileage = isMileage && kmRounded > 0 && rateRounded > 0 ? mileageCents(kmRounded, form.roundTrip, rateRounded) : null
 
+  // Doppio tocco su «Salva»: una voce sola
+  const submitting = useRef(false)
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (photo.kind === 'uploading') return
+    if (photo.kind === 'uploading' || submitting.current) return
+    submitting.current = true
     setBusy(true)
     setError(null)
-    const result = await saveItem(reportId, item?.id ?? null, form, photo.kind === 'ready' ? photo.path : null, removeReceipt)
+    const result = await saveItem(reportId, item?.id ?? null, form, photo.kind === 'ready' ? photo.path : null, removeReceipt).catch(() => null)
+    submitting.current = false
     setBusy(false)
+    if (!result) {
+      setError(t('error_saveError'))
+      return
+    }
     if (!result.success) {
       setError(limitTextOf(result) ?? (t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')))
       return
@@ -177,9 +195,9 @@ export default function ItemSheet({
   const remove = async () => {
     if (!item || !(await askConfirm(t('itemDeleteConfirm')))) return
     setBusy(true)
-    const result = await deleteItem(item.id)
+    const result = await deleteItem(item.id).catch(() => null)
     setBusy(false)
-    if (result.success) onDeleted(item.id)
+    if (result?.success) onDeleted(item.id)
     else setError(t('error_saveError'))
   }
 
@@ -254,10 +272,10 @@ export default function ItemSheet({
               {t('rateHelp')}
             </p>
             <div className="rounded-xl bg-[var(--ink)] px-3 py-2.5 text-white">
-              {mileage !== null && km && rate ? (
+              {mileage !== null ? (
                 <p className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
                   <span className="text-white/70">
-                    {t('mileageCalc', { km: formatKm(Math.round(km * 10) / 10 * (form.roundTrip ? 2 : 1), locale), rate: formatRate(rate, locale) })}
+                    {t('mileageCalc', { km: formatKm(kmRounded * (form.roundTrip ? 2 : 1), locale), rate: formatRate(rateRounded, locale) })}
                   </span>
                   <span className="text-lg font-bold text-[var(--gold-bright)]">{formatCents(mileage, locale)}</span>
                 </p>

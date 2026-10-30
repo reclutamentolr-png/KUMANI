@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Building2, LoaderCircle, Save, User } from 'lucide-react'
 import CancelButton, { cancelButtonLgClass } from '@/components/ui/CancelButton'
@@ -77,7 +77,7 @@ export function ProfileForm({ profile, onSaved }: { profile: IssuerProfile | nul
     if (cf) return setError(errorText(cf === 'format' ? 'taxCodeFormat' : 'taxCodeChecksum'))
     if (form.iban.trim() && !validateIban(form.iban).valid) return setError(errorText('ibanInvalid'))
     setBusy(true)
-    const result = await saveProfile(form)
+    const result = await saveProfile(form).catch(() => ({ success: false as const, message: 'saveError' }))
     setBusy(false)
     if (!result.success) return setError(errorText(result.message))
     setDone(true)
@@ -224,7 +224,7 @@ export function ClientSheetForm({ client, onSaved }: { client: ReceiptClient | n
     const err = clientError(form)
     if (err) return setError(errorText(err))
     setBusy(true)
-    const result = await saveClient(client?.id ?? null, form)
+    const result = await saveClient(client?.id ?? null, form).catch(() => ({ success: false as const, message: 'saveError' }))
     setBusy(false)
     if (!result.success) return setError(errorText(result.message))
     onSaved(result.data)
@@ -291,6 +291,8 @@ export function ReceiptSheetForm({
   const [note, setNote] = useState(receipt?.note ?? '')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Doppio clic: una ricevuta sola (ogni invio prende un numero nuovo)
+  const sending = useRef(false)
 
   const chosen = clientChoice && clientChoice !== NEW_CLIENT ? clients.find((c) => c.id === clientChoice) : undefined
   const kind: ClientKind | null = chosen ? chosen.kind : clientChoice === NEW_CLIENT ? newClient.kind : null
@@ -323,6 +325,8 @@ export function ReceiptSheetForm({
     if (expensesCents === null) return setError(errorText('expensesInvalid'))
     if (periodFrom && periodTo && periodTo < periodFrom) return setError(errorText('periodInvalid'))
     if (receipt && Number(issueDate.slice(0, 4)) !== receipt.year) return setError(errorText('yearChange'))
+    if (sending.current) return
+    sending.current = true
     setBusy(true)
     const form = {
       issueDate,
@@ -341,7 +345,8 @@ export function ReceiptSheetForm({
       paidOn: paid ? paidOn : '',
       note,
     }
-    const result = receipt ? await updateReceipt(receipt.id, form) : await createReceipt(form)
+    const result = await (receipt ? updateReceipt(receipt.id, form) : createReceipt(form)).catch(() => ({ success: false as const, message: 'saveError' }))
+    sending.current = false
     setBusy(false)
     if (!result.success) return setError(errorText(result.message))
     onSaved(result.data.receipt, result.data.client)
@@ -507,7 +512,7 @@ export function ReceiptSheetForm({
         {paid && (
           <div>
             <label className={labelClass} htmlFor="ro-paid-on">{t('fieldPaidOn')}</label>
-            <input id="ro-paid-on" type="date" className={inputClass} value={paidOn} onChange={(e) => setPaidOn(e.target.value)} />
+            <input id="ro-paid-on" type="date" required className={inputClass} value={paidOn} onChange={(e) => setPaidOn(e.target.value)} />
           </div>
         )}
         <div>

@@ -18416,7 +18416,11 @@
     "error_breakTooLong": "La pause est plus longue que le service.",
     "error_future": "Un service en cours ne peut pas commencer dans le futur.",
     "error_nothingYesterday": "Vous n’avez noté aucun service hier à répéter.",
-    "error_saveError": "Je n’ai pas réussi à enregistrer. Réessayez dans un instant."
+    "error_saveError": "Je n’ai pas réussi à enregistrer. Réessayez dans un instant.",
+    "error_overlap": "Ce service chevauche un autre déjà enregistré (même sur un autre lieu de travail, ou le service en cours). Vérifiez les horaires.",
+    "error_alreadyClosed": "Ce service a déjà été terminé, peut-être depuis un autre appareil. J’ai actualisé la page.",
+    "error_alreadyRepeated": "Les services d’hier ont déjà été copiés sur aujourd’hui.",
+    "error_loadError": "Je n’ai pas réussi à charger les services. Vérifiez la connexion et réessayez."
   },
   "candidature": {
     "back": "Retour à l’Écosystème",
@@ -18580,10 +18584,10 @@
     "profileSavedFirst": "Données enregistrées. Vous pouvez maintenant faire votre premier reçu.",
     "saveProfile": "Enregistrer mes données",
     "fieldKind": "Qui vous paie ?",
-    "kindPrivate": "Un particulier",
-    "kindPrivateText": "Une personne, pour elle-même ou sa famille. Pas de retenue.",
-    "kindWithholding": "Entreprise, professionnel ou organisme",
-    "kindWithholdingText": "A un numéro de TVA ou est un organisme : retient 20 % et le verse à l’État pour vous (agent de retenue).",
+    "kindPrivate": "Sans retenue",
+    "kindPrivateText": "Un particulier (pour lui ou sa famille), une personne avec un numéro de TVA au régime forfaitaire (forfettario) ou une personne à l’étranger.",
+    "kindWithholding": "Avec retenue (agent de retenue)",
+    "kindWithholdingText": "Entreprise, professionnel au régime ordinaire, organisme ou copropriété : il retient 20 % et le verse à l’État pour vous. En cas de doute, demandez au client s’il applique la retenue.",
     "fieldClientName": "Prénom et nom ou raison sociale",
     "fieldClientTaxId": "Code fiscal ou numéro de TVA",
     "optional": "(facultatif)",
@@ -18618,7 +18622,7 @@
     "calcStampCharged": "Timbre fiscal (payé par le client)",
     "calcTotal": "Total du reçu",
     "calcWithholding": "Retenue à la source 20 % sur {base}",
-    "calcNoWithholding": "Pas de retenue : c’est un particulier qui paie.",
+    "calcNoWithholding": "Aucune retenue : le client n’est pas agent de retenue.",
     "calcNet": "Net à payer",
     "calcChooseClient": "Choisissez le client pour savoir s’il y a une retenue.",
     "stampRequired": "Le montant dépasse 77,47 € : l’original doit porter un timbre fiscal de 2 €. Qui le paie ?",
@@ -18697,7 +18701,7 @@
     "error_clientNameRequired": "Saisissez le nom du client.",
     "error_clientTaxIdFormat": "Le code du client n’est pas bien écrit : 16 caractères (code fiscal) ou 11 chiffres (numéro de TVA).",
     "error_clientTaxIdChecksum": "Le code fiscal ou le numéro de TVA du client ne correspond pas : vérifiez que vous l’avez bien copié.",
-    "error_clientTaxIdRequired": "Pour une entreprise, un professionnel ou un organisme, le code fiscal ou le numéro de TVA est nécessaire.",
+    "error_clientTaxIdRequired": "Si le client applique la retenue, son code fiscal ou son numéro de TVA est nécessaire.",
     "error_profileMissing": "Saisissez d’abord vos données.",
     "error_dateInvalid": "Une date n’est pas valide.",
     "error_periodInvalid": "La période ne va pas : le dernier jour est avant le premier.",
@@ -18706,7 +18710,8 @@
     "error_expensesInvalid": "Le remboursement de frais n’est pas valide.",
     "error_stampIdInvalid": "Le numéro du timbre fiscal ne contient que des chiffres.",
     "error_clientMissing": "Choisissez le client.",
-    "error_notLast": "Seul le dernier reçu de l’année peut être supprimé. Celui-ci, vous pouvez l’annuler."
+    "error_notLast": "Seul le dernier reçu de l’année peut être supprimé. Celui-ci, vous pouvez l’annuler.",
+    "loadError": "Impossible de charger les reçus. Rechargez la page."
   },
   "noteSpese": {
     "title": "Notes de frais",
@@ -18840,7 +18845,9 @@
     "error_rateInvalid": "Saisissez le tarif au km, par exemple 0,45.",
     "error_dateRequired": "Choisissez la date de la dépense.",
     "error_tooManyItems": "Cette note de frais contient trop de dépenses. Créez-en une nouvelle.",
-    "error_pdf": "Impossible de créer le PDF. Veuillez réessayer."
+    "error_pdf": "Impossible de créer le PDF. Veuillez réessayer.",
+    "error_load": "Impossible de charger vos notes de frais. Rechargez la page dans un instant : vos données ne sont pas perdues.",
+    "pdfPhotosMissing": "{n, plural, one {Le PDF est prêt, mais # photo de ticket n'a pas pu être téléchargée. Vérifiez votre connexion et téléchargez à nouveau le PDF.} other {Le PDF est prêt, mais # photos de tickets n'ont pas pu être téléchargées. Vérifiez votre connexion et téléchargez à nouveau le PDF.}}"
   },
   "letteraPresentazione": {
     "title": "Lettre de motivation",
@@ -18942,6 +18949,7 @@
     "error_deleteError": "Impossible de supprimer la lettre. Veuillez réessayer.",
     "error_noAccess": "Ce service n’est pas actif pour votre compte.",
     "error_titleRequired": "Indiquez le nom de la lettre.",
-    "error_notFound": "Cette lettre n’existe plus."
+    "error_notFound": "Cette lettre n’existe plus.",
+    "leaveConfirm": "Votre lettre contient des modifications non enregistrées. Si vous quittez maintenant, elles seront perdues. Quitter quand même ?"
   }
 }

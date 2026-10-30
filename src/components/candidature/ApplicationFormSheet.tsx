@@ -119,7 +119,17 @@ export default function ApplicationFormSheet({
             <label className={label} htmlFor="ca-status">
               {t('status')}
             </label>
-            <select id="ca-status" className={input} value={form.status} onChange={(e) => set('status', e.target.value as ApplicationForm['status'])}>
+            <select
+              id="ca-status"
+              className={input}
+              value={form.status}
+              onChange={(e) => {
+                const status = e.target.value as ApplicationForm['status']
+                // «Da mandare» su una candidatura nuova: la data d'invio proposta (oggi) non vale,
+                // altrimenti il richiamo dopo 10 giorni partirebbe da oggi invece che dall'invio vero
+                setForm((f) => ({ ...f, status, sentOn: status === 'to_send' && !application && f.sentOn === today ? '' : f.sentOn }))
+              }}
+            >
               {APPLICATION_STATUSES.map((s) => (
                 <option key={s} value={s}>
                   {t(`status_${s}`)}
@@ -181,8 +191,11 @@ export default function ApplicationFormSheet({
             </label>
             <input
               id="ca-url"
-              type="url"
+              type="text"
               inputMode="url"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               className={input}
               value={form.adUrl}
               maxLength={APPLICATION_LIMITS.adUrl}

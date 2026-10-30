@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { LoaderCircle } from 'lucide-react'
 import { Sheet } from '@/components/memolife/MemoLifeForms'
@@ -16,10 +16,16 @@ function useSave(onDone: (report: ExpenseReport) => void) {
   const t = useTranslations('noteSpese')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Doppio tocco: una sola nota (o una sola copia)
+  const running = useRef(false)
   const run = async (action: () => Promise<Result>) => {
+    if (running.current) return
+    running.current = true
     setBusy(true)
     setError(null)
-    const result = await action()
+    // Rete caduta: si dice, la finestra non resta bloccata
+    const result: Result = await action().catch(() => ({ success: false as const, message: 'saveError' }))
+    running.current = false
     setBusy(false)
     if (result.success) onDone(result.data)
     else setError(limitTextOf(result) ?? (t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')))

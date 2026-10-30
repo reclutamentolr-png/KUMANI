@@ -50,7 +50,7 @@ export default async function RicevutaOccasionalePage() {
             <p className="mt-3 text-base text-white/70 sm:text-lg">{t('heroText')}</p>
           </div>
         </div>
-        <RicevutaOccasionaleApp initialProfile={profile} initialClients={clients} initialReceipts={receipts} initialYear={year} firstYear={firstYear} />
+        <RicevutaOccasionaleApp initialProfile={profile} initialClients={clients} initialReceipts={receipts ?? []} initialLoadError={receipts === null} initialYear={year} firstYear={firstYear} />
       </main>
     </div>
   )

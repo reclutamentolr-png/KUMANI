@@ -286,7 +286,8 @@ export function letterLabels(lang: string): LetterLabels {
 // Oggetto proposto dal ruolo cercato (vuoto se il ruolo non c'è)
 export function autoSubject(lang: string, position: string): string {
   const p = midSentence(position.trim(), asLetterLang(lang))
-  return p ? letterLabels(lang).autoSubject.replace('{position}', p) : ''
+  // Con una funzione: un «$» nel ruolo resta com'è (niente sostituzioni speciali)
+  return p ? letterLabels(lang).autoSubject.replace('{position}', () => p) : ''
 }
 
 export function formatLetterDate(iso: string, lang: string): string {
@@ -340,11 +341,17 @@ const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 // chi inserisce una frase prima di scrivere l'azienda la vede comunque giusta
 export function resolvePlaceholders(text: string, form: CoverLetterForm): string {
   const values = tokenValues(form)
+  const en = asLetterLang(form.language) === 'en'
   let out = text
   for (const k of Object.keys(values) as PhraseToken[]) {
-    if (!values[k]) continue
+    const value = values[k]
+    if (!value) continue
     const all = [...new Set(LETTER_LANGS.map((l) => LABELS[l].tokens[k]))]
-    out = out.replace(new RegExp(all.map(escapeRe).join('|'), 'gi'), values[k])
+    // Inglese: «a [profession]» diventa «an electrician» se serve; il valore
+    // va con una funzione, così un «$» scritto dall'utente resta com'è
+    out = out.replace(new RegExp(`(\\b[Aa] )?(?:${all.map(escapeRe).join('|')})`, 'gi'), (_, article: string | undefined) =>
+      article ? `${en && /^[aeiou]/i.test(value) ? `${article.trim()}n` : article.trim()} ${value}` : value,
+    )
   }
   return out
 }

@@ -190,20 +190,28 @@ const CookieConsentSettings = dynamic(() => import('@/components/admin/CookieCon
 // iscritti (src/lib/serviceGroups.ts: Social, Soldi e organizzazione, La tua
 // attività, Bambini…). Le sezioni della piattaforma che non sono strumenti
 // vanno in Community; il resto in "Altro".
+// Come nella pagina Servizi: prima le categorie per i privati («Per me»),
+// poi quelle in comune, poi quelle per chi ha un'attività
+const TOOL_PARTS = {
+  me: 'Per i privati («Per me»)',
+  all: 'Per tutti (in tutte e due le parti)',
+  biz: 'Per le attività («Per la mia attività»)',
+  other: 'Community e altro',
+} as const
 const TOOL_GROUPS = [
-  { id: 'security', label: 'Proteggerti dalle truffe' },
-  { id: 'money', label: 'Soldi e organizzazione' },
-  { id: 'work', label: 'Cerco o ho un lavoro' },
-  { id: 'docs', label: 'Documenti e file' },
-  { id: 'manage', label: 'Gestire la tua attività' },
-  { id: 'business', label: 'Farti conoscere e vendere' },
-  { id: 'social', label: 'Social' },
-  { id: 'wellness', label: 'Benessere' },
-  { id: 'fun', label: 'Svago' },
-  { id: 'audio', label: 'Audio e Strumenti' },
-  { id: 'kids', label: 'Bambini' },
-  { id: 'community', label: 'Community' },
-  { id: 'other', label: 'Altro' },
+  { id: 'security', label: 'Proteggerti dalle truffe', part: 'me' },
+  { id: 'money', label: 'Soldi e organizzazione', part: 'me' },
+  { id: 'work', label: 'Cerco o ho un lavoro', part: 'me' },
+  { id: 'wellness', label: 'Benessere', part: 'me' },
+  { id: 'fun', label: 'Svago', part: 'me' },
+  { id: 'audio', label: 'Audio e Strumenti', part: 'me' },
+  { id: 'kids', label: 'Bambini', part: 'me' },
+  { id: 'docs', label: 'Documenti e file', part: 'all' },
+  { id: 'manage', label: 'Gestire la tua attività', part: 'biz' },
+  { id: 'business', label: 'Farti conoscere e vendere (gratis e Plus anche in «Per me»)', part: 'biz' },
+  { id: 'social', label: 'Social (gratis e Plus anche in «Per me»)', part: 'biz' },
+  { id: 'community', label: 'Community', part: 'other' },
+  { id: 'other', label: 'Altro', part: 'other' },
 ] as const
 const PLATFORM_SWITCHES_COMMUNITY = new Set(['listings', 'chat', 'spotlight', 'convivio', 'events', 'timebank'])
 const TOOL_CATEGORY: Map<string, string> = new Map(getMarketplaceTools((key) => key).map((tool) => [tool.toolName, serviceGroupOf(tool.toolName)]))
@@ -1161,11 +1169,20 @@ L'accesso viene registrato.`))) return
           </p>
         </div>
 
-        {toolGroups.map((group) => {
+        {toolGroups.map((group, index) => {
           const isOpen = openToolGroups.has(group.id)
           const activeCount = group.tools.filter((tool: { is_enabled: boolean }) => tool.is_enabled).length
+          // Titolo della parte prima della sua prima categoria
+          const partTitle = index === 0 || toolGroups[index - 1].part !== group.part ? TOOL_PARTS[group.part] : null
           return (
-          <section key={group.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div key={group.id} className="space-y-3">
+          {partTitle && (
+            <h3 className={`flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider text-gray-700 ${index > 0 ? 'pt-4' : ''}`}>
+              <span className="h-4 w-1 rounded-full bg-[var(--gold)]" aria-hidden />
+              {partTitle}
+            </h3>
+          )}
+          <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             <button
               type="button"
               aria-expanded={isOpen}
@@ -1188,14 +1205,17 @@ L'accesso viene registrato.`))) return
               </span>
             </button>
             {isOpen && (
-            <div className="grid grid-cols-1 gap-4 border-t border-gray-100 bg-gray-50/60 p-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 border-t border-gray-100 bg-gray-50/60 p-3 md:grid-cols-2 xl:grid-cols-3">
               {group.tools.map((tool) => (
-                <div key={tool.tool_name} id={`tool-${tool.tool_name}`} className={`bg-white p-6 rounded-xl border shadow-sm scroll-mt-24 ${!tool.is_enabled && !tool.staff_preview ? 'opacity-60 bg-gray-50' : ''} ${focusTool === tool.tool_name ? 'ring-4 ring-[var(--gold)]/60' : ''}`}>
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900">{toolTitle(tool.tool_name)}</h3>
-                      <p className="font-mono text-xs text-gray-400">{tool.tool_name}</p>
-                      <p className="text-sm text-gray-500 mt-1">{tool.description || 'Strumento del marketplace'}</p>
+                // Scheda compatta: nome, interruttori di stato e piano su una riga, numeri d'uso in piccolo
+                <div key={tool.tool_name} id={`tool-${tool.tool_name}`} className={`bg-white p-4 rounded-xl border shadow-sm scroll-mt-24 ${!tool.is_enabled && !tool.staff_preview ? 'opacity-60 bg-gray-50' : ''} ${focusTool === tool.tool_name ? 'ring-4 ring-[var(--gold)]/60' : ''}`}>
+                  <div className="mb-3 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="truncate text-base font-bold text-gray-900">{toolTitle(tool.tool_name)}</h3>
+                      <p className="truncate text-xs text-gray-500" title={tool.description || undefined}>
+                        <span className="font-mono text-gray-400">{tool.tool_name}</span>
+                        {tool.description ? ` · ${tool.description}` : ''}
+                      </p>
                     </div>
                     {toolHref(tool.tool_name) && (
                       <a
@@ -1209,9 +1229,8 @@ L'accesso viene registrato.`))) return
                       </a>
                     )}
                   </div>
-                  <div className="mb-4 flex flex-wrap items-center gap-2">
-                    <span className="text-xs text-gray-500 uppercase">Stato</span>
-                    <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <div className="flex rounded-lg border border-gray-200 overflow-hidden" role="group" aria-label="Stato">
                       {([['on', 'Acceso'], ['staff', 'Solo Staff'], ['off', 'Spento']] as const).map(([state, label]) => {
                         const active = (tool.is_enabled ? 'on' : tool.staff_preview ? 'staff' : 'off') === state
                         return (
@@ -1220,7 +1239,7 @@ L'accesso viene registrato.`))) return
                             type="button"
                             onClick={() => !active && setToolState(tool.tool_name, state)}
                             disabled={savingTool === tool.tool_name}
-                            className={`px-3 py-1 text-xs font-semibold ${
+                            className={`px-2.5 py-1 text-xs font-semibold ${
                               active
                                 ? state === 'on'
                                   ? 'bg-green-600 text-white'
@@ -1235,16 +1254,7 @@ L'accesso viene registrato.`))) return
                         )
                       })}
                     </div>
-                  </div>
-                  {!tool.is_enabled && tool.staff_preview && (
-                    <>
-                      <p className="mb-2 rounded-lg bg-violet-50 px-3 py-2 text-xs text-violet-800">Gli iscritti non lo vedono: tu, lo Staff e i tester qui sotto lo aprite e lo provate normalmente.</p>
-                      <ToolTestersPanel toolName={tool.tool_name} />
-                    </>
-                  )}
-                  <div className="mb-4 flex items-center gap-2">
-                    <span className="text-xs text-gray-500 uppercase">Piano richiesto</span>
-                    <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+                    <div className="flex rounded-lg border border-gray-200 overflow-hidden" role="group" aria-label="Piano richiesto">
                       {(['free', 'base', 'pro'] as const).map((plan) => {
                         const active = (tool.required_plan ?? 'base') === plan
                         return (
@@ -1253,7 +1263,7 @@ L'accesso viene registrato.`))) return
                             type="button"
                             onClick={() => !active && changeToolPlan(tool.tool_name, plan)}
                             disabled={savingTool === tool.tool_name}
-                            className={`px-3 py-1 text-xs font-semibold ${
+                            className={`px-2.5 py-1 text-xs font-semibold ${
                               active
                                 ? plan === 'pro'
                                   ? 'bg-[var(--ink)] text-[var(--gold-bright)]'
@@ -1266,7 +1276,14 @@ L'accesso viene registrato.`))) return
                         )
                       })}
                     </div>
+                    {savingTool === tool.tool_name && <span className="text-xs text-[var(--gold)]">Salvo…</span>}
                   </div>
+                  {!tool.is_enabled && tool.staff_preview && (
+                    <>
+                      <p className="mb-2 rounded-lg bg-violet-50 px-3 py-2 text-xs text-violet-800">Gli iscritti non lo vedono: tu, lo Staff e i tester qui sotto lo aprite e lo provate normalmente.</p>
+                      <ToolTestersPanel toolName={tool.tool_name} />
+                    </>
+                  )}
                   {(tool.required_plan ?? 'base') !== 'free' && (
                     <ToolPassSetting
                       toolName={tool.tool_name}
@@ -1276,29 +1293,21 @@ L'accesso viene registrato.`))) return
                       onSaved={loadMarketplaceData}
                     />
                   )}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div className="flex gap-6">
-                      <div title="Persone diverse che l'hanno aperto o usato">
-                        <div className="text-xs text-gray-500 uppercase">Persone</div>
-                        <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_users}</div>
-                      </div>
-                      <div title="Somma dei giorni in cui ogni persona l'ha usato">
-                        <div className="text-xs text-gray-500 uppercase">Giorni d&apos;uso</div>
-                        <div className="text-2xl font-bold text-[var(--gold)]">{tool.usage_days}</div>
-                      </div>
-                    </div>
-                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${tool.is_enabled ? 'bg-green-100 text-green-700' : tool.staff_preview ? 'bg-violet-100 text-violet-700' : 'bg-red-100 text-red-700'}`}>
-                      {tool.is_enabled ? 'ATTIVO' : tool.staff_preview ? 'SOLO STAFF' : 'DISATTIVO'}
-                    </div>
-                  </div>
-                  {savingTool === tool.tool_name && (
-                    <div className="mt-3 text-xs text-[var(--gold)]">💾 Salvataggio...</div>
-                  )}
+                  <p className="mt-2 border-t border-gray-100 pt-2 text-xs text-gray-500">
+                    <span title="Persone diverse che l'hanno aperto o usato">
+                      <strong className="text-sm text-[var(--gold)]">{tool.usage_users}</strong> persone
+                    </span>
+                    {' · '}
+                    <span title="Somma dei giorni in cui ogni persona l'ha usato">
+                      <strong className="text-sm text-[var(--gold)]">{tool.usage_days}</strong> giorni d&apos;uso
+                    </span>
+                  </p>
                 </div>
               ))}
             </div>
             )}
           </section>
+          </div>
           )
         })}
       </div>

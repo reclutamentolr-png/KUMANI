@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   AlertTriangle,
@@ -61,12 +61,15 @@ export default function RicevutaOccasionaleApp({
   initialProfile,
   initialClients,
   initialReceipts,
+  initialLoadError = false,
   initialYear,
   firstYear,
 }: {
   initialProfile: IssuerProfile | null
   initialClients: ReceiptClient[]
   initialReceipts: OccasionalReceipt[]
+  /** Le ricevute dell'anno non si sono potute leggere */
+  initialLoadError?: boolean
   initialYear: number
   firstYear: number | null
 }) {
@@ -81,10 +84,12 @@ export default function RicevutaOccasionaleApp({
   const [year, setYear] = useState(initialYear)
   const [receipts, setReceipts] = useState(initialReceipts)
   // Ricevute già caricate per anno (per l'avviso dei 5.000 € nella finestra)
-  const [byYear, setByYear] = useState<Record<number, OccasionalReceipt[]>>({ [initialYear]: initialReceipts })
+  const [byYear, setByYear] = useState<Record<number, OccasionalReceipt[]>>(initialLoadError ? {} : { [initialYear]: initialReceipts })
   const [loading, setLoading] = useState(false)
   const [sheet, setSheet] = useState<SheetState>(null)
-  const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null)
+  const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(initialLoadError ? { ok: false, text: t('loadError') } : null)
+  // Ultimo anno chiesto: una risposta arrivata in ritardo per un altro anno non conta
+  const yearRequest = useRef(initialYear)
   const [pdfBusy, setPdfBusy] = useState<string | null>(null)
   const [rowBusy, setRowBusy] = useState<string | null>(null)
 
@@ -98,14 +103,29 @@ export default function RicevutaOccasionaleApp({
   const totals = useMemo(() => yearTotals(receipts), [receipts])
   const lastNumber = receipts.reduce((max, r) => Math.max(max, r.number), 0)
 
-  const loadYear = useCallback(async (y: number) => {
-    setYear(y)
-    setLoading(true)
-    const list = await listReceipts(y)
-    setReceipts(list)
-    setByYear((m) => ({ ...m, [y]: list }))
-    setLoading(false)
-  }, [])
+  const loadYear = useCallback(
+    async (y: number) => {
+      yearRequest.current = y
+      setYear(y)
+      setLoading(true)
+      let list: OccasionalReceipt[] | null = null
+      try {
+        list = await listReceipts(y)
+      } catch {
+        list = null
+      }
+      if (yearRequest.current !== y) return
+      setLoading(false)
+      if (!list) {
+        setReceipts([])
+        setNotice({ ok: false, text: t('loadError') })
+        return
+      }
+      setReceipts(list)
+      setByYear((m) => ({ ...m, [y]: list }))
+    },
+    [t],
+  )
 
   // Una ricevuta cambiata: si aggiorna nell'elenco del suo anno
   const putReceipt = (r: OccasionalReceipt) => {
@@ -181,7 +201,12 @@ export default function RicevutaOccasionaleApp({
 
   const run = async (id: string, action: () => Promise<{ success: true; data: OccasionalReceipt } | { success: false; message: string }>) => {
     setRowBusy(id)
-    const result = await action()
+    let result: Awaited<ReturnType<typeof action>>
+    try {
+      result = await action()
+    } catch {
+      result = { success: false, message: 'saveError' }
+    }
     setRowBusy(null)
     if (!result.success) return setNotice({ ok: false, text: errorText(result.message) })
     putReceipt(result.data)
@@ -366,7 +391,7 @@ export default function RicevutaOccasionaleApp({
                           onClick={async () => {
                             if (!(await askConfirm(t('deleteConfirm', { number: r.number, year: r.year })))) return
                             setRowBusy(r.id)
-                            const result = await deleteReceipt(r.id)
+                            const result = await deleteReceipt(r.id).catch(() => ({ success: false as const, message: 'deleteError' }))
                             setRowBusy(null)
                             if (!result.success) return setNotice({ ok: false, text: errorText(result.message) })
                             setReceipts((list) => list.filter((x) => x.id !== r.id))
@@ -421,7 +446,7 @@ export default function RicevutaOccasionaleApp({
                     aria-label={t('delete')}
                     onClick={async () => {
                       if (!(await askConfirm(t('deleteClientConfirm', { name: c.name })))) return
-                      const result = await deleteClient(c.id)
+                      const result = await deleteClient(c.id).catch(() => ({ success: false as const, message: 'deleteError' }))
                       if (!result.success) return setNotice({ ok: false, text: errorText(result.message) })
                       setClients((list) => list.filter((x) => x.id !== c.id))
                     }}
@@ -567,7 +592,7 @@ function PaidForm({ receipt, onSaved }: { receipt: OccasionalReceipt; onSaved: (
       onSubmit={async (e) => {
         e.preventDefault()
         setBusy(true)
-        const result = await setReceiptPaid(receipt.id, date)
+        const result = await setReceiptPaid(receipt.id, date).catch(() => ({ success: false as const, message: 'saveError' }))
         setBusy(false)
         if (!result.success) return setError(errorText(result.message))
         onSaved(result.data)

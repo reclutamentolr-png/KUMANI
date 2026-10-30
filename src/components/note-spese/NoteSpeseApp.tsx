@@ -63,8 +63,11 @@ type SheetState =
 export default function NoteSpeseApp({
   initialReports,
   initialDetail = null,
+  initialLoadError = false,
 }: {
   initialReports: ExpenseReportSummary[]
+  // Elenco non letto (errore del database): si dice, non si mostra vuoto
+  initialLoadError?: boolean
   // Nota da aprire subito (anteprima con dati di prova)
   initialDetail?: { report: ExpenseReport; items: ExpenseItem[] } | null
 }) {
@@ -74,7 +77,8 @@ export default function NoteSpeseApp({
   const [detail, setDetail] = useState<{ report: ExpenseReport; items: ExpenseItem[] } | null>(initialDetail)
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [sheet, setSheet] = useState<SheetState>(null)
-  const [notice, setNotice] = useState<string | null>(null)
+  const loadErrorText = () => (t.has('error_load') ? t('error_load') : t('error_saveError'))
+  const [notice, setNotice] = useState<string | null>(() => (initialLoadError ? loadErrorText() : null))
   const [exporting, setExporting] = useState(false)
   // Ultima data e categoria usate: la voce dopo parte già da lì
   const [lastUsed, setLastUsed] = useState<{ spentOn: string; category: ExpenseCategory } | null>(null)
@@ -92,12 +96,16 @@ export default function NoteSpeseApp({
     return from && to && from !== to ? `${from} – ${to}` : from || to
   }
 
-  const refreshList = async () => setReports(await listReports())
+  const refreshList = async () => {
+    const list = await listReports().catch(() => null)
+    if (list) setReports(list)
+    else setNotice(loadErrorText())
+  }
 
   const openReport = async (id: string) => {
     setLoadingId(id)
     setNotice(null)
-    const data = await getReport(id)
+    const data = await getReport(id).catch(() => null)
     setLoadingId(null)
     if (!data) {
       setNotice(t('error_saveError'))
@@ -110,6 +118,7 @@ export default function NoteSpeseApp({
 
   const closeReport = () => {
     setDetail(null)
+    setNotice(null)
     void refreshList()
   }
 
@@ -241,8 +250,10 @@ export default function NoteSpeseApp({
         pageOf: (page, pages) => t('pdfPageOf', { page, pages }),
       }
       const { generateExpensePdf } = await import('@/lib/noteSpesePdf')
-      const blob = await generateExpensePdf({ report, items: withUrls, labels, locale })
+      const { blob, missingPhotos } = await generateExpensePdf({ report, items: withUrls, labels, locale })
       downloadBlob(`${fileSlug(report.title)}.pdf`, blob)
+      // Foto non scaricate (rete): il PDF esce lo stesso, ma bisogna saperlo
+      if (missingPhotos > 0) setNotice(t.has('pdfPhotosMissing') ? t('pdfPhotosMissing', { n: missingPhotos }) : t('error_pdf'))
     } catch (e) {
       console.error('[NoteSpese] pdf', e)
       setNotice(t('error_pdf'))
@@ -252,8 +263,8 @@ export default function NoteSpeseApp({
 
   const removeReport = async () => {
     if (!(await askConfirm(t('reportDeleteConfirm', { title: report.title })))) return
-    const result = await deleteReport(report.id)
-    if (!result.success) {
+    const result = await deleteReport(report.id).catch(() => null)
+    if (!result?.success) {
       setNotice(t('error_saveError'))
       return
     }

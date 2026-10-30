@@ -48,7 +48,10 @@ function dbError(scope: string, error: { message?: string; code?: string }): { s
   const msg = error.message ?? ''
   if (msg.includes('ro_limit')) return { success: false, message: 'limit' }
   if (msg.includes('ro_year_change')) return { success: false, message: 'yearChange' }
-  console.error(`[RicevutaOccasionale] ${scope} failed:`, error)
+  if (msg.includes('ro_not_last')) return { success: false, message: 'notLast' }
+  if (msg.includes('ro_client')) return { success: false, message: 'clientMissing' }
+  // Solo codice e messaggio: niente dettagli con i dati della ricevuta nei log
+  console.error(`[RicevutaOccasionale] ${scope} failed:`, error.code ?? '', msg)
   return { success: false, message: 'saveError' }
 }
 
@@ -172,8 +175,9 @@ export async function deleteClient(id: string): Promise<ActionResult<null>> {
 
 // ─── Ricevute ─────────────────────────────────────────────────────────────
 
-/** Ricevute di un anno, dalla più recente. */
-export async function listReceipts(year: number): Promise<OccasionalReceipt[]> {
+/** Ricevute di un anno, dalla più recente; null se la lettura non riesce
+ * (la pagina lo dice, invece di mostrare l'anno vuoto). */
+export async function listReceipts(year: number): Promise<OccasionalReceipt[] | null> {
   const g = await gate()
   if (!g || !Number.isInteger(year) || year < 2000 || year > 2100) return []
   const { data, error } = await g.supabase
@@ -185,7 +189,7 @@ export async function listReceipts(year: number): Promise<OccasionalReceipt[]> {
     .limit(5000)
   if (error) {
     console.error('[RicevutaOccasionale] listReceipts failed:', error)
-    return []
+    return null
   }
   return (data ?? []).map((r) => toReceipt(r as Record<string, unknown>))
 }
@@ -319,7 +323,12 @@ export async function createReceipt(form: ReceiptForm): Promise<ActionResult<{ r
     .insert({ user_id: g.userId, year: Number(built.row.issue_date.slice(0, 4)), number: 1, ...built.row, client_id: savedClient?.id ?? built.row.client_id })
     .select(RECEIPT_COLUMNS)
     .single()
-  if (error || !data) return dbError('createReceipt', error ?? {})
+  if (error || !data) {
+    // Ricevuta non fatta: il cliente appena salvato si toglie, altrimenti a
+    // ogni nuovo tentativo ne resterebbe un doppione
+    if (savedClient) await g.supabase.from('occasional_receipt_clients').delete().eq('id', savedClient.id).eq('user_id', g.userId)
+    return dbError('createReceipt', error ?? {})
+  }
   await awardToolPoint(TOOL)
   return { success: true, data: { receipt: toReceipt(data as Record<string, unknown>), client: savedClient } }
 }
@@ -353,7 +362,10 @@ export async function updateReceipt(id: string, form: ReceiptForm): Promise<Acti
     .eq('user_id', g.userId)
     .select(RECEIPT_COLUMNS)
     .single()
-  if (error || !data) return dbError('updateReceipt', error ?? {})
+  if (error || !data) {
+    if (savedClient) await g.supabase.from('occasional_receipt_clients').delete().eq('id', savedClient.id).eq('user_id', g.userId)
+    return dbError('updateReceipt', error ?? {})
+  }
   return { success: true, data: { receipt: toReceipt(data as Record<string, unknown>), client: savedClient } }
 }
 
@@ -405,7 +417,8 @@ export async function deleteReceipt(id: string): Promise<ActionResult<null>> {
   if (count) return { success: false, message: 'notLast' }
   const { data, error } = await g.supabase.from('occasional_receipts').delete().eq('id', id).eq('user_id', g.userId).select('id')
   if (error) {
-    console.error('[RicevutaOccasionale] deleteReceipt failed:', error)
+    if (error.message?.includes('ro_not_last')) return { success: false, message: 'notLast' }
+    console.error('[RicevutaOccasionale] deleteReceipt failed:', error.code ?? '', error.message)
     return { success: false, message: 'deleteError' }
   }
   // Nessuna riga eliminata: nel frattempo ne è stata fatta un'altra

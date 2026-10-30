@@ -16,6 +16,7 @@ import {
   formatEur,
   interviewIcs,
   romeToday,
+  safeAdUrl,
   safeFileName,
   suggestFollowUp,
   telHref,
@@ -115,6 +116,7 @@ export default function ApplicationCard({
   }
 
   const mail = mailHref(app)
+  const adUrl = safeAdUrl(app.ad_url)
   const row = (name: string, value: React.ReactNode) =>
     value ? (
       <div className="flex gap-3 py-2">
@@ -165,8 +167,8 @@ export default function ApplicationCard({
               <Mail className="h-4 w-4" aria-hidden="true" /> {t('writeEmail')}
             </a>
           )}
-          {app.ad_url && (
-            <a href={app.ad_url} target="_blank" rel="noopener noreferrer" className={`${pill} border border-[var(--ink)] bg-white text-[var(--ink)]`}>
+          {adUrl && (
+            <a href={adUrl} target="_blank" rel="noopener noreferrer" className={`${pill} border border-[var(--ink)] bg-white text-[var(--ink)]`}>
               <ExternalLink className="h-4 w-4" aria-hidden="true" /> {t('openAd')}
             </a>
           )}

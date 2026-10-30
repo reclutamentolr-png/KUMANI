@@ -19,6 +19,7 @@ import {
   romeParts,
   romeToday,
   shiftTimes,
+  shiftsOverlap,
   type WorkPlace,
   type WorkShift,
 } from '@/lib/registroOre'
@@ -90,10 +91,17 @@ export type RegistroInitial = {
   personName: string
 }
 
+// Una lettura non riuscita non deve sembrare «nessun dato» (si vedrebbe la
+// pagina del primo posto, o un mese vuoto): si lancia l'errore e la pagina
+// lo dice.
 export async function listPlaces(): Promise<WorkPlace[]> {
   const g = await gate()
   if (!g) return []
-  const { data } = await g.supabase.from('work_places').select(PLACE_COLS).order('created_at')
+  const { data, error } = await g.supabase.from('work_places').select(PLACE_COLS).order('created_at')
+  if (error) {
+    console.error('[RegistroOre] list places failed:', error.code, error.message)
+    throw new Error('loadError')
+  }
   return (data ?? []).map(toPlace)
 }
 
@@ -103,21 +111,66 @@ export async function listShifts(from: string, to: string): Promise<WorkShift[]>
   if (!g || !DATE_RE.test(from) || !DATE_RE.test(to) || from > to) return []
   // Al massimo un paio di mesi per volta
   if (Date.parse(to) - Date.parse(from) > 70 * 24 * HOUR) return []
-  const { data } = await g.supabase
+  const { data, error } = await g.supabase
     .from('work_shifts')
     .select(SHIFT_COLS)
     .gte('work_date', from)
     .lte('work_date', to)
     .order('starts_at')
     .limit(2000)
+  if (error) {
+    console.error('[RegistroOre] list shifts failed:', error.code, error.message)
+    throw new Error('loadError')
+  }
   return (data ?? []).map(toShift)
 }
 
 export async function getOpenShift(): Promise<WorkShift | null> {
   const g = await gate()
   if (!g) return null
-  const { data } = await g.supabase.from('work_shifts').select(SHIFT_COLS).is('ends_at', null).maybeSingle()
+  const { data, error } = await g.supabase.from('work_shifts').select(SHIFT_COLS).is('ends_at', null).maybeSingle()
+  if (error) {
+    console.error('[RegistroOre] open shift failed:', error.code, error.message)
+    throw new Error('loadError')
+  }
   return data ? toShift(data) : null
+}
+
+/**
+ * Un altro turno della stessa persona (in qualsiasi posto) si sovrappone a
+ * [startMs, endMs]? Evita ore contate due volte: doppio invio, «Ripeti il
+ * turno di ieri» premuto due volte, turno scritto a mano e anche con
+ * Inizio/Fine. I turni durano al massimo 24 ore: basta guardare quelli
+ * cominciati dal giorno prima, più quello in corso.
+ */
+async function hasOverlap(
+  g: NonNullable<Awaited<ReturnType<typeof gate>>>,
+  startMs: number,
+  endMs: number | null,
+  excludeId: string | null,
+): Promise<'none' | 'overlap' | 'alreadyOpen' | 'error'> {
+  const until = endMs ?? Math.max(Date.now(), startMs + MINUTE)
+  const [near, open] = await Promise.all([
+    g.supabase
+      .from('work_shifts')
+      .select('id, starts_at, ends_at')
+      .gte('starts_at', new Date(startMs - 24 * HOUR).toISOString())
+      .lt('starts_at', new Date(until).toISOString())
+      .limit(200),
+    g.supabase.from('work_shifts').select('id, starts_at, ends_at').is('ends_at', null).limit(1),
+  ])
+  if (near.error || open.error) {
+    console.error('[RegistroOre] overlap check failed:', near.error?.message ?? open.error?.message)
+    return 'error'
+  }
+  // Un solo turno in corso per volta: messaggio dedicato
+  if (endMs === null && (open.data ?? []).some((s) => s.id !== excludeId)) return 'alreadyOpen'
+  const overlap = [...(near.data ?? []), ...(open.data ?? [])].some(
+    (s) =>
+      s.id !== excludeId &&
+      shiftsOverlap(startMs, endMs, Date.parse(String(s.starts_at)), s.ends_at ? Date.parse(String(s.ends_at)) : null),
+  )
+  return overlap ? 'overlap' : 'none'
 }
 
 export async function getRegistroInitial(from: string, to: string): Promise<RegistroInitial> {
@@ -264,8 +317,11 @@ export async function saveShift(input: ShiftInput): Promise<ActionResult<WorkShi
     notes: clip(input.notes, REGISTRO_LIMITS.notes) || null,
   }
 
+  if (input.id && !UUID_RE.test(input.id)) return { success: false, message: 'invalid' }
+  const clash = await hasOverlap(g, times.startMs, times.endMs, input.id ?? null)
+  if (clash !== 'none') return { success: false, message: clash === 'error' ? 'saveError' : clash }
+
   if (input.id) {
-    if (!UUID_RE.test(input.id)) return { success: false, message: 'invalid' }
     const { data, error } = await g.supabase.from('work_shifts').update(row).eq('id', input.id).select(SHIFT_COLS).maybeSingle()
     if (error || !data) {
       if (error && error.code !== '23505') console.error('[RegistroOre] update shift failed:', error)
@@ -291,6 +347,8 @@ export async function startShift(placeId: string, time?: string | null): Promise
     startMs = romeLocalToMs(today, time)
     if (startMs > Date.now() + MINUTE) startMs = romeLocalToMs(addDays(today, -1), time)
   }
+  const clash = await hasOverlap(g, startMs, null, null)
+  if (clash !== 'none') return { success: false, message: clash === 'error' ? 'saveError' : clash }
   return insertShift(g, {
     place_id: placeId,
     work_date: romeParts(startMs).date,
@@ -312,20 +370,25 @@ export async function endShift(id: string, end: string, breakMinutesInput: numbe
   if (breakMinutes === null) return { success: false, message: 'break' }
   const { data: current } = await g.supabase.from('work_shifts').select(SHIFT_COLS).eq('id', id).maybeSingle()
   if (!current) return { success: false, message: 'notFound' }
+  // Già chiuso (doppio clic, o chiuso da un altro dispositivo): non si sovrascrive l'ora di fine
+  if (current.ends_at) return { success: false, message: 'alreadyClosed' }
   const startMs = Date.parse(String(current.starts_at))
   const endMs = endAfter(startMs, end)
   if (endMs === null) return { success: false, message: 'time' }
   if (endMs - startMs > 24 * HOUR) return { success: false, message: 'tooLong' }
   if (breakMinutes * MINUTE >= endMs - startMs) return { success: false, message: 'breakTooLong' }
+  const clash = await hasOverlap(g, startMs, endMs, id)
+  if (clash !== 'none') return { success: false, message: clash === 'error' ? 'saveError' : clash }
   const { data, error } = await g.supabase
     .from('work_shifts')
     .update({ ends_at: new Date(endMs).toISOString(), break_minutes: breakMinutes })
     .eq('id', id)
+    .is('ends_at', null)
     .select(SHIFT_COLS)
     .maybeSingle()
   if (error || !data) {
     if (error) console.error('[RegistroOre] end shift failed:', error)
-    return { success: false, message: error ? dbError(error) : 'notFound' }
+    return { success: false, message: error ? dbError(error) : 'alreadyClosed' }
   }
   return { success: true, data: toShift(data) }
 }
@@ -352,21 +415,34 @@ export async function repeatYesterday(): Promise<ActionResult<WorkShift[]>> {
   if (!g) return { success: false, message: 'noAccess' }
   const today = romeToday()
   const yesterday = addDays(today, -1)
-  const { data } = await g.supabase
+  const { data, error } = await g.supabase
     .from('work_shifts')
     .select(SHIFT_COLS)
     .eq('work_date', yesterday)
     .not('ends_at', 'is', null)
     .order('starts_at')
+  if (error) {
+    console.error('[RegistroOre] repeat read failed:', error.code, error.message)
+    return { success: false, message: 'saveError' }
+  }
   const source = (data ?? []).map(toShift)
   if (!source.length) return { success: false, message: 'nothingYesterday' }
 
+  // Turni già presenti oggi alle stesse ore (premuto due volte, o da due
+  // dispositivi): non si copiano di nuovo
   const created: WorkShift[] = []
+  let skipped = 0
   for (const s of source) {
     const start = romeParts(Date.parse(s.starts_at)).time
     const end = romeParts(Date.parse(s.ends_at!)).time
     const times = shiftTimes(today, start, end)
     if (!times.ok || times.endMs === null) continue
+    const clash = await hasOverlap(g, times.startMs, times.endMs, null)
+    if (clash === 'error') return created.length ? { success: true, data: created } : { success: false, message: 'saveError' }
+    if (clash !== 'none') {
+      skipped++
+      continue
+    }
     const breakMinutes = Math.min(s.break_minutes, Math.max(0, Math.round((times.endMs - times.startMs) / MINUTE) - 1))
     const result = await insertShift(g, {
       place_id: s.place_id,
@@ -381,5 +457,6 @@ export async function repeatYesterday(): Promise<ActionResult<WorkShift[]>> {
     if (!result.success) return created.length ? { success: true, data: created } : result
     created.push(result.data)
   }
+  if (!created.length && skipped) return { success: false, message: 'alreadyRepeated' }
   return { success: true, data: created }
 }

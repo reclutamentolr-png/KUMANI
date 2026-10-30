@@ -219,7 +219,8 @@ export async function buildReceiptPdfBlob(r: OccasionalReceipt): Promise<Blob> {
     "Prestazione occasionale ai sensi dell'art. 2222 del Codice Civile, esclusa dal campo di applicazione IVA ai sensi dell'art. 5 del D.P.R. 633/1972 per mancanza del requisito dell'abitualità.",
     r.withholding
       ? "Il committente, in qualità di sostituto d'imposta, versa la ritenuta d'acconto del 20% ai sensi dell'art. 25 del D.P.R. 600/1973."
-      : "Compenso non soggetto a ritenuta d'acconto: il committente non è sostituto d'imposta.",
+      : // Vale per i privati e per chi non deve operare la ritenuta (es. regime forfettario)
+        "Compenso non soggetto a ritenuta d'acconto, in quanto il committente non è tenuto ad operarla.",
   ]
   if (r.stamp_required)
     notes.push(
@@ -242,18 +243,28 @@ export async function buildReceiptPdfBlob(r: OccasionalReceipt): Promise<Blob> {
   p.need(Math.max(stampH, 80) + 10)
   const top = p.y
   const place = r.place ? `${r.place}, ${dateIt(r.issue_date)}` : dateIt(r.issue_date)
+  const signX = r.stamp_required ? M + W - stampW - 200 : M + W - 200
   p.font(false, 9, MUTED)
   doc.text('Luogo e data', M, top + 8)
-  p.font(false, 10.5, INK)
-  doc.text(place, M, top + 24)
-  const signX = r.stamp_required ? M + W - stampW - 200 : M + W - 200
+  // Luogo lungo: a capo prima della firma (al massimo 4 righe)
+  p.lines(place, signX - M - 12, false, 10.5)
+    .slice(0, 4)
+    .forEach((l, i) => {
+      p.font(false, 10.5, INK)
+      doc.text(l, M, top + 24 + i * 13)
+    })
   p.font(false, 9, MUTED)
   doc.text('Firma del prestatore', signX, top + 8)
   doc.setDrawColor(...TEXT)
   doc.setLineWidth(0.6)
   doc.line(signX, top + 62, signX + 180, top + 62)
-  p.font(false, 8, MUTED)
-  doc.text(r.issuer_name, signX, top + 74)
+  // Nome sotto la riga della firma: a capo dentro la sua larghezza
+  p.lines(r.issuer_name, 180, false, 8)
+    .slice(0, 2)
+    .forEach((l, i) => {
+      p.font(false, 8, MUTED)
+      doc.text(l, signX, top + 74 + i * 10)
+    })
   if (r.stamp_required) {
     const sx = M + W - stampW
     doc.setDrawColor(...MUTED)
@@ -273,8 +284,10 @@ export async function buildReceiptPdfBlob(r: OccasionalReceipt): Promise<Blob> {
     doc.setDrawColor(...RULE)
     doc.setLineWidth(0.5)
     doc.line(M, A4_H - 40, M + W, A4_H - 40)
+    // Una riga sola, senza arrivare al numero di pagina
+    const footer = p.lines(`Ricevuta n. ${docNumber} – ${r.issuer_name}`, W - 90, false, 8)
     p.font(false, 8, MUTED)
-    doc.text(`Ricevuta n. ${docNumber} – ${r.issuer_name}`, M, A4_H - 27)
+    doc.text(footer.length > 1 ? `${footer[0]}…` : footer[0], M, A4_H - 27)
     doc.text(`Pagina ${i} di ${pages}`, M + W, A4_H - 27, { align: 'right' })
   }
 

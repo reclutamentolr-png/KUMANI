@@ -136,6 +136,8 @@ export function romeLocalToDate(local: string): Date | null {
   const [y, mo, d, h, mi] = m.slice(1).map(Number)
   if (mo < 1 || mo > 12 || d < 1 || d > 31 || h > 23 || mi > 59) return null
   const asUtc = Date.UTC(y, mo - 1, d, h, mi)
+  // 31 febbraio e simili: niente salti al mese dopo
+  if (new Date(asUtc).getUTCDate() !== d) return null
   // Due passaggi: il cambio dell'ora legale cade proprio tra le due stime
   let guess = asUtc - romeOffsetMinutes(new Date(asUtc)) * 60_000
   guess = asUtc - romeOffsetMinutes(new Date(guess)) * 60_000
@@ -230,7 +232,14 @@ export function applicationStats(apps: JobApplication[], today: string) {
 // ---------------------------------------------------------------------------
 // File .ics del colloquio (Google Calendar, iPhone, Outlook lo aprono)
 
-const icsText = (value: string) => value.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n')
+const icsText = (value: string) =>
+  value
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\r\n?|\n/g, '\\n')
+    // Altri caratteri di controllo non sono ammessi nel file
+    .replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '')
 const icsStamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
 
 // Righe lunghe spezzate a 75 byte come vuole lo standard (senza tagliare le lettere accentate)
@@ -271,7 +280,7 @@ export function interviewIcs(app: JobApplication, texts: { summary: string; desc
     `SUMMARY:${icsText(texts.summary)}`,
     ...(app.city ? [`LOCATION:${icsText(app.city)}`] : []),
     ...(texts.description ? [`DESCRIPTION:${icsText(texts.description)}`] : []),
-    ...(app.ad_url ? [`URL:${app.ad_url}`] : []),
+    ...(safeAdUrl(app.ad_url) ? [`URL:${safeAdUrl(app.ad_url)}`] : []),
     'BEGIN:VALARM',
     'ACTION:DISPLAY',
     `DESCRIPTION:${icsText(texts.alarm)}`,
@@ -304,6 +313,19 @@ export const safeFileName = (value: string) =>
     .replace(/^-+|-+$/g, '')
     .slice(0, 40)
     .toLowerCase() || 'colloquio'
+
+// Link all'annuncio: solo http/https con un dominio e senza spazi o caratteri
+// di controllo (niente javascript:, data: o altro). Usato dal server prima di
+// salvare e dal browser prima di aprirlo, anche per dati arrivati da fuori.
+export function safeAdUrl(url: string | null | undefined): string | null {
+  if (!url || url.length > APPLICATION_LIMITS.adUrl || !/^https?:\/\/[^\s/?#]+\.[^\s/?#]+([/?#][^\s]*)?$/i.test(url) || /[\u0000-\u001f\u007f]/.test(url)) return null
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? url : null
+  } catch {
+    return null
+  }
+}
 
 // Numero di telefono per tel: (solo cifre e +)
 export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`

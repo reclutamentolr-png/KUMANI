@@ -47,7 +47,7 @@ export default async function NoteSpesePage() {
             <p className="mt-3 text-base text-white/70 sm:text-lg">{t('heroText')}</p>
           </div>
         </div>
-        <NoteSpeseApp initialReports={reports} />
+        <NoteSpeseApp initialReports={reports ?? []} initialLoadError={reports === null} />
       </main>
     </div>
   )

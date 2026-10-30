@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { Check, LoaderCircle, Play, Square, Trash2 } from 'lucide-react'
 import { deletePlace, deleteShift, endShift, savePlace, saveShift, startShift } from '@/app/actions/registroOre'
@@ -28,14 +28,31 @@ export const primaryClass =
 
 type Result = { success: true } | { success: false; message: string; limitText?: string }
 
+/**
+ * Chiama un'azione del server: se la connessione cade o il server non
+ * risponde, invece di restare con la rotellina che gira si ha un errore da
+ * mostrare («Non sono riuscito a salvare»).
+ */
+export async function callAction<T extends Result>(action: () => Promise<T>): Promise<T | { success: false; message: string; limitText?: string }> {
+  try {
+    return await action()
+  } catch (err) {
+    console.error('[RegistroOre] action failed:', err)
+    return { success: false, message: 'saveError' }
+  }
+}
+
 /** Messaggio d'errore tradotto per il codice restituito dalle azioni */
 export function useErrorText() {
   const t = useTranslations('registroOre')
-  return (result: Result) => {
-    if (result.success) return null
-    if (result.limitText) return result.limitText
-    return t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')
-  }
+  return useCallback(
+    (result: Result) => {
+      if (result.success) return null
+      if (result.limitText) return result.limitText
+      return t.has(`error_${result.message}`) ? t(`error_${result.message}`) : t('error_saveError')
+    },
+    [t],
+  )
 }
 
 function ErrorBox({ text }: { text: string | null }) {
@@ -76,7 +93,7 @@ export function PlaceForm({
     e.preventDefault()
     setBusy(true)
     setError(null)
-    const result = await savePlace({ id: place?.id, name, color, hourlyRate: rate, dailyHours: daily, weeklyHours: weekly })
+    const result = await callAction(() => savePlace({ id: place?.id, name, color, hourlyRate: rate, dailyHours: daily, weeklyHours: weekly }))
     setBusy(false)
     if (result.success) onSaved(result.data)
     else setError(errorText(result))
@@ -85,7 +102,7 @@ export function PlaceForm({
   const remove = async () => {
     if (!place || !(await askConfirm(t('deletePlaceConfirm', { name: place.name })))) return
     setBusy(true)
-    const result = await deletePlace(place.id)
+    const result = await callAction(() => deletePlace(place.id))
     setBusy(false)
     if (result.success) onDeleted?.()
     else setError(errorText(result))
@@ -299,17 +316,19 @@ export function ShiftForm({
     e.preventDefault()
     setBusy(true)
     setError(null)
-    const result = await saveShift({
-      id: shift?.id,
-      placeId,
-      date,
-      start,
-      end: stillOpen ? null : end,
-      breakMinutes: breakMinutes || 0,
-      isHoliday,
-      isNight,
-      notes,
-    })
+    const result = await callAction(() =>
+      saveShift({
+        id: shift?.id,
+        placeId,
+        date,
+        start,
+        end: stillOpen ? null : end,
+        breakMinutes: breakMinutes || 0,
+        isHoliday,
+        isNight,
+        notes,
+      }),
+    )
     setBusy(false)
     if (result.success) onSaved(result.data)
     else setError(errorText(result))
@@ -318,7 +337,7 @@ export function ShiftForm({
   const remove = async () => {
     if (!shift || !(await askConfirm(t('deleteShiftConfirm')))) return
     setBusy(true)
-    const result = await deleteShift(shift.id)
+    const result = await callAction(() => deleteShift(shift.id))
     setBusy(false)
     if (result.success) onDeleted()
     else setError(errorText(result))
@@ -413,7 +432,18 @@ export function ShiftForm({
 
 // ─── Inizio turno (con più posti, o per cambiare l'ora) ───────────────────
 
-export function StartForm({ places, defaultPlaceId, onSaved }: { places: WorkPlace[]; defaultPlaceId: string; onSaved: (shift: WorkShift) => void }) {
+export function StartForm({
+  places,
+  defaultPlaceId,
+  onSaved,
+  onStale,
+}: {
+  places: WorkPlace[]
+  defaultPlaceId: string
+  onSaved: (shift: WorkShift) => void
+  /** il turno in corso è già stato aperto (altro dispositivo): la pagina si aggiorna */
+  onStale: (text: string) => void
+}) {
   const t = useTranslations('registroOre')
   const errorText = useErrorText()
   const [placeId, setPlaceId] = useState(defaultPlaceId)
@@ -427,9 +457,10 @@ export function StartForm({ places, defaultPlaceId, onSaved }: { places: WorkPla
     setBusy(true)
     setError(null)
     // Ora non toccata = adesso al minuto
-    const result = await startShift(placeId, touched ? time : null)
+    const result = await callAction(() => startShift(placeId, touched ? time : null))
     setBusy(false)
     if (result.success) onSaved(result.data)
+    else if (result.message === 'alreadyOpen') onStale(errorText(result) ?? '')
     else setError(errorText(result))
   }
 
@@ -462,7 +493,18 @@ export function StartForm({ places, defaultPlaceId, onSaved }: { places: WorkPla
 
 // ─── Fine turno ───────────────────────────────────────────────────────────
 
-export function EndForm({ shift, defaultBreak, onSaved }: { shift: WorkShift; defaultBreak: number; onSaved: (shift: WorkShift) => void }) {
+export function EndForm({
+  shift,
+  defaultBreak,
+  onSaved,
+  onStale,
+}: {
+  shift: WorkShift
+  defaultBreak: number
+  onSaved: (shift: WorkShift) => void
+  /** turno già chiuso o cancellato (altro dispositivo): la pagina si aggiorna */
+  onStale: (text: string) => void
+}) {
   const t = useTranslations('registroOre')
   const errorText = useErrorText()
   const [time, setTime] = useState(() => romeParts(Date.now()).time)
@@ -488,9 +530,10 @@ export function EndForm({ shift, defaultBreak, onSaved }: { shift: WorkShift; de
     e.preventDefault()
     setBusy(true)
     setError(null)
-    const result = await endShift(shift.id, time, breakMinutes || 0)
+    const result = await callAction(() => endShift(shift.id, time, breakMinutes || 0))
     setBusy(false)
     if (result.success) onSaved(result.data)
+    else if (result.message === 'alreadyClosed' || result.message === 'notFound') onStale(errorText(result) ?? '')
     else setError(errorText(result))
   }
 

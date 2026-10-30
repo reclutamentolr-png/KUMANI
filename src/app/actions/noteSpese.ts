@@ -5,16 +5,18 @@ import { hasActiveToolAccess } from '@/lib/subscriptionGate'
 import { awardToolPoint } from '@/lib/toolPoints'
 import { limitError } from '@/lib/appLimits'
 import {
-  DATE_RE,
   EXPENSE_BUCKET,
   EXPENSE_CATEGORIES,
   EXPENSE_LIMITS,
   REPORT_STATUSES,
   addDays,
   daysBetween,
+  mileageCents,
   parseCents,
   parseDecimal,
   romeToday,
+  roundTo,
+  validDay,
   type ExpenseItem,
   type ExpenseReport,
   type ExpenseReportSummary,
@@ -36,7 +38,6 @@ const ITEM_COLUMNS = 'id, report_id, spent_on, category, description, amount_cen
 
 const clip = (value: unknown, max: number) => (typeof value === 'string' ? value.trim().slice(0, max) : '')
 const orNull = (value: string) => value || null
-const validDay = (value: unknown) => (typeof value === 'string' && DATE_RE.test(value) && !Number.isNaN(Date.parse(value)) ? value : null)
 
 async function gate() {
   const supabase = await createClient()
@@ -100,19 +101,37 @@ function reportFields(form: ReportFormData) {
 
 // ——— Note spese ———
 
-export async function listReports(): Promise<ExpenseReportSummary[]> {
+// Il server del database restituisce al massimo 1000 righe per richiesta:
+// le voci per i totali si leggono a pagine (fino al limite di 20.000)
+async function allItemSums(supabase: Supabase, userId: string): Promise<{ report_id: string; amount_cents: number }[] | null> {
+  const rows: { report_id: string; amount_cents: number }[] = []
+  const PAGE = 1000
+  for (let from = 0; from < 20000; from += PAGE) {
+    const { data, error } = await supabase.from('expense_items').select('report_id, amount_cents').eq('user_id', userId).order('id').range(from, from + PAGE - 1)
+    if (error) {
+      console.error('[NoteSpese] listReports items failed:', error)
+      return null
+    }
+    rows.push(...(data ?? []))
+    if (!data || data.length < PAGE) break
+  }
+  return rows
+}
+
+// null: lettura non riuscita (la pagina lo dice, non mostra un elenco vuoto)
+export async function listReports(): Promise<ExpenseReportSummary[] | null> {
   const g = await gate()
   if (!g) return []
-  const [{ data: reports, error }, { data: items }] = await Promise.all([
+  const [{ data: reports, error }, items] = await Promise.all([
     g.supabase.from('expense_reports').select(REPORT_COLUMNS).eq('user_id', g.userId).order('created_at', { ascending: false }).limit(1000),
-    g.supabase.from('expense_items').select('report_id, amount_cents').eq('user_id', g.userId).limit(20000),
+    allItemSums(g.supabase, g.userId),
   ])
-  if (error) {
-    console.error('[NoteSpese] listReports failed:', error)
-    return []
+  if (error || !items) {
+    if (error) console.error('[NoteSpese] listReports failed:', error)
+    return null
   }
   const sums = new Map<string, { count: number; cents: number }>()
-  for (const it of items ?? []) {
+  for (const it of items) {
     const s = sums.get(it.report_id) ?? { count: 0, cents: 0 }
     s.count += 1
     s.cents += Number(it.amount_cents) || 0
@@ -217,6 +236,10 @@ export async function duplicateReport(id: string, title: string, newStart: strin
   const firstDay = source.period_from ?? rows[0]?.spent_on ?? start
   const shift = daysBetween(firstDay, start)
   const move = (day: string | null) => (day ? addDays(day, shift) : null)
+  const newFrom = source.period_from ? move(source.period_from) : start
+  let newTo = move(source.period_to)
+  // Senza data di inizio la fine può finire prima della nuova partenza
+  if (newFrom && newTo && newTo < newFrom) newTo = newFrom
 
   const { data: copy, error } = await g.supabase
     .from('expense_reports')
@@ -225,8 +248,8 @@ export async function duplicateReport(id: string, title: string, newStart: strin
       title: cleanTitle,
       employee_name: source.employee_name,
       recipient: source.recipient,
-      period_from: source.period_from ? move(source.period_from) : start,
-      period_to: move(source.period_to),
+      period_from: newFrom,
+      period_to: newTo,
       advance_cents: 0,
       km_rate: source.km_rate,
       notes: source.notes,
@@ -287,10 +310,16 @@ function itemFields(form: ItemFormData): { row: ItemRow } | { error: string } {
   if (!(EXPENSE_CATEGORIES as readonly string[]).includes(form.category)) return { error: 'saveError' }
   const description = clip(form.description, EXPENSE_LIMITS.description)
   if (form.category === 'mileage') {
-    const km = parseDecimal(form.km ?? '')
+    // Arrotondati come li salva il database (km a 0,1, tariffa a 4 decimali):
+    // 0,04 km diventerebbe 0 e il database rifiuterebbe la voce
+    const rawKm = parseDecimal(form.km ?? '')
+    const km = rawKm === null ? null : roundTo(rawKm, 1)
     if (km === null || km <= 0 || km > EXPENSE_LIMITS.maxKm) return { error: 'kmInvalid' }
-    const rate = parseDecimal(form.kmRate ?? '')
+    const rawRate = parseDecimal(form.kmRate ?? '')
+    const rate = rawRate === null ? null : roundTo(rawRate, 4)
     if (rate === null || rate <= 0 || rate > EXPENSE_LIMITS.maxRate) return { error: 'rateInvalid' }
+    // Importo oltre il massimo di una voce (100.000 €): il database la rifiuterebbe
+    if (mileageCents(km, form.roundTrip === true, rate) > EXPENSE_LIMITS.maxAmountCents) return { error: 'kmInvalid' }
     return {
       row: {
         spent_on: spentOn,
@@ -300,9 +329,9 @@ function itemFields(form: ItemFormData): { row: ItemRow } | { error: string } {
         amount_cents: 0,
         route_from: orNull(clip(form.routeFrom, EXPENSE_LIMITS.place)),
         route_to: orNull(clip(form.routeTo, EXPENSE_LIMITS.place)),
-        km: Math.round(km * 10) / 10,
+        km,
         round_trip: form.roundTrip === true,
-        km_rate: Math.round(rate * 10000) / 10000,
+        km_rate: rate,
       },
     }
   }

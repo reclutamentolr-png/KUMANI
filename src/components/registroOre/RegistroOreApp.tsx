@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import {
   CalendarDays,
@@ -43,7 +43,7 @@ import {
 } from '@/lib/registroOre'
 import { toCsv, downloadCsv } from '@/lib/magazzino'
 import { askConfirm } from '@/lib/confirm'
-import { EndForm, PlaceForm, ShiftForm, StartForm, inputClass, labelClass, primaryClass, useErrorText } from './RegistroOreForms'
+import { EndForm, PlaceForm, ShiftForm, StartForm, callAction, inputClass, labelClass, primaryClass, useErrorText } from './RegistroOreForms'
 
 type SheetState =
   | { kind: 'place'; place: WorkPlace | null }
@@ -100,14 +100,27 @@ export default function RegistroOreApp({ initial, year: initialYear, month: init
     return () => window.clearInterval(id)
   }, [open])
 
-  const loadMonth = useCallback(async (y: number, m: number) => {
-    setLoading(true)
-    const range = monthFetchRange(y, m)
-    const [list, current] = await Promise.all([listShifts(range.from, range.to), getOpenShift()])
-    setShifts(list)
-    setOpen(current)
-    setLoading(false)
-  }, [])
+  // Solo l'ultima lettura chiesta aggiorna la pagina (mesi cambiati in fretta)
+  const loadSeq = useRef(0)
+  const loadMonth = useCallback(
+    async (y: number, m: number) => {
+      const seq = ++loadSeq.current
+      setLoading(true)
+      const range = monthFetchRange(y, m)
+      try {
+        const [list, current] = await Promise.all([listShifts(range.from, range.to), getOpenShift()])
+        if (seq !== loadSeq.current) return
+        setShifts(list)
+        setOpen(current)
+      } catch (err) {
+        console.error('[RegistroOre] load failed:', err)
+        if (seq === loadSeq.current) setNotice(errorText({ success: false, message: 'loadError' }))
+      } finally {
+        if (seq === loadSeq.current) setLoading(false)
+      }
+    },
+    [errorText],
+  )
 
   const refresh = useCallback(() => loadMonth(year, month), [loadMonth, year, month])
 
@@ -151,9 +164,14 @@ export default function RegistroOreApp({ initial, year: initialYear, month: init
   const quickStart = async () => {
     if (places.length > 1) return setSheet({ kind: 'start' })
     setBusy('start')
-    const result = await startShift(defaultPlaceId)
+    const result = await callAction(() => startShift(defaultPlaceId))
     setBusy(null)
-    if (!result.success) return setNotice(errorText(result))
+    if (!result.success) {
+      setNotice(errorText(result))
+      // Già aperto da un altro dispositivo: si mostra
+      if (result.message === 'alreadyOpen') await refresh()
+      return
+    }
     setOpen(result.data)
     setNow(Date.now())
     setNotice(t('startedNotice', { time: romeTime(result.data.starts_at) }))
@@ -163,7 +181,7 @@ export default function RegistroOreApp({ initial, year: initialYear, month: init
     const todayShifts = shifts.filter((s) => s.work_date === today)
     if (todayShifts.length && !(await askConfirm(t('repeatConfirm')))) return
     setBusy('repeat')
-    const result = await repeatYesterday()
+    const result = await callAction(() => repeatYesterday())
     setBusy(null)
     if (!result.success) return setNotice(errorText(result))
     setNotice(t('repeatedNotice', { n: result.data.length }))
@@ -644,10 +662,17 @@ export default function RegistroOreApp({ initial, year: initialYear, month: init
               setNotice(t('placeSaved'))
             }}
             onDeleted={async () => {
+              const deletedId = sheet.place?.id
               setSheet(null)
               setPlaceFilter('')
-              setPlaces(await listPlaces())
+              // Il posto è già cancellato: si toglie subito, poi si rilegge
+              setPlaces((list) => list.filter((p) => p.id !== deletedId))
               setNotice(t('placeDeleted'))
+              try {
+                setPlaces(await listPlaces())
+              } catch {
+                setNotice(errorText({ success: false, message: 'loadError' }))
+              }
               await refresh()
             }}
           />
@@ -677,6 +702,11 @@ export default function RegistroOreApp({ initial, year: initialYear, month: init
           <StartForm
             places={places}
             defaultPlaceId={defaultPlaceId}
+            onStale={async (text) => {
+              setSheet(null)
+              setNotice(text)
+              await refresh()
+            }}
             onSaved={(s) => {
               setSheet(null)
               setOpen(s)
@@ -691,6 +721,11 @@ export default function RegistroOreApp({ initial, year: initialYear, month: init
           <EndForm
             shift={open}
             defaultBreak={lastOfPlace(open.place_id)?.break_minutes ?? 0}
+            onStale={async (text) => {
+              setSheet(null)
+              setNotice(text)
+              await refresh()
+            }}
             onSaved={async (s) => {
               setSheet(null)
               setOpen(null)

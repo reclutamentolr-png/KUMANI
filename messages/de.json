@@ -18416,7 +18416,11 @@
     "error_breakTooLong": "Die Pause ist länger als die Schicht.",
     "error_future": "Eine laufende Schicht kann nicht in der Zukunft beginnen.",
     "error_nothingYesterday": "Gestern hast du keine Schicht eingetragen, die man wiederholen kann.",
-    "error_saveError": "Speichern hat nicht geklappt. Versuch es gleich noch einmal."
+    "error_saveError": "Speichern hat nicht geklappt. Versuch es gleich noch einmal.",
+    "error_overlap": "Diese Schicht überschneidet sich mit einer bereits eingetragenen (auch an einem anderen Arbeitsplatz oder mit der laufenden Schicht). Prüfe die Uhrzeiten.",
+    "error_alreadyClosed": "Diese Schicht wurde bereits beendet, vielleicht auf einem anderen Gerät. Ich habe die Seite aktualisiert.",
+    "error_alreadyRepeated": "Die Schichten von gestern wurden bereits auf heute kopiert.",
+    "error_loadError": "Die Schichten konnten nicht geladen werden. Prüfe die Verbindung und versuche es erneut."
   },
   "candidature": {
     "back": "Zurück zum Ökosystem",
@@ -18580,10 +18584,10 @@
     "profileSavedFirst": "Daten gespeichert. Jetzt kannst du deine erste Quittung erstellen.",
     "saveProfile": "Meine Daten speichern",
     "fieldKind": "Wer bezahlt dich?",
-    "kindPrivate": "Eine Privatperson",
-    "kindPrivateText": "Jemand, der für sich oder seine Familie zahlt. Kein Steuereinbehalt.",
-    "kindWithholding": "Firma, Freiberufler oder Einrichtung",
-    "kindWithholdingText": "Hat eine Umsatzsteuernummer oder ist eine Einrichtung: behält 20 % ein und zahlt sie für dich an den Staat (Steuereinbehalter).",
+    "kindPrivate": "Ohne Quellensteuer",
+    "kindPrivateText": "Eine Privatperson (für sich oder die Familie), jemand mit USt-IdNr. in der Pauschalregelung (forfettario) oder jemand im Ausland.",
+    "kindWithholding": "Mit Quellensteuer (Steuerabzugspflichtiger)",
+    "kindWithholdingText": "Unternehmen, Freiberufler in der ordentlichen Regelung, Körperschaft oder Eigentümergemeinschaft: behält 20 % ein und zahlt sie für dich an den Staat. Im Zweifel frag den Kunden, ob er die Quellensteuer einbehält.",
     "fieldClientName": "Vor- und Nachname oder Firmenname",
     "fieldClientTaxId": "Steuernummer oder Umsatzsteuernummer",
     "optional": "(freiwillig)",
@@ -18618,7 +18622,7 @@
     "calcStampCharged": "Stempelmarke (zahlt der Kunde)",
     "calcTotal": "Summe der Quittung",
     "calcWithholding": "Steuereinbehalt 20 % auf {base}",
-    "calcNoWithholding": "Kein Steuereinbehalt: Es zahlt eine Privatperson.",
+    "calcNoWithholding": "Kein Steuerabzug: Der Kunde ist nicht abzugspflichtig.",
     "calcNet": "Zu zahlender Nettobetrag",
     "calcChooseClient": "Wähle den Kunden, um zu sehen, ob ein Steuereinbehalt anfällt.",
     "stampRequired": "Der Betrag liegt über 77,47 €: Auf das Original gehört eine Stempelmarke zu 2 €. Wer bezahlt sie?",
@@ -18697,7 +18701,7 @@
     "error_clientNameRequired": "Gib den Namen des Kunden ein.",
     "error_clientTaxIdFormat": "Die Nummer des Kunden ist nicht richtig geschrieben: 16 Zeichen (Steuernummer) oder 11 Ziffern (USt-Nummer).",
     "error_clientTaxIdChecksum": "Die Steuernummer oder USt-Nummer des Kunden stimmt nicht: Prüfe, ob du sie richtig abgeschrieben hast.",
-    "error_clientTaxIdRequired": "Bei einer Firma, einem Freiberufler oder einer Einrichtung braucht es die Steuernummer oder die USt-Nummer.",
+    "error_clientTaxIdRequired": "Wenn der Kunde Quellensteuer einbehält, brauchst du seine Steuernummer oder USt-IdNr.",
     "error_profileMissing": "Gib zuerst deine Daten ein.",
     "error_dateInvalid": "Ein Datum ist ungültig.",
     "error_periodInvalid": "Der Zeitraum stimmt nicht: Der letzte Tag liegt vor dem ersten.",
@@ -18706,7 +18710,8 @@
     "error_expensesInvalid": "Die Spesenerstattung ist ungültig.",
     "error_stampIdInvalid": "Die Nummer der Stempelmarke besteht nur aus Ziffern.",
     "error_clientMissing": "Wähle den Kunden.",
-    "error_notLast": "Nur die letzte Quittung des Jahres lässt sich löschen. Diese kannst du stornieren."
+    "error_notLast": "Nur die letzte Quittung des Jahres lässt sich löschen. Diese kannst du stornieren.",
+    "loadError": "Die Quittungen konnten nicht geladen werden. Bitte lade die Seite neu."
   },
   "noteSpese": {
     "title": "Spesenabrechnungen",
@@ -18840,7 +18845,9 @@
     "error_rateInvalid": "Gib den Satz pro km ein, zum Beispiel 0,30.",
     "error_dateRequired": "Wähle das Datum der Ausgabe.",
     "error_tooManyItems": "Diese Spesenabrechnung hat zu viele Ausgaben. Lege eine neue an.",
-    "error_pdf": "Das PDF konnte nicht erstellt werden. Bitte versuch es noch einmal."
+    "error_pdf": "Das PDF konnte nicht erstellt werden. Bitte versuch es noch einmal.",
+    "error_load": "Deine Spesenabrechnungen konnten nicht geladen werden. Lade die Seite gleich neu: Deine Daten sind nicht verloren.",
+    "pdfPhotosMissing": "{n, plural, one {Das PDF ist fertig, aber # Belegfoto konnte nicht heruntergeladen werden. Prüfe deine Verbindung und lade das PDF erneut herunter.} other {Das PDF ist fertig, aber # Belegfotos konnten nicht heruntergeladen werden. Prüfe deine Verbindung und lade das PDF erneut herunter.}}"
   },
   "letteraPresentazione": {
     "title": "Anschreiben",
@@ -18942,6 +18949,7 @@
     "error_deleteError": "Das Anschreiben konnte nicht gelöscht werden. Versuch es noch einmal.",
     "error_noAccess": "Dieser Dienst ist für dein Konto nicht aktiv.",
     "error_titleRequired": "Gib dem Anschreiben einen Namen.",
-    "error_notFound": "Dieses Anschreiben gibt es nicht mehr."
+    "error_notFound": "Dieses Anschreiben gibt es nicht mehr.",
+    "leaveConfirm": "Dein Anschreiben hat ungespeicherte Änderungen. Wenn du jetzt gehst, gehen sie verloren. Trotzdem verlassen?"
   }
 }

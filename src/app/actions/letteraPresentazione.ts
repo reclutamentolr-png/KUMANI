@@ -21,19 +21,31 @@ type ActionResult<T> = { success: true; data: T } | { success: false; message: s
 const TOOL = 'lettera-presentazione'
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
-const clip = (value: unknown, max: number) => (typeof value === 'string' ? value.trim().slice(0, max) : '')
+// Taglio senza lasciare mezza emoji in fondo (una metà da sola il database non la accetta)
+const cut = (text: string, max: number) => text.slice(0, max).replace(/[\uD800-\uDBFF]$/, '')
+const clip = (value: unknown, max: number) => (typeof value === 'string' ? cut(value.trim(), max) : '')
 // Testo lungo: si tengono gli a capo, si tolgono gli spazi in fondo alle righe
 const clipBody = (value: unknown, max: number) =>
   typeof value === 'string'
-    ? value
-        .replace(/\r\n?/g, '\n')
-        .split('\n')
-        .map((l) => l.trimEnd())
-        .join('\n')
-        .replace(/\n{3,}/g, '\n\n')
-        .trim()
-        .slice(0, max)
+    ? cut(
+        value
+          .replace(/\r\n?/g, '\n')
+          .split('\n')
+          .map((l) => l.trimEnd())
+          .join('\n')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim(),
+        max,
+      )
     : ''
+
+// Data vera (niente 30 febbraio, che il database rifiuterebbe facendo fallire il salvataggio)
+function validDate(date: string): boolean {
+  if (!DATE_RE.test(date) || date < '2000-01-01' || date > '2100-12-31') return false
+  const [y, m, d] = date.split('-').map(Number)
+  const t = new Date(Date.UTC(y, m - 1, d))
+  return t.getUTCFullYear() === y && t.getUTCMonth() === m - 1 && t.getUTCDate() === d
+}
 
 const SUMMARY_COLUMNS = 'id, title, recipient_company, position, content_language, template, letter_date, updated_at'
 
@@ -63,7 +75,7 @@ function toRow(form: CoverLetterForm) {
     recipient_name: clip(form.recipientName, LETTER_LIMITS.recipientName),
     recipient_address: clipBody(form.recipientAddress, LETTER_LIMITS.recipientAddress),
     place: clip(form.place, LETTER_LIMITS.place),
-    letter_date: DATE_RE.test(date) && date >= '2000-01-01' && date <= '2100-12-31' ? date : null,
+    letter_date: validDate(date) ? date : null,
     subject: clip(form.subject, LETTER_LIMITS.subject),
     greeting: clip(form.greeting, LETTER_LIMITS.greeting),
     body: clipBody(form.body, LETTER_LIMITS.body),
@@ -147,7 +159,7 @@ export async function duplicateCoverLetter(id: string, copySuffix: string): Prom
   const { data: source } = await g.supabase.from('cover_letters').select('*').eq('id', id).eq('user_id', g.userId).maybeSingle()
   if (!source) return { success: false, message: 'notFound' }
   const suffix = ` ${clip(copySuffix, 20) || '(copia)'}`
-  const title = `${String(source.title).slice(0, LETTER_LIMITS.title - suffix.length)}${suffix}`
+  const title = `${cut(String(source.title), LETTER_LIMITS.title - suffix.length)}${suffix}`
   // Si copiano solo le colonne della lettera (niente id, proprietario, date)
   const copy = Object.fromEntries(
     Object.entries(source as Record<string, unknown>).filter(([k]) => !['id', 'user_id', 'created_at', 'updated_at'].includes(k)),

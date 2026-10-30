@@ -106,7 +106,7 @@ export async function generateExpensePdf({
   items: ExpenseItem[]
   labels: ExpensePdfLabels
   locale: string
-}): Promise<Blob> {
+}): Promise<{ blob: Blob; missingPhotos: number }> {
   const items = sortItems(rawItems)
   const withReceipt = items.filter((i) => i.receipt_url)
   const [regular, bold, ...photoList] = await Promise.all([
@@ -374,5 +374,5 @@ export async function generateExpensePdf({
     doc.text(labels.pageOf(p, pages), M + W, A4_H - 22, { align: 'right' })
   }
 
-  return doc.output('blob')
+  return { blob: doc.output('blob'), missingPhotos: withReceipt.length - photos.size }
 }

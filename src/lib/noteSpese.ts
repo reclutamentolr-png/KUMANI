@@ -92,20 +92,51 @@ export function romeToday(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(new Date())
 }
 
-// Numero scritto all'italiana o all'inglese: «12,50», «1.234,5», «12.50»
+// Numero scritto all'italiana o all'inglese: «12,50», «1.234,5», «12.50»,
+// «1,234.56». Con virgola e punto insieme i decimali sono dopo l'ultimo dei
+// due; «1.234» sono migliaia, ma «0.425» (tariffa al km) resta 0,425.
 export function parseDecimal(value: string): number | null {
-  const raw = value.trim().replace(/\s|€/g, '')
+  const raw = value.trim().replace(/\s|€|'/g, '')
   if (!raw) return null
-  const normalized = raw.includes(',') ? raw.replace(/\./g, '').replace(',', '.') : /^\d{1,3}(\.\d{3})+$/.test(raw) ? raw.replace(/\./g, '') : raw
+  const lastComma = raw.lastIndexOf(',')
+  const lastDot = raw.lastIndexOf('.')
+  const normalized =
+    lastComma >= 0 && lastDot >= 0
+      ? lastComma > lastDot
+        ? raw.replace(/\./g, '').replace(',', '.')
+        : raw.replace(/,/g, '')
+      : lastComma >= 0
+        ? /^\d{1,3}(,\d{3}){2,}$/.test(raw)
+          ? raw.replace(/,/g, '')
+          : raw.replace(',', '.')
+        : /^[1-9]\d{0,2}(\.\d{3})+$/.test(raw)
+          ? raw.replace(/\./g, '')
+          : raw
   if (!/^\d*\.?\d*$/.test(normalized) || normalized === '.') return null
   const n = Number(normalized)
   return Number.isFinite(n) ? n : null
 }
 
+// Arrotondamento a `decimals` cifre senza gli errori dei numeri con la
+// virgola (1,005 € → 1,01 €, 0,15 km → 0,2 km), come fa il database
+export function roundTo(n: number, decimals: number): number {
+  const f = 10 ** decimals
+  return Math.round(Number((n * f).toFixed(6))) / f
+}
+
 // Euro scritti → centesimi interi (null se non è un numero valido)
 export function parseCents(value: string): number | null {
   const n = parseDecimal(value)
-  return n === null ? null : Math.round(n * 100)
+  return n === null ? null : Math.round(Number((n * 100).toFixed(6)))
+}
+
+// Data «AAAA-MM-GG» vera (niente 30 febbraio) e in un intervallo sensato
+export function validDay(value: unknown): string | null {
+  if (typeof value !== 'string' || !DATE_RE.test(value)) return null
+  const year = Number(value.slice(0, 4))
+  if (year < 1900 || year > 2199) return null
+  const d = new Date(`${value}T00:00:00Z`)
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === value ? value : null
 }
 
 // Centesimi → testo da rimettere nel campo («12,50»)
@@ -119,6 +150,12 @@ export function formatCents(cents: number, locale: string): string {
 
 export function formatKm(km: number, locale: string): string {
   return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(km)
+}
+
+// Chilometri da rimettere nel campo: senza separatore delle migliaia,
+// altrimenti «1,234.5» (inglese) verrebbe riletto male
+export function kmToInput(km: number, locale: string): string {
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1, useGrouping: false }).format(km)
 }
 
 export function formatRate(rate: number, locale: string): string {

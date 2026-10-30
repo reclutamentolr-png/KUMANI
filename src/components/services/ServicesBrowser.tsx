@@ -41,8 +41,6 @@ import { communityAsService } from '@/lib/communityItems'
 import { setServicesView } from '@/app/actions/homeView'
 import { FROM_ICONS_KEY, FROM_SERVICES, type ServicesView } from '@/lib/homeView'
 
-type Filter = 'all' | 'mine' | 'locked'
-
 const PLAN_RANK: Record<ServiceItem['plan'], number> = { free: 0, base: 1, pro: 2 }
 
 // Icona di ogni categoria (copertine, colonna a sinistra, barra in alto)
@@ -128,7 +126,6 @@ export default function ServicesBrowser({
     }
   }
   const [query, setQuery] = useState('')
-  const [filter, setFilter] = useState<Filter>('all')
   const [favorites, setFavorites] = useState(initialFavorites)
   const [segment, setSegment] = useState<ServiceSegment>('me')
   const [selected, setSelected] = useState<ServiceGroup | null>(null)
@@ -173,21 +170,9 @@ export default function ServicesBrowser({
     setScrollTick((n) => n + 1)
   }
 
-  // La sicurezza conta come tre servizi (Controlla, Proteggi, Segnala): un
-  // servizio è «mio» se almeno una scheda è aperta, «da sbloccare» se una è chiusa
-  const others = items.filter((item) => !TOOL_HUB[item.toolName])
-  const hubs = SERVICE_HUBS.map((hub) => items.filter((item) => TOOL_HUB[item.toolName] === hub)).filter((list) => list.length > 0)
-  const counts = {
-    all: others.length + hubs.length,
-    mine: others.filter((item) => item.open).length + hubs.filter((list) => list.some((item) => item.open)).length,
-    locked: others.filter((item) => !item.open).length + hubs.filter((list) => list.some((item) => !item.open)).length,
-  }
-
   const groups = useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean)
     const shown = items.filter((item) => {
-      if (filter === 'mine' && !item.open) return false
-      if (filter === 'locked' && item.open) return false
       const text = normalize(`${item.title} ${item.name ?? ''} ${item.description} ${t(`group_${item.group}`)}`)
       return words.every((word) => text.includes(word))
     })
@@ -197,7 +182,7 @@ export default function ServicesBrowser({
       group,
       items: shown.filter((item) => item.group === group).sort((a, b) => PLAN_RANK[a.plan] - PLAN_RANK[b.plan] || Number(b.open) - Number(a.open)),
     })).filter(({ items }) => items.length > 0)
-  }, [items, query, filter, t])
+  }, [items, query, t])
 
   const searching = query.trim().length > 0
   const hubsView = !searching
@@ -218,16 +203,14 @@ export default function ServicesBrowser({
   const openOf = (_group: ServiceGroup, list: ServiceItem[]) => list.filter((item) => item.open).length
   const segmentSize = segmentGroups.reduce((n, g) => n + sizeOf(g.group, g.items), 0)
 
-  // Community nella vista Icone: con la stessa ricerca e gli stessi filtri
+  // Community nella vista Icone: con la stessa ricerca
   const communityIcons = useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean)
     return community.map(communityAsService).filter((item) => {
-      if (filter === 'mine' && !item.open) return false
-      if (filter === 'locked' && item.open) return false
       const text = normalize(`${item.title} ${item.description}`)
       return words.every((word) => text.includes(word))
     })
-  }, [community, query, filter])
+  }, [community, query])
 
   const onToggle = (toolName: string, isFavorite: boolean) =>
     setFavorites((list) => (isFavorite ? [toolName, ...list.filter((name) => name !== toolName)] : list.filter((name) => name !== toolName)))
@@ -364,24 +347,6 @@ export default function ServicesBrowser({
         )}
       </label>
 
-      {/* Filtri */}
-      <div role="tablist" aria-label={t('filtersLabel')} className="mt-3 flex gap-2 overflow-x-auto pb-1 [contain:inline-size]">
-        {(['all', 'mine', 'locked'] as const).map((key) => (
-          <button
-            key={key}
-            type="button"
-            role="tab"
-            aria-selected={filter === key}
-            onClick={() => setFilter(key)}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm font-bold transition-colors ${
-              filter === key ? 'bg-[var(--ink)] text-white' : 'border border-[var(--gold)]/35 bg-white text-[var(--ink)] hover:border-[var(--gold)]'
-            }`}
-          >
-            {t(`filter_${key}`)} <span className={filter === key ? 'text-[var(--gold-bright)]' : 'text-[var(--muted)]'}>{counts[key]}</span>
-          </button>
-        ))}
-      </div>
-
       {view === 'icons' ? (
         segmentGroups.length === 0 && communityIcons.length === 0 ? (
           noResults
@@ -476,13 +441,16 @@ export default function ServicesBrowser({
                 {/* Telefono: le categorie della parte in una fila che resta in alto e scorre di lato (contain: non allarga la pagina) */}
                 <div className="sticky top-0 z-10 -mx-4 mb-4 bg-[var(--background)]/95 px-4 py-2 backdrop-blur lg:hidden">
                   <div className="flex gap-2 overflow-x-auto pb-1 [contain:inline-size] [scrollbar-width:none]">
-                    <button
-                      type="button"
-                      onClick={() => chooseGroup(null)}
-                      className="flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--ink)]/15 bg-white px-3 py-2 text-sm font-semibold text-[var(--ink)]"
-                    >
-                      <ArrowLeft className="h-4 w-4" aria-hidden /> {t('backToCategories')}
-                    </button>
+                    {/* «Tutte» resta fermo all'inizio: è il pulsante per tornare alle categorie */}
+                    <span className="sticky left-0 z-10 flex shrink-0 bg-[var(--background)] pr-1 shadow-[8px_0_8px_-6px_rgba(23,23,23,0.18)]">
+                      <button
+                        type="button"
+                        onClick={() => chooseGroup(null)}
+                        className="flex items-center gap-1.5 rounded-full border border-[var(--ink)] bg-white px-3 py-2 text-sm font-bold text-[var(--ink)]"
+                      >
+                        <ArrowLeft className="h-4 w-4" aria-hidden /> {t('backToCategories')}
+                      </button>
+                    </span>
                     {segmentGroups.map(({ group }) => {
                       const Icon = GROUP_ICON[group]
                       const on = group === current.group

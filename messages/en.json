@@ -18416,7 +18416,11 @@
     "error_breakTooLong": "The break is longer than the shift.",
     "error_future": "A shift in progress can’t start in the future.",
     "error_nothingYesterday": "You didn’t log any shifts yesterday to repeat.",
-    "error_saveError": "I couldn’t save. Please try again shortly."
+    "error_saveError": "I couldn’t save. Please try again shortly.",
+    "error_overlap": "This shift overlaps another one you already logged (even at another workplace, or the shift in progress). Check the times.",
+    "error_alreadyClosed": "This shift has already been ended, maybe from another device. I've refreshed the page.",
+    "error_alreadyRepeated": "Yesterday's shifts have already been copied to today.",
+    "error_loadError": "I couldn't load your shifts. Check your connection and try again."
   },
   "candidature": {
     "back": "Back to the Ecosystem",
@@ -18580,10 +18584,10 @@
     "profileSavedFirst": "Details saved. Now you can make your first receipt.",
     "saveProfile": "Save my details",
     "fieldKind": "Who is paying you?",
-    "kindPrivate": "A private person",
-    "kindPrivateText": "Someone paying for themselves or their family. No withholding tax.",
-    "kindWithholding": "Company, professional or organisation",
-    "kindWithholdingText": "Has a VAT number or is an organisation: keeps 20% and pays it to the State for you (withholding agent).",
+    "kindPrivate": "No withholding",
+    "kindPrivateText": "A private person (for themselves or their family), someone with a VAT number under the flat-rate scheme (forfettario), or someone abroad.",
+    "kindWithholding": "With withholding (withholding agent)",
+    "kindWithholdingText": "A company, a professional under the ordinary regime, an organisation or a condominium: they keep 20% and pay it to the State for you. If in doubt, ask the client whether they apply withholding tax.",
     "fieldClientName": "Name or company name",
     "fieldClientTaxId": "Tax code or VAT number",
     "optional": "(optional)",
@@ -18618,7 +18622,7 @@
     "calcStampCharged": "Revenue stamp (paid by the client)",
     "calcTotal": "Receipt total",
     "calcWithholding": "Withholding tax 20% on {base}",
-    "calcNoWithholding": "No withholding tax: a private person is paying.",
+    "calcNoWithholding": "No withholding: the client is not a withholding agent.",
     "calcNet": "Net amount to pay",
     "calcChooseClient": "Choose the client to see if withholding tax applies.",
     "stampRequired": "The amount is over €77.47: the original needs a €2 revenue stamp. Who pays for it?",
@@ -18697,7 +18701,7 @@
     "error_clientNameRequired": "Enter the client’s name.",
     "error_clientTaxIdFormat": "The client’s code is not written correctly: 16 characters (tax code) or 11 digits (VAT number).",
     "error_clientTaxIdChecksum": "The client’s tax code or VAT number does not add up: check you copied it correctly.",
-    "error_clientTaxIdRequired": "For a company, a professional or an organisation, the tax code or VAT number is needed.",
+    "error_clientTaxIdRequired": "If the client applies withholding tax, their tax code or VAT number is required.",
     "error_profileMissing": "Enter your details first.",
     "error_dateInvalid": "One of the dates is not valid.",
     "error_periodInvalid": "The period does not add up: the end date comes before the start date.",
@@ -18706,7 +18710,8 @@
     "error_expensesInvalid": "The expenses refund is not valid.",
     "error_stampIdInvalid": "The revenue stamp number contains digits only.",
     "error_clientMissing": "Choose the client.",
-    "error_notLast": "Only the last receipt of the year can be deleted. You can cancel this one."
+    "error_notLast": "Only the last receipt of the year can be deleted. You can cancel this one.",
+    "loadError": "We couldn’t load your receipts. Please reload the page."
   },
   "noteSpese": {
     "title": "Expense reports",
@@ -18840,7 +18845,9 @@
     "error_rateInvalid": "Enter the rate per km, for example 0.45.",
     "error_dateRequired": "Choose the date of the expense.",
     "error_tooManyItems": "This expense report has too many items. Create a new one.",
-    "error_pdf": "Could not create the PDF. Please try again."
+    "error_pdf": "Could not create the PDF. Please try again.",
+    "error_load": "I couldn't load your expense reports. Reload the page in a moment: your data is not lost.",
+    "pdfPhotosMissing": "{n, plural, one {The PDF is ready, but # receipt photo could not be downloaded. Check your connection and download the PDF again.} other {The PDF is ready, but # receipt photos could not be downloaded. Check your connection and download the PDF again.}}"
   },
   "letteraPresentazione": {
     "title": "Cover letter",
@@ -18942,6 +18949,7 @@
     "error_deleteError": "The letter could not be deleted. Please try again.",
     "error_noAccess": "This service is not active for your account.",
     "error_titleRequired": "Write the letter name.",
-    "error_notFound": "This letter no longer exists."
+    "error_notFound": "This letter no longer exists.",
+    "leaveConfirm": "Your letter has unsaved changes. If you leave now, they will be lost. Leave anyway?"
   }
 }
