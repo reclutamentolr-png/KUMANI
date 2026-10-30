@@ -13,7 +13,8 @@ export default function DocumentPreview({ doc }: { doc: DocContent }) {
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i]
     const next = blocks[i + 1]
-    if (isField(b) && b.half && next && isField(next) && next.half) {
+    const twoSigns = b.type === 'signature' && next?.type === 'signature' && (next.align === 'left') !== (b.align === 'left')
+    if ((isField(b) && b.half && next && isField(next) && next.half) || twoSigns) {
       rows.push([b, next])
       i++
     } else rows.push([b])
@@ -22,14 +23,19 @@ export default function DocumentPreview({ doc }: { doc: DocContent }) {
 
   const field = (b: DocBlock) => (
     <div className="min-w-0 flex-1">
-      <p className="mb-1 truncate text-[10px] font-bold text-gray-500">
-        {b.label}
-        {b.required && ' *'}
-      </p>
+      {b.type !== 'checkbox' && (
+        <p className="mb-1 truncate text-[10px] font-bold text-gray-500">
+          {b.label}
+          {b.required && ' *'}
+        </p>
+      )}
       {b.type === 'checkbox' ? (
         <div className="flex items-start gap-2 whitespace-pre-wrap text-[11px] text-gray-800">
           <span className={`mt-0.5 h-3.5 w-3.5 shrink-0 rounded-sm border border-[#c8bda8] ${b.checked ? 'bg-[var(--gold)]' : 'bg-[#faf5e6]'}`} />
-          <span className="min-w-0 break-words">{b.text}</span>
+          <span className="min-w-0 break-words">
+            {b.text?.trim() || b.label}
+            {b.required && ' *'}
+          </span>
         </div>
       ) : b.type === 'select' ? (
         <div className="flex h-6 items-center justify-between gap-1 rounded-sm border border-[#c8bda8] bg-[#faf5e6] px-2 text-[11px] text-gray-800">
@@ -54,6 +60,20 @@ export default function DocumentPreview({ doc }: { doc: DocContent }) {
           {rows.length === 0 && <p className="pt-10 text-center text-xs text-gray-400">{t('previewEmpty')}</p>}
           {rows.map((row) => {
             const b = row[0]
+            if (row.length === 2 && b.type === 'signature') {
+              const [left, right] = b.align === 'left' ? row : [row[1], row[0]]
+              return (
+                <div key={b.id} className="flex justify-between gap-3 pt-2">
+                  {[left, right].map((s) => (
+                    <div key={s.id} className="w-[45%]">
+                      <p className="truncate text-[10px] font-bold text-gray-500">{s.label || t('def_signature')}</p>
+                      <div className="mt-9 border-b border-gray-800" />
+                      {s.text && <p className="mt-1 truncate text-[9px] text-gray-500">{s.text}</p>}
+                    </div>
+                  ))}
+                </div>
+              )
+            }
             if (row.length === 2)
               return (
                 <div key={b.id} className="flex gap-3">

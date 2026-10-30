@@ -4,7 +4,23 @@
 // Si crea subito sul server e si apre il documento.
 import { useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { ClipboardList, Camera, FilePlus2, FileSignature, LoaderCircle, Receipt, type LucideIcon } from 'lucide-react'
+import {
+  Bus,
+  Camera,
+  ClipboardList,
+  Contact,
+  FilePlus2,
+  FileSignature,
+  LoaderCircle,
+  MessageSquareWarning,
+  Receipt,
+  ShieldCheck,
+  ShoppingCart,
+  Star,
+  Trophy,
+  Users,
+  type LucideIcon,
+} from 'lucide-react'
 import { useLocalizedRouter as useRouter } from '@/lib/useLocalizedRouter'
 import { limitTextOf } from '@/lib/limitText'
 import { createComposableDocument } from '@/app/actions/documentoComponibile'
@@ -17,6 +33,14 @@ const ICONS: Record<TemplateId, LucideIcon> = {
   liberatoria: Camera,
   preventivo: Receipt,
   delega: FileSignature,
+  gita: Bus,
+  socio: Users,
+  'scheda-cliente': Contact,
+  ordine: ShoppingCart,
+  soddisfazione: Star,
+  reclamo: MessageSquareWarning,
+  evento: Trophy,
+  responsabilita: ShieldCheck,
 }
 
 export default function NuovoDocumento() {

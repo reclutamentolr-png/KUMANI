@@ -168,9 +168,10 @@ export async function buildFillablePdf(doc: DocContent, labels: PdfLabels): Prom
   }
 
   const hintOf = (b: DocBlock) => (b.type === 'date' ? b.hint || labels.dateHint : b.hint || '')
-  const checkboxLines = (b: DocBlock, width: number) => wrap(clean(b.text || ''), font, 10, width - 22)
+  const checkboxText = (b: DocBlock) => `${(b.text || '').trim() || (b.label || '').trim()}${b.required ? ' *' : ''}`
+  const checkboxLines = (b: DocBlock, width: number) => wrap(clean(checkboxText(b)), font, 10, width - 22)
   const fieldHeight = (b: DocBlock, width: number) => {
-    if (b.type === 'checkbox') return Math.max(18, checkboxLines(b, width).length * 13 + 4) + 14
+    if (b.type === 'checkbox') return Math.max(18, checkboxLines(b, width).length * 13 + 4)
     const h = b.type === 'textarea' ? textareaLines(b) * 14 + 8 : 22
     return h + 14 + (hintOf(b) ? 11 : 0)
   }
@@ -181,8 +182,10 @@ export async function buildFillablePdf(doc: DocContent, labels: PdfLabels): Prom
   const field = (b: DocBlock, x: number, width: number, top: number, flow = false): number => {
     let cy = top
     const label = clean(b.label || '') + (b.required ? ' *' : '')
-    if (label.trim()) page.drawText(fit(label, bold, 9, width), { x, y: cy - 9, size: 9, font: bold, color: MUTED })
-    cy -= 14
+    if (b.type !== 'checkbox') {
+      if (label.trim()) page.drawText(fit(label, bold, 9, width), { x, y: cy - 9, size: 9, font: bold, color: MUTED })
+      cy -= 14
+    }
     const name = fieldName(b.label || b.type, used)
     if (b.type === 'checkbox') {
       const cb = form.createCheckBox(name)
@@ -275,13 +278,23 @@ export async function buildFillablePdf(doc: DocContent, labels: PdfLabels): Prom
         // immagine non leggibile: si salta
       }
     } else if (b.type === 'signature') {
-      ensure(80)
+      // Spazio firma: etichetta, riga a 4 cm circa per firmare, nota sotto
+      ensure(70)
       const width = 220
-      const x = b.align === 'left' ? M : M + W - width
-      page.drawText(fit(clean(b.label || labels.signature), bold, 9, width), { x, y: y - 9, size: 9, font: bold, color: MUTED })
-      page.drawLine({ start: { x, y: y - 52 }, end: { x: x + width, y: y - 52 }, thickness: 0.8, color: INK })
-      if (b.text) page.drawText(fit(clean(b.text), font, 8.5, width), { x, y: y - 64, size: 8.5, font, color: MUTED })
-      y -= 80
+      const sign = (s: DocBlock) => {
+        const x = s.align === 'left' ? M : M + W - width
+        page.drawText(fit(clean(s.label || labels.signature), bold, 9, width), { x, y: y - 9, size: 9, font: bold, color: MUTED })
+        page.drawLine({ start: { x, y: y - 46 }, end: { x: x + width, y: y - 46 }, thickness: 0.8, color: INK })
+        if (s.text) page.drawText(fit(clean(s.text), font, 8.5, width), { x, y: y - 58, size: 8.5, font, color: MUTED })
+      }
+      sign(b)
+      // Due firme di fila, una a sinistra e una a destra: sulla stessa riga
+      const next = blocks[i + 1]
+      if (next?.type === 'signature' && (next.align === 'left') !== (b.align === 'left')) {
+        sign(next)
+        i++
+      }
+      y -= 70
     } else if (isField(b)) {
       // Due campi «a metà» di fila stanno sulla stessa riga
       const next = blocks[i + 1]
