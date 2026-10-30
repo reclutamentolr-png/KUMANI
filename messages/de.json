@@ -18370,7 +18370,12 @@
     "cat1": "Welcher Dienst aus „{tool}“ passt zu mir?",
     "cat2": "Wo fange ich bei „{tool}“ an?",
     "cat3": "Was kann ich mit den Diensten aus „{tool}“ machen?",
-    "cat4": "Welche Dienste aus „{tool}“ sind in meinem Plan?"
+    "cat4": "Welche Dienste aus „{tool}“ sind in meinem Plan?",
+    "surprise1": "Was kann ich mit einem Gutschein schenken?",
+    "surprise2": "Wie öffnet sich die Überraschung?",
+    "surprise3": "Wie funktioniert die Übergabe des Geschenks?",
+    "surprise4": "Was kostet es und wann bezahle ich?",
+    "surprise5": "Wie schicke ich sie der Person?"
   },
   "nfcTag": {
     "buyTitle": "Was du brauchst",

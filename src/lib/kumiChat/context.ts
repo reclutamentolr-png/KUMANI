@@ -2,7 +2,7 @@
 // domande suggerite e cosa sa KUMI rispondendo (a chi è già dentro non si
 // propone di iscriversi).
 
-export type KumiContextKind = 'visitor' | 'home' | 'wallet' | 'community' | 'documents' | 'tool' | 'category'
+export type KumiContextKind = 'visitor' | 'home' | 'wallet' | 'community' | 'documents' | 'tool' | 'category' | 'surprise'
 // tool = nome del servizio, oppure della categoria aperta nella pagina Servizi
 export type KumiContext = { kind: KumiContextKind; tool?: string }
 
@@ -11,6 +11,8 @@ const starts = (path: string, p: string) => path === p || path.startsWith(`${p}/
 // path = indirizzo senza la lingua; tool = nome del servizio se si è dentro uno;
 // category = nome della categoria aperta nella pagina Servizi (?categoria=…)
 export function kumiContextOf(path: string, signedIn: boolean, toolTitle?: string | null, category?: string | null): KumiContext {
+  // KUMANI Sorpresa: domande sui regali, per visitatori e iscritti
+  if (starts(path, '/sorprese')) return { kind: 'surprise' }
   if (!signedIn) return { kind: 'visitor' }
   if (starts(path, '/app') && toolTitle) return { kind: 'tool', tool: toolTitle }
   if (starts(path, '/servizi') && category) return { kind: 'category', tool: category }
@@ -29,7 +31,8 @@ export const KUMI_CHIPS: Record<KumiContextKind, string[]> = {
   documents: ['documents1', 'documents2', 'documents3', 'documents4'],
   tool: ['tool1', 'tool2', 'tool3', 'tool4'],
   category: ['cat1', 'cat2', 'cat3', 'cat4'],
+  surprise: ['surprise1', 'surprise2', 'surprise3', 'surprise4', 'surprise5'],
 }
 
 export const isKumiContext = (v: unknown): v is KumiContext =>
-  !!v && typeof v === 'object' && ['visitor', 'home', 'wallet', 'community', 'documents', 'tool', 'category'].includes((v as KumiContext).kind)
+  !!v && typeof v === 'object' && ['visitor', 'home', 'wallet', 'community', 'documents', 'tool', 'category', 'surprise'].includes((v as KumiContext).kind)
