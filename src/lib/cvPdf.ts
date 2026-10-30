@@ -41,18 +41,18 @@ export type CvForPdf = {
 // Helper senza jsPDF ri-esportato per chi lo importava da qui
 export { loadInterFontBase64 } from '@/lib/pdfHelpers'
 
-type RGB = [number, number, number]
-type FontKey = 'regular' | 'bold' | 'serif' | 'serifBold'
-type CvFonts = { regular: string; bold: string; serif?: string; serifBold?: string }
+export type RGB = [number, number, number]
+export type FontKey = 'regular' | 'bold' | 'serif' | 'serifBold'
+export type CvFonts = { regular: string; bold: string; serif?: string; serifBold?: string }
 
-const FONT_FILES: Record<FontKey, string> = {
+export const FONT_FILES: Record<FontKey, string> = {
   regular: '/fonts/inter/Inter-Regular.ttf',
   bold: '/fonts/inter/Inter-Bold.ttf',
   serif: '/fonts/ptserif/PTSerif-Regular.ttf',
   serifBold: '/fonts/ptserif/PTSerif-Bold.ttf',
 }
 
-async function fontBase64(url: string): Promise<string> {
+export async function fontBase64(url: string): Promise<string> {
   const res = await fetch(url)
   if (!res.ok) throw new Error(`font ${url}`)
   const bytes = new Uint8Array(await res.arrayBuffer())
@@ -138,14 +138,15 @@ export async function buildCvPdfBlob(params: { cv: CvForPdf; photoUrl: string | 
 }
 
 // ─── Impaginazione ────────────────────────────────────────────────────────
+// Pezzi esportati (Pager, Flow, caratteri, colori) li usa anche la Lettera di presentazione
 // Coordinate dall'alto: «y» è il bordo superiore della riga successiva.
 // Ogni colonna (Flow) va a pagina nuova da sola quando finisce lo spazio.
 
-const A4_W = 595.28
-const A4_H = 841.89
-const FOOTER_H = 62
+export const A4_W = 595.28
+export const A4_H = 841.89
+export const FOOTER_H = 62
 
-class Pager {
+export class Pager {
   maxY: Record<number, number> = {}
   constructor(
     public doc: jsPDF,
@@ -166,7 +167,7 @@ class Pager {
   }
 }
 
-type TextOpts = {
+export type TextOpts = {
   size?: number
   font?: FontKey
   color?: RGB
@@ -179,7 +180,7 @@ type TextOpts = {
   url?: string
 }
 
-class Flow {
+export class Flow {
   constructor(
     public pg: Pager,
     public x: number,
@@ -344,14 +345,14 @@ class Flow {
   }
 }
 
-const INK: RGB = [23, 23, 23]
-const TEXT: RGB = [55, 55, 55]
-const MUTED: RGB = [115, 115, 115]
-const LIGHT_RULE: RGB = [205, 205, 205]
-const WHITE: RGB = [255, 255, 255]
-const GOLD: RGB = [199, 161, 90]
+export const INK: RGB = [23, 23, 23]
+export const TEXT: RGB = [55, 55, 55]
+export const MUTED: RGB = [115, 115, 115]
+export const LIGHT_RULE: RGB = [205, 205, 205]
+export const WHITE: RGB = [255, 255, 255]
+export const GOLD: RGB = [199, 161, 90]
 
-function registerFonts(doc: jsPDF, fonts: CvFonts) {
+export function registerFonts(doc: jsPDF, fonts: CvFonts) {
   doc.addFileToVFS('Inter-Regular.ttf', fonts.regular)
   doc.addFont('Inter-Regular.ttf', 'Inter', 'normal')
   doc.addFileToVFS('Inter-Bold.ttf', fonts.bold)
@@ -365,7 +366,7 @@ function registerFonts(doc: jsPDF, fonts: CvFonts) {
   doc.setFont('Inter', 'normal')
 }
 
-function addImageSafe(doc: jsPDF, dataUrl: string | null, x: number, y: number, w: number, h: number) {
+export function addImageSafe(doc: jsPDF, dataUrl: string | null, x: number, y: number, w: number, h: number) {
   if (!dataUrl) return false
   try {
     doc.addImage(dataUrl, dataUrl.startsWith('data:image/png') ? 'PNG' : 'JPEG', x, y, w, h)
@@ -579,10 +580,10 @@ function drawModerno(doc: jsPDF, ctx: Ctx, photo: string | null) {
 
 // ─── Modello Professionale ────────────────────────────────────────────────
 
-const NAVY: RGB = [15, 42, 74]
-const NAVY_SOFT: RGB = [44, 74, 110]
-const SKY: RGB = [176, 214, 243]
-const SKY_LINE: RGB = [186, 214, 238]
+export const NAVY: RGB = [15, 42, 74]
+export const NAVY_SOFT: RGB = [44, 74, 110]
+export const SKY: RGB = [176, 214, 243]
+export const SKY_LINE: RGB = [186, 214, 238]
 const BLUE_DOT: RGB = [47, 111, 179]
 
 function drawProfessionale(doc: jsPDF, ctx: Ctx, photo: string | null) {
@@ -731,9 +732,9 @@ function drawProfessionale(doc: jsPDF, ctx: Ctx, photo: string | null) {
 
 // ─── Modello Elegante ─────────────────────────────────────────────────────
 
-const PAPER: RGB = [251, 251, 250]
-const ELEG_TEXT: RGB = [75, 75, 75]
-const ELEG_HEAD: RGB = [60, 60, 60]
+export const PAPER: RGB = [251, 251, 250]
+export const ELEG_TEXT: RGB = [75, 75, 75]
+export const ELEG_HEAD: RGB = [60, 60, 60]
 
 function drawElegante(doc: jsPDF, ctx: Ctx, photo: string | null, hasSerif: boolean) {
   const { cv, L } = ctx
@@ -861,7 +862,7 @@ function drawElegante(doc: jsPDF, ctx: Ctx, photo: string | null, hasSerif: bool
 
 // ─── Formato europeo ──────────────────────────────────────────────────────
 
-const EU_BLUE: RGB = [29, 79, 145]
+export const EU_BLUE: RGB = [29, 79, 145]
 
 function drawEuropeo(doc: jsPDF, ctx: Ctx, photo: string | null) {
   const { cv, L } = ctx

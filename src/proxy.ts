@@ -67,6 +67,11 @@ const PAID_TOOLS = [
   'accordatore',
   'firma-email',
   'calcolatrici',
+  'lettera-presentazione',
+  'note-spese',
+  'ricevuta-occasionale',
+  'candidature',
+  'registro-ore',
   'angolo-bambini',
 ];
 

@@ -75,6 +75,11 @@ import {
   AudioWaveform,
   Metronome,
   Guitar,
+  Clock,
+  Send,
+  ReceiptText,
+  Wallet,
+  FilePenLine,
 } from 'lucide-react'
 
 type Category = 'marketing' | 'security' | 'personal' | 'wellness' | 'lavoro' | 'svago' | 'audio' | 'bambini' | 'community'
@@ -184,6 +189,11 @@ export default function HomeToolsGrid({ freeToolNames = [] }: { freeToolNames?: 
     { name: 'magazzino', icon: Warehouse, title: tc('magazzino'), desc: tc('magazzinoDescription'), category: 'lavoro' },
     { name: 'calcolatrici', icon: Calculator, title: tc('calcolatrici'), desc: tc('calcolatriciDescription'), category: 'lavoro' },
     { name: 'trova-lavoro', icon: BriefcaseBusiness, title: tc('trovaLavoro'), desc: tc('trovaLavoroDescription'), category: 'lavoro' },
+    { name: 'lettera-presentazione', icon: FilePenLine, title: tc('letteraPresentazione'), desc: tc('letteraPresentazioneDescription'), category: 'lavoro' },
+    { name: 'note-spese', icon: Wallet, title: tc('noteSpese'), desc: tc('noteSpeseDescription'), category: 'lavoro' },
+    { name: 'ricevuta-occasionale', icon: ReceiptText, title: tc('ricevutaOccasionale'), desc: tc('ricevutaOccasionaleDescription'), category: 'lavoro' },
+    { name: 'candidature', icon: Send, title: tc('candidature'), desc: tc('candidatureDescription'), category: 'lavoro' },
+    { name: 'registro-ore', icon: Clock, title: tc('registroOre'), desc: tc('registroOreDescription'), category: 'lavoro' },
     { name: 'kumani-cv', icon: FileUser, title: tc('kumaniCv'), desc: tc('kumaniCvDescription'), category: 'personal' },
     { name: 'affinity', icon: HeartHandshake, title: tc('affinity'), desc: tc('affinityDescription'), category: 'svago' },
     { name: 'veritas', icon: VenetianMask, title: tc('veritas'), desc: tc('veritasDescription'), category: 'svago' },

@@ -30,6 +30,11 @@ const GROUP_OF: Record<string, ServiceGroup> = {
   travel: 'money',
   // Lavoro
   'trova-lavoro': 'work',
+  'lettera-presentazione': 'work',
+  'note-spese': 'work',
+  'ricevuta-occasionale': 'work',
+  'candidature': 'work',
+  'registro-ore': 'work',
   'kumani-cv': 'work',
   preventivi: 'work',
   clienti: 'work',
