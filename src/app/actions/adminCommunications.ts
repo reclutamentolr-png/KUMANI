@@ -194,7 +194,7 @@ export async function adminSendCommunicationPush(id: string): Promise<{ success:
   for (const locale of COMM_LOCALES) {
     if (!present.has(locale)) continue
     const tx = textsFor(c, locale)
-    const r = await adminSendPushCampaign({ title: tx.push_title ?? c.push_title, body: tx.push_body ?? c.push_body, url: messageUrl(c), audience: c.audience === 'subscribers' ? 'active' : 'all', locale })
+    const r = await adminSendPushCampaign({ title: tx.push_title ?? c.push_title, body: tx.push_body ?? c.push_body, url: messageUrl(c), audience: c.audience === 'subscribers' ? 'active' : 'all', locale, skipInbox: true })
     if (!r.success) {
       firstError ??= r.error
       continue

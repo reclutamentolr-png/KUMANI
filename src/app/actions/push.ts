@@ -224,7 +224,9 @@ async function addCampaignToInbox(
   return added
 }
 
-export async function adminSendPushCampaign(input: { title: string; body: string; url: string; audience: PushAudience; locale: string; userId?: string }) {
+// skipInbox: chi chiama ha già messo l'avviso nella campanella (le Comunicazioni):
+// senza, chi ha le notifiche attive lo trovava due volte
+export async function adminSendPushCampaign(input: { title: string; body: string; url: string; audience: PushAudience; locale: string; userId?: string; skipInbox?: boolean }) {
   const admin = await verifyAdmin('messages.write')
   if (!admin) return { success: false, error: 'Non autorizzato.' }
   if (!pushConfigured()) return { success: false, error: 'Notifiche non configurate: mancano le chiavi VAPID.' }
@@ -281,6 +283,7 @@ export async function adminSendPushCampaign(input: { title: string; body: string
     .insert({ title, body, url, audience, locale, recipients, sent, failed, created_by: admin.id, target_user_id: targetUserId })
     .select('id')
     .single()
-  const inbox = campaign ? await addCampaignToInbox(campaign.id as string, { title, body, url }, audience, locale, targetUserId, [...new Set(rows.map((r) => r.user_id))]) : 0
+  const inbox =
+    campaign && !input.skipInbox ? await addCampaignToInbox(campaign.id as string, { title, body, url }, audience, locale, targetUserId, [...new Set(rows.map((r) => r.user_id))]) : 0
   return { success: true, recipients, sent, failed, inbox }
 }
