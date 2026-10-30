@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useTransition } from 'react'
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
@@ -43,6 +43,8 @@ import { FROM_ICONS_KEY, FROM_SERVICES, type ServicesView } from '@/lib/homeView
 
 type Filter = 'all' | 'mine' | 'locked'
 
+const PLAN_RANK: Record<ServiceItem['plan'], number> = { free: 0, base: 1, pro: 2 }
+
 // Icona di ogni categoria (copertine, colonna a sinistra, barra in alto)
 const GROUP_ICON: Record<ServiceGroup, LucideIcon> = {
   security: ShieldCheck,
@@ -77,6 +79,10 @@ const normalize = (text: string) =>
     .toLowerCase()
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
+
+// Nella scheda singola il nome proprio del servizio («Trova Lavoro»), non
+// quello della cartella («KUMANI Lavoro · Cerca lavoro»)
+const ownTitle = (item: ServiceItem): ServiceItem => (item.name && TOOL_HUB[item.toolName] ? { ...item, title: item.name } : item)
 
 // Cartelle (servizi uniti) e servizi sciolti di una categoria
 function splitGroup(group: ServiceGroup, items: ServiceItem[], hubsView: boolean) {
@@ -154,10 +160,17 @@ export default function ServicesBrowser({
     setSelected(null)
     remember(seg, null)
   }
+  // Aprendo una categoria la pagina parte dalla fila delle categorie (sul
+  // computer dalla fascia nera), non dalla cima con ricerca e filtri
+  const listTopRef = useRef<HTMLDivElement>(null)
+  const [scrollTick, setScrollTick] = useState(0)
+  useEffect(() => {
+    if (scrollTick) listTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [scrollTick])
   const chooseGroup = (group: ServiceGroup | null) => {
     setSelected(group)
     remember(segment, group)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setScrollTick((n) => n + 1)
   }
 
   // La sicurezza conta come tre servizi (Controlla, Proteggi, Segnala): un
@@ -178,10 +191,11 @@ export default function ServicesBrowser({
       const text = normalize(`${item.title} ${item.name ?? ''} ${item.description} ${t(`group_${item.group}`)}`)
       return words.every((word) => text.includes(word))
     })
-    // Nei gruppi prima i servizi che si possono già usare
+    // Nei gruppi prima i gratuiti, poi quelli del Plus, poi del Pro; a parità
+    // prima quelli che si possono già usare
     return SERVICE_GROUPS.map((group) => ({
       group,
-      items: shown.filter((item) => item.group === group).sort((a, b) => Number(b.open) - Number(a.open)),
+      items: shown.filter((item) => item.group === group).sort((a, b) => PLAN_RANK[a.plan] - PLAN_RANK[b.plan] || Number(b.open) - Number(a.open)),
     })).filter(({ items }) => items.length > 0)
   }, [items, query, filter, t])
 
@@ -199,16 +213,9 @@ export default function ServicesBrowser({
         })
         .filter((x): x is (typeof groups)[number] => !!x && x.items.length > 0)
   const current = selected ? segmentGroups.find((g) => g.group === selected) : undefined
-  // Quanti servizi conta una categoria: le cartelle valgono uno (aperta se
-  // almeno uno dei suoi servizi lo è), come nei filtri qui sopra
-  const sizeOf = (group: ServiceGroup, list: ServiceItem[]) => {
-    const split = splitGroup(group, list, true)
-    return split.hubs.length + split.loose.length
-  }
-  const openOf = (group: ServiceGroup, list: ServiceItem[]) => {
-    const split = splitGroup(group, list, true)
-    return split.hubs.filter((hub) => list.some((item) => TOOL_HUB[item.toolName] === hub && item.open)).length + split.loose.filter((item) => item.open).length
-  }
+  // Nell'Elenco ogni servizio ha la sua scheda: si contano tutti
+  const sizeOf = (_group: ServiceGroup, list: ServiceItem[]) => list.length
+  const openOf = (_group: ServiceGroup, list: ServiceItem[]) => list.filter((item) => item.open).length
   const segmentSize = segmentGroups.reduce((n, g) => n + sizeOf(g.group, g.items), 0)
 
   // Community nella vista Icone: con la stessa ricerca e gli stessi filtri
@@ -228,14 +235,16 @@ export default function ServicesBrowser({
   const cards = (list: ServiceItem[]) => (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {list.map((item) => (
-        <ServiceCard key={item.toolName} item={item} isFavorite={favorites.includes(item.toolName)} onToggle={onToggle} />
+        <ServiceCard key={item.toolName} item={item} isFavorite={favorites.includes(item.toolName)} onToggle={onToggle} brand />
       ))}
     </div>
   )
 
-  // I servizi di una categoria: cartelle, servizi sciolti e, per il Lavoro, le due parti
+  // I servizi di una categoria, ognuno con la sua scheda e la sua
+  // descrizione (le cartelle restano nella vista Icone e nella Home);
+  // per il Lavoro divisi in due parti
   const groupBody = (group: ServiceGroup, list: ServiceItem[]) => {
-    const split = splitGroup(group, list, hubsView)
+    const split = splitGroup(group, list.map(ownTitle), false)
     const parts = GROUP_PARTS[group]
     if (parts) {
       const inPart = (toolName: string) => parts.some((part) => part.tools.includes(toolName))
@@ -244,11 +253,15 @@ export default function ServicesBrowser({
         <div className="space-y-6">
           {parts.map((part) => {
             const partHubs = split.hubs.filter((hub) => list.some((item) => TOOL_HUB[item.toolName] === hub && part.tools.includes(item.toolName)))
-            const partItems = split.loose.filter((item) => part.tools.includes(item.toolName))
+            // Prima gratis, poi Plus, poi Pro; a parità nell'ordine della parte
+            const partItems = split.loose
+              .filter((item) => part.tools.includes(item.toolName))
+              .sort((a, b) => PLAN_RANK[a.plan] - PLAN_RANK[b.plan] || part.tools.indexOf(a.toolName) - part.tools.indexOf(b.toolName))
             if (!partHubs.length && !partItems.length) return null
             return (
               <div key={part.key}>
-                <h3 className="mb-2.5 text-sm font-extrabold uppercase tracking-wider" style={{ color: GROUP_STYLE[group].color }}>
+                <h3 className="mb-2.5 flex items-center gap-2 text-sm font-extrabold uppercase tracking-wider text-[var(--ink)]">
+                  <span className="h-4 w-1 rounded-full bg-[var(--gold)]" aria-hidden />
                   {t(`part_${group}_${part.key}`)}
                 </h3>
                 {partHubs.length > 0 && <HubCards hubs={partHubs} items={list} />}
@@ -352,7 +365,7 @@ export default function ServicesBrowser({
       </label>
 
       {/* Filtri */}
-      <div role="tablist" aria-label={t('filtersLabel')} className="mt-3 flex gap-2 overflow-x-auto pb-1">
+      <div role="tablist" aria-label={t('filtersLabel')} className="mt-3 flex gap-2 overflow-x-auto pb-1 [contain:inline-size]">
         {(['all', 'mine', 'locked'] as const).map((key) => (
           <button
             key={key}
@@ -393,7 +406,7 @@ export default function ServicesBrowser({
             {groups.map(({ group, items }) => (
               <section key={group} aria-labelledby={`group-${group}`}>
                 <h2 id={`group-${group}`} className="mb-3 flex items-center gap-2 text-lg font-extrabold text-[var(--ink)]">
-                  <span className={`h-2.5 w-2.5 rounded-full ${GROUP_STYLE[group].dot}`} />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[var(--gold)]" />
                   {t(`group_${group}`)}
                   <span className="text-sm font-semibold text-[var(--muted)]">{items.length}</span>
                 </h2>
@@ -403,11 +416,11 @@ export default function ServicesBrowser({
           </div>
         )
       ) : (
-        <div className="mt-6 lg:flex lg:gap-6">
+        <div ref={listTopRef} className="mt-6 scroll-mt-2 lg:flex lg:gap-6">
           {/* Computer: le categorie della parte scelta in una colonna */}
           <aside className="hidden lg:block lg:w-64 lg:shrink-0">
             <nav aria-label={t('allCategories')} className="sticky top-4 rounded-2xl border border-[var(--gold)]/25 bg-white p-2 shadow-sm">
-              <SideRow active={!current} onClick={() => chooseGroup(null)} Icon={LayoutGrid} label={t('allCategories')} count={segmentSize} color="#171717" soft="#f4f1e8" />
+              <SideRow active={!current} onClick={() => chooseGroup(null)} Icon={LayoutGrid} label={t('allCategories')} count={segmentSize} />
               <div className="my-1 h-px bg-[var(--gold)]/15" />
               {segmentGroups.map(({ group, items }) => (
                 <SideRow
@@ -417,8 +430,6 @@ export default function ServicesBrowser({
                   Icon={GROUP_ICON[group]}
                   label={t(`group_${group}`)}
                   count={sizeOf(group, items)}
-                  color={GROUP_STYLE[group].color}
-                  soft={GROUP_STYLE[group].soft}
                 />
               ))}
             </nav>
@@ -462,9 +473,9 @@ export default function ServicesBrowser({
               </>
             ) : (
               <section aria-labelledby={`group-${current.group}`}>
-                {/* Telefono: le categorie della parte in una fila che resta in alto */}
+                {/* Telefono: le categorie della parte in una fila che resta in alto e scorre di lato (contain: non allarga la pagina) */}
                 <div className="sticky top-0 z-10 -mx-4 mb-4 bg-[var(--background)]/95 px-4 py-2 backdrop-blur lg:hidden">
-                  <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+                  <div className="flex gap-2 overflow-x-auto pb-1 [contain:inline-size] [scrollbar-width:none]">
                     <button
                       type="button"
                       onClick={() => chooseGroup(null)}
@@ -475,7 +486,6 @@ export default function ServicesBrowser({
                     {segmentGroups.map(({ group }) => {
                       const Icon = GROUP_ICON[group]
                       const on = group === current.group
-                      const { color } = GROUP_STYLE[group]
                       return (
                         <button
                           key={group}
@@ -483,8 +493,9 @@ export default function ServicesBrowser({
                           aria-current={on ? 'true' : undefined}
                           ref={on ? (el) => el?.scrollIntoView({ inline: 'center', block: 'nearest' }) : undefined}
                           onClick={() => chooseGroup(group)}
-                          className="flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-sm font-semibold transition-colors"
-                          style={on ? { background: color, borderColor: color, color: '#fff' } : { background: '#fff', borderColor: `${color}40`, color }}
+                          className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-sm font-semibold transition-colors ${
+                            on ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--gold-bright)]' : 'border-[var(--gold)]/35 bg-white text-[var(--ink)]'
+                          }`}
                         >
                           <Icon className="h-4 w-4" aria-hidden /> {t(`group_${group}`)}
                         </button>
@@ -493,18 +504,18 @@ export default function ServicesBrowser({
                   </div>
                 </div>
 
-                {/* Fascia della categoria con il suo colore */}
-                <div className="mb-4 flex items-center gap-4 rounded-2xl p-4 sm:p-5" style={{ background: GROUP_STYLE[current.group].soft }}>
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-white" style={{ background: GROUP_STYLE[current.group].color }}>
+                {/* Fascia della categoria, nera e oro come il resto del sito */}
+                <div className="mb-4 flex items-center gap-4 rounded-2xl bg-[var(--ink)] p-4 text-white shadow-[0_12px_30px_rgba(23,23,23,0.18)] sm:p-5">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--gold)] text-[var(--ink)]">
                     <CurrentIcon group={current.group} />
                   </span>
                   <div className="min-w-0">
-                    <h2 id={`group-${current.group}`} className="text-xl font-extrabold" style={{ color: GROUP_STYLE[current.group].color }}>
+                    <h2 id={`group-${current.group}`} className="text-xl font-extrabold text-[var(--gold-bright)]">
                       {t(`group_${current.group}`)}
                     </h2>
-                    <p className="text-sm text-[var(--ink)]/75">{t(`groupLine_${current.group}`)}</p>
+                    <p className="text-sm text-white/75">{t(`groupLine_${current.group}`)}</p>
                   </div>
-                  <span className="ml-auto hidden shrink-0 rounded-full bg-white/70 px-3 py-1 text-sm font-bold sm:block" style={{ color: GROUP_STYLE[current.group].color }}>
+                  <span className="ml-auto hidden shrink-0 rounded-full bg-white/10 px-3 py-1 text-sm font-bold text-[var(--gold-bright)] sm:block">
                     {t('servicesCount', { n: sizeOf(current.group, current.items) })}
                   </span>
                 </div>
@@ -537,26 +548,21 @@ function SideRow({
   Icon,
   label,
   count,
-  color,
-  soft,
 }: {
   active: boolean
   onClick: () => void
   Icon: LucideIcon
   label: string
   count: number
-  color: string
-  soft: string
 }) {
   return (
     <button
       type="button"
       aria-current={active ? 'true' : undefined}
       onClick={onClick}
-      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${active ? '' : 'hover:bg-[var(--paper)]'}`}
-      style={active ? { background: soft, color } : { color: '#2a2a2a' }}
+      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${active ? 'bg-[var(--ink)] text-white' : 'text-[var(--ink)] hover:bg-[var(--paper)]'}`}
     >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ background: active ? color : soft, color: active ? '#fff' : color }}>
+      <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${active ? 'bg-[var(--gold)] text-[var(--ink)]' : 'bg-[var(--ink)] text-[var(--gold-bright)]'}`}>
         <Icon className="h-4 w-4" aria-hidden />
       </span>
       <span className="min-w-0 flex-1 leading-tight">{label}</span>
@@ -569,16 +575,14 @@ function SideRow({
 function CategoryCover({ group, items, size, open, onClick }: { group: ServiceGroup; items: ServiceItem[]; size: number; open: number; onClick: () => void }) {
   const t = useTranslations('hub')
   const Icon = GROUP_ICON[group]
-  const { color, soft } = GROUP_STYLE[group]
   return (
     <button
       type="button"
       onClick={onClick}
-      className="relative flex h-full flex-col overflow-hidden rounded-2xl border bg-white p-3.5 text-left shadow-[0_6px_18px_rgba(23,23,23,0.06)] transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-4"
-      style={{ borderColor: `${color}30` }}
+      className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--gold)]/30 bg-white p-3.5 text-left shadow-[0_6px_18px_rgba(23,23,23,0.06)] transition-all hover:-translate-y-0.5 hover:border-[var(--gold)] hover:shadow-md sm:p-4"
     >
-      <span className="absolute inset-x-0 top-0 h-1.5" style={{ background: color }} aria-hidden />
-      <span className="mt-1 flex h-11 w-11 items-center justify-center rounded-2xl" style={{ background: soft, color }}>
+      <span className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-bright)]" aria-hidden />
+      <span className="mt-1 flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--ink)] text-[var(--gold-bright)]">
         <Icon className="h-6 w-6" aria-hidden />
       </span>
       <span className="mt-3 text-[15px] font-extrabold leading-tight text-[var(--ink)] sm:text-base">{t(`group_${group}`)}</span>
@@ -588,13 +592,13 @@ function CategoryCover({ group, items, size, open, onClick }: { group: ServiceGr
           {items.slice(0, 3).map((item) => {
             const ItemIcon = marketplaceIconMap[item.iconName] || Smartphone
             return (
-              <span key={item.toolName} className="flex h-7 w-7 items-center justify-center rounded-lg border-2 border-white" style={{ background: soft, color }}>
+              <span key={item.toolName} className="flex h-7 w-7 items-center justify-center rounded-lg border-2 border-white bg-[var(--gold-pale)] text-[var(--ink)]">
                 <ItemIcon className="h-3.5 w-3.5" />
               </span>
             )
           })}
         </span>
-        <span className="text-right text-[11px] font-bold leading-tight" style={{ color }}>
+        <span className="text-right text-[11px] font-bold leading-tight text-[var(--ink)]">
           {t('servicesCount', { n: size })}
           {open < size && <span className="block font-semibold text-[var(--muted)]">{t('openCount', { n: open })}</span>}
         </span>
@@ -608,17 +612,20 @@ export function ServiceCard({
   isFavorite,
   onToggle,
   compact = false,
+  brand = false,
 }: {
   item: ServiceItem
   isFavorite: boolean
   onToggle?: (toolName: string, isFavorite: boolean) => void
   // Home: solo icona, nome e Apri/lucchetto, senza descrizione né stella
   compact?: boolean
+  // Pagina Servizi: icone nere e oro per tutti, nome più grande
+  brand?: boolean
 }) {
   const t = useTranslations('hub')
   const Icon = marketplaceIconMap[item.iconName] || Smartphone
   // Sezioni della Community: colore proprio
-  const style = item.tone ? { dot: 'bg-sky-600', tile: item.tone } : GROUP_STYLE[item.group]
+  const style = brand ? { dot: 'bg-[var(--gold)]', tile: 'bg-[var(--ink)] text-[var(--gold-bright)]' } : item.tone ? { dot: 'bg-sky-600', tile: item.tone } : GROUP_STYLE[item.group]
   // Servizi uniti («KUMANI Benessere · Concentrazione»): nella Home prima il
   // nome del servizio, sotto piccolo il gruppo
   const [hubName, toolTitle] = item.title.includes(' · ') ? item.title.split(' · ', 2) : [null, item.title]
@@ -641,14 +648,14 @@ export function ServiceCard({
           )}
         </span>
         <span className={`flex min-w-0 flex-1 flex-col ${compact ? '' : 'pr-7'}`}>
-          <span className="truncate font-bold text-[var(--ink)]">{compact ? toolTitle : item.title}</span>
+          <span className={`text-[var(--ink)] ${compact ? 'truncate font-bold' : `line-clamp-2 leading-snug ${brand ? 'text-[16px] font-extrabold' : 'font-bold'}`}`}>{compact ? toolTitle : item.title}</span>
           {compact && compactNote && <span className="truncate text-xs text-[var(--muted)]">{compactNote}</span>}
           {!compact && <PlanTag plan={item.plan} className="mt-1" />}
-          {!compact && <span className="mt-0.5 line-clamp-2 text-xs leading-5 text-[var(--muted)]">{item.description}</span>}
+          {!compact && <span className="mt-0.5 line-clamp-3 text-xs leading-5 text-[var(--muted)]">{item.description}</span>}
           {!compact && (
             <span className="mt-2 flex flex-wrap items-center gap-1.5">
               {item.open ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-bold text-sky-800">
+                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold ${brand ? 'bg-[var(--gold-pale)] text-[var(--ink)]' : 'bg-sky-50 text-sky-800'}`}>
                   {t('open')} <ArrowRight className="h-3 w-3" />
                 </span>
               ) : (
