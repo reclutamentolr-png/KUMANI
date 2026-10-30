@@ -193,8 +193,10 @@ const CookieConsentSettings = dynamic(() => import('@/components/admin/CookieCon
 const TOOL_GROUPS = [
   { id: 'security', label: 'Proteggerti dalle truffe' },
   { id: 'money', label: 'Soldi e organizzazione' },
-  { id: 'work', label: 'Lavoro' },
-  { id: 'business', label: 'La tua attività' },
+  { id: 'work', label: 'Cerco o ho un lavoro' },
+  { id: 'docs', label: 'Documenti e file' },
+  { id: 'manage', label: 'Gestire la tua attività' },
+  { id: 'business', label: 'Farti conoscere e vendere' },
   { id: 'social', label: 'Social' },
   { id: 'wellness', label: 'Benessere' },
   { id: 'fun', label: 'Svago' },

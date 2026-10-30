@@ -126,7 +126,7 @@ export const HUB_TABS: Record<ServiceHub, HubTab[]> = {
 }
 
 // Gruppo della pagina Servizi in cui sta ciascun servizio unito
-export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', proteggi: 'security', segnala: 'security', benessere: 'wellness', giochi: 'fun', qr: 'business', spendly: 'money', lavoro: 'work', gestione: 'work', ufficio: 'work', negozio: 'business', vetrina: 'business', social: 'social', agenda: 'money', casaauto: 'money', viaggi: 'money', amicizie: 'fun' }
+export const HUB_GROUP: Record<ServiceHub, string> = { controlla: 'security', proteggi: 'security', segnala: 'security', benessere: 'wellness', giochi: 'fun', qr: 'business', spendly: 'money', lavoro: 'work', gestione: 'manage', ufficio: 'docs', negozio: 'business', vetrina: 'business', social: 'social', agenda: 'money', casaauto: 'money', viaggi: 'money', amicizie: 'fun' }
 
 // Servizio di partenza di ciascuno (la prima scheda)
 export const HUB_HOME: Record<ServiceHub, string> = {
