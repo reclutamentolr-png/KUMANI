@@ -13159,7 +13159,7 @@
     "addStep": "Aggiungi una tappa",
     "saveKindFirst": "Salva per confermare il nuovo tipo di sorpresa.",
     "deleteDraft": "Elimina la bozza",
-    "shareMessage": "{name}, ho una sorpresa per te! 🎁 Aprila qui: {url}",
+    "shareMessage": "{name}, ho una sorpresa per te! Aprila qui: {url}",
     "whatsapp": "Manda su WhatsApp",
     "email": "Manda per email",
     "emailSubject": "Ho una sorpresa per te 🎁",

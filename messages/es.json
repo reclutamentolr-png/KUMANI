@@ -13159,7 +13159,7 @@
     "addStep": "Añadir una etapa",
     "saveKindFirst": "Guarda para confirmar el nuevo tipo de sorpresa.",
     "deleteDraft": "Eliminar el borrador",
-    "shareMessage": "{name}, ¡tengo una sorpresa para ti! 🎁 Ábrela aquí: {url}",
+    "shareMessage": "{name}, ¡tengo una sorpresa para ti! Ábrela aquí: {url}",
     "whatsapp": "Enviar por WhatsApp",
     "email": "Enviar por email",
     "emailSubject": "Tengo una sorpresa para ti 🎁",

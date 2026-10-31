@@ -13159,7 +13159,7 @@
     "addStep": "Add a step",
     "saveKindFirst": "Save to confirm the new type of surprise.",
     "deleteDraft": "Delete draft",
-    "shareMessage": "{name}, I have a surprise for you! 🎁 Open it here: {url}",
+    "shareMessage": "{name}, I have a surprise for you! Open it here: {url}",
     "whatsapp": "Send on WhatsApp",
     "email": "Send by email",
     "emailSubject": "I have a surprise for you 🎁",
