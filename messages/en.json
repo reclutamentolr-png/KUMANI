@@ -10732,7 +10732,8 @@
     "side_both": "Front and back (2 separate files)",
     "side_combined": "Front and back in one PDF",
     "fileReady": "Your file is ready.",
-    "fileReadyShare": "Share"
+    "fileReadyShare": "Share",
+    "map": "Map"
   },
   "seo": {
     "siteTitle": "KUMANI – Hands that lend you a hand",

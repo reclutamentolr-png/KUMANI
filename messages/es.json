@@ -10732,7 +10732,8 @@
     "side_both": "Anverso y reverso (2 archivos separados)",
     "side_combined": "Anverso y reverso en un solo PDF",
     "fileReady": "El archivo está listo.",
-    "fileReadyShare": "Compartir"
+    "fileReadyShare": "Compartir",
+    "map": "Mapa"
   },
   "seo": {
     "siteTitle": "KUMANI – Manos que te echan una mano",

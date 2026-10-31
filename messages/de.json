@@ -10732,7 +10732,8 @@
     "side_both": "Vorder- und Rückseite (2 getrennte Dateien)",
     "side_combined": "Vorder- und Rückseite in einem PDF",
     "fileReady": "Die Datei ist fertig.",
-    "fileReadyShare": "Teilen"
+    "fileReadyShare": "Teilen",
+    "map": "Karte"
   },
   "seo": {
     "siteTitle": "KUMANI – Hände, die dir helfen",

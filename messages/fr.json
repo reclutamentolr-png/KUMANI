@@ -10732,7 +10732,8 @@
     "side_both": "Recto et verso (2 fichiers séparés)",
     "side_combined": "Recto et verso dans un seul PDF",
     "fileReady": "Le fichier est prêt.",
-    "fileReadyShare": "Partager"
+    "fileReadyShare": "Partager",
+    "map": "Carte"
   },
   "seo": {
     "siteTitle": "KUMANI – Des mains qui vous tendent la main",

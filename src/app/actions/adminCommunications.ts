@@ -244,13 +244,25 @@ async function addToInbox(c: CommunicationRow): Promise<number> {
 // Invio dell'email a tutti, ripetibile: chi l'ha già ricevuta è nel registro
 // (staff_communication_deliveries) e non la riceve di nuovo. Si manda solo
 // quanto permette il limite di Resend di oggi; il resto con «Invia ai mancanti».
-export async function adminSendCommunicationEmail(id: string): Promise<{ success: boolean; error?: string; sent?: number; pending?: number }> {
+// La grafica salvata deve essere quella che l'Admin vede e che questa versione
+// del sito conosce: mai una email che parte in testo semplice per sbaglio
+// (pagina Admin aperta da prima di un aggiornamento)
+function layoutProblem(c: CommunicationRow, expected?: string): string | null {
+  const saved = c.email_layout ?? 'classic'
+  if (!isEmailLayout(saved)) return `La grafica «${saved}» non è riconosciuta da questa versione del sito: ricarica la pagina e riprova. Non è partita nessuna email.`
+  if (expected !== undefined && expected !== saved) return `La grafica salvata («${saved}») è diversa da quella mostrata («${expected}»): ricarica la pagina e riprova. Non è partita nessuna email.`
+  return null
+}
+
+export async function adminSendCommunicationEmail(id: string, expectedLayout?: string): Promise<{ success: boolean; error?: string; sent?: number; pending?: number }> {
   const admin = await verifyAdmin('messages.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const s = db()
   const { data: c } = await s.from('staff_communications').select('*').eq('id', id).maybeSingle<CommunicationRow>()
   if (!c) return { success: false, error: 'Comunicazione non trovata' }
   if (!c.email_subject || !c.email_body) return { success: false, error: 'Questa comunicazione non ha l’email' }
+  const problem = layoutProblem(c, expectedLayout)
+  if (problem) return { success: false, error: problem }
   // Un invio alla volta (il blocco scade da solo dopo 15 minuti)
   const lockLimit = new Date(Date.now() - 15 * 60_000).toISOString()
   const { data: locked } = await s
@@ -329,12 +341,14 @@ export async function adminSendCommunicationEmail(id: string): Promise<{ success
 }
 
 // Prova: la stessa email solo a chi sta usando l'Admin (non conta come invio)
-export async function adminTestCommunicationEmail(id: string, locale: string = 'it'): Promise<{ success: boolean; error?: string; to?: string }> {
+export async function adminTestCommunicationEmail(id: string, locale: string = 'it', expectedLayout?: string): Promise<{ success: boolean; error?: string; to?: string }> {
   const admin = await verifyAdmin('messages.write')
   if (!admin) return { success: false, error: 'Non autorizzato' }
   const s = db()
   const { data: c } = await s.from('staff_communications').select('*').eq('id', id).maybeSingle<CommunicationRow>()
   if (!c?.email_subject || !c.email_body) return { success: false, error: 'Questa comunicazione non ha l’email' }
+  const problem = layoutProblem(c, expectedLayout)
+  if (problem) return { success: false, error: problem }
   const { data: me } = await s.from('profiles').select('id, email, first_name').eq('id', admin.id).maybeSingle()
   if (!me?.email) return { success: false, error: 'Il tuo account non ha un’email' }
   const email = buildEmail(c, { id: me.id, email: me.email, first_name: me.first_name, locale })

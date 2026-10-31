@@ -79,14 +79,22 @@ export default function CommunicationsPanel() {
     load()
   }
 
+  // Grafica che questa pagina non conosce (aperta da prima di un aggiornamento)
+  const unknownLayout = (c: CommunicationRow) => {
+    if (LAYOUTS.some((l) => l.id === (c.email_layout ?? 'classic'))) return false
+    notify(`La grafica «${c.email_layout}» non è in questa versione della pagina: ricaricala e riprova.`)
+    return true
+  }
+
   const sendEmail = async (c: CommunicationRow) => {
+    if (unknownLayout(c)) return
     const again = !!c.email_sent_at
     const question = again
       ? `Inviare l’email «${c.email_subject}» agli iscritti che non l’hanno ancora ricevuta (circa ${missing(c)})? Chi l’ha già ricevuta non la riceve di nuovo.`
       : `Inviare l’email «${c.email_subject}» a ${peopleFor(c)} ${c.audience === 'subscribers' ? 'iscritti con un piano attivo' : 'iscritti'}? ${counts.emailExcluded ? `${counts.emailExcluded} hanno scelto di non riceverle e saranno esclusi. ` : ''}Se si supera il limite di Resend di oggi, le restanti si mandano domani con «Invia ai mancanti». Non si può annullare.`
     if (!(await askConfirm(question, { tone: 'warning' }))) return
     setBusy(c.id + 'email')
-    const r = await adminSendCommunicationEmail(c.id)
+    const r = await adminSendCommunicationEmail(c.id, c.email_layout ?? 'classic')
     setBusy(null)
     if (!r.success) return notify('Errore: ' + r.error)
     notify(`Email inviata a ${r.sent} iscritti${r.pending ? `: ne mancano ${r.pending}, mandale con «Invia ai mancanti» (domani se è finito il limite di Resend)` : ''}`)
@@ -94,8 +102,9 @@ export default function CommunicationsPanel() {
   }
 
   const test = async (c: CommunicationRow) => {
+    if (unknownLayout(c)) return
     setBusy(c.id + 'test')
-    const r = await adminTestCommunicationEmail(c.id, lang)
+    const r = await adminTestCommunicationEmail(c.id, lang, c.email_layout ?? 'classic')
     setBusy(null)
     notify(r.success ? `Prova inviata a ${r.to}` : 'Errore: ' + r.error)
   }

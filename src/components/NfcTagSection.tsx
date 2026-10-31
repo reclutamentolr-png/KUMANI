@@ -61,13 +61,39 @@ export default function NfcTagSection({ kind, url }: { kind: 'card' | 'review'; 
     setState('idle')
   }
 
+  const linkRef = useRef<HTMLElement | null>(null)
   const copyLink = async () => {
+    let ok = false
     try {
       await navigator.clipboard.writeText(url)
+      ok = true
+    } catch {
+      // Appunti non permessi (alcuni browser del telefono): copia alla vecchia maniera
+      const area = document.createElement('textarea')
+      area.value = url
+      area.setAttribute('readonly', '')
+      area.style.position = 'fixed'
+      area.style.opacity = '0'
+      document.body.appendChild(area)
+      area.select()
+      area.setSelectionRange(0, url.length)
+      try {
+        ok = document.execCommand('copy')
+      } catch {
+        ok = false
+      }
+      area.remove()
+    }
+    if (ok) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // appunti non disponibili: il link resta visibile da selezionare
+    } else if (linkRef.current) {
+      // Niente da fare: il link resta selezionato, pronto per «Copia» del telefono
+      const range = document.createRange()
+      range.selectNodeContents(linkRef.current)
+      const sel = window.getSelection()
+      sel?.removeAllRanges()
+      sel?.addRange(range)
     }
   }
 
@@ -116,7 +142,7 @@ export default function NfcTagSection({ kind, url }: { kind: 'card' | 'review'; 
       <div className="mt-4">
         <p className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">{t('linkLabel')}</p>
         <div className="mt-1 flex flex-wrap items-center gap-2">
-          <code className="min-w-0 flex-1 break-all rounded-lg border border-[var(--gold)]/30 bg-[var(--gold-pale)] px-3 py-2 text-sm text-[var(--ink)]">{url}</code>
+          <code ref={linkRef} className="min-w-0 flex-1 select-all break-all rounded-lg border border-[var(--gold)]/30 bg-[var(--gold-pale)] px-3 py-2 text-sm text-[var(--ink)]">{url}</code>
           <button type="button" onClick={copyLink} className="inline-flex items-center gap-1.5 rounded-full border border-[var(--gold)]/50 px-4 py-2 text-sm font-bold text-[var(--ink)]">
             {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-[var(--gold)]" />} {copied ? t('copied') : t('copy')}
           </button>

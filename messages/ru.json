@@ -10732,7 +10732,8 @@
     "side_both": "Лицевая и оборот (2 отдельных файла)",
     "side_combined": "Лицевая и оборот в одном PDF",
     "fileReady": "Файл готов.",
-    "fileReadyShare": "Поделиться"
+    "fileReadyShare": "Поделиться",
+    "map": "Карта"
   },
   "seo": {
     "siteTitle": "KUMANI – Руки, которые помогают",
