@@ -16,8 +16,8 @@
 
 import { escapeHtml } from '@/lib/email'
 
-export type EmailLayout = 'classic' | 'rivista' | 'lettera'
-export const EMAIL_LAYOUTS: EmailLayout[] = ['classic', 'rivista', 'lettera']
+export type EmailLayout = 'classic' | 'rivista' | 'lettera' | 'halloween'
+export const EMAIL_LAYOUTS: EmailLayout[] = ['classic', 'rivista', 'lettera', 'halloween']
 export const isEmailLayout = (v: unknown): v is EmailLayout => typeof v === 'string' && (EMAIL_LAYOUTS as string[]).includes(v)
 
 export type Block =
@@ -133,49 +133,55 @@ const GOLD_SOFT = '#f0d27a'
 const GOLD_TEXT = '#a8841f'
 const INK = '#171717'
 
+// Colori della grafica: oro KUMANI, oppure zucca e notte per Halloween
+type Palette = { accent: string; soft: string; text: string; ink: string; page: string; paper: string; border: string; stat: string; box: string; boxDark: string; muted: string }
+const GOLD_PAL: Palette = { accent: GOLD, soft: GOLD_SOFT, text: GOLD_TEXT, ink: INK, page: '#efebe3', paper: '#fffdf8', border: '#eadfbf', stat: '#f6ecd0', box: '#fbf3dc', boxDark: '#262626', muted: '#a8a29e' }
+const HALLOWEEN_PAL: Palette = { accent: '#f97316', soft: '#fdba74', text: '#c2410c', ink: '#1c1229', page: '#2a1d3a', paper: '#fff9f2', border: '#fbd5b0', stat: '#ffedd5', box: '#fff1e2', boxDark: '#2e2040', muted: '#b9a9cc' }
+
 // Grassetto e link dentro il testo (già protetto)
-const inline = (s: string, onDark = false) =>
+const inline = (s: string, onDark = false, c: Palette = GOLD_PAL) =>
   escapeHtml(s)
-    .replace(/\*\*(.+?)\*\*/g, `<b style="color:${onDark ? '#ffffff' : INK}">$1</b>`)
-    .replace(/(https?:\/\/[^\s<]+)/g, `<a href="$1" style="color:${onDark ? GOLD_SOFT : GOLD_TEXT}">$1</a>`)
+    .replace(/\*\*(.+?)\*\*/g, `<b style="color:${onDark ? '#ffffff' : c.ink}">$1</b>`)
+    .replace(/(https?:\/\/[^\s<]+)/g, `<a href="$1" style="color:${onDark ? c.soft : c.text}">$1</a>`)
     .replace(/\n/g, '<br>')
 
 const table = (inner: string, style = '') => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="${style}">${inner}</table>`
 
-type Theme = { dark: boolean; letter: boolean }
+type Theme = { dark: boolean; letter: boolean; c?: Palette }
 
 function renderBlocks(blocks: Block[], th: Theme): string {
+  const c = th.c ?? GOLD_PAL
   const text = th.dark ? '#cfcac0' : '#44403c'
   const size = th.letter ? '15px;line-height:24px' : '15px;line-height:23px'
   return blocks
     .map((b) => {
-      if (b.t === 'p') return `<p style="margin:0 0 14px;font-family:${SANS};font-size:${size};color:${text}">${inline(b.text, th.dark)}</p>`
+      if (b.t === 'p') return `<p style="margin:0 0 14px;font-family:${SANS};font-size:${size};color:${text}">${inline(b.text, th.dark, c)}</p>`
       if (b.t === 'list')
         return table(
           b.items
-            .map((i) => `<tr><td width="24" valign="top" style="padding:0 0 10px;color:${GOLD};font-size:15px;font-family:${SANS}">◆</td><td valign="top" style="padding:0 0 10px;font-family:${SANS};font-size:14px;line-height:21px;color:${text}">${inline(i, th.dark)}</td></tr>`)
+            .map((i) => `<tr><td width="24" valign="top" style="padding:0 0 10px;color:${c.accent};font-size:15px;font-family:${SANS}">◆</td><td valign="top" style="padding:0 0 10px;font-family:${SANS};font-size:14px;line-height:21px;color:${text}">${inline(i, th.dark, c)}</td></tr>`)
             .join(''),
           'margin:0 0 6px',
         )
       if (b.t === 'grid') {
         const cell = (i: { name: string; text: string }, left: boolean) =>
-          `<td width="50%" valign="top" style="padding:0 ${left ? '6px' : '0'} 12px ${left ? '0' : '6px'};font-family:${SANS};font-size:13px;line-height:19px;color:${th.dark ? '#e7e2d6' : text}"><b style="color:${th.dark ? GOLD_SOFT : GOLD_TEXT}">${inline(i.name, th.dark)}</b><br>${inline(i.text, th.dark)}</td>`
+          `<td width="50%" valign="top" style="padding:0 ${left ? '6px' : '0'} 12px ${left ? '0' : '6px'};font-family:${SANS};font-size:13px;line-height:19px;color:${th.dark ? '#e7e2d6' : text}"><b style="color:${th.dark ? c.soft : c.text}">${inline(i.name, th.dark, c)}</b><br>${inline(i.text, th.dark, c)}</td>`
         const rows: string[] = []
         for (let i = 0; i < b.items.length; i += 2) rows.push(`<tr>${cell(b.items[i], true)}${b.items[i + 1] ? cell(b.items[i + 1], false) : '<td width="50%"></td>'}</tr>`)
         return table(rows.join(''), 'margin:0 0 4px')
       }
       if (b.t === 'button') {
-        const filled = th.dark ? `background:${GOLD};` : `background:${INK};`
-        const color = th.dark ? INK : GOLD_SOFT
+        const filled = th.dark ? `background:${c.accent};` : `background:${c.ink};`
+        const color = th.dark ? c.ink : c.soft
         return table(`<tr><td style="padding:4px 0 6px"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="${filled}border-radius:${th.letter ? '6px' : '999px'}"><a href="${escapeHtml(b.url)}" style="display:inline-block;padding:12px 22px;font-family:${SANS};font-size:14px;font-weight:bold;color:${color};text-decoration:none">${escapeHtml(b.label)} →</a></td></tr></table></td></tr>`)
       }
       if (b.t === 'box')
-        return table(`<tr><td style="background:${th.dark ? '#262626' : '#fbf3dc'};border-left:4px solid ${GOLD};border-radius:10px;padding:14px 16px;font-family:${SANS};font-size:14px;line-height:22px;color:${th.dark ? '#e7e2d6' : '#3f3a33'}">${inline(b.text, th.dark)}</td></tr>`, 'margin:0 0 14px')
+        return table(`<tr><td style="background:${th.dark ? c.boxDark : c.box};border-left:4px solid ${c.accent};border-radius:10px;padding:14px 16px;font-family:${SANS};font-size:14px;line-height:22px;color:${th.dark ? '#e7e2d6' : '#3f3a33'}">${inline(b.text, th.dark, c)}</td></tr>`, 'margin:0 0 14px')
       // Numeri grandi affiancati (al massimo tre per riga)
       const w = Math.floor(100 / Math.min(3, b.items.length))
       const cells = b.items
         .slice(0, 3)
-        .map((i, k) => `<td width="${w}%" valign="top" style="padding:0 ${k < b.items.length - 1 ? '6px' : '0'} 0 ${k > 0 ? '6px' : '0'}">${table(`<tr><td style="background:#f6ecd0;border-radius:14px;padding:18px"><p style="margin:0;font-family:${SERIF};font-size:38px;line-height:42px;color:${INK}">${escapeHtml(i.value)}</p><p style="margin:6px 0 0;font-family:${SANS};font-size:13px;line-height:19px;color:#57534e">${inline(i.text)}</p></td></tr>`)}</td>`)
+        .map((i, k) => `<td width="${w}%" valign="top" style="padding:0 ${k < b.items.length - 1 ? '6px' : '0'} 0 ${k > 0 ? '6px' : '0'}">${table(`<tr><td style="background:${c.stat};border-radius:14px;padding:18px"><p style="margin:0;font-family:${SERIF};font-size:38px;line-height:42px;color:${c.ink}">${escapeHtml(i.value)}</p><p style="margin:6px 0 0;font-family:${SANS};font-size:13px;line-height:19px;color:#57534e">${inline(i.text, false, c)}</p></td></tr>`)}</td>`)
         .join('')
       return table(`<tr>${cells}</tr>`, 'margin:0 0 12px')
     })
@@ -190,38 +196,42 @@ const footer = (f: EmailFrame, color: string) =>
   `${escapeHtml(f.why)} <a href="${f.unsubUrl}" style="color:${color}">${escapeHtml(f.stop)}</a> (${escapeHtml(f.pushNote)}).`
 
 // «Rivista»: testata scura con KUMI, ogni sezione in una scheda
-export function renderRivista(p: ParsedEmail, f: EmailFrame): string {
+export function renderRivista(p: ParsedEmail, f: EmailFrame, c: Palette = GOLD_PAL, deco = ''): string {
   const site = f.siteUrl.replace(/^https?:\/\//, '')
   const [lead, ...rest] = p.intro
   const sections = p.sections
     .map((s) => {
-      const th = { dark: s.dark, letter: false }
-      const head = `${s.eyebrow ? `<p style="margin:0 0 6px;font-family:${SANS};font-size:11px;font-weight:bold;letter-spacing:2px;color:${s.dark ? GOLD : GOLD_TEXT};text-transform:uppercase">${escapeHtml(s.eyebrow)}</p>` : ''}<p style="margin:0 0 12px;font-family:${SERIF};font-size:24px;line-height:30px;color:${s.dark ? '#ffffff' : INK}">${escapeHtml(s.title)}</p>`
-      const style = s.dark ? `background:${INK};border-radius:16px;padding:22px 22px 12px` : `background:#ffffff;border:1px solid #eadfbf;border-radius:16px;padding:22px 22px 12px`
+      const th = { dark: s.dark, letter: false, c }
+      const head = `${s.eyebrow ? `<p style="margin:0 0 6px;font-family:${SANS};font-size:11px;font-weight:bold;letter-spacing:2px;color:${s.dark ? c.accent : c.text};text-transform:uppercase">${escapeHtml(s.eyebrow)}</p>` : ''}<p style="margin:0 0 12px;font-family:${SERIF};font-size:24px;line-height:30px;color:${s.dark ? '#ffffff' : c.ink}">${escapeHtml(s.title)}</p>`
+      const style = s.dark ? `background:${c.ink};border-radius:16px;padding:22px 22px 12px` : `background:#ffffff;border:1px solid ${c.border};border-radius:16px;padding:22px 22px 12px`
       return table(`<tr><td style="${style}">${head}${renderBlocks(s.blocks, th)}</td></tr>`, 'margin:16px 0 0')
     })
     .join('')
   const sign = p.signature
-    ? `<p style="margin:6px 0 0;font-family:${SERIF};font-size:20px;color:${INK}">${escapeHtml(p.signature.name)}</p><p style="margin:2px 0 0;font-family:${SANS};font-size:13px;color:${GOLD_TEXT};letter-spacing:1px">${escapeHtml(p.signature.role)}</p>`
+    ? `<p style="margin:6px 0 0;font-family:${SERIF};font-size:20px;color:${c.ink}">${escapeHtml(p.signature.name)}</p><p style="margin:2px 0 0;font-family:${SANS};font-size:13px;color:${c.text};letter-spacing:1px">${escapeHtml(p.signature.role)}</p>`
     : ''
-  return `<!doctype html><html lang="${f.locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(f.subject)}</title></head><body style="margin:0;padding:0;background:#efebe3">
+  return `<!doctype html><html lang="${f.locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(f.subject)}</title></head><body style="margin:0;padding:0;background:${c.page}">
 <span style="display:none;max-height:0;overflow:hidden;opacity:0">${escapeHtml(f.preheader)}</span>
 ${table(`<tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px">
-<tr><td style="background:${INK};border-radius:20px 20px 0 0;padding:28px 32px 0">${table(`<tr><td valign="middle">${logo(f.siteUrl, 44)}</td><td valign="middle" align="right" style="font-family:${SANS};font-size:11px;letter-spacing:3px;color:${GOLD};text-transform:uppercase">${escapeHtml(p.label ?? '')}</td></tr>`)}</td></tr>
-<tr><td style="background:${INK};padding:0 32px">${table(`<tr><td valign="bottom" style="padding:26px 0 30px">
+<tr><td style="background:${c.ink};border-radius:20px 20px 0 0;padding:28px 32px 0">${table(`<tr><td valign="middle">${logo(f.siteUrl, 44)}</td><td valign="middle" align="right" style="font-family:${SANS};font-size:11px;letter-spacing:3px;color:${c.accent};text-transform:uppercase">${escapeHtml(p.label ?? '')}</td></tr>`)}</td></tr>
+<tr><td style="background:${c.ink};padding:0 32px">${table(`<tr><td valign="bottom" style="padding:26px 0 30px">
 ${p.greeting ? `<p style="margin:0 0 10px;font-family:${SERIF};font-size:32px;line-height:38px;color:#ffffff">${escapeHtml(p.greeting)}</p>` : ''}
-${lead?.t === 'p' ? `<p style="margin:0;font-family:${SERIF};font-size:20px;line-height:27px;color:${GOLD_SOFT}">${inline(lead.text, true)}</p>` : ''}
-${renderBlocks(lead?.t === 'p' ? rest : p.intro, { dark: true, letter: false }).replace(/margin:0 0 14px/, 'margin:12px 0 0')}
+${lead?.t === 'p' ? `<p style="margin:0;font-family:${SERIF};font-size:20px;line-height:27px;color:${c.soft}">${inline(lead.text, true, c)}</p>` : ''}
+${renderBlocks(lead?.t === 'p' ? rest : p.intro, { dark: true, letter: false, c }).replace(/margin:0 0 14px/, 'margin:12px 0 0')}
 </td><td valign="bottom" width="150" style="padding:0 0 0 12px">${kumi(f.siteUrl, 140)}</td></tr>`)}</td></tr>
-<tr><td style="background:${GOLD};height:4px;line-height:4px;font-size:0">&nbsp;</td></tr>
-<tr><td style="background:#fffdf8;padding:8px 24px 24px">${sections}
-${table(`<tr><td style="padding:24px 6px 0">${sign}</td></tr><tr><td style="padding:20px 6px 0"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="background:${GOLD};border-radius:999px"><a href="${f.siteUrl}/dashboard" style="display:inline-block;padding:14px 26px;font-family:${SANS};font-size:15px;font-weight:bold;color:${INK};text-decoration:none">${escapeHtml(f.openLabel)}</a></td></tr></table></td></tr>`)}
+${deco ? `<tr><td align="center" style="background:${c.ink};padding:0 0 14px;font-size:22px;line-height:26px;letter-spacing:10px">${deco}</td></tr>` : ''}
+<tr><td style="background:${c.accent};height:4px;line-height:4px;font-size:0">&nbsp;</td></tr>
+<tr><td style="background:${c.paper};padding:8px 24px 24px">${sections}
+${table(`<tr><td style="padding:24px 6px 0">${sign}</td></tr><tr><td style="padding:20px 6px 0"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="background:${c.accent};border-radius:999px"><a href="${f.siteUrl}/dashboard" style="display:inline-block;padding:14px 26px;font-family:${SANS};font-size:15px;font-weight:bold;color:${c.ink};text-decoration:none">${escapeHtml(f.openLabel)}</a></td></tr></table></td></tr>`)}
 </td></tr>
-<tr><td style="background:${INK};border-radius:0 0 20px 20px;padding:20px 32px;font-family:${SANS};font-size:12px;line-height:18px;color:#a8a29e;text-align:center">KUMANI · <a href="${f.siteUrl}" style="color:${GOLD};text-decoration:none">${escapeHtml(site)}</a><br>${footer(f, '#a8a29e')}</td></tr>
-</table></td></tr>`, 'background:#efebe3')}
+<tr><td style="background:${c.ink};border-radius:0 0 20px 20px;padding:20px 32px;font-family:${SANS};font-size:12px;line-height:18px;color:${c.muted};text-align:center">KUMANI · <a href="${f.siteUrl}" style="color:${c.accent};text-decoration:none">${escapeHtml(site)}</a><br>${footer(f, c.muted)}</td></tr>
+</table></td></tr>`, 'background:${c.page}')}
 </body></html>`
 }
+
+// «Halloween»: la Rivista con zucca e notte
+export const renderHalloween = (p: ParsedEmail, f: EmailFrame) => renderRivista(p, f, HALLOWEEN_PAL, '🎃 🦇 🕸️ 👻 🦇 🎃')
 
 // «Lettera»: foglio chiaro su fondo scuro, sezioni numerate, KUMI accanto alla firma
 export function renderLettera(p: ParsedEmail, f: EmailFrame): string {

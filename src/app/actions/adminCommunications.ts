@@ -9,7 +9,7 @@ import { KUMANI_MAILBOXES } from '@/lib/contactInfo'
 import { PUBLIC_SITE_URL } from '@/lib/siteUrl'
 import { fetchAllRows } from '@/lib/fetchAllRows'
 import { COMM_LOCALES, EMAIL_CHROME, isHeading, personalize, readyLocales, textsFor, type CommLocale } from '@/lib/communications'
-import { emailBodyToText, isEmailLayout, parseEmailBody, renderLettera, renderRivista, type EmailLayout } from '@/lib/emailBlocks'
+import { emailBodyToText, isEmailLayout, parseEmailBody, renderHalloween, renderLettera, renderRivista, type EmailLayout } from '@/lib/emailBlocks'
 import { adminSendPushCampaign } from './push'
 
 // Admin → Comunicazioni: i messaggi a tutti gli iscritti preparati in anticipo
@@ -133,6 +133,7 @@ function buildEmail(c: CommunicationRow, person: Person): SendEmailInput & { loc
   const html =
     layout === 'rivista' ? renderRivista(parseEmailBody(body), frame)
     : layout === 'lettera' ? renderLettera(parseEmailBody(body), frame)
+    : layout === 'halloween' ? renderHalloween(parseEmailBody(body), frame)
     : toHtml(c, body, unsub, tx.email_preheader ?? '', tx.locale)
   const plain = layout === 'classic' ? body.trim() : emailBodyToText(body)
   return {

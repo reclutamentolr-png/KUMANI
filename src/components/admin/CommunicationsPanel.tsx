@@ -24,6 +24,7 @@ const LAYOUTS: { id: EmailLayout; label: string }[] = [
   { id: 'classic', label: 'Classica' },
   { id: 'rivista', label: 'Rivista' },
   { id: 'lettera', label: 'Lettera' },
+  { id: 'halloween', label: 'Halloween' },
 ]
 
 // Admin → Comunicazioni: messaggi a tutti gli iscritti già pronti (notifica
