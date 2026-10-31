@@ -13609,7 +13609,12 @@
     "templatesClose": "Fermer les modèles",
     "templatesTextVoucher": "Texte, ouverture et style déjà prêts : changez ce que vous voulez.",
     "payTextVoucher": "Tout est prêt et vous avez vu l'aperçu ? Activez le lien pour l'envoyer. Après le paiement, vous pouvez encore corriger les textes.",
-    "occasion_valentineVoucher": "La Saint-Valentin approche : préparez un bon cadeau qui s’ouvre avec une animation."
+    "occasion_valentineVoucher": "La Saint-Valentin approche : préparez un bon cadeau qui s’ouvre avec une animation.",
+    "ogTitle": "{name}, une surprise t’attend",
+    "ogTitleNoName": "Une surprise t’attend",
+    "ogKicker": "Une surprise pour",
+    "close": "Fermer",
+    "closeUnsaved": "Vous avez des modifications non enregistrées : fermer quand même ?"
   },
   "surpriseTpl": {
     "mom_name": "Un massage pour maman",

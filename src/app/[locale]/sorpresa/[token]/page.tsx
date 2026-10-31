@@ -13,7 +13,9 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; token: string }> }): Promise<Metadata> {
   const { locale, token } = await params
   const [info, t] = await Promise.all([surpriseShareInfo(token), getTranslations({ locale, namespace: 'surprise' })])
-  const title = info ? `🎁 ${t(`occasionTitle_${info.occasion ?? 'generic'}`)} ${info.recipient_name || ''}`.trim() : '🎁 KUMANI'
+  // L'occasione non si svela nell'anteprima: si scopre aprendo la sorpresa
+  const name = info?.recipient_name?.trim()
+  const title = info ? `🎁 ${name ? t('ogTitle', { name }) : t('ogTitleNoName')}` : '🎁 KUMANI'
   const description = info?.sender_name ? t('ogDescription', { name: info.sender_name }) : t('ogDescriptionNoSender')
   return {
     title: { absolute: title },

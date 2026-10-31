@@ -13609,7 +13609,12 @@
     "templatesClose": "Vorlagen schließen",
     "templatesTextVoucher": "Text, Öffnung und Stil fertig vorbereitet: Ändere, was du willst.",
     "payTextVoucher": "Alles vorbereitet und die Vorschau angesehen? Aktiviere den Link zum Verschicken. Nach der Zahlung kannst du die Texte noch korrigieren.",
-    "occasion_valentineVoucher": "Valentinstag naht: Bereite einen Geschenkgutschein vor, der sich mit einer Animation öffnet."
+    "occasion_valentineVoucher": "Valentinstag naht: Bereite einen Geschenkgutschein vor, der sich mit einer Animation öffnet.",
+    "ogTitle": "{name}, hier ist eine Überraschung für dich",
+    "ogTitleNoName": "Hier ist eine Überraschung für dich",
+    "ogKicker": "Eine Überraschung für",
+    "close": "Schließen",
+    "closeUnsaved": "Du hast ungespeicherte Änderungen: trotzdem schließen?"
   },
   "surpriseTpl": {
     "mom_name": "Eine Massage für Mama",

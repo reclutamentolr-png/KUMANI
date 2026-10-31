@@ -13609,7 +13609,12 @@
     "templatesClose": "Close templates",
     "templatesTextVoucher": "Text, opening and style ready-made: change whatever you like.",
     "payTextVoucher": "Prepared everything and checked the preview? Activate the link to send it. After payment you can still fix the texts.",
-    "occasion_valentineVoucher": "Valentine's Day is coming: prepare a gift voucher that opens with an animation."
+    "occasion_valentineVoucher": "Valentine's Day is coming: prepare a gift voucher that opens with an animation.",
+    "ogTitle": "{name}, there's a surprise for you",
+    "ogTitleNoName": "There's a surprise for you",
+    "ogKicker": "A surprise for",
+    "close": "Close",
+    "closeUnsaved": "You have unsaved changes: close anyway?"
   },
   "surpriseTpl": {
     "mom_name": "A massage for Mum",

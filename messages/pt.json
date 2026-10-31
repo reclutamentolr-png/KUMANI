@@ -13609,7 +13609,12 @@
     "templatesClose": "Fechar modelos",
     "templatesTextVoucher": "Texto, abertura e estilo já prontos: muda o que quiseres.",
     "payTextVoucher": "Preparou tudo e viu a pré-visualização? Ative a ligação para a enviar. Depois do pagamento ainda pode corrigir os textos.",
-    "occasion_valentineVoucher": "O Dia dos Namorados está a chegar: prepare um vale-presente que se abre com uma animação."
+    "occasion_valentineVoucher": "O Dia dos Namorados está a chegar: prepare um vale-presente que se abre com uma animação.",
+    "ogTitle": "{name}, há uma surpresa para ti",
+    "ogTitleNoName": "Há uma surpresa para ti",
+    "ogKicker": "Uma surpresa para",
+    "close": "Fechar",
+    "closeUnsaved": "Tem alterações não guardadas: fechar mesmo assim?"
   },
   "surpriseTpl": {
     "mom_name": "Uma massagem para a mãe",

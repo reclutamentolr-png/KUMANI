@@ -13609,7 +13609,12 @@
     "templatesClose": "Chiudi i modelli",
     "templatesTextVoucher": "Testo, apertura e stile già pronti: cambi quello che vuoi.",
     "payTextVoucher": "Hai preparato tutto e guardato l'anteprima? Attiva il link per mandarlo. Dopo il pagamento puoi ancora correggere i testi.",
-    "occasion_valentineVoucher": "San Valentino si avvicina: prepara un buono regalo che si apre con un’animazione."
+    "occasion_valentineVoucher": "San Valentino si avvicina: prepara un buono regalo che si apre con un’animazione.",
+    "ogTitle": "{name}, c'è una sorpresa per te",
+    "ogTitleNoName": "C'è una sorpresa per te",
+    "ogKicker": "Una sorpresa per",
+    "close": "Chiudi",
+    "closeUnsaved": "Hai modifiche non salvate: chiudere comunque?"
   },
   "surpriseTpl": {
     "mom_name": "Un massaggio per la mamma",

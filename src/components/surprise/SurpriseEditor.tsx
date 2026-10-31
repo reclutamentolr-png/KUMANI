@@ -943,6 +943,16 @@ export default function SurpriseEditor({
             {notice.text}
           </p>
         )}
+        {/* Chiudi: torna alle sorprese (con modifiche non salvate chiede prima) */}
+        <Link
+          href="/sorprese"
+          onClick={(e) => {
+            if (dirty && !window.confirm(t('closeUnsaved'))) e.preventDefault()
+          }}
+          className={`inline-flex min-h-11 items-center gap-2 rounded-xl border border-gray-300 px-4 text-sm font-semibold text-gray-700 hover:bg-gray-50 ${notice ? '' : 'mr-auto'}`}
+        >
+          <X className="h-4 w-4" /> {t('close')}
+        </Link>
         {/* Annulla: torna a quanto salvato l'ultima volta */}
         <button
           type="button"

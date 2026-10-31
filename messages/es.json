@@ -13609,7 +13609,12 @@
     "templatesClose": "Cerrar plantillas",
     "templatesTextVoucher": "Texto, apertura y estilo ya listos: cambia lo que quieras.",
     "payTextVoucher": "¿Lo tienes todo listo y has visto la vista previa? Activa el enlace para enviarlo. Después del pago aún puedes corregir los textos.",
-    "occasion_valentineVoucher": "Se acerca San Valentín: prepara un bono regalo que se abre con una animación."
+    "occasion_valentineVoucher": "Se acerca San Valentín: prepara un bono regalo que se abre con una animación.",
+    "ogTitle": "{name}, hay una sorpresa para ti",
+    "ogTitleNoName": "Hay una sorpresa para ti",
+    "ogKicker": "Una sorpresa para",
+    "close": "Cerrar",
+    "closeUnsaved": "Tienes cambios sin guardar: ¿cerrar de todos modos?"
   },
   "surpriseTpl": {
     "mom_name": "Un masaje para mamá",
